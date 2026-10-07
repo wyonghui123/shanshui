@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>字体 · 表达要素研究报告</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Zhi+Mang+Xing&family=Long+Cang&family=Liu+Jian+Mao+Cao&family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@200..900&display=swap" rel="stylesheet">
+<style>
+/* 已落地的自持子集（相对本文件取 dist/animation/fonts/）；未取到则回退系统体 */
+@font-face{font-family:"PoemSeal";src:url("../../dist/animation/fonts/seal-script.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"PoemDaoLi";src:url("../../dist/animation/fonts/poem-li.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+:root{
+  --paper:#F6F3EC; --paper2:#FBF9F4; --ink:#1C1C1C; --ink2:#3A362F; --ink3:#6E6A60;
+  --line:rgba(28,28,28,.14); --line2:rgba(28,28,28,.08);
+  --zhu:#A83A2C; --jin:#B8860B; --qing:#2F5D62;
+  --serif:"Noto Serif SC","Songti SC","Source Han Serif SC",serif;
+  --sans:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --kai:"STKaiti","KaiTi","Kaiti SC",serif;
+  --song:"Noto Serif SC","STSong","SimSun",serif;
+  --fangsong:"STFangsong","FangSong",serif;
+  --li:"PoemDaoLi","LiSu","SimLi","STKaiti",serif;
+  --zhuan:"PoemSeal","Songti SC",serif;
+  --wenkai:"LXGW WenKai TC","STKaiti","KaiTi",serif;
+  --brushkai:"Ma Shan Zheng","STKaiti","KaiTi",serif;
+  --yaz:"ZCOOL XiaoWei","Noto Serif SC",serif;
+  --xing:"Zhi Mang Xing","STKaiti",serif;
+  --cao:"Liu Jian Mao Cao","STKaiti",serif;
+  --shou:"Long Cang","STKaiti",serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:56px 28px 90px}
+h1{font-family:var(--serif);font-size:31px;font-weight:600;letter-spacing:.02em;margin:0 0 8px}
+.sub{font-family:var(--serif);font-size:15px;color:var(--ink3);margin:0 0 14px;letter-spacing:.03em}
+.lead{color:var(--ink2);font-size:14.5px;line-height:1.8;margin:0 0 8px;max-width:86ch}
+.lead b{color:var(--ink)}
+.meta-line{font-size:12.5px;color:var(--ink3);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0;margin:22px 0 34px;letter-spacing:.02em;line-height:1.85}
+section{margin:0 0 50px}
+.sec-head{display:flex;align-items:baseline;gap:12px;margin:0 0 14px;border-bottom:1px solid var(--line);padding-bottom:8px}
+.sec-no{font-family:var(--serif);font-size:13px;color:var(--zhu);letter-spacing:.12em;white-space:nowrap}
+.sec-head h2{font-family:var(--serif);font-size:20px;font-weight:600;margin:0}
+.sec-note{font-size:13.5px;color:var(--ink3);line-height:1.85;margin:0 0 16px;max-width:92ch}
+.sec-note b{color:var(--ink2)}
+h3.ax{font-family:var(--serif);font-size:16px;font-weight:600;margin:26px 0 10px;display:flex;align-items:baseline;gap:10px}
+h3.ax .tag{font-family:var(--sans);font-size:11px;letter-spacing:.08em;color:var(--paper);background:var(--ink2);padding:2px 8px;border-radius:6px}
+h4{font-family:var(--serif);font-size:14px;font-weight:600;margin:18px 0 8px;color:var(--ink2)}
+.card{background:var(--paper2);border:1px solid var(--line2);border-radius:10px;padding:18px 20px;margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:820px){.grid2,.grid3{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;font-size:12.8px;margin:4px 0 14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line2);vertical-align:top;line-height:1.65}
+th{font-family:var(--serif);font-weight:600;color:var(--ink3);font-size:12px;letter-spacing:.03em;background:rgba(28,28,28,.025)}
+td b{font-weight:600}
+td .q{font-family:var(--serif);color:var(--ink);font-size:12.5px;line-height:1.8}
+code{font-family:ui-monospace,Consolas,monospace;font-size:11.5px;background:rgba(28,28,28,.05);padding:1px 5px;border-radius:4px}
+pre{background:#FBFAF6;border:1px solid var(--line2);border-radius:8px;padding:13px 15px;overflow:auto;font-family:ui-monospace,Consolas,monospace;font-size:11.8px;line-height:1.7;color:var(--ink2);margin:0 0 12px}
+.callout{background:var(--paper2);border:1px solid var(--line2);border-left:3px solid var(--jin);border-radius:8px;padding:14px 18px;font-size:13.5px;line-height:1.9;color:var(--ink2);margin:0 0 16px}
+.callout b{color:var(--ink)}
+.callout.z{border-left-color:var(--zhu)}
+.callout.q{border-left-color:var(--qing)}
+.badge{display:inline-block;font-size:10.5px;letter-spacing:.04em;padding:1px 7px;border-radius:6px;white-space:nowrap;font-weight:600;vertical-align:middle}
+.b-ok{background:rgba(47,93,98,.12);color:var(--qing)}
+.b-part{background:rgba(184,134,11,.14);color:#8a6608}
+.b-gap{background:rgba(168,58,44,.12);color:var(--zhu)}
+a{color:var(--zhu)}
+footer{font-size:12px;color:var(--ink3);border-top:1px solid var(--line);padding-top:16px;line-height:1.95}
+footer a{color:var(--zhu)}
+.src-l{font-size:12.3px;color:var(--ink3);line-height:2}
+/* 试笔台 */
+.spec{display:flex;flex-direction:column;gap:0;border:1px solid var(--line2);border-radius:10px;overflow:hidden;background:var(--paper2)}
+.spec .row{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center;padding:12px 18px;border-bottom:1px solid var(--line2)}
+.spec .row:last-child{border-bottom:0}
+.spec .lbl{font-size:12px;color:var(--ink3);line-height:1.6}
+.spec .lbl b{display:block;font-family:var(--serif);font-size:13.5px;color:var(--ink2);font-weight:600}
+.spec .demo{font-size:34px;line-height:1.5;letter-spacing:.06em;color:#161616;white-space:nowrap;overflow:hidden}
+.spec.vert .row{grid-template-columns:150px 1fr}
+.spec.vert .demo{writing-mode:vertical-rl;height:190px;font-size:28px;letter-spacing:.10em;margin:0 auto}
+.chipbar{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.chipbar button{font-family:var(--sans);font-size:12px;padding:5px 12px;border-radius:999px;border:1px solid var(--line);background:var(--paper2);color:var(--ink2);cursor:pointer}
+.chipbar button.on{background:var(--ink2);color:var(--paper);border-color:var(--ink2)}
+.seal-demo{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+.seal-demo .s{width:56px;height:56px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;line-height:1.05;text-align:center;letter-spacing:.02em}
+.seal-zhu{background:var(--zhu);color:var(--paper2)}
+.seal-bai{border:2px solid var(--zhu);color:var(--zhu)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>字体 · 表达要素研究报告</h1>
+<p class="sub">文字的字体如何成为画面的一部分 —— 现状盘点 · 书体谱系 · 落款规矩 · 可商用字体库 · 落地路径</p>
+<p class="lead">本报告回答一个问题：在「水墨 · 三首绝句」项目里，<b>字体算不算一个「比较大」的表达要素</b>，以及它由哪些可参数化的维度构成、现在做成了什么样、下一步怎么改。</p>
+<p class="lead">结论先行：字体是<b>唯一同时横跨「构图 / 笔法 / 时间」三层</b>的要素——它占画面的位置（章法）、它与皴法笔调的统一（笔墨）、它逐句写就的节拍（时间化题跋）。因此它不是装饰，而是表达要素本身。项目原状是<b>「题诗用系统楷体、印章用宋体」</b>，存在两个具体缺口：跨平台不确定性、印章不合「印从篆出」的惯例。<b>两处均已落地</b>——题诗改为内嵌自持子集（七款书体：楷 / 行楷 / 行 / 隶 / 草，跨平台一致，<b>篆隶楷行草</b>谱系齐备）；印章改用篆书子集（敬峰中山王篆，依 OFL §3 改名 <code>PoemSeal</code>，动画与三张全链路页均已内嵌）。</p>
+<div class="meta-line">
+依据：王岳川《书法灵韵》· 谢赫六法 / 荆浩《笔法记》· 历代题款与钤印通例 · 苏轼「诗画本一律」<br>
+互链：<a href="landscape_ink_elements.html">表达要素总纲</a> · <a href="图声表达要素补遗.md">图声表达要素补遗</a> · <a href="../design/ink_figure_grammar.html">人物造型语法</a> · 日期 2026-10-04
+</div>
+
+<!-- ================= §0 ================= -->
+<section>
+  <div class="sec-head"><span class="sec-no">§0</span><h2>结论速览</h2></div>
+  <div class="grid3">
+    <div class="card"><h4 style="margin-top:0">① 字体是「大」要素</h4><div style="font-size:13px;color:var(--ink2);line-height:1.8">同时耦合<b>构图</b>（题跋位置/章法）、<b>笔法</b>（与画意统一）、<b>节奏</b>（逐句题诗＝题跋的时间化）。已在总纲 §1.7 被点名为构成的一部分，但未展开。</div></div>
+    <div class="card"><h4 style="margin-top:0">② 原状 2 个缺口，均已闭合</h4><div style="font-size:13px;color:var(--ink2);line-height:1.8">题诗＝系统楷体（跨平台会飘）→ 已改内嵌自持子集；印章＝宋体（不合「印从篆出」）→ 已改篆书子集。前者是<b>确定性</b>问题，后者是<b>语义</b>问题，现已分别解决。</div></div>
+    <div class="card"><h4 style="margin-top:0">③ 可改，且成本可控</h4><div style="font-size:13px;color:var(--ink2);line-height:1.8">OFL 授权的水墨气质字体已齐备；本项目字符集极小（三首绝句＜100 字），子集化后只有几十 KB，可内嵌。</div></div>
+  </div>
+  <div class="callout q"><b>一个结构性发现</b>：当前「逐字写出」其实是 <code>clipPath</code> 高度增长的<b>揭示</b>，不是真正的笔顺书写。要「书写感」必须换成 <b>path 字形 + 描边动画</b>——这是字体要素从「排版」升级为「书写」的分水岭（§6）。</div>
+</section>
+
+<!-- ================= §1 ================= -->
+<section>
+  <div class="sec-head"><span class="sec-no">§1</span><h2>现状盘点：项目里字体出现在哪、怎么渲染</h2></div>
+  <table>
+    <tr><th style="width:16%">位置</th><th style="width:34%">当前字体声明</th><th style="width:30%">渲染机制</th><th>问题</th></tr>
+    <tr>
+      <td><b>题诗</b>（正文）</td>
+      <td>按诗定档：<code>PoemLongCang</code>（江雪）/ <code>PoemMaShan</code>（白帝城 · 静夜思），兜底 <code>PoemKai</code>；落款 <code>PoemZhiMang</code><br><span style="color:var(--ink3)">七款内嵌自持子集（楷 / 行楷 / 行 / 隶 / 草）+ 系统楷体兜底</span> <span class="badge b-ok">已落地</span></td>
+      <td>逐字一个 <code>&lt;text&gt;</code>，外包 <code>clipPath</code>，矩形高度由 0 增长 → 从上到下<b>揭示</b></td>
+      <td>跨平台不一致<b>已解决</b>（自持子集，69 字全覆盖）；仍非真笔顺</td>
+    </tr>
+    <tr>
+      <td><b>印章</b>（钤印）</td>
+      <td><code>PoemSeal, Songti SC, serif</code><br><span style="color:var(--ink3)">敬峰中山王篆子集（依 OFL §3 改名）</span> <span class="badge b-ok">已落地</span></td>
+      <td>静态 <code>&lt;text&gt;</code>（江雪 / 白帝 / 静夜 各两字）</td>
+      <td>已合「印从篆出」；<code>PoemSeal</code> 缺失时回退宋体</td>
+    </tr>
+    <tr>
+      <td><b>画中物标注</b></td>
+      <td>继承工装页 UI（<code>--sans</code> 无衬线）</td>
+      <td>静态 <code>&lt;text&gt;</code> + 引导线</td>
+      <td>与题诗未形成「题跋 / 标注」的体例区分</td>
+    </tr>
+    <tr>
+      <td><b>报告 / 工装页 UI</b></td>
+      <td><code>--serif</code> / <code>--sans</code> / <code>--mono</code> 三变量</td>
+      <td>CSS 变量，浏览器排版</td>
+      <td>与画面无关，可不改</td>
+    </tr>
+  </table>
+  <div class="grid2">
+    <div class="card">
+      <h4 style="margin-top:0">代码位置</h4>
+      <div class="src-l">
+        题诗字体：<code>dist/animation/ink_animations.html</code> 的 <code>@font-face</code> 七款（<code>cfg.poem.face / authorFace</code> 按诗定档）<br>
+        字体子集：<code>dist/animation/fonts/*.woff2</code>（生成 / 校验 <code>build/font_subset.py</code>）<br>
+        题诗揭示：同文件（<code>clipPath</code> 高度）<br>
+        印章文字：<code>PoemSeal</code>；三张全链路页以 base64 内嵌
+      </div>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">本机已装的中文字体（可用资源）</h4>
+      <div class="src-l">
+        楷：<code>STKAITI.TTF</code>（华文楷体）· <code>simkai.ttf</code>（楷体）<br>
+        宋：<code>STSONG.TTF</code> · <code>simsun.ttc</code>　仿宋：<code>STFANGSO.TTF</code> · <code>simfang.ttf</code><br>
+        隶：<code>SIMLI.TTF</code>（隶书）　黑：<code>simhei.ttf</code> · <code>msyh.ttc</code><br>
+        开源：<code>NotoSerifSC-VF.ttf</code> · <code>NotoSansSC-VF.ttf</code>（可变字体）
+      </div>
+    </div>
+  </div>
+  <div class="callout z"><b>注意</b>：本机<b>没有</b>篆书、行书、草书字体。篆书、行书、草书均已通过引入 OFL Web 字体子集解决（§5 / §6）：篆用于印章，行用于落款，<b>草作为谱系档位已落地</b>（柳建毛草，补高唤醒情感区；三首题诗未用）。</div>
+</section>
+
+<!-- ================= §2 ================= -->
+<section>
+  <div class="sec-head"><span class="sec-no">§2</span><h2>字体作为「表达要素」的分解（9 个可参数化维度）</h2></div>
+  <p class="sec-note">把「字体」拆成可下参数、可断言、可回改的维度——这样才能像 <code>layer_technique</code> 那样进入规则体系，而不是一个笼统的「好看 / 不好看」。</p>
+  <table>
+    <tr><th style="width:14%">维度</th><th style="width:44%">含义</th><th style="width:14%">可参数化</th><th>项目现状</th></tr>
+    <tr><td><b>1 书体</b></td><td>篆 / 隶 / 楷 / 行 / 草，以及印刷体（宋 / 楷 / 仿宋）</td><td>枚举档</td><td><span class="badge b-ok">已落地</span> 题诗楷 / 行楷 / 行、印章篆、草档柳建毛草；隶为谱系占位</td></tr>
+    <tr><td><b>2 结体</b></td><td>字形骨架：方正 / 修长 / 扁方 / 欹侧</td><td>随书体定</td><td><span class="badge b-gap">未控</span></td></tr>
+    <tr><td><b>3 笔法</b></td><td>起收、提按、方圆、藏露、粗细对比</td><td>随书体定</td><td><span class="badge b-gap">未控</span></td></tr>
+    <tr><td><b>4 墨色</b></td><td>浓 / 淡 / 枯 / 润 / 飞白</td><td>可（数值）</td><td><span class="badge b-ok">有</span> 题诗固定 <code>#161616</code>，未分档</td></tr>
+    <tr><td><b>5 字号</b></td><td>正文 / 落款 / 标注的主次</td><td>可（数值）</td><td><span class="badge b-part">部分</span> 仅一个 <code>fontSize</code></td></tr>
+    <tr><td><b>6 字距 / 行距</b></td><td>字距（charPitch）、列距（colPitch）＝疏密</td><td>可（数值）</td><td><span class="badge b-ok">有</span> <code>PL.charPitch / colPitch</code></td></tr>
+    <tr><td><b>7 排列</b></td><td>竖排右起（传统）／横排</td><td>枚举</td><td><span class="badge b-ok">有</span> 竖排、右起、逐列</td></tr>
+    <tr><td><b>8 书写节奏</b></td><td>落笔顺序与速度，与配音同步</td><td>可（时间序列）</td><td><span class="badge b-ok">有</span> <code>pitch / dur</code> 逐句数组，末字韵脚恰在句末</td></tr>
+    <tr><td><b>9 印章</b></td><td>字体（篆）· 朱文 / 白文 · 大小 · 位置</td><td>枚举 + 数值</td><td><span class="badge b-part">部分</span> 有印位/印面档（G8），字体未做</td></tr>
+  </table>
+  <div class="callout"><b>为什么说「比较大」</b>：9 个维度里，<b>书体</b>决定气质、<b>章法</b>（字号/字距/排列）参与构图、<b>节奏</b>绑定时间轴、<b>印章</b>既是字又是印——一个要素同时落在构图、笔墨、时间三条链上，这在画面要素里是罕见的。</div>
+</section>
+
+<!-- ================= §3 ================= -->
+<section>
+  <div class="sec-head"><span class="sec-no">§3</span><h2>书体谱系与气质（古典依据）</h2></div>
+  <p class="sec-note">每种书体自带一套「形—气」对应，可直接作为「书体档」的语义依据。</p>
+  <table>
+    <tr><th style="width:10%">书体</th><th style="width:34%">形</th><th style="width:30%">气 / 用途</th><th>依据</th></tr>
+    <tr><td><b>篆</b></td><td>线条圆转、结体纵长、图案化装饰</td><td>古拙、金石、庙堂感；<b>印章专用</b></td><td>书法灵韵（人民网）</td></tr>
+    <tr><td><b>隶</b></td><td>化曲为直、变纵为横、字形扁方、蚕头燕尾</td><td>端庄、舒展、汉碑气象</td><td>王岳川《书法灵韵》（全国哲社办）</td></tr>
+    <tr><td><b>楷</b></td><td>字形方正、横平竖直、一笔不苟</td><td>法度、端正；<b>题款最稳</b></td><td>《书法字体》百科 / 北大书法所</td></tr>
+    <tr><td><b>行</b></td><td>楷草之间、牵丝映带</td><td>流畅、活泼、易识；<b>落款最常用</b></td><td>雅昌《中国画题款艺术的形式美》</td></tr>
+    <tr><td><b>草</b></td><td>省并连绵、一笔而下</td><td>奔放、难识；<b>不宜作落款</b></td><td>同上（落款通例）</td></tr>
+  </table>
+  <h3 class="ax"><span class="tag">细档</span>楷书四大家：同为楷，气质不同</h3>
+  <table>
+    <tr><th style="width:14%">书家</th><th style="width:26%">风格</th><th>关键词</th></tr>
+    <tr><td><b>颜真卿</b></td><td>宽博浑厚、气势开张</td><td>「颜筋」· 端庄雄伟</td></tr>
+    <tr><td><b>柳公权</b></td><td>瘦劲严谨、法度森严</td><td>「柳骨」· 清健遒劲</td></tr>
+    <tr><td><b>欧阳询</b></td><td>中宫收紧、险绝</td><td>欧体 · 严谨</td></tr>
+    <tr><td><b>赵孟頫</b></td><td>圆润秀雅、流丽</td><td>赵体 · 温润</td></tr>
+  </table>
+  <div class="callout"><b>对项目的意义</b>：同是「楷」，颜 / 柳 / 欧 / 赵 的气质差异，足以让《江雪》的<b>瘦硬</b>与《早发白帝城》的<b>开张</b>用不同楷档区分——「书体档」不必是「篆隶楷行草」这么粗，也可以是「楷·瘦硬 / 楷·宽博」。</div>
+</section>
+
+<!-- ================= §4 ================= -->
+<section>
+  <div class="sec-head"><span class="sec-no">§4</span><h2>题款用字的既有规矩（可直接转成规则）</h2></div>
+  <p class="sec-note">这些是历代题跋钤印的通行惯例，本身就是「规则卡」的现成素材。</p>
+  <table>
+    <tr><th style="width:24%">规矩</th><th>内容</th><th style="width:30%">出处</th></tr>
+    <tr><td><b>文古款今 · 文正款活</b></td><td>正文用古体，落款用今体；正文端正如楷隶，落款宜活泼如行书</td><td>福建省委党校《求是翰墨》</td></tr>
+    <tr><td><b>落款书体禁忌</b></td><td>「隶不用篆，楷不用隶，行草不用楷」；大草不用于落款</td><td>衡阳市老年大学 / 福建党校</td></tr>
+    <tr><td><b>落款首选行书</b></td><td>既易识别，又显活泼——实际应用最多的落款字体</td><td>同上</td></tr>
+    <tr><td><b>款书与画意相谐</b></td><td>泼墨写意配草书／行草，工笔配小楷；笔法须与画统一</td><td>雅昌《中国画题款艺术的形式美》</td></tr>
+    <tr><td><b>大小主次</b></td><td>年月姓名字略小于词句、位置略低；篆隶正楷「齐头齐脚」，行草「齐头不齐脚」</td><td>期刊网《题款形式》</td></tr>
+    <tr><td><b>印不过三</b></td><td>钤印数量宜少；印章<b>绝不能比落款字大</b></td><td>书法艺术网 / 福建党校</td></tr>
+    <tr><td><b>引首章 / 压角章</b></td><td>引首章钤正文起首；压角章是画中最大印，只用于画、钤于角</td><td>凤凰网《书画钤印六法》/ 百科·钤印</td></tr>
+    <tr><td><b>朱文 / 白文</b></td><td>朱文（阳文）红字、劲挺阳刚；白文（阴文）红底白字、厚重</td><td>《中国印章的文化密码》</td></tr>
+  </table>
+  <div class="callout z"><b>落到本项目</b>：三首都是「诗为主体」的题跋式作品。按「文正款活」——正文（诗）用<b>楷 / 行楷</b>，落款用<b>行书</b>，钤印用<b>篆</b>，三档已分开。原状把「诗」与「印章」混在同一套系统衬线里、缺体例区分，现已按诗情定档接线。</div>
+</section>
+
+<!-- ================= §5 ================= -->
+<section>
+  <div class="sec-head"><span class="sec-no">§5</span><h2>可商用字体库（水墨气质 · 授权已核实）</h2></div>
+  <p class="sec-note">下表均为 <b>OFL-1.1</b> 授权（可免费商用、可嵌入、可再分发），来源为 Google Fonts / Fontsource 官方包。商业字库（汉仪、方正、文悦等）需单独授权，不在本表。</p>
+  <table>
+    <tr><th style="width:20%">字体</th><th style="width:12%">书体</th><th style="width:14%">授权</th><th style="width:22%">来源</th><th>气质 / 适用</th></tr>
+    <tr><td><b>霞鹜文楷</b><br><span style="color:var(--ink3)">LXGW WenKai</span></td><td>楷</td><td>OFL-1.1</td><td>GitHub lxgw/LxgwWenKai；TC 版入 Google Fonts</td><td>手写感楷体、清秀耐读 → <b>题诗首选</b></td></tr>
+    <tr><td><b>思源宋体</b><br><span style="color:var(--ink3)">Noto Serif SC</span></td><td>宋</td><td>OFL-1.1</td><td>Google Fonts</td><td>权重 200–900、可变 → <b>UI / 标注</b></td></tr>
+    <tr><td><b>马善政</b><br><span style="color:var(--ink3)">Ma Shan Zheng</span></td><td>毛笔楷</td><td>OFL-1.1</td><td>Google Fonts</td><td>毛笔书写感强 → 题诗 / 落款（写意）</td></tr>
+    <tr><td><b>站酷小薇</b><br><span style="color:var(--ink3)">ZCOOL XiaoWei</span></td><td>雅宋</td><td>OFL-1.1</td><td>Google Fonts</td><td>纤细清雅 → 标注 / 副题</td></tr>
+    <tr><td><b>志莽行书</b><br><span style="color:var(--ink3)">Zhi Mang Xing</span></td><td>行</td><td>OFL-1.1</td><td>Google Fonts</td><td>流动 → 落款（合「文正款活」）</td></tr>
+    <tr><td><b>龙藏</b><br><span style="color:var(--ink3)">Long Cang</span></td><td>瘦笔</td><td>OFL-1.1</td><td>Google Fonts</td><td>瘦劲疏朗 → 寒江孤峭（《江雪》）</td></tr>
+    <tr><td><b>刘建毛草</b><br><span style="color:var(--ink3)">Liu Jian Mao Cao</span></td><td>草</td><td>OFL-1.1</td><td>Google Fonts</td><td>狂放连绵 → <b>草档谱系占位</b>（补高唤醒情感区；辨识度低，不作正文小字）</td></tr>
+    <tr><td><b>敬峰中山王篆</b><br><span style="color:var(--ink3)">JFZSKSealScript</span></td><td>篆</td><td>OFL-1.1</td><td>作者开源发布</td><td>铁线篆意 → <b>印章</b>（仅「江雪白帝静夜」6 字）</td></tr>
+    <tr><td colspan="5" style="background:rgba(184,134,11,.07)"><b>非 OFL（作者声明）</b>：阿里妈妈刀隶体 AlimamaDaoLiTi —— 免费商用 + 允许嵌入，但字体文件内无 OFL 记录，故单列；仅作<b>隶档谱系占位</b>，三首未用。</td></tr>
+    <tr><td colspan="5" style="background:rgba(28,28,28,.025)"><b>系统内已装（零成本，但跨平台会飘）</b>：STKaiti 楷 · STSong/SimSun 宋 · STFangsong/仿宋 · SIMLI <b>隶书</b></td></tr>
+  </table>
+  <div class="callout q"><b>关键取舍</b>：字体不是稀缺资源（OFL 已够用），<b>把字体确定地嵌进交付物</b>才是瓶颈——与项目「模型不是瓶颈、接入才是」的教训同构。</div>
+</section>
+
+<!-- ================= §6 ================= -->
+<section>
+  <div class="sec-head"><span class="sec-no">§6</span><h2>技术落地：体积 · 竖排 · 内嵌 · 真书写</h2></div>
+
+  <h3 class="ax"><span class="tag">A</span>体积：中文字体大，但本项目极小</h3>
+  <p class="sec-note">整套中文字体动辄数 MB，但本项目<b>字符集只有三首绝句（＜100 字）</b>。按实际用字做子集化，可压到几十 KB，直接内嵌交付物。</p>
+  <pre># 按诗句字符集做子集（示意）
+pyftsubset LXGWWenKai-Regular.ttf \
+  --text-file=poem_chars.txt \
+  --flavor=woff2 --layout-features='*' \
+  --output-file=wenkai_poem.woff2</pre>
+
+  <h3 class="ax"><span class="tag">B</span>竖排：用 writing-mode，不用手工堆坐标</h3>
+  <p class="sec-note">传统竖排右起对应 CSS <code>writing-mode: vertical-rl</code>（CJK 从上到下、列从右向左）。当前项目是手算 <code>colX / baseY</code> 逐字定位——功能等价，但换成 <code>vertical-rl</code> 可让浏览器接管断行与标点挤压。</p>
+  <pre>.poem{ writing-mode: vertical-rl; text-orientation: upright; letter-spacing:.08em }</pre>
+
+  <h3 class="ax"><span class="tag">C</span>内嵌：@font-face + 子集，摆脱系统字体名</h3>
+  <pre>@font-face{
+  font-family:"PoemKai";
+  src:url("wenkai_poem.woff2") format("woff2");
+  font-display:swap;
+}
+.poem{ font-family:"PoemKai","STKaiti",serif }   /* Web 字体优先，系统体兜底 */</pre>
+
+  <h3 class="ax"><span class="tag">D</span>真书写：从「揭示」升级为「笔顺」 <span class="badge b-ok">已落地</span></h3>
+  <div class="callout z"><b>现状</b>：题诗已从 <code>clipPath</code> 矩形自上而下长高（「被揭开」）升级为 <b>path 字形 + 逐笔中线遮罩</b>（「被写出」）。每字取自持字体的字形轮廓作 <code>&lt;path&gt;</code>，被一条 <code>&lt;mask&gt;</code> 遮住；mask 内按<b>笔顺</b>铺若干条「笔锋带」（中线按笔画长度加粗），用 <code>stroke-dashoffset</code> 逐笔展开，末笔走完即字形写就。</div>
+  <table>
+    <tr><th style="width:20%">方案</th><th style="width:32%">做法</th><th>代价 / 适用</th></tr>
+    <tr><td>保持揭示</td><td>clipPath 高度增长</td><td>零成本；有「显影」感，无「书写」感。<b>已弃用</b>（保留为数据缺失时的降级）</td></tr>
+    <tr><td>整字描边</td><td>字体转 path → 轮廓描边动画</td><td>中成本；像「描红」，笔画顺序不真</td></tr>
+    <tr><td><b>逐笔书写</b> <span class="badge b-ok">已落地</span></td><td>按笔顺拆中线，逐笔 dashoffset</td><td>高成本（需笔顺数据）；最接近真书写</td></tr>
+  </table>
+  <div class="callout q"><b>数据与出处</b>：笔画<b>顺序</b>与<b>中线（运笔轨迹）</b>是字体里没有的，取自 <code>hanzi-writer-data@2.0.1</code>（源自 Make Me a Hanzi，<b>Arphic Public License</b>）；字形轮廓取自本项目自持字体子集。两者在 <code>build/stroke_data.py</code> 里合并：中线换算到设计单位（<code>upem=1000</code>）并按 RDP 简化，再对每字的轮廓边界点算「逐笔遮罩带宽」（每个边界点归属最近中线，取该笔内最远点 × 安全系数），保证末笔走完时笔锋带的并集<b>恰好铺满</b>字形而不串笔。产物 <code>dist/animation/strokes.js</code>（<code>window.POEM_STROKES</code>，64 字 / 3 字体）。</div>
+</section>
+
+<!-- ================= §7 ================= -->
+<section>
+  <div class="sec-head"><span class="sec-no">§7</span><h2>字体试笔台（现场对照）</h2></div>
+  <p class="sec-note">下方用同一句诗渲染不同书体。<b>Web 字体需联网</b>（Google Fonts）；离线时自动回退到本机系统字体（STKaiti 楷 / SimSun 宋 / SIMLI 隶书）。</p>
+  <div class="chipbar">
+    <button id="b-h" class="on">横排</button>
+    <button id="b-v">竖排（右起）</button>
+  </div>
+  <div class="spec" id="spec">
+    <div class="row"><div class="lbl"><b>楷 · 系统</b>STKaiti</div><div class="demo" style="font-family:var(--kai)">举头望明月　低头思故乡</div></div>
+    <div class="row"><div class="lbl"><b>楷 · 开源</b>霞鹜文楷</div><div class="demo" style="font-family:var(--wenkai)">举头望明月　低头思故乡</div></div>
+    <div class="row"><div class="lbl"><b>毛笔楷</b>马善政</div><div class="demo" style="font-family:var(--brushkai)">举头望明月　低头思故乡</div></div>
+    <div class="row"><div class="lbl"><b>宋 · 思源</b>Noto Serif SC</div><div class="demo" style="font-family:var(--song)">举头望明月　低头思故乡</div></div>
+    <div class="row"><div class="lbl"><b>雅宋</b>站酷小薇</div><div class="demo" style="font-family:var(--yaz)">举头望明月　低头思故乡</div></div>
+    <div class="row"><div class="lbl"><b>隶</b>刀隶体（已落地）</div><div class="demo" style="font-family:var(--li)">举头望明月　低头思故乡</div></div>
+    <div class="row"><div class="lbl"><b>行书</b>志莽行书</div><div class="demo" style="font-family:var(--xing)">举头望明月　低头思故乡</div></div>
+    <div class="row"><div class="lbl"><b>瘦笔</b>龙藏</div><div class="demo" style="font-family:var(--shou)">孤舟蓑笠翁　独钓寒江雪</div></div>
+    <div class="row"><div class="lbl"><b>草书</b>柳建毛草（已落地）</div><div class="demo" style="font-family:var(--cao)">朝辞白帝彩云间</div></div>
+    <div class="row"><div class="lbl"><b>篆</b>中山王篆（印章）</div><div class="demo" style="font-family:var(--zhuan)">江雪白帝静夜</div></div>
+  </div>
+
+  <h3 class="ax"><span class="tag">印</span>印章体例：宋体 vs 篆意</h3>
+  <div class="card">
+    <div class="seal-demo">
+      <div class="s seal-zhu" style="font-family:var(--song)">静夜</div>
+      <div class="s seal-bai" style="font-family:var(--song)">静夜</div>
+      <div class="s seal-zhu" style="font-family:var(--zhuan)">静夜</div>
+      <div class="s seal-bai" style="font-family:var(--zhuan)">静夜</div>
+      <div style="font-size:12.5px;color:var(--ink3);line-height:1.8;max-width:34ch">左二为原状（宋体）。右二为<b>已落地的篆书子集</b>（<code>PoemSeal</code>，敬峰中山王篆）——合「印从篆出」之制，朱文 / 白文两式均可用。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= §8 ================= -->
+<section>
+  <div class="sec-head"><span class="sec-no">§8</span><h2>建议（按依赖关系排序）</h2></div>
+  <table>
+    <tr><th style="width:8%">序</th><th style="width:26%">动作</th><th>理由 / 落点</th></tr>
+    <tr><td><b>1</b></td><td>内嵌 Web 字体（子集） <span class="badge b-ok">已落地</span></td><td><b>先解决确定性</b>：不再依赖系统字体名，跨平台一致。落点：题诗 <code>font-family</code> 改为自定义字体族 + 系统兜底。<br><span style="color:var(--ink3)">实现：七款 OFL 子集（楷 霞鹜文楷 / 毛笔楷 马善政 / 行楷 龙藏 / 行 志莽行书 / 草 柳建毛草 / 隶 刀隶体 / 篆 印章）→ <code>dist/animation/fonts/*.woff2</code>，对题诗 69 字全覆盖；生成/校验 <code>build/font_subset.py</code>，已纳入 <code>build/verify.py</code></span></td></tr>
+    <tr><td><b>2</b></td><td>印章改「篆意」 <span class="badge b-ok">已落地</span></td><td><b>再解决语义</b>：印章从宋体改为篆书——引入敬峰中山王篆子集（依 OFL §3 改名 <code>PoemSeal</code>，仅「江雪白帝静夜」6 字），分朱文 / 白文档。落点：<code>#*-seal</code> 两字</td></tr>
+    <tr><td><b>3</b></td><td>立「字体卡」：书体档 + 字号 + 字距 + 墨色 <span class="badge b-part">部分</span></td><td>把 §2 的 9 维收成一张可下参数的卡，按诗情调档（江雪→瘦硬，白帝城→开张，静夜思→小楷）。<br><span style="color:var(--ink3)">已接线：正文按诗 <code>V/A/T</code> 定档（江雪 V− 孤冷→龙藏；白帝城 V+ 开张→马善政；静夜思 A/T→马善政），落款按「文正款活」升一档用行书；<code>inkGrade / tracking / sealStyle</code> 尚未接线</span></td></tr>
+    <tr><td><b>4</b></td><td>标注与题诗分体例</td><td>「文正款活」：正文楷、标注用雅宋 / 行，形成主次</td></tr>
+    <tr><td><b>5</b></td><td>书写动画升级 <span class="badge b-ok">已落地</span></td><td><b>最后解决「写出」而非「揭示」</b>：题诗转 path 字形 + 逐笔中线遮罩，按笔顺用 <code>stroke-dashoffset</code> 运笔。<br><span style="color:var(--ink3)">实现：笔顺/中线取 <code>hanzi-writer-data</code>（Make Me a Hanzi，Arphic Public License），字形取自持字体子集，合并于 <code>build/stroke_data.py</code> → <code>dist/animation/strokes.js</code>；<code>ink_animations.html</code> 每字 = 字形 path + mask（笔锋带），含覆盖护栏（末笔走完即字形本体，无空洞/不串笔），已纳入 <code>build/verify.py</code></span></td></tr>
+  </table>
+  <div class="callout q"><b>与项目既有约束的关系</b>：本报告的建议全部落在「表现层」，不改动场景几何真源（<code>data/source/scene/*.json</code>）与 D2 处方；若采纳，需按既有流程重跑 <code>assemble.py</code> 与 O1 闭环，并在收口时重新分享受影响的页面。</div>
+</section>
+
+<!-- ================= 来源 ================= -->
+<section>
+  <div class="sec-head"><span class="sec-no">§9</span><h2>来源</h2></div>
+  <div class="src-l">
+    [1] 王岳川《书法灵韵》· 人民网 <a href="http://culture.people.com.cn/n1/2024/0627/c1013-40265756.html">culture.people.com.cn</a> · 全国哲社办 <a href="http://www.nopss.gov.cn/n1/2024/0626/c458483-40264693.html">nopss.gov.cn</a> · 北大书法所 <a href="https://shufa.pku.edu.cn/whsf/65982sfw1378134.htm">shufa.pku.edu.cn</a><br>
+    [2] 《书法字体（书法风格的分类）》· 百科 <a href="https://m.baike.com/wiki/%E4%B9%A6%E6%B3%95%E5%AD%97%E4%BD%93/7299768647676657690">baike.com</a><br>
+    [3] 楷书四大家 / 颜筋柳骨 · 人民日报海外版 <a href="http://paper.people.com.cn/rmrbhwb/html/2016-04/19/content_1671607.htm">paper.people.com.cn</a> · 中国作家网 <a href="http://www.chinawriter.com.cn/meishu/2016/2016-03-21/267996.html">chinawriter.com.cn</a> · 百科 <a href="https://m.baike.com/wiki/%E6%A5%B7%E4%B9%A6%E5%9B%9B%E5%A4%A7%E5%AE%B6/1475140">baike.com</a><br>
+    [4] 《中国画题款艺术的形式美》· 雅昌 <a href="https://m-news.artron.net/20150511/n739944.html">artron.net</a><br>
+    [5] 落款书体通例 · 福建省委党校《求是翰墨》<a href="https://www.fjdx.gov.cn/hanmo/qsjianshang/">fjdx.gov.cn</a> · 衡阳市老年大学 <a href="http://www.hyslgbdx.cn/news/detail/16623">hyslgbdx.cn</a> · 期刊网 <a href="http://www.chinaqking.com/column-sort/detail/40/634831">chinaqking.com</a><br>
+    [6] 书画钤印 · 凤凰网《书画钤印六法》<a href="https://guoxue.ifeng.com/c/7jaSKfDlLVe">guoxue.ifeng.com</a> · 百科·钤印 <a href="https://m.baike.com/wiki/%E9%92%A4%E5%8D%B0/1872643">baike.com</a> · 书法艺术网 <a href="https://www.sfrx.cn/html/2019/yshy_0822/12300.html">sfrx.cn</a><br>
+    [7] 霞鹜文楷（OFL-1.1）· 作者页 <a href="https://lxgw.github.io/2021/02/07/Lxgw-Wenkai-Release/">lxgw.github.io</a> · GitHub <a href="https://git.dotclear.watch/lxgw/LxgwWenKai">LxgwWenKai</a> · Fontsource <a href="https://www.npmjs.com/package/@fontsource/lxgw-wenkai-tc">@fontsource/lxgw-wenkai-tc</a><br>
+    [8] Google Fonts / Fontsource（均 OFL-1.1）· Ma Shan Zheng <a href="https://www.npmjs.com/package/@fontsource/ma-shan-zheng">fontsource</a> · ZCOOL XiaoWei <a href="https://www.npmjs.com/package/@fontsource/zcool-xiaowei">fontsource</a> · Noto Serif SC <a href="https://www.npmjs.com/package/@fontsource/noto-serif-sc">fontsource</a> · Zhi Mang Xing <a href="https://www.npmjs.com/package/@fontsource/zhi-mang-xing">fontsource</a> · Long Cang <a href="https://www.npmjs.com/package/@fontsource/long-cang">fontsource</a> · Liu Jian Mao Cao <a href="https://www.npmjs.com/package/@fontsource/liu-jian-mao-cao">fontsource</a><br>
+    [9] CSS Writing Modes · W3C <a href="https://drafts.csswg.org/css-writing-modes-3/">drafts.csswg.org</a> · MDN <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/Properties/writing-mode">developer.mozilla.org</a><br>
+    [10] 中文字体子集化 · FontFYI <a href="https://fontfyi.com/glossary/subsetting/">fontfyi.com</a> · ksw-ux <a href="https://ksw.design.donxj.com/knowledge/chinese-web-font-optimize">donxj.com</a><br>
+    [11] 笔顺 / 中线数据 · <a href="https://github.com/chanind/hanzi-writer-data">hanzi-writer-data</a>（源自 <a href="https://github.com/skishore/makemeahanzi">Make Me a Hanzi</a>）· <b>Arphic Public License</b>（Arphic Technology 字体衍生数据的授权条款，允许再分发，需保留本署名与许可）
+  </div>
+</section>
+
+<footer>
+字体 · 表达要素研究报告 · 2026-10-04 · 基于项目现状盘点（<code>dist/animation/ink_animations.html</code>）+ 外部授权核实<br>
+本报告为「表达要素」系列补篇，承接 <a href="landscape_ink_elements.html">表达要素总纲</a> §1.7 题跋与印章（诗书画印一体）。
+</footer>
+
+</div>
+<script>
+(function(){
+  var spec=document.getElementById('spec'), bh=document.getElementById('b-h'), bv=document.getElementById('b-v');
+  bh.addEventListener('click',function(){spec.classList.remove('vert');bh.classList.add('on');bv.classList.remove('on');});
+  bv.addEventListener('click',function(){spec.classList.add('vert');bv.classList.add('on');bh.classList.remove('on');});
+})();
+</script>
+</body>
+</html>

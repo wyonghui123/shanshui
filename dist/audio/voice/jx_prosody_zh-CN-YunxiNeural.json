@@ -1,0 +1,241 @@
+{
+  "poem": "江雪 · 柳宗元",
+  "poem_key": "jx",
+  "backend": "edge+prosody",
+  "voice": "jx_edge_zh-CN-YunxiNeural_quatrain.wav",
+  "sr": 24000,
+  "duration": 18.076,
+  "emotion": null,
+  "line_texts": [
+    "千山鸟飞绝",
+    "万径人踪灭",
+    "孤舟蓑笠翁",
+    "独钓寒江雪"
+  ],
+  "rules": {
+    "平长仄短": {
+      "level": 1.35,
+      "oblique": 0.85,
+      "entering": 0.65,
+      "rhyme": 1.65
+    },
+    "句调": [
+      {
+        "seg": "起",
+        "f0_mul": 0.99,
+        "f0_slope_pct_per_s": -0.6
+      },
+      {
+        "seg": "承",
+        "f0_mul": 0.95,
+        "f0_slope_pct_per_s": -1.4
+      },
+      {
+        "seg": "转",
+        "f0_mul": 0.97,
+        "f0_slope_pct_per_s": -0.2
+      },
+      {
+        "seg": "合",
+        "f0_mul": 0.89,
+        "f0_slope_pct_per_s": -1.3
+      }
+    ],
+    "句间衔接": {
+      "句末渐弱深度": [
+        0.0,
+        0.15,
+        0.0,
+        0.55
+      ],
+      "句首滑音_ms": 250.0,
+      "跳进上限_半音": 2.0,
+      "气口_ms": 170.0,
+      "实际停顿_秒": [
+        1.544,
+        1.433,
+        1.228
+      ],
+      "行时序_秒": [
+        [
+          0.35,
+          3.35
+        ],
+        [
+          4.894,
+          7.784
+        ],
+        [
+          9.217,
+          11.877
+        ],
+        [
+          13.106,
+          16.276
+        ]
+      ]
+    }
+  },
+  "syllables": [
+    {
+      "char": "千",
+      "tone": "level",
+      "role": "level",
+      "line": 1,
+      "pos": 1,
+      "frames": 114
+    },
+    {
+      "char": "山",
+      "tone": "level",
+      "role": "level",
+      "line": 1,
+      "pos": 2,
+      "frames": 81
+    },
+    {
+      "char": "鸟",
+      "tone": "oblique",
+      "role": "oblique",
+      "line": 1,
+      "pos": 3,
+      "frames": 109
+    },
+    {
+      "char": "飞",
+      "tone": "level",
+      "role": "level",
+      "line": 1,
+      "pos": 4,
+      "frames": 115
+    },
+    {
+      "char": "绝",
+      "tone": "entering",
+      "role": "entering",
+      "line": 1,
+      "pos": 5,
+      "frames": 90
+    },
+    {
+      "char": "万",
+      "tone": "oblique",
+      "role": "oblique",
+      "line": 2,
+      "pos": 1,
+      "frames": 120
+    },
+    {
+      "char": "径",
+      "tone": "oblique",
+      "role": "oblique",
+      "line": 2,
+      "pos": 2,
+      "frames": 102
+    },
+    {
+      "char": "人",
+      "tone": "level",
+      "role": "level",
+      "line": 2,
+      "pos": 3,
+      "frames": 107
+    },
+    {
+      "char": "踪",
+      "tone": "level",
+      "role": "level",
+      "line": 2,
+      "pos": 4,
+      "frames": 115
+    },
+    {
+      "char": "灭",
+      "tone": "entering",
+      "role": "entering",
+      "line": 2,
+      "pos": 5,
+      "frames": 96
+    },
+    {
+      "char": "孤",
+      "tone": "level",
+      "role": "level",
+      "line": 3,
+      "pos": 1,
+      "frames": 96
+    },
+    {
+      "char": "舟",
+      "tone": "level",
+      "role": "level",
+      "line": 3,
+      "pos": 2,
+      "frames": 70
+    },
+    {
+      "char": "蓑",
+      "tone": "level",
+      "role": "level",
+      "line": 3,
+      "pos": 3,
+      "frames": 87
+    },
+    {
+      "char": "笠",
+      "tone": "entering",
+      "role": "entering",
+      "line": 3,
+      "pos": 4,
+      "frames": 97
+    },
+    {
+      "char": "翁",
+      "tone": "level",
+      "role": "level",
+      "line": 3,
+      "pos": 5,
+      "frames": 72
+    },
+    {
+      "char": "独",
+      "tone": "entering",
+      "role": "entering",
+      "line": 4,
+      "pos": 1,
+      "frames": 133
+    },
+    {
+      "char": "钓",
+      "tone": "oblique",
+      "role": "oblique",
+      "line": 4,
+      "pos": 2,
+      "frames": 99
+    },
+    {
+      "char": "寒",
+      "tone": "level",
+      "role": "level",
+      "line": 4,
+      "pos": 3,
+      "frames": 124
+    },
+    {
+      "char": "江",
+      "tone": "level",
+      "role": "level",
+      "line": 4,
+      "pos": 4,
+      "frames": 143
+    },
+    {
+      "char": "雪",
+      "tone": "entering",
+      "role": "entering",
+      "line": 4,
+      "pos": 5,
+      "frames": 110
+    }
+  ]
+}

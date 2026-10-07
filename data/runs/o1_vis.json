@@ -1,0 +1,2079 @@
+{
+  "jx": {
+    "T": 19.578,
+    "frames": {
+      "0.78": {
+        "jx-far": {
+          "present": true,
+          "effOpacity": 0.623,
+          "attrOpacity": "0.623",
+          "bbox": {
+            "w": 1180,
+            "h": 142
+          },
+          "rect": {
+            "cx": 0.4996,
+            "cy": 0.3815,
+            "x": -0.1559,
+            "y": 0.2631,
+            "w": 1.3111,
+            "h": 0.2369
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 0.623
+        },
+        "jx-waterline": {
+          "present": true,
+          "effOpacity": 0.16,
+          "attrOpacity": "0.16",
+          "bbox": {
+            "w": 1180,
+            "h": 10.7
+          },
+          "rect": {
+            "cx": 0.4996,
+            "cy": 0.4363,
+            "x": -0.1559,
+            "y": 0.4274,
+            "w": 1.3111,
+            "h": 0.0178
+          },
+          "childCount": 0,
+          "dashes": [],
+          "vis": 0.16
+        },
+        "jx-water": {
+          "present": false
+        },
+        "jx-path": {
+          "present": true,
+          "effOpacity": 0,
+          "attrOpacity": "0.000",
+          "bbox": {
+            "w": 216,
+            "h": 48
+          },
+          "rect": {
+            "cx": 0.153,
+            "cy": 0.47,
+            "x": 0.033,
+            "y": 0.4299,
+            "w": 0.24,
+            "h": 0.0801
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 0
+        },
+        "jx-reed": {
+          "present": true,
+          "effOpacity": 0,
+          "attrOpacity": "0.000",
+          "bbox": {
+            "w": 78,
+            "h": 154
+          },
+          "rect": {
+            "cx": 0.1319,
+            "cy": 0.7419,
+            "x": 0.0885,
+            "y": 0.6134,
+            "w": 0.0867,
+            "h": 0.2569
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 0
+        },
+        "jx-boat": {
+          "present": true,
+          "effOpacity": 0,
+          "attrOpacity": "0.000",
+          "bbox": {
+            "w": 234,
+            "h": 75
+          },
+          "rect": {
+            "cx": 0.6496,
+            "cy": 0.7572,
+            "x": 0.5118,
+            "y": 0.6909,
+            "w": 0.2756,
+            "h": 0.1326
+          },
+          "childCount": 4,
+          "dashes": [],
+          "vis": 0
+        },
+        "jx-line": {
+          "present": true,
+          "effOpacity": 0.5,
+          "attrOpacity": "0.5",
+          "bbox": {
+            "w": 27.6,
+            "h": 106
+          },
+          "rect": {
+            "cx": 0.6816,
+            "cy": 0.842,
+            "x": 0.6663,
+            "y": 0.7536,
+            "w": 0.0306,
+            "h": 0.1768
+          },
+          "childCount": 0,
+          "dashes": [
+            {
+              "off": 100,
+              "total": 100,
+              "visibleFrac": 0
+            }
+          ],
+          "vis": 0
+        },
+        "jx-snow": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": null,
+          "bbox": {
+            "w": 845,
+            "h": 624.3
+          },
+          "rect": {
+            "cx": 0.5219,
+            "cy": 0.4865,
+            "x": 0.0524,
+            "y": -0.0342,
+            "w": 0.9389,
+            "h": 1.0415
+          },
+          "childCount": 46,
+          "dashes": [],
+          "vis": 1
+        },
+        "jx-anno": {
+          "present": true,
+          "effOpacity": 0,
+          "attrOpacity": "0",
+          "bbox": {
+            "w": 695.8,
+            "h": 438.5
+          },
+          "rect": {
+            "cx": 0.4518,
+            "cy": 0.5541,
+            "x": 0.0653,
+            "y": 0.1883,
+            "w": 0.7731,
+            "h": 0.7316
+          },
+          "childCount": 7,
+          "dashes": [],
+          "vis": 0
+        },
+        "jx-poemink": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": null,
+          "bbox": {
+            "w": 150.2,
+            "h": 150.2
+          },
+          "rect": {
+            "cx": 0.8471,
+            "cy": 0.2152,
+            "x": 0.7637,
+            "y": 0.0899,
+            "w": 0.1669,
+            "h": 0.2507
+          },
+          "childCount": 23,
+          "dashes": [],
+          "vis": 1
+        },
+        "jx-seal": {
+          "present": true,
+          "effOpacity": 0,
+          "attrOpacity": "0.000",
+          "bbox": {
+            "w": 26,
+            "h": 59.6
+          },
+          "rect": {
+            "cx": 0.9367,
+            "cy": 0.8966,
+            "x": 0.9222,
+            "y": 0.8469,
+            "w": 0.0289,
+            "h": 0.0994
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 0
+        }
+      },
+      "5.09": {
+        "jx-far": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": "1.000",
+          "bbox": {
+            "w": 1180,
+            "h": 142
+          },
+          "rect": {
+            "cx": 0.4733,
+            "cy": 0.3815,
+            "x": -0.1822,
+            "y": 0.2631,
+            "w": 1.3111,
+            "h": 0.2369
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 1
+        },
+        "jx-waterline": {
+          "present": true,
+          "effOpacity": 0.16,
+          "attrOpacity": "0.16",
+          "bbox": {
+            "w": 1180,
+            "h": 10.7
+          },
+          "rect": {
+            "cx": 0.4733,
+            "cy": 0.4363,
+            "x": -0.1822,
+            "y": 0.4274,
+            "w": 1.3111,
+            "h": 0.0178
+          },
+          "childCount": 0,
+          "dashes": [],
+          "vis": 0.16
+        },
+        "jx-water": {
+          "present": false
+        },
+        "jx-path": {
+          "present": true,
+          "effOpacity": 0,
+          "attrOpacity": "0.000",
+          "bbox": {
+            "w": 216,
+            "h": 48
+          },
+          "rect": {
+            "cx": 0.1267,
+            "cy": 0.47,
+            "x": 0.0067,
+            "y": 0.4299,
+            "w": 0.24,
+            "h": 0.0801
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 0
+        },
+        "jx-reed": {
+          "present": true,
+          "effOpacity": 0.52,
+          "attrOpacity": "0.520",
+          "bbox": {
+            "w": 78,
+            "h": 154
+          },
+          "rect": {
+            "cx": 0.1056,
+            "cy": 0.7419,
+            "x": 0.0622,
+            "y": 0.6134,
+            "w": 0.0867,
+            "h": 0.2569
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 0.52
+        },
+        "jx-boat": {
+          "present": true,
+          "effOpacity": 0,
+          "attrOpacity": "0.000",
+          "bbox": {
+            "w": 234,
+            "h": 75
+          },
+          "rect": {
+            "cx": 0.6233,
+            "cy": 0.7572,
+            "x": 0.4855,
+            "y": 0.6909,
+            "w": 0.2756,
+            "h": 0.1326
+          },
+          "childCount": 4,
+          "dashes": [],
+          "vis": 0
+        },
+        "jx-line": {
+          "present": true,
+          "effOpacity": 0.5,
+          "attrOpacity": "0.5",
+          "bbox": {
+            "w": 27.6,
+            "h": 106
+          },
+          "rect": {
+            "cx": 0.6553,
+            "cy": 0.842,
+            "x": 0.64,
+            "y": 0.7536,
+            "w": 0.0306,
+            "h": 0.1768
+          },
+          "childCount": 0,
+          "dashes": [
+            {
+              "off": 100,
+              "total": 100,
+              "visibleFrac": 0
+            }
+          ],
+          "vis": 0
+        },
+        "jx-snow": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": null,
+          "bbox": {
+            "w": 821,
+            "h": 627.8
+          },
+          "rect": {
+            "cx": 0.4911,
+            "cy": 0.5086,
+            "x": 0.035,
+            "y": -0.0151,
+            "w": 0.9122,
+            "h": 1.0474
+          },
+          "childCount": 46,
+          "dashes": [],
+          "vis": 1
+        },
+        "jx-anno": {
+          "present": true,
+          "effOpacity": 0,
+          "attrOpacity": "0",
+          "bbox": {
+            "w": 695.8,
+            "h": 438.5
+          },
+          "rect": {
+            "cx": 0.4255,
+            "cy": 0.5541,
+            "x": 0.039,
+            "y": 0.1883,
+            "w": 0.7731,
+            "h": 0.7316
+          },
+          "childCount": 7,
+          "dashes": [],
+          "vis": 0
+        },
+        "jx-poemink": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": null,
+          "bbox": {
+            "w": 150.2,
+            "h": 150.2
+          },
+          "rect": {
+            "cx": 0.8471,
+            "cy": 0.2152,
+            "x": 0.7637,
+            "y": 0.0899,
+            "w": 0.1669,
+            "h": 0.2507
+          },
+          "childCount": 23,
+          "dashes": [],
+          "vis": 1
+        },
+        "jx-seal": {
+          "present": true,
+          "effOpacity": 0,
+          "attrOpacity": "0.000",
+          "bbox": {
+            "w": 26,
+            "h": 59.6
+          },
+          "rect": {
+            "cx": 0.9367,
+            "cy": 0.8966,
+            "x": 0.9222,
+            "y": 0.8469,
+            "w": 0.0289,
+            "h": 0.0994
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 0
+        }
+      },
+      "7.83": {
+        "jx-far": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": "1.000",
+          "bbox": {
+            "w": 1180,
+            "h": 142
+          },
+          "rect": {
+            "cx": 0.4919,
+            "cy": 0.3848,
+            "x": -0.1455,
+            "y": 0.2696,
+            "w": 1.2749,
+            "h": 0.2304
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 1
+        },
+        "jx-waterline": {
+          "present": true,
+          "effOpacity": 0.16,
+          "attrOpacity": "0.16",
+          "bbox": {
+            "w": 1180,
+            "h": 10.7
+          },
+          "rect": {
+            "cx": 0.4919,
+            "cy": 0.438,
+            "x": -0.1455,
+            "y": 0.4294,
+            "w": 1.2749,
+            "h": 0.0173
+          },
+          "childCount": 0,
+          "dashes": [],
+          "vis": 0.16
+        },
+        "jx-water": {
+          "present": false
+        },
+        "jx-path": {
+          "present": true,
+          "effOpacity": 0.2,
+          "attrOpacity": "0.200",
+          "bbox": {
+            "w": 216,
+            "h": 48
+          },
+          "rect": {
+            "cx": 0.1548,
+            "cy": 0.4708,
+            "x": 0.0382,
+            "y": 0.4319,
+            "w": 0.2334,
+            "h": 0.0779
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 0.2
+        },
+        "jx-reed": {
+          "present": true,
+          "effOpacity": 0.52,
+          "attrOpacity": "0.520",
+          "bbox": {
+            "w": 78,
+            "h": 154
+          },
+          "rect": {
+            "cx": 0.1343,
+            "cy": 0.7352,
+            "x": 0.0922,
+            "y": 0.6103,
+            "w": 0.0843,
+            "h": 0.2498
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 0.52
+        },
+        "jx-boat": {
+          "present": true,
+          "effOpacity": 0,
+          "attrOpacity": "0.000",
+          "bbox": {
+            "w": 234,
+            "h": 75
+          },
+          "rect": {
+            "cx": 0.6378,
+            "cy": 0.7501,
+            "x": 0.5038,
+            "y": 0.6856,
+            "w": 0.268,
+            "h": 0.129
+          },
+          "childCount": 4,
+          "dashes": [],
+          "vis": 0
+        },
+        "jx-line": {
+          "present": true,
+          "effOpacity": 0.5,
+          "attrOpacity": "0.5",
+          "bbox": {
+            "w": 27.6,
+            "h": 106
+          },
+          "rect": {
+            "cx": 0.6689,
+            "cy": 0.8326,
+            "x": 0.654,
+            "y": 0.7466,
+            "w": 0.0298,
+            "h": 0.172
+          },
+          "childCount": 0,
+          "dashes": [
+            {
+              "off": 100,
+              "total": 100,
+              "visibleFrac": 0
+            }
+          ],
+          "vis": 0
+        },
+        "jx-snow": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": null,
+          "bbox": {
+            "w": 822.5,
+            "h": 644.5
+          },
+          "rect": {
+            "cx": 0.4943,
+            "cy": 0.5037,
+            "x": 0.0499,
+            "y": -0.0191,
+            "w": 0.8887,
+            "h": 1.0456
+          },
+          "childCount": 46,
+          "dashes": [],
+          "vis": 1
+        },
+        "jx-anno": {
+          "present": true,
+          "effOpacity": 0,
+          "attrOpacity": "0",
+          "bbox": {
+            "w": 695.3,
+            "h": 438
+          },
+          "rect": {
+            "cx": 0.4451,
+            "cy": 0.5516,
+            "x": 0.0696,
+            "y": 0.1963,
+            "w": 0.7512,
+            "h": 0.7106
+          },
+          "childCount": 7,
+          "dashes": [],
+          "vis": 0
+        },
+        "jx-poemink": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": null,
+          "bbox": {
+            "w": 150.2,
+            "h": 150.2
+          },
+          "rect": {
+            "cx": 0.8471,
+            "cy": 0.2152,
+            "x": 0.7637,
+            "y": 0.0899,
+            "w": 0.1669,
+            "h": 0.2507
+          },
+          "childCount": 23,
+          "dashes": [],
+          "vis": 1
+        },
+        "jx-seal": {
+          "present": true,
+          "effOpacity": 0,
+          "attrOpacity": "0.000",
+          "bbox": {
+            "w": 26,
+            "h": 59.6
+          },
+          "rect": {
+            "cx": 0.9367,
+            "cy": 0.8966,
+            "x": 0.9222,
+            "y": 0.8469,
+            "w": 0.0289,
+            "h": 0.0994
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 0
+        }
+      },
+      "12.14": {
+        "jx-far": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": "1.000",
+          "bbox": {
+            "w": 1180,
+            "h": 142
+          },
+          "rect": {
+            "cx": 0.4957,
+            "cy": 0.3786,
+            "x": -0.1395,
+            "y": 0.2638,
+            "w": 1.2705,
+            "h": 0.2296
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 1
+        },
+        "jx-waterline": {
+          "present": true,
+          "effOpacity": 0.16,
+          "attrOpacity": "0.16",
+          "bbox": {
+            "w": 1180,
+            "h": 10.7
+          },
+          "rect": {
+            "cx": 0.4957,
+            "cy": 0.4316,
+            "x": -0.1395,
+            "y": 0.423,
+            "w": 1.2705,
+            "h": 0.0173
+          },
+          "childCount": 0,
+          "dashes": [],
+          "vis": 0.16
+        },
+        "jx-water": {
+          "present": false
+        },
+        "jx-path": {
+          "present": true,
+          "effOpacity": 0.2,
+          "attrOpacity": "0.200",
+          "bbox": {
+            "w": 216,
+            "h": 48
+          },
+          "rect": {
+            "cx": 0.1598,
+            "cy": 0.4643,
+            "x": 0.0435,
+            "y": 0.4255,
+            "w": 0.2326,
+            "h": 0.0776
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 0.2
+        },
+        "jx-reed": {
+          "present": true,
+          "effOpacity": 0.52,
+          "attrOpacity": "0.520",
+          "bbox": {
+            "w": 78,
+            "h": 154
+          },
+          "rect": {
+            "cx": 0.1393,
+            "cy": 0.7278,
+            "x": 0.0973,
+            "y": 0.6033,
+            "w": 0.084,
+            "h": 0.249
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 0.52
+        },
+        "jx-boat": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": "1.000",
+          "bbox": {
+            "w": 234,
+            "h": 75
+          },
+          "rect": {
+            "cx": 0.6411,
+            "cy": 0.7432,
+            "x": 0.5151,
+            "y": 0.6825,
+            "w": 0.2519,
+            "h": 0.1212
+          },
+          "childCount": 4,
+          "dashes": [],
+          "vis": 1
+        },
+        "jx-line": {
+          "present": true,
+          "effOpacity": 0.5,
+          "attrOpacity": "0.5",
+          "bbox": {
+            "w": 27.6,
+            "h": 106
+          },
+          "rect": {
+            "cx": 0.672,
+            "cy": 0.8248,
+            "x": 0.6572,
+            "y": 0.7391,
+            "w": 0.0297,
+            "h": 0.1714
+          },
+          "childCount": 0,
+          "dashes": [
+            {
+              "off": 100,
+              "total": 100,
+              "visibleFrac": 0
+            }
+          ],
+          "vis": 0
+        },
+        "jx-snow": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": null,
+          "bbox": {
+            "w": 829.3,
+            "h": 628.5
+          },
+          "rect": {
+            "cx": 0.4978,
+            "cy": 0.4709,
+            "x": 0.0513,
+            "y": -0.0371,
+            "w": 0.8929,
+            "h": 1.016
+          },
+          "childCount": 46,
+          "dashes": [],
+          "vis": 1
+        },
+        "jx-anno": {
+          "present": true,
+          "effOpacity": 0,
+          "attrOpacity": "0",
+          "bbox": {
+            "w": 695.3,
+            "h": 438.1
+          },
+          "rect": {
+            "cx": 0.4491,
+            "cy": 0.5448,
+            "x": 0.0748,
+            "y": 0.1907,
+            "w": 0.7486,
+            "h": 0.7082
+          },
+          "childCount": 7,
+          "dashes": [],
+          "vis": 0
+        },
+        "jx-poemink": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": null,
+          "bbox": {
+            "w": 150.2,
+            "h": 150.2
+          },
+          "rect": {
+            "cx": 0.8471,
+            "cy": 0.2152,
+            "x": 0.7637,
+            "y": 0.0899,
+            "w": 0.1669,
+            "h": 0.2507
+          },
+          "childCount": 23,
+          "dashes": [],
+          "vis": 1
+        },
+        "jx-seal": {
+          "present": true,
+          "effOpacity": 0,
+          "attrOpacity": "0.000",
+          "bbox": {
+            "w": 26,
+            "h": 59.6
+          },
+          "rect": {
+            "cx": 0.9367,
+            "cy": 0.8966,
+            "x": 0.9222,
+            "y": 0.8469,
+            "w": 0.0289,
+            "h": 0.0994
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 0
+        }
+      },
+      "19.03": {
+        "jx-far": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": "1.000",
+          "bbox": {
+            "w": 1180,
+            "h": 142
+          },
+          "rect": {
+            "cx": 0.413,
+            "cy": 0.2329,
+            "x": -0.3212,
+            "y": 0.1003,
+            "w": 1.4683,
+            "h": 0.2653
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 1
+        },
+        "jx-waterline": {
+          "present": true,
+          "effOpacity": 0.16,
+          "attrOpacity": "0.16",
+          "bbox": {
+            "w": 1180,
+            "h": 10.7
+          },
+          "rect": {
+            "cx": 0.413,
+            "cy": 0.2942,
+            "x": -0.3212,
+            "y": 0.2842,
+            "w": 1.4683,
+            "h": 0.02
+          },
+          "childCount": 0,
+          "dashes": [],
+          "vis": 0.16
+        },
+        "jx-water": {
+          "present": false
+        },
+        "jx-path": {
+          "present": true,
+          "effOpacity": 0.2,
+          "attrOpacity": "0.200",
+          "bbox": {
+            "w": 216,
+            "h": 48
+          },
+          "rect": {
+            "cx": 0.0247,
+            "cy": 0.3319,
+            "x": -0.1097,
+            "y": 0.2871,
+            "w": 0.2688,
+            "h": 0.0897
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 0.2
+        },
+        "jx-reed": {
+          "present": true,
+          "effOpacity": 0.52,
+          "attrOpacity": "0.520",
+          "bbox": {
+            "w": 78,
+            "h": 154
+          },
+          "rect": {
+            "cx": 0.0011,
+            "cy": 0.6365,
+            "x": -0.0474,
+            "y": 0.4926,
+            "w": 0.0971,
+            "h": 0.2877
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 0.52
+        },
+        "jx-boat": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": "1.000",
+          "bbox": {
+            "w": 234,
+            "h": 75
+          },
+          "rect": {
+            "cx": 0.5809,
+            "cy": 0.6542,
+            "x": 0.4354,
+            "y": 0.5842,
+            "w": 0.2912,
+            "h": 0.1401
+          },
+          "childCount": 4,
+          "dashes": [],
+          "vis": 1
+        },
+        "jx-line": {
+          "present": true,
+          "effOpacity": 0.5,
+          "attrOpacity": "0.5",
+          "bbox": {
+            "w": 27.6,
+            "h": 106
+          },
+          "rect": {
+            "cx": 0.6168,
+            "cy": 0.7486,
+            "x": 0.5996,
+            "y": 0.6496,
+            "w": 0.0343,
+            "h": 0.1981
+          },
+          "childCount": 0,
+          "dashes": [
+            {
+              "off": 0,
+              "total": 100,
+              "visibleFrac": 1
+            }
+          ],
+          "vis": 0.5
+        },
+        "jx-snow": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": null,
+          "bbox": {
+            "w": 844.2,
+            "h": 601.5
+          },
+          "rect": {
+            "cx": 0.4381,
+            "cy": 0.4004,
+            "x": -0.0871,
+            "y": -0.1616,
+            "w": 1.0505,
+            "h": 1.1238
+          },
+          "childCount": 46,
+          "dashes": [],
+          "vis": 1
+        },
+        "jx-anno": {
+          "present": true,
+          "effOpacity": 0,
+          "attrOpacity": "0",
+          "bbox": {
+            "w": 694.3,
+            "h": 438.4
+          },
+          "rect": {
+            "cx": 0.3596,
+            "cy": 0.4255,
+            "x": -0.0723,
+            "y": 0.016,
+            "w": 0.8639,
+            "h": 0.819
+          },
+          "childCount": 7,
+          "dashes": [],
+          "vis": 0
+        },
+        "jx-poemink": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": null,
+          "bbox": {
+            "w": 150.2,
+            "h": 150.2
+          },
+          "rect": {
+            "cx": 0.8471,
+            "cy": 0.2152,
+            "x": 0.7637,
+            "y": 0.0899,
+            "w": 0.1669,
+            "h": 0.2507
+          },
+          "childCount": 23,
+          "dashes": [],
+          "vis": 1
+        },
+        "jx-seal": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": "1.000",
+          "bbox": {
+            "w": 26,
+            "h": 59.6
+          },
+          "rect": {
+            "cx": 0.9367,
+            "cy": 0.8966,
+            "x": 0.9222,
+            "y": 0.8469,
+            "w": 0.0289,
+            "h": 0.0994
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 1
+        }
+      }
+    }
+  },
+  "bd": {
+    "T": 13.631,
+    "frames": {
+      "0.57": {
+        "bd-cloud": {
+          "present": true,
+          "effOpacity": 0.815,
+          "attrOpacity": "0.815",
+          "bbox": {
+            "w": 640,
+            "h": 97
+          },
+          "rect": {
+            "cx": 0.4899,
+            "cy": 0.1392,
+            "x": 0.134,
+            "y": 0.0583,
+            "w": 0.7118,
+            "h": 0.162
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 0.815
+        },
+        "bd-city": {
+          "present": true,
+          "effOpacity": 0.595,
+          "attrOpacity": "0.595",
+          "bbox": {
+            "w": 76,
+            "h": 46
+          },
+          "rect": {
+            "cx": 0.2372,
+            "cy": 0.1401,
+            "x": 0.195,
+            "y": 0.1017,
+            "w": 0.0845,
+            "h": 0.0768
+          },
+          "childCount": 5,
+          "dashes": [],
+          "vis": 0.595
+        },
+        "bd-far": {
+          "present": true,
+          "effOpacity": 0,
+          "attrOpacity": "0.000",
+          "bbox": {
+            "w": 360,
+            "h": 176
+          },
+          "rect": {
+            "cx": 0.533,
+            "cy": 0.3622,
+            "x": 0.3329,
+            "y": 0.2152,
+            "w": 0.4004,
+            "h": 0.2939
+          },
+          "childCount": 4,
+          "dashes": [],
+          "vis": 0
+        },
+        "bd-cliff": {
+          "present": true,
+          "effOpacity": 0.855,
+          "attrOpacity": "0.855",
+          "bbox": {
+            "w": 900,
+            "h": 600
+          },
+          "rect": {
+            "cx": 0.4997,
+            "cy": 0.4991,
+            "x": -0.0008,
+            "y": -0.0019,
+            "w": 1.0009,
+            "h": 1.0019
+          },
+          "childCount": 2,
+          "dashes": [],
+          "vis": 0.855
+        },
+        "bd-cun": {
+          "present": true,
+          "effOpacity": 0.17,
+          "attrOpacity": "0.170",
+          "bbox": {
+            "w": 732,
+            "h": 446
+          },
+          "rect": {
+            "cx": 0.4997,
+            "cy": 0.4807,
+            "x": 0.0926,
+            "y": 0.1084,
+            "w": 0.8141,
+            "h": 0.7448
+          },
+          "childCount": 8,
+          "dashes": [],
+          "vis": 0.17
+        },
+        "bd-mist": {
+          "present": true,
+          "effOpacity": 0.195,
+          "attrOpacity": "0.195",
+          "bbox": {
+            "w": 408,
+            "h": 64
+          },
+          "rect": {
+            "cx": 0.513,
+            "cy": 0.5392,
+            "x": 0.2861,
+            "y": 0.4857,
+            "w": 0.4537,
+            "h": 0.1069
+          },
+          "childCount": 2,
+          "dashes": [],
+          "vis": 0.195
+        },
+        "bd-water": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": null,
+          "bbox": {
+            "w": 461.8,
+            "h": 186.7
+          },
+          "rect": {
+            "cx": 0.4919,
+            "cy": 0.8382,
+            "x": 0.2351,
+            "y": 0.6823,
+            "w": 0.5136,
+            "h": 0.3118
+          },
+          "childCount": 5,
+          "dashes": [],
+          "vis": 1
+        },
+        "bd-trail": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": null,
+          "bbox": {
+            "w": 116,
+            "h": 23
+          },
+          "rect": {
+            "cx": 0.3062,
+            "cy": 0.8222,
+            "x": 0.2417,
+            "y": 0.803,
+            "w": 0.129,
+            "h": 0.0384
+          },
+          "childCount": 2,
+          "dashes": [
+            {
+              "off": 100,
+              "total": 100,
+              "visibleFrac": 0
+            },
+            {
+              "off": 100,
+              "total": 100,
+              "visibleFrac": 0
+            }
+          ],
+          "vis": 0
+        },
+        "bd-boat": {
+          "present": true,
+          "effOpacity": 0,
+          "attrOpacity": "0.000",
+          "bbox": {
+            "w": 112,
+            "h": 36
+          },
+          "rect": {
+            "cx": 0.3951,
+            "cy": 0.8049,
+            "x": 0.3329,
+            "y": 0.7748,
+            "w": 0.1246,
+            "h": 0.0601
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 0
+        },
+        "bd-anno": {
+          "present": true,
+          "effOpacity": 0,
+          "attrOpacity": "0",
+          "bbox": {
+            "w": 551.4,
+            "h": 429.2
+          },
+          "rect": {
+            "cx": 0.3453,
+            "cy": 0.4286,
+            "x": 0.0387,
+            "y": 0.0702,
+            "w": 0.6132,
+            "h": 0.7167
+          },
+          "childCount": 6,
+          "dashes": [],
+          "vis": 0
+        },
+        "bd-poemink": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": null,
+          "bbox": {
+            "w": 144.7,
+            "h": 196.4
+          },
+          "rect": {
+            "cx": 0.1625,
+            "cy": 0.4103,
+            "x": 0.0821,
+            "y": 0.2464,
+            "w": 0.1607,
+            "h": 0.3277
+          },
+          "childCount": 30,
+          "dashes": [],
+          "vis": 1
+        },
+        "bd-seal": {
+          "present": true,
+          "effOpacity": 0,
+          "attrOpacity": "0.000",
+          "bbox": {
+            "w": 26,
+            "h": 58.7
+          },
+          "rect": {
+            "cx": 0.9367,
+            "cy": 0.8973,
+            "x": 0.9222,
+            "y": 0.8483,
+            "w": 0.0289,
+            "h": 0.098
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 0
+        }
+      },
+      "2.56": {
+        "bd-cloud": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": "1.000",
+          "bbox": {
+            "w": 640,
+            "h": 97
+          },
+          "rect": {
+            "cx": 0.4755,
+            "cy": 0.0673,
+            "x": 0.1007,
+            "y": -0.018,
+            "w": 0.7495,
+            "h": 0.1706
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 1
+        },
+        "bd-city": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": "1.000",
+          "bbox": {
+            "w": 76,
+            "h": 46
+          },
+          "rect": {
+            "cx": 0.2047,
+            "cy": 0.0682,
+            "x": 0.1602,
+            "y": 0.0277,
+            "w": 0.089,
+            "h": 0.0809
+          },
+          "childCount": 5,
+          "dashes": [],
+          "vis": 1
+        },
+        "bd-far": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": "1.000",
+          "bbox": {
+            "w": 360,
+            "h": 176
+          },
+          "rect": {
+            "cx": 0.5162,
+            "cy": 0.302,
+            "x": 0.3054,
+            "y": 0.1473,
+            "w": 0.4216,
+            "h": 0.3095
+          },
+          "childCount": 4,
+          "dashes": [],
+          "vis": 1
+        },
+        "bd-cliff": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": "1.000",
+          "bbox": {
+            "w": 900,
+            "h": 600
+          },
+          "rect": {
+            "cx": 0.4811,
+            "cy": 0.4462,
+            "x": -0.0459,
+            "y": -0.0813,
+            "w": 1.054,
+            "h": 1.0551
+          },
+          "childCount": 2,
+          "dashes": [],
+          "vis": 1
+        },
+        "bd-cun": {
+          "present": true,
+          "effOpacity": 0.3,
+          "attrOpacity": "0.300",
+          "bbox": {
+            "w": 732,
+            "h": 446
+          },
+          "rect": {
+            "cx": 0.4811,
+            "cy": 0.4269,
+            "x": 0.0524,
+            "y": 0.0347,
+            "w": 0.8573,
+            "h": 0.7843
+          },
+          "childCount": 8,
+          "dashes": [],
+          "vis": 0.3
+        },
+        "bd-mist": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": "1.000",
+          "bbox": {
+            "w": 408,
+            "h": 64
+          },
+          "rect": {
+            "cx": 0.4951,
+            "cy": 0.4884,
+            "x": 0.2562,
+            "y": 0.4322,
+            "w": 0.4778,
+            "h": 0.1125
+          },
+          "childCount": 2,
+          "dashes": [],
+          "vis": 1
+        },
+        "bd-water": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": null,
+          "bbox": {
+            "w": 461.8,
+            "h": 184
+          },
+          "rect": {
+            "cx": 0.4729,
+            "cy": 0.8062,
+            "x": 0.2024,
+            "y": 0.6444,
+            "w": 0.5408,
+            "h": 0.3236
+          },
+          "childCount": 5,
+          "dashes": [],
+          "vis": 1
+        },
+        "bd-trail": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": null,
+          "bbox": {
+            "w": 116,
+            "h": 23
+          },
+          "rect": {
+            "cx": 0.2773,
+            "cy": 0.7865,
+            "x": 0.2094,
+            "y": 0.7663,
+            "w": 0.1358,
+            "h": 0.0404
+          },
+          "childCount": 2,
+          "dashes": [
+            {
+              "off": 100,
+              "total": 100,
+              "visibleFrac": 0
+            },
+            {
+              "off": 100,
+              "total": 100,
+              "visibleFrac": 0
+            }
+          ],
+          "vis": 0
+        },
+        "bd-boat": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": "1.000",
+          "bbox": {
+            "w": 112,
+            "h": 36
+          },
+          "rect": {
+            "cx": 0.371,
+            "cy": 0.767,
+            "x": 0.3054,
+            "y": 0.7353,
+            "w": 0.1312,
+            "h": 0.0633
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 1
+        },
+        "bd-anno": {
+          "present": true,
+          "effOpacity": 0,
+          "attrOpacity": "0",
+          "bbox": {
+            "w": 550.7,
+            "h": 429.4
+          },
+          "rect": {
+            "cx": 0.3181,
+            "cy": 0.3718,
+            "x": -0.0044,
+            "y": -0.0058,
+            "w": 0.645,
+            "h": 0.7552
+          },
+          "childCount": 6,
+          "dashes": [],
+          "vis": 0
+        },
+        "bd-poemink": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": null,
+          "bbox": {
+            "w": 144.7,
+            "h": 196.4
+          },
+          "rect": {
+            "cx": 0.1625,
+            "cy": 0.4103,
+            "x": 0.0821,
+            "y": 0.2464,
+            "w": 0.1607,
+            "h": 0.3277
+          },
+          "childCount": 30,
+          "dashes": [],
+          "vis": 1
+        },
+        "bd-seal": {
+          "present": true,
+          "effOpacity": 0,
+          "attrOpacity": "0.000",
+          "bbox": {
+            "w": 26,
+            "h": 58.7
+          },
+          "rect": {
+            "cx": 0.9367,
+            "cy": 0.8973,
+            "x": 0.9222,
+            "y": 0.8483,
+            "w": 0.0289,
+            "h": 0.098
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 0
+        }
+      },
+      "8.26": {
+        "bd-cloud": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": "1.000",
+          "bbox": {
+            "w": 640,
+            "h": 97
+          },
+          "rect": {
+            "cx": 0.3146,
+            "cy": -0.0235,
+            "x": -0.112,
+            "y": -0.1206,
+            "w": 0.8533,
+            "h": 0.1942
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 1
+        },
+        "bd-city": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": "1.000",
+          "bbox": {
+            "w": 76,
+            "h": 46
+          },
+          "rect": {
+            "cx": -0.0093,
+            "cy": -0.0225,
+            "x": -0.06,
+            "y": -0.0686,
+            "w": 0.1013,
+            "h": 0.0921
+          },
+          "childCount": 5,
+          "dashes": [],
+          "vis": 1
+        },
+        "bd-far": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": "1.000",
+          "bbox": {
+            "w": 360,
+            "h": 176
+          },
+          "rect": {
+            "cx": 0.3453,
+            "cy": 0.2437,
+            "x": 0.1053,
+            "y": 0.0676,
+            "w": 0.48,
+            "h": 0.3524
+          },
+          "childCount": 4,
+          "dashes": [],
+          "vis": 1
+        },
+        "bd-cliff": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": "1.000",
+          "bbox": {
+            "w": 900,
+            "h": 600
+          },
+          "rect": {
+            "cx": 0.3053,
+            "cy": 0.4079,
+            "x": -0.2947,
+            "y": -0.1927,
+            "w": 1.2,
+            "h": 1.2012
+          },
+          "childCount": 2,
+          "dashes": [],
+          "vis": 1
+        },
+        "bd-cun": {
+          "present": true,
+          "effOpacity": 0.3,
+          "attrOpacity": "0.300",
+          "bbox": {
+            "w": 732,
+            "h": 446
+          },
+          "rect": {
+            "cx": 0.3053,
+            "cy": 0.3859,
+            "x": -0.1827,
+            "y": -0.0606,
+            "w": 0.976,
+            "h": 0.8929
+          },
+          "childCount": 8,
+          "dashes": [],
+          "vis": 0.3
+        },
+        "bd-mist": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": "1.000",
+          "bbox": {
+            "w": 408,
+            "h": 64
+          },
+          "rect": {
+            "cx": 0.3213,
+            "cy": 0.456,
+            "x": 0.0493,
+            "y": 0.3919,
+            "w": 0.544,
+            "h": 0.1281
+          },
+          "childCount": 2,
+          "dashes": [],
+          "vis": 1
+        },
+        "bd-water": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": null,
+          "bbox": {
+            "w": 461.8,
+            "h": 183.8
+          },
+          "rect": {
+            "cx": 0.296,
+            "cy": 0.8337,
+            "x": -0.0119,
+            "y": 0.6498,
+            "w": 0.6157,
+            "h": 0.368
+          },
+          "childCount": 5,
+          "dashes": [],
+          "vis": 1
+        },
+        "bd-trail": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": null,
+          "bbox": {
+            "w": 116,
+            "h": 23
+          },
+          "rect": {
+            "cx": 0.0733,
+            "cy": 0.7953,
+            "x": -0.004,
+            "y": 0.7723,
+            "w": 0.1547,
+            "h": 0.046
+          },
+          "childCount": 2,
+          "dashes": [
+            {
+              "off": 79.4,
+              "total": 100,
+              "visibleFrac": 0.206
+            },
+            {
+              "off": 79.4,
+              "total": 100,
+              "visibleFrac": 0.206
+            }
+          ],
+          "vis": 0.206
+        },
+        "bd-boat": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": "1.000",
+          "bbox": {
+            "w": 112,
+            "h": 36
+          },
+          "rect": {
+            "cx": 0.18,
+            "cy": 0.7734,
+            "x": 0.1053,
+            "y": 0.7373,
+            "w": 0.1493,
+            "h": 0.0721
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 1
+        },
+        "bd-anno": {
+          "present": true,
+          "effOpacity": 0,
+          "attrOpacity": "0",
+          "bbox": {
+            "w": 550.7,
+            "h": 429.4
+          },
+          "rect": {
+            "cx": 0.1198,
+            "cy": 0.3232,
+            "x": -0.2473,
+            "y": -0.1066,
+            "w": 0.7343,
+            "h": 0.8596
+          },
+          "childCount": 6,
+          "dashes": [],
+          "vis": 0
+        },
+        "bd-poemink": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": null,
+          "bbox": {
+            "w": 144.7,
+            "h": 196.4
+          },
+          "rect": {
+            "cx": 0.1625,
+            "cy": 0.4103,
+            "x": 0.0821,
+            "y": 0.2464,
+            "w": 0.1607,
+            "h": 0.3277
+          },
+          "childCount": 30,
+          "dashes": [],
+          "vis": 1
+        },
+        "bd-seal": {
+          "present": true,
+          "effOpacity": 0,
+          "attrOpacity": "0.000",
+          "bbox": {
+            "w": 26,
+            "h": 58.7
+          },
+          "rect": {
+            "cx": 0.9367,
+            "cy": 0.8973,
+            "x": 0.9222,
+            "y": 0.8483,
+            "w": 0.0289,
+            "h": 0.098
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 0
+        }
+      },
+      "13.27": {
+        "bd-cloud": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": "1.000",
+          "bbox": {
+            "w": 640,
+            "h": 97
+          },
+          "rect": {
+            "cx": 0.5016,
+            "cy": -0.2641,
+            "x": -0.098,
+            "y": -0.4005,
+            "w": 1.1991,
+            "h": 0.2729
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 1
+        },
+        "bd-city": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": "1.000",
+          "bbox": {
+            "w": 76,
+            "h": 46
+          },
+          "rect": {
+            "cx": 0.027,
+            "cy": -0.2627,
+            "x": -0.0442,
+            "y": -0.3274,
+            "w": 0.1424,
+            "h": 0.1294
+          },
+          "childCount": 5,
+          "dashes": [],
+          "vis": 1
+        },
+        "bd-far": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": "1.000",
+          "bbox": {
+            "w": 360,
+            "h": 176
+          },
+          "rect": {
+            "cx": 0.5254,
+            "cy": 0.1115,
+            "x": 0.1882,
+            "y": -0.1361,
+            "w": 0.6745,
+            "h": 0.4952
+          },
+          "childCount": 4,
+          "dashes": [],
+          "vis": 1
+        },
+        "bd-cliff": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": "1.000",
+          "bbox": {
+            "w": 900,
+            "h": 600
+          },
+          "rect": {
+            "cx": 0.4692,
+            "cy": 0.3422,
+            "x": -0.3739,
+            "y": -0.5018,
+            "w": 1.6863,
+            "h": 1.688
+          },
+          "childCount": 2,
+          "dashes": [],
+          "vis": 1
+        },
+        "bd-cun": {
+          "present": true,
+          "effOpacity": 0.3,
+          "attrOpacity": "0.300",
+          "bbox": {
+            "w": 732,
+            "h": 446
+          },
+          "rect": {
+            "cx": 0.4692,
+            "cy": 0.3113,
+            "x": -0.2165,
+            "y": -0.3161,
+            "w": 1.3715,
+            "h": 1.2548
+          },
+          "childCount": 8,
+          "dashes": [],
+          "vis": 0.3
+        },
+        "bd-mist": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": "1.000",
+          "bbox": {
+            "w": 408,
+            "h": 64
+          },
+          "rect": {
+            "cx": 0.4917,
+            "cy": 0.4097,
+            "x": 0.1095,
+            "y": 0.3197,
+            "w": 0.7645,
+            "h": 0.1801
+          },
+          "childCount": 2,
+          "dashes": [],
+          "vis": 1
+        },
+        "bd-water": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": null,
+          "bbox": {
+            "w": 461.8,
+            "h": 199.1
+          },
+          "rect": {
+            "cx": 0.4561,
+            "cy": 0.9672,
+            "x": 0.0235,
+            "y": 0.6871,
+            "w": 0.8653,
+            "h": 0.5601
+          },
+          "childCount": 5,
+          "dashes": [],
+          "vis": 1
+        },
+        "bd-trail": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": null,
+          "bbox": {
+            "w": 116,
+            "h": 23
+          },
+          "rect": {
+            "cx": 0.1432,
+            "cy": 0.8866,
+            "x": 0.0345,
+            "y": 0.8542,
+            "w": 0.2173,
+            "h": 0.0647
+          },
+          "childCount": 2,
+          "dashes": [
+            {
+              "off": 0,
+              "total": 100,
+              "visibleFrac": 1
+            },
+            {
+              "off": 0,
+              "total": 100,
+              "visibleFrac": 1
+            }
+          ],
+          "vis": 1
+        },
+        "bd-boat": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": "1.000",
+          "bbox": {
+            "w": 112,
+            "h": 36
+          },
+          "rect": {
+            "cx": 0.2931,
+            "cy": 0.8544,
+            "x": 0.1882,
+            "y": 0.8038,
+            "w": 0.2099,
+            "h": 0.1013
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 1
+        },
+        "bd-anno": {
+          "present": true,
+          "effOpacity": 0,
+          "attrOpacity": "0",
+          "bbox": {
+            "w": 550.7,
+            "h": 429.4
+          },
+          "rect": {
+            "cx": 0.2086,
+            "cy": 0.2231,
+            "x": -0.3074,
+            "y": -0.381,
+            "w": 1.0319,
+            "h": 1.2082
+          },
+          "childCount": 6,
+          "dashes": [],
+          "vis": 0
+        },
+        "bd-poemink": {
+          "present": true,
+          "effOpacity": 1,
+          "attrOpacity": null,
+          "bbox": {
+            "w": 144.7,
+            "h": 196.4
+          },
+          "rect": {
+            "cx": 0.1625,
+            "cy": 0.4103,
+            "x": 0.0821,
+            "y": 0.2464,
+            "w": 0.1607,
+            "h": 0.3277
+          },
+          "childCount": 30,
+          "dashes": [],
+          "vis": 1
+        },
+        "bd-seal": {
+          "present": true,
+          "effOpacity": 0.998,
+          "attrOpacity": "0.998",
+          "bbox": {
+            "w": 26,
+            "h": 58.7
+          },
+          "rect": {
+            "cx": 0.9367,
+            "cy": 0.8973,
+            "x": 0.9222,
+            "y": 0.8483,
+            "w": 0.0289,
+            "h": 0.098
+          },
+          "childCount": 3,
+          "dashes": [],
+          "vis": 0.998
+        }
+      }
+    }
+  }
+}

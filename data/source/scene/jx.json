@@ -1,0 +1,810 @@
+{
+ "meta": {
+  "poem": "江雪",
+  "pid": "jx",
+  "role": "场景几何单一真源（冻结自动画 #jx-cam）：动画与全链路静帧/线稿皆由此渲染。",
+  "source": "dist/animation/ink_animations.html#jx-cam",
+  "generated_by": "python build/scene_render.py --extract",
+  "rest_state": "相机 identity；各层显隐取终态；JS 变换（漂移/振荡/姿态）取基础位；描边取画完态（dashoffset=0）；JS 生成内容（水纹 t=0 相位 / 飘雪终态）静态复现。",
+  "note": "本文件由 --extract 从动画抽取，勿手改；改场景请改动画后重抽再 --write。"
+ },
+ "viewBox": [
+  0,
+  0,
+  900,
+  600
+ ],
+ "paper": "#F6F3EC",
+ "defs": "<filter id=\"jxEdge\" x=\"-20%\" y=\"-20%\" width=\"140%\" height=\"140%\">\n          <feTurbulence type=\"fractalNoise\" baseFrequency=\"0.014\" numOctaves=\"4\" seed=\"11\" result=\"n\"/>\n          <feDisplacementMap in=\"SourceGraphic\" in2=\"n\" scale=\"18\" xChannelSelector=\"R\" yChannelSelector=\"G\"/>\n        </filter>\n        <filter id=\"jxSoft\" x=\"-20%\" y=\"-20%\" width=\"140%\" height=\"140%\">\n          <feTurbulence type=\"fractalNoise\" baseFrequency=\"0.028\" numOctaves=\"3\" seed=\"5\" result=\"n2\"/>\n          <feDisplacementMap in=\"SourceGraphic\" in2=\"n2\" scale=\"10\" xChannelSelector=\"R\" yChannelSelector=\"G\"/>\n          <feGaussianBlur stdDeviation=\"3.2\"/>\n        </filter>\n        <filter id=\"jxGrain\" x=\"0\" y=\"0\" width=\"100%\" height=\"100%\">\n          <feTurbulence type=\"fractalNoise\" baseFrequency=\"0.85\" numOctaves=\"2\" seed=\"3\" result=\"g\"/>\n          <feColorMatrix in=\"g\" type=\"saturate\" values=\"0\"/>\n        </filter>\n        <filter id=\"jxDry\" x=\"-30%\" y=\"-30%\" width=\"160%\" height=\"160%\">\n          <feTurbulence type=\"fractalNoise\" baseFrequency=\"0.09\" numOctaves=\"3\" seed=\"9\" result=\"d\"/>\n          <feDisplacementMap in=\"SourceGraphic\" in2=\"d\" scale=\"6\" xChannelSelector=\"R\" yChannelSelector=\"G\"/>\n        </filter>\n        <filter id=\"jxBoatInk\" x=\"-30%\" y=\"-30%\" width=\"160%\" height=\"160%\">\n          <feTurbulence type=\"fractalNoise\" baseFrequency=\"0.014\" numOctaves=\"4\" seed=\"11\" result=\"nb\"/>\n          <feDisplacementMap in=\"SourceGraphic\" in2=\"nb\" scale=\"18\" xChannelSelector=\"R\" yChannelSelector=\"G\"/>\n        </filter>\n        <!-- 墨笔：位移出毛边，再用细噪点做飞白 -->\n        <filter id=\"jxInk\" x=\"-18%\" y=\"-18%\" width=\"136%\" height=\"136%\">\n          <feTurbulence type=\"fractalNoise\" baseFrequency=\"0.05 0.085\" numOctaves=\"3\" seed=\"41\" result=\"it\"/>\n          <feDisplacementMap in=\"SourceGraphic\" in2=\"it\" scale=\"3.4\" xChannelSelector=\"R\" yChannelSelector=\"G\" result=\"id\"/>\n          <feTurbulence type=\"fractalNoise\" baseFrequency=\"0.72\" numOctaves=\"2\" seed=\"9\" result=\"ig\"/>\n          <feColorMatrix in=\"ig\" type=\"luminanceToAlpha\" result=\"iga\"/>\n          <feComponentTransfer in=\"iga\" result=\"igm\">\n            <feFuncA type=\"linear\" slope=\"0.5\" intercept=\"0.62\"/>\n          </feComponentTransfer>\n          <feComposite in=\"id\" in2=\"igm\" operator=\"in\"/>\n        </filter>",
+ "layers": [
+  {
+   "id": "jx-far",
+   "label": "远山",
+   "filter": "jxEdge",
+   "opacity": null,
+   "clip": null,
+   "shapes": [
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M-140 252 L-70 206 L0 252 L120 176 L212 234 L320 158 L432 238 L522 194 L642 250 L762 198 L900 252 L980 210 L1040 252 L1040 300 L-140 300 Z",
+      "fill": "#6E6A60",
+      "opacity": "0.13"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M-140 252 L-60 210 L88 204 L202 248 L332 188 L472 252 L602 212 L742 252 L900 252 L990 218 L1040 252 L1040 300 L-140 300 Z",
+      "fill": "#5A564D",
+      "opacity": "0.17"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M-140 252 L-40 232 L142 222 L282 252 L422 214 L582 252 L800 234 L960 246 L1040 252 L1040 300 L-140 300 Z",
+      "fill": "#3A362F",
+      "opacity": "0.15"
+     }
+    }
+   ]
+  },
+  {
+   "id": "jx-waterline",
+   "label": "山脚水痕",
+   "filter": null,
+   "opacity": null,
+   "clip": null,
+   "shapes": [
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M-140 262 Q-40 272 0 258 Q220 274 452 262 Q680 250 900 264 Q960 268 1040 264",
+      "fill": "none",
+      "stroke": "#3A362F",
+      "stroke-width": "1.6",
+      "opacity": "0.16",
+      "filter": "url(#jxSoft)"
+     }
+    }
+   ]
+  },
+  {
+   "id": "jx-path",
+   "label": "万径",
+   "filter": "jxSoft",
+   "opacity": "0.20",
+   "clip": null,
+   "shapes": [
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M30 258 L152 302",
+      "stroke": "#5A564D",
+      "stroke-width": "2.4",
+      "fill": "none"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M64 258 L200 304",
+      "stroke": "#5A564D",
+      "stroke-width": "2",
+      "fill": "none"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M98 258 L246 306",
+      "stroke": "#5A564D",
+      "stroke-width": "1.8",
+      "fill": "none"
+     }
+    }
+   ]
+  },
+  {
+   "id": "jx-reed",
+   "label": "芦苇",
+   "filter": "jxDry",
+   "opacity": "0.52",
+   "clip": null,
+   "shapes": [
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M88 514 Q100 438 80 368",
+      "stroke-width": "1.8"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M114 518 Q130 450 158 392",
+      "stroke-width": "1.4"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M138 522 Q146 464 138 420",
+      "stroke-width": "1.2"
+     }
+    }
+   ]
+  },
+  {
+   "id": "jx-boat",
+   "label": "孤舟",
+   "filter": "jxBoatInk",
+   "opacity": null,
+   "clip": null,
+   "shapes": [
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M468 468 Q585 502 702 468 Q662 490 585 492 Q508 490 468 468 Z",
+      "fill": "#1C1C1C",
+      "opacity": "0.88"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M566 428 Q586 406 606 428 Z",
+      "fill": "#1C1C1C",
+      "opacity": "0.92"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M576 428 L596 428 L598 456 L574 456 Z",
+      "fill": "#1C1C1C",
+      "opacity": "0.88"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M578 458 Q588 466 596 458",
+      "fill": "none",
+      "stroke": "#F6F3EC",
+      "stroke-width": "1",
+      "opacity": "0.5"
+     }
+    }
+   ]
+  },
+  {
+   "id": "jx-line",
+   "label": "钓丝",
+   "filter": null,
+   "opacity": null,
+   "clip": null,
+   "shapes": [
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M600 452 Q642 500 620 558",
+      "fill": "none",
+      "stroke": "#1C1C1C",
+      "stroke-width": "1.2",
+      "opacity": "0.5",
+      "filter": "url(#jxDry)",
+      "pathLength": "100",
+      "stroke-dasharray": "100 100",
+      "stroke-dashoffset": "0"
+     }
+    }
+   ]
+  },
+  {
+   "id": "jx-snow",
+   "label": "飘雪",
+   "filter": null,
+   "opacity": null,
+   "clip": null,
+   "shapes": [
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.86",
+      "cx": "837.5",
+      "cy": "354.2",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "2.01",
+      "cx": "166.6",
+      "cy": "48.1",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.82",
+      "cx": "765.3",
+      "cy": "445.5",
+      "opacity": "0.079"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.19",
+      "cx": "50.6",
+      "cy": "60.7",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.22",
+      "cx": "436.2",
+      "cy": "257.8",
+      "opacity": "0.186"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.43",
+      "cx": "423.2",
+      "cy": "33.5",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.59",
+      "cx": "375.4",
+      "cy": "191.2",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.70",
+      "cx": "793.2",
+      "cy": "463.7",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.82",
+      "cx": "757.3",
+      "cy": "35.8",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.06",
+      "cx": "657.0",
+      "cy": "226.1",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.14",
+      "cx": "662.5",
+      "cy": "440.3",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.70",
+      "cx": "310.2",
+      "cy": "344.9",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.66",
+      "cx": "150.4",
+      "cy": "184.1",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.02",
+      "cx": "67.6",
+      "cy": "114.9",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.22",
+      "cx": "713.9",
+      "cy": "218.4",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.79",
+      "cx": "306.3",
+      "cy": "539.5",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.71",
+      "cx": "266.6",
+      "cy": "258.3",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.73",
+      "cx": "278.8",
+      "cy": "439.0",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.99",
+      "cx": "571.7",
+      "cy": "54.4",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.02",
+      "cx": "648.3",
+      "cy": "564.0",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.29",
+      "cx": "808.9",
+      "cy": "511.1",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.96",
+      "cx": "297.5",
+      "cy": "114.9",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.98",
+      "cx": "519.2",
+      "cy": "288.6",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.05",
+      "cx": "186.0",
+      "cy": "161.6",
+      "opacity": "0.201"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.54",
+      "cx": "94.7",
+      "cy": "472.9",
+      "opacity": "0.340"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "2.06",
+      "cx": "241.5",
+      "cy": "-25.9",
+      "opacity": "0.043"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.90",
+      "cx": "784.8",
+      "cy": "195.1",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "2.00",
+      "cx": "436.2",
+      "cy": "520.1",
+      "opacity": "0.290"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.10",
+      "cx": "678.5",
+      "cy": "327.8",
+      "opacity": "0.197"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.61",
+      "cx": "92.5",
+      "cy": "300.0",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.12",
+      "cx": "142.0",
+      "cy": "91.8",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.04",
+      "cx": "108.1",
+      "cy": "116.4",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.41",
+      "cx": "679.9",
+      "cy": "221.3",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.95",
+      "cx": "395.3",
+      "cy": "233.5",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.90",
+      "cx": "208.1",
+      "cy": "321.0",
+      "opacity": "0.420"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "fill": "#8A8578",
+      "r": "1.34",
+      "cx": "842.2",
+      "cy": "384.2",
+      "opacity": "0.420"
+     }
+    }
+   ]
+  },
+  {
+   "id": "jx-anno",
+   "label": "画中物标注",
+   "filter": null,
+   "opacity": "0",
+   "clip": null,
+   "shapes": [
+    {
+     "tag": "line",
+     "attrs": {
+      "x1": "400",
+      "y1": "214",
+      "x2": "358",
+      "y2": "178"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "cx": "400",
+      "cy": "214",
+      "r": "2.4"
+     }
+    },
+    {
+     "tag": "text",
+     "attrs": {
+      "x": "352",
+      "y": "172",
+      "text-anchor": "start"
+     },
+     "text": "远山"
+    },
+    {
+     "tag": "line",
+     "attrs": {
+      "x1": "118",
+      "y1": "442",
+      "x2": "66",
+      "y2": "400"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "cx": "118",
+      "cy": "442",
+      "r": "2.4"
+     }
+    },
+    {
+     "tag": "text",
+     "attrs": {
+      "x": "60",
+      "y": "394",
+      "text-anchor": "start"
+     },
+     "text": "芦苇"
+    },
+    {
+     "tag": "line",
+     "attrs": {
+      "x1": "706",
+      "y1": "258",
+      "x2": "722",
+      "y2": "240"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "cx": "706",
+      "cy": "258",
+      "r": "2.4"
+     }
+    },
+    {
+     "tag": "text",
+     "attrs": {
+      "x": "728",
+      "y": "236",
+      "text-anchor": "start"
+     },
+     "text": "寒江"
+    },
+    {
+     "tag": "line",
+     "attrs": {
+      "x1": "146",
+      "y1": "152",
+      "x2": "146",
+      "y2": "132"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "cx": "146",
+      "cy": "152",
+      "r": "2.4"
+     }
+    },
+    {
+     "tag": "text",
+     "attrs": {
+      "x": "146",
+      "y": "126",
+      "text-anchor": "middle"
+     },
+     "text": "雪"
+    },
+    {
+     "tag": "line",
+     "attrs": {
+      "x1": "168",
+      "y1": "292",
+      "x2": "186",
+      "y2": "326"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "cx": "168",
+      "cy": "292",
+      "r": "2.4"
+     }
+    },
+    {
+     "tag": "text",
+     "attrs": {
+      "x": "190",
+      "y": "340",
+      "text-anchor": "start"
+     },
+     "text": "万径"
+    },
+    {
+     "tag": "line",
+     "attrs": {
+      "x1": "585",
+      "y1": "462",
+      "x2": "585",
+      "y2": "404"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "cx": "585",
+      "cy": "462",
+      "r": "2.4"
+     }
+    },
+    {
+     "tag": "text",
+     "attrs": {
+      "x": "585",
+      "y": "398",
+      "text-anchor": "middle"
+     },
+     "text": "孤舟 · 蓑笠翁"
+    },
+    {
+     "tag": "line",
+     "attrs": {
+      "x1": "618",
+      "y1": "520",
+      "x2": "646",
+      "y2": "540"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "cx": "618",
+      "cy": "520",
+      "r": "2.4"
+     }
+    },
+    {
+     "tag": "text",
+     "attrs": {
+      "x": "652",
+      "y": "548",
+      "text-anchor": "start"
+     },
+     "text": "钓丝"
+    }
+   ]
+  }
+ ],
+ "seal": {
+  "attrs": {
+   "id": "jx-seal",
+   "opacity": "1"
+  },
+  "shapes": [
+   {
+    "tag": "rect",
+    "attrs": {
+     "x": "830",
+     "y": "522",
+     "width": "26",
+     "height": "44",
+     "rx": "4",
+     "fill": "#A83A2C",
+     "opacity": "0.86"
+    }
+   },
+   {
+    "tag": "text",
+    "attrs": {
+     "x": "843",
+     "y": "540",
+     "font-size": "19",
+     "fill": "#F6F3EC",
+     "font-family": "PoemSeal, Songti SC, serif",
+     "text-anchor": "middle"
+    },
+    "text": "江"
+   },
+   {
+    "tag": "text",
+    "attrs": {
+     "x": "843",
+     "y": "562",
+     "font-size": "19",
+     "fill": "#F6F3EC",
+     "font-family": "PoemSeal, Songti SC, serif",
+     "text-anchor": "middle"
+    },
+    "text": "雪"
+   }
+  ]
+ }
+}

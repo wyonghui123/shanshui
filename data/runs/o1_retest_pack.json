@@ -1,0 +1,329 @@
+{
+  "meta": {
+    "generated": "2026-10-04T02:01:19",
+    "purpose": "同源复判 · 盲判任务包（O1.3-B）",
+    "source_qset": "o1_qset.json @ v1.3",
+    "n": 12,
+    "stripped": [
+      "expect",
+      "measured",
+      "baseline.answer",
+      "baseline.evidence"
+    ],
+    "note": "本包不含任何期望答案与基线作答。判读者须仅依据 images 所列帧图作答，不得读取项目内其他 JSON。"
+  },
+  "items": [
+    {
+      "id": "JX-N1",
+      "poem": "jx",
+      "axis": "NEGATIVE",
+      "basis": "poem",
+      "type": "yes_no",
+      "media": "single",
+      "probe_assisted": false,
+      "q": "画面中是否出现飞鸟？",
+      "options": null,
+      "images": [
+        {
+          "frame": "jx_05_nopoem",
+          "t": 7.83,
+          "file": "dist/figures/thumbs/jx_05_nopoem.jpg"
+        }
+      ],
+      "answer_schema": {
+        "answer": "必须与 options 中某一项完全一致",
+        "conf": "high|mid|low",
+        "evidence": "判读依据（看图所得，勿引用源码参数）"
+      }
+    },
+    {
+      "id": "JX-N2",
+      "poem": "jx",
+      "axis": "NEGATIVE",
+      "basis": "poem",
+      "type": "yes_no",
+      "media": "single",
+      "probe_assisted": false,
+      "q": "画面中是否出现除渔翁以外的第二个人？",
+      "options": null,
+      "images": [
+        {
+          "frame": "jx_04_nopoem",
+          "t": 19.03,
+          "file": "dist/figures/thumbs/jx_04_nopoem.jpg"
+        }
+      ],
+      "answer_schema": {
+        "answer": "必须与 options 中某一项完全一致",
+        "conf": "high|mid|low",
+        "evidence": "判读依据（看图所得，勿引用源码参数）"
+      }
+    },
+    {
+      "id": "JX-N3",
+      "poem": "jx",
+      "axis": "NEGATIVE",
+      "basis": "poem",
+      "type": "yes_no",
+      "media": "single",
+      "probe_assisted": false,
+      "q": "画面中是否出现人的脚印／足迹？",
+      "options": null,
+      "images": [
+        {
+          "frame": "jx_05_nopoem",
+          "t": 7.83,
+          "file": "dist/figures/thumbs/jx_05_nopoem.jpg"
+        }
+      ],
+      "answer_schema": {
+        "answer": "必须与 options 中某一项完全一致",
+        "conf": "high|mid|low",
+        "evidence": "判读依据（看图所得，勿引用源码参数）"
+      }
+    },
+    {
+      "id": "JX-T4",
+      "poem": "jx",
+      "axis": "TEMPORAL",
+      "basis": "design",
+      "type": "yes_no",
+      "media": "pair",
+      "probe_assisted": false,
+      "q": "全片是否只有一个场景（无场景切换）？",
+      "options": null,
+      "images": [
+        {
+          "frame": "jx_01",
+          "t": 0.78,
+          "file": "dist/figures/thumbs/jx_01.jpg"
+        },
+        {
+          "frame": "jx_04",
+          "t": 19.03,
+          "file": "dist/figures/thumbs/jx_04.jpg"
+        }
+      ],
+      "answer_schema": {
+        "answer": "必须与 options 中某一项完全一致",
+        "conf": "high|mid|low",
+        "evidence": "判读依据（看图所得，勿引用源码参数）"
+      }
+    },
+    {
+      "id": "JX-T6",
+      "poem": "jx",
+      "axis": "TEMPORAL",
+      "basis": "poem",
+      "type": "yes_no",
+      "media": "pair",
+      "probe_assisted": false,
+      "q": "雪在片中是否持续飘落（而非静止悬停）？",
+      "options": null,
+      "images": [
+        {
+          "frame": "jx_01",
+          "t": 0.78,
+          "file": "dist/figures/thumbs/jx_01.jpg"
+        },
+        {
+          "frame": "jx_04",
+          "t": 19.03,
+          "file": "dist/figures/thumbs/jx_04.jpg"
+        }
+      ],
+      "answer_schema": {
+        "answer": "必须与 options 中某一项完全一致",
+        "conf": "high|mid|low",
+        "evidence": "判读依据（看图所得，勿引用源码参数）"
+      }
+    },
+    {
+      "id": "BD-N1",
+      "poem": "bd",
+      "axis": "NEGATIVE",
+      "basis": "poem",
+      "type": "yes_no",
+      "media": "single",
+      "probe_assisted": false,
+      "q": "画面中是否出现猿／猴子？",
+      "options": null,
+      "images": [
+        {
+          "frame": "bd_04_nopoem",
+          "t": 13.27,
+          "file": "dist/figures/thumbs/bd_04_nopoem.jpg"
+        }
+      ],
+      "answer_schema": {
+        "answer": "必须与 options 中某一项完全一致",
+        "conf": "high|mid|low",
+        "evidence": "判读依据（看图所得，勿引用源码参数）"
+      }
+    },
+    {
+      "id": "BD-N2",
+      "poem": "bd",
+      "axis": "NEGATIVE",
+      "basis": "poem",
+      "type": "yes_no",
+      "media": "single",
+      "probe_assisted": false,
+      "q": "画面中是否出现江陵城（终点）？",
+      "options": null,
+      "images": [
+        {
+          "frame": "bd_04_nopoem",
+          "t": 13.27,
+          "file": "dist/figures/thumbs/bd_04_nopoem.jpg"
+        }
+      ],
+      "answer_schema": {
+        "answer": "必须与 options 中某一项完全一致",
+        "conf": "high|mid|low",
+        "evidence": "判读依据（看图所得，勿引用源码参数）"
+      }
+    },
+    {
+      "id": "BD-A6",
+      "poem": "bd",
+      "axis": "ATTR",
+      "basis": "design",
+      "type": "choice",
+      "media": "single",
+      "probe_assisted": false,
+      "q": "两岸山壁主体的渲染方式是？",
+      "options": [
+        "湿笔晕染（边缘柔化、墨色向两侧渗开）",
+        "干笔飞白（边缘毛涩、有断白）",
+        "硬边实线（无晕染无飞白）"
+      ],
+      "images": [
+        {
+          "frame": "bd_02",
+          "t": 2.56,
+          "file": "dist/figures/thumbs/bd_02.jpg"
+        }
+      ],
+      "answer_schema": {
+        "answer": "必须与 options 中某一项完全一致",
+        "conf": "high|mid|low",
+        "evidence": "判读依据（看图所得，勿引用源码参数）"
+      }
+    },
+    {
+      "id": "BD-S3",
+      "poem": "bd",
+      "axis": "SPATIAL",
+      "basis": "design",
+      "type": "choice",
+      "media": "single",
+      "probe_assisted": false,
+      "q": "江水在画面中的走向？",
+      "options": [
+        "从画面中央向远处纵深延伸",
+        "横贯画面左右",
+        "沿画面右缘垂直而下"
+      ],
+      "images": [
+        {
+          "frame": "bd_02",
+          "t": 2.56,
+          "file": "dist/figures/thumbs/bd_02.jpg"
+        }
+      ],
+      "answer_schema": {
+        "answer": "必须与 options 中某一项完全一致",
+        "conf": "high|mid|low",
+        "evidence": "判读依据（看图所得，勿引用源码参数）"
+      }
+    },
+    {
+      "id": "BD-S4",
+      "poem": "bd",
+      "axis": "SPATIAL",
+      "basis": "design",
+      "type": "choice",
+      "media": "single",
+      "probe_assisted": false,
+      "q": "万重山与两岸山壁的关系？",
+      "options": [
+        "万重山在两道山壁的缺口之间、层层后退",
+        "万重山在山壁之上、位于画面顶部",
+        "万重山覆盖在山壁之上"
+      ],
+      "images": [
+        {
+          "frame": "bd_02",
+          "t": 2.56,
+          "file": "dist/figures/thumbs/bd_02.jpg"
+        }
+      ],
+      "answer_schema": {
+        "answer": "必须与 options 中某一项完全一致",
+        "conf": "high|mid|low",
+        "evidence": "判读依据（看图所得，勿引用源码参数）"
+      }
+    },
+    {
+      "id": "BD-S5",
+      "poem": "bd",
+      "axis": "SPATIAL",
+      "basis": "design",
+      "type": "choice",
+      "media": "single",
+      "probe_assisted": false,
+      "q": "两岸山壁与江面的关系？",
+      "options": [
+        "山壁内缘即江面左右边界、紧贴无缝",
+        "山壁与江面之间另有一条岸／滩",
+        "江面在画面一侧、山壁在另一侧"
+      ],
+      "images": [
+        {
+          "frame": "bd_02",
+          "t": 2.56,
+          "file": "dist/figures/thumbs/bd_02.jpg"
+        }
+      ],
+      "answer_schema": {
+        "answer": "必须与 options 中某一项完全一致",
+        "conf": "high|mid|low",
+        "evidence": "判读依据（看图所得，勿引用源码参数）"
+      }
+    },
+    {
+      "id": "BD-T2",
+      "poem": "bd",
+      "axis": "TEMPORAL",
+      "basis": "design",
+      "type": "yes_no",
+      "media": "pair",
+      "probe_assisted": false,
+      "q": "全片是否为连续长镜头（无场景切换）？",
+      "options": null,
+      "images": [
+        {
+          "frame": "bd_01",
+          "t": 0.57,
+          "file": "dist/figures/thumbs/bd_01.jpg"
+        },
+        {
+          "frame": "bd_03",
+          "t": 8.26,
+          "file": "dist/figures/thumbs/bd_03.jpg"
+        },
+        {
+          "frame": "bd_04",
+          "t": 13.27,
+          "file": "dist/figures/thumbs/bd_04.jpg"
+        }
+      ],
+      "answer_schema": {
+        "answer": "必须与 options 中某一项完全一致",
+        "conf": "high|mid|low",
+        "evidence": "判读依据（看图所得，勿引用源码参数）"
+      }
+    }
+  ]
+}

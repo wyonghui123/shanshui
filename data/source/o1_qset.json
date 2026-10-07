@@ -1,0 +1,230 @@
+{
+  "meta": {
+    "id": "o1-eval-v1",
+    "name": "水墨动画忠实度评估 · 问题集（模板 + 实例）",
+    "version": "1.3",
+    "date": "2026-10-02",
+    "principle": "问题由「诗」生成，答案由「画面」给出。期望答案写在数据里，评分 = 画面答案与期望答案的一致率。",
+    "positioning": {
+      "role": "护栏（guardrail），不是目标（objective）",
+      "measures": "忠实度 —— 诗里的意思有没有丢、有没有画反。只回答「有没有画错」，不回答「画得好不好」。",
+      "not_measures": "意境 · 美感 —— 这是项目的真正目标，目前无尺子可量；本问题集的通过率不能替代它。",
+      "usage": "只用于回归：改动之后忠实度不得下降。不得以「要素全中」作为创作优化目标 —— 追求要素全匹配会把该留白处填满，反而流失意境。",
+      "related": "更接近意境的代理是留白／负节点，由 O3 双判据负责；诗中无据、设计所加的元素（如芦苇）以 basis=design、w=0.5 计入，不作为诗意要素要求。"
+    },
+    "revision": {
+      "from": "1.2",
+      "to": "1.3",
+      "note": "本版同时改「判据」与「画面」：按「镜头缩放过大破坏意境」的裁定，把《江雪》13–16.5s 的急推压平为全程极缓推近，并同步修订受影响的判据（JX-T5 期望曲线、JX-T4 场景切换定义、JX-S2 判读帧理由）。",
+      "fixes": [
+        { "id": "V3-1", "where": "JX-T5", "status": "fixed", "how": "期望曲线由「前段近乎静止、13s 后急推加速、末段又归于近乎静止」改为「前段近乎静止，后段极缓推近（无急推）」。自动判据阈值：vmax ≤ 0.05/s（5%/s）即判「无急推」。" },
+        { "id": "V3-2", "where": "JX-T4", "status": "fixed", "how": "补「场景切换」定义（题内 protocol + meta.protocol.scene_switch）：仅指硬切／黑场／叠化转场；同一场景内的相机推拉、横移、缩放不算切换。消除原题面把连续推镜误读为切换的歧义。" },
+        { "id": "V3-3", "where": "ink_animations.html · JX.cam", "status": "fixed", "how": "JX 相机键值由 1.00→0.93→1.55→1.58（峰值 0.394/s）压平为 1.00→0.96→1.12（峰值 ≈0.04/s），横移与纵向平移同步减小；节拍标签「急推」改为「极缓推近」。" },
+        { "id": "V3-4", "where": "JX-S2", "status": "verified", "how": "压平后 jx_03(t=15.5) 孤舟仍在右下，判读帧绑定不变；why 内「终帧因急推落至正中」改为「终帧略向孤舟推近、较 jx_03 更居中」。" }
+      ]
+    },
+    "revision_history": [
+      {
+      "from": "1.1",
+      "to": "1.2",
+      "note": "本版只修「尺子」，不动画面。逐条对应基线暴露的 D1–D7。",
+      "fixes": [
+        { "id": "D1", "where": "JX-S4", "status": "fixed", "how": "地平线选项由 3 档改为 4 档，补入「中部偏上（0.40–0.50H）」；并新增 meta.protocol.option_coverage 作为通用规则（选项档位必须覆盖实测值，否则该题作废而非判错）。" },
+        { "id": "D2", "where": "全题集", "status": "verified", "how": "v1.1 已为每题补 frame 字段；v1.2 由 src/o1/o1_validate.mjs 机器校验「每题必有 frame」，不再靠人工自觉。" },
+        { "id": "D3", "where": "JX-N2 / BD-N2", "status": "fixed", "how": "负节点题由「抽检去诗帧」升级为「一律绑去诗帧」：JX-N2 由 jx_04 改绑 jx_04_nopoem，BD-N2 由 bd_04 改绑 bd_04_nopoem。校验器强制 NEGATIVE 题的 frame 必须含 nopoem。" },
+        { "id": "D4", "where": "JX-A3 / BD-A4", "status": "fixed", "how": "留白率拆为 ρ_layout（线稿口径，设计意图）与 ρ_render（渲染口径，探针实测）两个指标，见 meta.rho_definitions；相关题在 why 内注明所引口径。" },
+        { "id": "D5", "where": "全题集", "status": "fixed", "how": "补入 11 道高区分度题：墨色分档对比、笔触干湿、疏密势能、留白形状、相机速度曲线。期望值全部可回溯到源码参数或探针实测，天花板效应由「更细的量」而非「更多的题」突破。" },
+        { "id": "D6", "where": "JX-A5 / BD-E2", "status": "fixed", "how": "极淡元素题加 probe_assisted 标记与 reading_protocol（放大倍数、局部区域、对比度提升、探针先判）；协议规定「探针说有、肉眼不可见」不得判 miss。" },
+        { "id": "D7", "where": "全时序题", "status": "fixed", "how": "时序题加 media 字段（pair/video/probe），单帧判读被禁止；JX-E6「飘落的雪」拆为 JX-E6（存在，单帧）+ JX-T6（持续飘落，成对帧）；相机速度曲线类题（JX-T5/BD-T4/BD-T5）改用 media=probe，由 src/o1/o1_probe_cam.mjs 采样 DOM 的 scale 客观判定，不依赖视频素材。" }
+      ]
+      }
+    ],
+    "axes": {
+      "EXIST": "意象存在性 —— 诗中该有的东西，画面里有没有",
+      "ATTR": "属性 —— 浓淡／虚实／疏密／数量是否符合该意象的身份",
+      "SPATIAL": "空间关系 —— 意象之间的相对位置、景深、贴合关系",
+      "TEMPORAL": "时序 —— 出场先后、镜头连续性是否与诗句顺序一致",
+      "NEGATIVE": "负节点 —— 诗中「本该有却没有」的意象，是否确实缺席（留白检验）"
+    },
+    "basis": {
+      "poem": "期望答案直接来自诗句语义（画错了 = 不忠实于诗）",
+      "design": "期望答案来自本项目的构图／节拍设计（答错 = 画面没实现设计意图）"
+    },
+    "answer_types": ["yes_no", "choice"],
+    "media_types": {
+      "single": "单帧可判 —— 存在性、静态属性、静态空间关系",
+      "pair": "成对帧（起点+终点）—— 出场先后、渐次画出等过程量（D7）",
+      "video": "须短视频 —— 镜头连续性等纯过程量，单帧与成对帧均不可判（D7）",
+      "probe": "客观探针判定 —— 相机轨迹、速度曲线等连续量，由 src/o1/o1_probe_cam.mjs 从 DOM 采样，非目视（D7）"
+    },
+    "scoring": {
+      "per_question": "s = 1 若作答与 expect 完全一致，否则 0",
+      "aggregate": "加权通过率 = Σ(w·s) / Σ(w)",
+      "axis_rollup": "同一 axis 内的加权通过率",
+      "failure_list": "s = 0 的题即「看不懂」的定位点；按 axis 与 basis 归类",
+      "exclude_defect": "判为「题面缺陷」的题不计入分母，单列清单 —— 否则会把工具的毛病记到画面头上",
+      "exclude_unreadable": "v1.2 新增：media=video 的题若无对应短视频素材，标记 unreadable 并剔除出分母，不得以单帧勉强作答。media=probe 的题改由 src/o1/o1_probe_cam.mjs 采样相机 scale 客观判定，无需素材"
+    },
+    "generation_rules": [
+      "STEP 2 每个「正节点」→ 1 道 EXIST（expect 是）+ 1 道 ATTR（该意象的浓淡／虚实身份）",
+      "STEP 2 每个「负节点」→ 1 道 NEGATIVE（expect 否），权重上调，因为它是本项目最独特的判据",
+      "STEP 2「虚／留白」意象 → 1 道 ATTR（用留白表现的检验），而非 EXIST，避免把「留白」误判成「缺失」",
+      "STEP 5 场景图每一条空间关系边 → 1 道 SPATIAL；构图约束（重心、地平线、留白率）各 → 1 道 SPATIAL／ATTR",
+      "STEP 7 节拍表每个出场先后关系 → 1 道 TEMPORAL；镜头结构（长镜头／定格）→ 1 道 TEMPORAL",
+      "跨通道节点（如「猿声」）→ 视觉通道记 1 道 NEGATIVE（expect 否），听觉通道不入画面题",
+      "设计额外添加、诗中无据的元素（如芦苇、船迹）→ 仍出题，但 basis=design 且权重减半",
+      "v1.2：属性题若相邻档位之间留有「空档」，即为缺陷题（D1）—— 选项必须覆盖实测值所在区间",
+      "v1.2：过程性谓语（飘落／拉长／渐次画出／加速）不得出成单帧题，必须 media=pair 或 video（D7）"
+    ],
+    "protocol": {
+      "note": "v1.1 建立「在哪一帧判读」；v1.2 补「选项怎么给、极淡怎么判、过程怎么看」。",
+      "frame_binding": "每题必须绑定判读帧（frame 字段）。构图类题默认绑在「设计意图最易读的那一帧」，而非终帧。",
+      "option_coverage": "（D1）选项档位必须覆盖实测值所在的区间。若实测值落在两档之间的空档，该题为题面缺陷，须改档位或改数值题，不得判画面错。",
+      "anno_off": "基线一律关闭「画中物标注」图层 —— 标注会直接写出意象名，使 EXIST／NEGATIVE 题失去意义。",
+      "negative_nopoem": "（D3 强化）凡 NEGATIVE 题，一律绑「去题诗」帧（frame 名含 nopoem）。v1.1 只对含意象词的题抽检，v1.2 改为全量强制 —— 题诗文字里的「鸟」「猿」「江陵」是稳定的假阳性源。",
+      "reading_protocol": "（D6）极淡元素题（probe_assisted=true）的判读协议：① 先看探针数值再做有无初筛；② 在题干给定的局部区域内判读，勿受全幅平均影响；③ 允许放大 200% 或把局部对比度提升 3× 复核；④ 探针说「有」而肉眼不可见时，记 mid/low 置信度，不得判 miss。",
+      "pairs_for_temporal": "（D7）时序题须用成对帧或视频判读，单帧不可判。media 字段取值见 meta.media_types。",
+      "unreadable": "（D7）media=video 的题若本轮未录短视频素材，判为 unreadable（剔除分母），不得用成对帧替代 —— 速度曲线是连续量，两帧之间的形状无法还原。",
+      "scene_switch": "（V3-2）「场景切换」仅指硬切（cut）／黑场／叠化等转场 —— 画布内容被整体替换。同一场景内的相机推拉、横移、缩放不构成切换；本片为单场景长镜头，靠相机推拉分段。"
+    },
+    "rho_definitions": {
+      "note": "（D4）留白率有两套口径，v1.1 混用导致 bd 一侧差近 20 个百分点。v1.2 起分列，不可直接比较。",
+      "rho_layout": "在「构图线稿」口径下测得（不含滤镜墨晕）：jx 0.79 / bd 0.52。这是设计意图值。",
+      "rho_render": "在「渲染后含墨晕」的帧上由探针实测：jx_02 0.831 / jx_04 0.866 / bd_02 0.307 / bd_04(nopoem) 0.441。这是观感值。",
+      "rule": "凡涉及留白率的题，必须在 why 里注明所引口径；比较只能同口径比。"
+    },
+    "probe": {
+      "note": "属性类题的答案若肉眼处于阈值附近，改由客观探针给出硬数据。",
+      "scripts": {
+        "src/o1/o1_render.mjs": "按节拍抽帧（关自动播放、定位到指定秒、关标注、可选去题诗）",
+        "src/o1/o1_probe.mjs": "对指定区域做亮度直方图 + 12×6 亮度网格（留白率、墨色分布）",
+        "src/o1/o1_probe2.mjs": "60×24 细网格墨迹图 + 最暗点定位（判定极淡笔画是否真的画出来了）",
+        "src/o1/o1_thumbs.mjs": "生成 760px 缩略图供工装页使用",
+        "src/o1/o1_validate.mjs": "（v1.2 新增）校验问题集结构：frame 绑定、负节点去诗帧、选项覆盖、media 类型、探针协议"
+      }
+    },
+    "known_confounds": [
+      "题诗（墨笔书法）与画面同框：诗句文字里含有意象词（如「千山」「鸟」「猿」），可能干扰 VQA 判断。v1.2 起负节点题一律以「去题诗」帧判读。",
+      "「标注」图层会直接写出意象名称，会使 EXIST／NEGATIVE 题失去意义。基线一律关闭标注。",
+      "留白率 ρ 有两套口径（ρ_layout 线稿 / ρ_render 渲染），见 meta.rho_definitions，不可直接比较。",
+      "「干笔／湿笔」的判据来自滤镜参数与填充方式（jxDry/bdDry 为干笔位移、无模糊；bdSoft 的高斯模糊为湿笔晕染，用于云／雾；大面积渐变填充＋无描边亦读作湿笔晕染，如 BD-A6 山壁），非主观风格判断；判读时可借助笔触边缘的毛涩／柔化特征。"
+    ]
+  },
+  "poems": [
+    {
+      "id": "jx",
+      "title": "江雪",
+      "author": "唐 · 柳宗元",
+      "form": "五言绝句 · 入声屑韵 · 折腰体",
+      "total_s": 19.578,
+      "segments": [
+        { "t": 0.35, "name": "起", "line": "千山鸟飞绝", "dur": 3.4 },
+        { "t": 5.224, "name": "承", "line": "万径人踪灭", "dur": 3.1 },
+        { "t": 9.768, "name": "转", "line": "孤舟蓑笠翁", "dur": 3.3 },
+        { "t": 14.183, "name": "合", "line": "独钓寒江雪", "dur": 5.4 }
+      ],
+      "frames": [
+        { "name": "jx_01", "t": 0.78, "label": "起 · 远山初现（孤舟未出）" },
+        { "name": "jx_02", "t": 5.09, "label": "起末 · 雪与芦苇（孤舟未出）" },
+        { "name": "jx_05", "t": 7.83, "label": "承 · 极远景全构图（万径区）" },
+        { "name": "jx_05_nopoem", "t": 7.83, "label": "承 · 去题诗对照帧" },
+        { "name": "jx_03", "t": 12.14, "label": "转 · 缓推，孤舟重放落笔" },
+        { "name": "jx_04", "t": 19.03, "label": "合末 · 钓丝已成、钤印（浓淡同框）" },
+        { "name": "jx_04_nopoem", "t": 19.03, "label": "合末 · 去题诗对照帧" },
+        { "name": "jx_04_anno", "t": 19.03, "label": "合末 · 带标注（仅供核对图层，不入基线）" }
+      ],
+      "questions": [
+        { "id": "JX-E1", "axis": "EXIST", "basis": "poem", "frame": "jx_02", "media": "single", "q": "画面中是否出现山（远山／群山）？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "「千山」" },
+        { "id": "JX-E2", "axis": "EXIST", "basis": "poem", "frame": "jx_03", "media": "single", "q": "画面中是否出现一条小船？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "「孤舟」" },
+        { "id": "JX-E3", "axis": "EXIST", "basis": "poem", "frame": "jx_04", "media": "single", "q": "画面中是否出现人物（渔翁）？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "「蓑笠翁」" },
+        { "id": "JX-E4", "axis": "EXIST", "basis": "design", "frame": "jx_02", "media": "single", "q": "画面中是否出现芦苇／枯草？", "type": "yes_no", "expect": "是", "w": 0.5, "why": "构图为制造疏密对比所加，诗中无据，故权重减半" },
+        { "id": "JX-E5", "axis": "EXIST", "basis": "poem", "frame": "jx_04", "media": "single", "q": "画面中是否出现钓丝／钓线？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "「独钓」" },
+        { "id": "JX-E6", "axis": "EXIST", "basis": "poem", "frame": "jx_02", "media": "single", "q": "画面中是否出现雪？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "「雪」—— v1.2 由「飘落的雪」收窄为纯存在题；「飘落」的过程性改由 JX-T6 以成对帧判读（D7）" },
+
+        { "id": "JX-N1", "axis": "NEGATIVE", "basis": "poem", "frame": "jx_05_nopoem", "media": "single", "q": "画面中是否出现飞鸟？", "type": "yes_no", "expect": "否", "w": 1.5, "why": "「千山鸟飞绝」—— 负节点，必须缺席。去诗帧排除「鸟」字假阳性（D3）" },
+        { "id": "JX-N2", "axis": "NEGATIVE", "basis": "poem", "frame": "jx_04_nopoem", "media": "single", "q": "画面中是否出现除渔翁以外的第二个人？", "type": "yes_no", "expect": "否", "w": 1.5, "why": "「万径人踪灭」—— 负节点。v1.2 改绑去诗帧，排除题诗「人踪」二字（D3）" },
+        { "id": "JX-N3", "axis": "NEGATIVE", "basis": "poem", "frame": "jx_05_nopoem", "media": "single", "q": "画面中是否出现人的脚印／足迹？", "type": "yes_no", "expect": "否", "w": 1.0, "why": "「人踪灭」" },
+
+        { "id": "JX-A1", "axis": "ATTR", "basis": "poem", "frame": "jx_04", "media": "single", "q": "全画面墨色最浓的实体是？", "type": "choice", "options": ["孤舟与蓑笠翁", "远山", "芦苇", "雪"], "expect": "孤舟与蓑笠翁", "w": 1.0, "why": "「孤舟蓑笠翁」是唯一实写焦点，浓墨" },
+        { "id": "JX-A2", "axis": "ATTR", "basis": "poem", "frame": "jx_02", "media": "single", "q": "远山的墨色浓淡？", "type": "choice", "options": ["很淡", "中等", "很浓"], "expect": "很淡", "w": 1.0, "why": "远景层，淡墨" },
+        { "id": "JX-A3", "axis": "ATTR", "basis": "design", "frame": "jx_02", "media": "single", "q": "画面整体是「大面留白」还是「画满」？", "type": "choice", "options": ["大面积留白", "大致均衡", "画得很满"], "expect": "大面积留白", "w": 1.0, "why": "留白率：ρ_layout = 0.79（线稿口径）／ρ_render = 0.831（渲染口径，jx_02 探针实测）—— 两口径同向且都属「大面留白」（D4）" },
+        { "id": "JX-A4", "axis": "ATTR", "basis": "poem", "frame": "jx_05", "media": "single", "q": "江面（寒江）是否用水波／水纹描绘？", "type": "choice", "options": ["几乎不画，以留白表现", "画了少量水纹", "画满水纹"], "expect": "几乎不画，以留白表现", "w": 1.0, "why": "「寒江」为虚写，由留白承载" },
+        { "id": "JX-A5", "axis": "ATTR", "basis": "design", "frame": "jx_05_nopoem", "media": "single", "probe_assisted": true, "q": "小路（万径）在画面中是否可辨认？", "type": "choice", "options": ["清晰可见", "极淡、几乎不可见", "完全没有"], "expect": "极淡、几乎不可见", "w": 0.5, "why": "「万径」近乎虚写，仅极淡斜线暗示。#jx-path 三条斜线（x 0.03–0.27, y 0.43–0.51）group opacity 0.20 + jxSoft 柔化；探针实测把中景带由 lum 186 压到 166（对比度约 11%）—— 确实画出来了，但处在感知阈值附近。按 reading_protocol 判读（D6）" },
+
+        { "id": "JX-A6", "axis": "ATTR", "basis": "design", "frame": "jx_04", "media": "single", "q": "画面最浓实体（孤舟蓑笠翁）与最淡实体（远山）之间的墨色对比属于？", "type": "choice", "options": ["强对比（浓淡悬殊）", "中等对比", "弱对比（几乎同色）"], "expect": "强对比（浓淡悬殊）", "w": 1.0, "why": "（v1.2 新增，D5）孤舟 #1C1C1C @0.88–0.92 → 合成 lum≈35；远山三层 opacity 0.13/0.17/0.15 → 合成 lum≈188。Δlum≈153，属强对比。这是原题集「很淡／中等／很浓」三档测不出的对比量" },
+        { "id": "JX-A7", "axis": "ATTR", "basis": "design", "frame": "jx_02", "media": "single", "q": "实写笔触（芦苇茎）的墨色边缘特征是？", "type": "choice", "options": ["毛边干笔（边缘毛涩、无晕染）", "湿笔晕染（边缘柔化、墨色外溢）", "均匀实线（边缘光滑）"], "expect": "毛边干笔（边缘毛涩、无晕染）", "w": 1.0, "why": "（v1.2 新增，D5）芦苇 #jx-reed 挂 jxDry 滤镜：feTurbulence baseFrequency 0.09 + feDisplacementMap scale 6 —— 只做位移毛边，不做飞白。真正的「飞白」（噪点遮罩 feComposite）只在 jxInk 里，且仅用于题诗。故选项写「毛边干笔」而非「干笔飞白」" },
+        { "id": "JX-A8", "axis": "ATTR", "basis": "design", "frame": "jx_04", "media": "single", "q": "画面疏密的分布特征是？", "type": "choice", "options": ["大面积疏（留白）中藏着极小的密（孤舟焦点）", "疏密均匀分布", "大面积密（画满）中留小空白"], "expect": "大面积疏（留白）中藏着极小的密（孤舟焦点）", "w": 1.0, "why": "（v1.2 新增，D5）留白 ρ_render = 0.866，浓墨像素仅 1.73% 且集中在孤舟 —— 疏密不是「比例」而是「势能」，原留白率题测不出" },
+        { "id": "JX-A9", "axis": "ATTR", "basis": "design", "frame": "jx_05", "media": "single", "q": "画面中最大的一块连续留白位于？", "type": "choice", "options": ["中下部（远山以下的寒江江面）", "上部（远山以上的天空）", "四周边缘"], "expect": "中下部（远山以下的寒江江面）", "w": 0.5, "why": "（v1.2 新增，D5）留白不是均匀的：远山脊线 y 0.26–0.33，其下至画面底缘为江面，除一道岸线 #jx-waterline 与极淡万径外无笔画 —— 探针实测下半幅非纸面像素仅 1.04%。留白的「形状」比留白的「率」更能区分画面" },
+
+        { "id": "JX-S1", "axis": "SPATIAL", "basis": "design", "frame": "jx_02", "media": "single", "q": "远山位于画面的？", "type": "choice", "options": ["上部", "中部", "下部"], "expect": "上部", "w": 1.0, "why": "远景层" },
+        { "id": "JX-S2", "axis": "SPATIAL", "basis": "design", "frame": "jx_03", "media": "single", "q": "孤舟与蓑笠翁位于画面的？", "type": "choice", "options": ["左上", "右上", "左下", "右下"], "expect": "右下", "w": 1.0, "why": "视觉重心 (0.65, 0.69)，三七停。注意：终帧相机略向孤舟推近、较 jx_03 更居中，故判读帧绑 jx_03" },
+        { "id": "JX-S3", "axis": "SPATIAL", "basis": "design", "frame": "jx_02", "media": "single", "q": "芦苇位于画面的？", "type": "choice", "options": ["左下", "右下", "左上"], "expect": "左下", "w": 0.5, "why": "与右下焦点形成疏密对角" },
+        { "id": "JX-S4", "axis": "SPATIAL", "basis": "design", "frame": "jx_02", "media": "single", "measured": { "value": 0.43, "unit": "H", "source": "山带顶缘实测 0.42–0.44H／底缘 0.50H；设计值 0.42H" }, "q": "地平线大致在画面高度的？", "type": "choice", "options": ["上 1/3 附近（0.28–0.40H）", "中部偏上（0.40–0.50H）", "正中（0.48–0.52H）", "下 1/3 附近（0.52–0.68H）"], "expect": "中部偏上（0.40–0.50H）", "w": 0.5, "why": "（v1.2 修 D1）原 3 档选项「上 1/3(0.33)／正中(0.50)」之间有空档，实测 0.43H 落空 → 无法作答。现补入「中部偏上（0.40–0.50H）」档，实测值被覆盖，本题恢复可判" },
+        { "id": "JX-S5", "axis": "SPATIAL", "basis": "design", "frame": "jx_03", "media": "single", "q": "远山与孤舟的前后关系？", "type": "choice", "options": ["孤舟在前、远山在后", "远山在前、孤舟在后", "两者同一平面"], "expect": "孤舟在前、远山在后", "w": 1.0, "why": "近景焦点 vs 远景淡墨" },
+
+        { "id": "JX-T1", "axis": "TEMPORAL", "basis": "design", "frame": "jx_01+jx_03", "media": "pair", "q": "远山是否比孤舟更早出现在画面中？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "远山 0.35–1.9s 淡入，孤舟 9.8s 后才实写" },
+        { "id": "JX-T2", "axis": "TEMPORAL", "basis": "design", "frame": "jx_03+jx_04", "media": "pair", "q": "钓丝是否在动画后段才被画出？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "钓丝 14.3–15.7s 画出，属合段" },
+        { "id": "JX-T3", "axis": "TEMPORAL", "basis": "design", "frame": "jx_01+jx_02+jx_04", "media": "pair", "q": "雪是否在全片多个时段都可见？", "type": "yes_no", "expect": "是", "w": 0.5, "why": "雪贯穿全片，密度随情感起伏（snowKeys v = 0.45/1.00/0.30/0.85/0.85，最小值不为 0）" },
+        { "id": "JX-T4", "axis": "TEMPORAL", "basis": "design", "frame": "jx_01+jx_04", "media": "pair", "protocol": "「场景切换」仅指硬切／黑场／叠化等转场（画布内容被整体替换），见 meta.protocol.scene_switch；同一场景内的相机推拉、横移、缩放不算切换。", "q": "全片是否只有一个场景（无场景切换）？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "单场景长镜头，靠相机推拉分段；jx_01 与 jx_04 为同一场景的不同倍率（1.00× / 1.12×），仅相机变换，无硬切、无黑场、无叠化" },
+        { "id": "JX-T5", "axis": "TEMPORAL", "basis": "design", "frame": "jx_01+jx_03+jx_04", "media": "probe", "q": "全片相机运动的速度曲线形状是？", "type": "choice", "options": ["前段近乎静止，后段极缓推近（无急推）", "前段近乎静止、中段急推加速、末段又归于近乎静止", "全程匀速推近（无速度变化）"], "expect": "前段近乎静止，后段极缓推近（无急推）", "w": 1.0, "why": "（v1.3 修订，原「13s 后急推加速」）src/o1/o1_probe_cam.mjs 实测 s：1.0000（0–7s 完全静止）→ 0.9600（13s 轻推远）→ 1.1200（25s 极缓推近），vmax ≈ 0.04/s（≈4%/s，低于 5% 阈值）→ 全片无急推。原 v1.2 的 13–16.5s 急推（s 0.93→1.55，vmax 0.394/s）已按「缩放过大破坏意境」的裁定压平" },
+        { "id": "JX-T6", "axis": "TEMPORAL", "basis": "poem", "frame": "jx_01+jx_04", "media": "pair", "q": "雪在片中是否持续飘落（而非静止悬停）？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "（v1.2 由 JX-E6 拆出，D7）「飘落」是过程性谓语，单帧不可判。源码：每片雪 cy = (y0 + vy·t) % 660 持续下移，cx 叠 ±16px 正弦横摆 —— 确为飘落而非静止" }
+      ]
+    },
+    {
+      "id": "bd",
+      "title": "早发白帝城",
+      "author": "唐 · 李白",
+      "form": "七言绝句 · 上平十五删（平韵） · 正格律绝",
+      "total_s": 13.631,
+      "segments": [
+        { "t": 0.2, "name": "起", "line": "朝辞白帝彩云间", "dur": 2.53 },
+        { "t": 3.62, "name": "承", "line": "千里江陵一日还", "dur": 2.25 },
+        { "t": 6.812, "name": "转", "line": "两岸猿声啼不住", "dur": 1.945 },
+        { "t": 9.776, "name": "合", "line": "轻舟已过万重山", "dur": 3.855 }
+      ],
+      "frames": [
+        { "name": "bd_01", "t": 0.57, "label": "起 · 白帝城初现（轻舟未出）" },
+        { "name": "bd_02", "t": 2.56, "label": "起 · 云／城／两岸／万重山／江面／轻舟齐备" },
+        { "name": "bd_03", "t": 8.26, "label": "转 · 侧掠两岸" },
+        { "name": "bd_04", "t": 13.27, "label": "合末 · 万重山飞退、钤印" },
+        { "name": "bd_04_nopoem", "t": 13.27, "label": "合末 · 去题诗对照帧" },
+        { "name": "bd_04_anno", "t": 13.27, "label": "合末 · 带标注（仅供核对图层，不入基线）" }
+      ],
+      "questions": [
+        { "id": "BD-E1", "axis": "EXIST", "basis": "poem", "frame": "bd_02", "media": "single", "q": "画面中是否出现一座城／城楼？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "「白帝城」" },
+        { "id": "BD-E2", "axis": "EXIST", "basis": "poem", "frame": "bd_02", "media": "single", "probe_assisted": true, "q": "画面中是否出现云？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "「彩云」。#bd-cloud 为三椭圆（cy 56/84/118），fill 渐变 + 0.06 灰，极淡 —— 存在但接近雾／霭的观感。按 reading_protocol 判读（D6）" },
+        { "id": "BD-E3", "axis": "EXIST", "basis": "poem", "frame": "bd_02", "media": "single", "q": "画面中是否出现一条小船？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "「轻舟」" },
+        { "id": "BD-E4", "axis": "EXIST", "basis": "poem", "frame": "bd_02", "media": "single", "q": "画面中是否出现两侧夹峙的山壁／峡谷？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "「两岸」" },
+        { "id": "BD-E5", "axis": "EXIST", "basis": "poem", "frame": "bd_02", "media": "single", "q": "画面中是否出现层层叠叠的远山？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "「万重山」" },
+        { "id": "BD-E6", "axis": "EXIST", "basis": "poem", "frame": "bd_02", "media": "single", "q": "画面中是否出现江面／水面？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "「江陵」「一日还」的水路" },
+        { "id": "BD-E7", "axis": "EXIST", "basis": "design", "frame": "bd_04", "media": "single", "q": "画面中是否出现船尾拖痕／尾迹？", "type": "yes_no", "expect": "是", "w": 0.5, "why": "速度线／船迹，设计所加，诗中无据" },
+
+        { "id": "BD-N1", "axis": "NEGATIVE", "basis": "poem", "frame": "bd_04_nopoem", "media": "single", "q": "画面中是否出现猿／猴子？", "type": "yes_no", "expect": "否", "w": 1.5, "why": "「两岸猿声」—— 跨通道节点：听觉正、视觉负。画出猿即错。去诗帧排除「猿」字假阳性（D3）" },
+        { "id": "BD-N2", "axis": "NEGATIVE", "basis": "poem", "frame": "bd_04_nopoem", "media": "single", "q": "画面中是否出现江陵城（终点）？", "type": "yes_no", "expect": "否", "w": 1.0, "why": "「江陵」为虚 · 不可见。v1.2 改绑去诗帧，排除题诗「江陵」二字（D3）" },
+
+        { "id": "BD-A1", "axis": "ATTR", "basis": "poem", "frame": "bd_02", "media": "single", "q": "全画面墨色最浓的实体是？", "type": "choice", "options": ["轻舟", "白帝城", "彩云", "两岸山壁"], "expect": "轻舟", "w": 1.0, "why": "「轻舟」是焦点，浓墨飞白。v1.2 改绑 bd_02 —— bd_04 推镜后白帝城与彩云已出画，四选一退化为「唯一在场者」，测不出浓淡谱；bd_02 四者齐备（轻舟 lum≈50 < 白帝城≈126 < 山壁≈190 < 彩云）" },
+        { "id": "BD-A2", "axis": "ATTR", "basis": "poem", "frame": "bd_02", "media": "single", "q": "云的墨色？", "type": "choice", "options": ["淡墨浅灰", "浓墨", "彩色（红黄等）"], "expect": "淡墨浅灰", "w": 1.0, "why": "「彩云」为虚 · 淡染，水墨不宜设色" },
+        { "id": "BD-A3", "axis": "ATTR", "basis": "design", "frame": "bd_02", "media": "single", "q": "江面水纹的疏密？", "type": "choice", "options": ["稀疏、仅数道", "中等", "密集布满"], "expect": "稀疏、仅数道", "w": 1.0, "why": "远水无波，近水仅五道，笔断意连" },
+        { "id": "BD-A4", "axis": "ATTR", "basis": "design", "frame": "bd_04", "media": "single", "q": "画面整体留白程度？", "type": "choice", "options": ["大面积留白", "约一半", "几乎不留白"], "expect": "约一半", "w": 1.0, "why": "留白率：ρ_layout = 0.52（线稿口径）／ρ_render = 0.307（bd_02）–0.441（bd_04 去诗）—— 渲染口径明显低于线稿口径，故选「约一半」而非「大面积」。两口径分列见 meta.rho_definitions（D4）" },
+
+        { "id": "BD-A5", "axis": "ATTR", "basis": "design", "frame": "bd_02", "media": "single", "q": "按墨色由浓到淡排序，正确的是？", "type": "choice", "options": ["轻舟 > 白帝城 > 两岸山壁 > 彩云", "两岸山壁 > 轻舟 > 白帝城 > 彩云", "彩云 > 白帝城 > 轻舟 > 两岸山壁"], "expect": "轻舟 > 白帝城 > 两岸山壁 > 彩云", "w": 1.0, "why": "（v1.2 新增，D5）轻舟 #1C1C1C @0.90 → lum≈50；白帝城 #2A2724 @0.58 → lum≈126；山壁渐变 ≈190；彩云 0.06 灰椭圆最淡。绑 bd_02（四者同框）；原「最浓是谁」只测极值，排序题测整条浓淡谱" },
+        { "id": "BD-A6", "axis": "ATTR", "basis": "design", "frame": "bd_02", "media": "single", "q": "两岸山壁主体的渲染方式是？", "type": "choice", "options": ["湿笔晕染（边缘柔化、墨色向两侧渗开）", "干笔飞白（边缘毛涩、有断白）", "硬边实线（无晕染无飞白）"], "expect": "湿笔晕染（边缘柔化、墨色向两侧渗开）", "w": 1.0, "why": "（v1.2 新增，D5；O1.2 修正口径）湿笔模糊 bdSoft 实用于云与雾，山壁并非湿笔模糊；#bd-cliff 组滤镜为 bdEdge（干笔位移 scale 16，无高斯模糊），主体为 bdCliffL/R 横向渐变填充（外缘 opacity 0.13 → 内缘 0.46，无描边硬边），墨色向内侧渐浓且无断白 → 归入「湿笔晕染」档。对照：皴法 #bd-cun 与船迹用 bdDry（位移 scale 7）为干笔" },
+        { "id": "BD-A7", "axis": "ATTR", "basis": "design", "frame": "bd_02", "media": "single", "q": "画面疏密的分布特征是？", "type": "choice", "options": ["两侧山壁密、中央峡口疏（留白）", "疏密均匀分布", "中央密、两侧疏"], "expect": "两侧山壁密、中央峡口疏（留白）", "w": 1.0, "why": "（v1.2 新增，D5）左右山壁各占约 1/4 且为全画最密区，中央峡口 x 0.44–0.62 露出远山并向下展开为江面留白 —— 疏密呈「两实夹一虚」的纵向结构，非均匀分布" },
+        { "id": "BD-A8", "axis": "ATTR", "basis": "design", "frame": "bd_02", "media": "single", "q": "画面中最大的一块连续留白位于？", "type": "choice", "options": ["中央峡口并向下展开为江面，呈向纵深收束的透光带", "上方天空", "左右两侧"], "expect": "中央峡口并向下展开为江面，呈向纵深收束的透光带", "w": 0.5, "why": "（v1.2 新增，D5）楔形江面 #bdRiverClip 由峡口 (400,302)-(560,302) 向下展至底缘，留白沿消失点收束；探针实测 bd_02 留白 30.7%，集中在中央而非两侧" },
+
+        { "id": "BD-S1", "axis": "SPATIAL", "basis": "design", "frame": "bd_02", "media": "single", "q": "白帝城位于画面的？", "type": "choice", "options": ["左上", "右上", "左下", "右下", "正中"], "expect": "左上", "w": 1.0, "why": "立于左崖顶，高远" },
+        { "id": "BD-S2", "axis": "SPATIAL", "basis": "design", "frame": "bd_02", "media": "single", "q": "轻舟位于画面的？", "type": "choice", "options": ["左上", "左下", "右上", "右下", "正中"], "expect": "左下", "w": 1.0, "why": "视觉重心 (0.41, 0.69)" },
+        { "id": "BD-S3", "axis": "SPATIAL", "basis": "design", "frame": "bd_02", "media": "single", "q": "江水在画面中的走向？", "type": "choice", "options": ["从画面中央向远处纵深延伸", "横贯画面左右", "沿画面右缘垂直而下"], "expect": "从画面中央向远处纵深延伸", "w": 1.0, "why": "楔形江面，收敛于消失点" },
+        { "id": "BD-S4", "axis": "SPATIAL", "basis": "design", "frame": "bd_02", "media": "single", "q": "万重山与两岸山壁的关系？", "type": "choice", "options": ["万重山在两道山壁的缺口之间、层层后退", "万重山在山壁之上、位于画面顶部", "万重山覆盖在山壁之上"], "expect": "万重山在两道山壁的缺口之间、层层后退", "w": 1.0, "why": "用户曾反馈「远处的山在中间、又有两边的岸，空间很乱」——此项即该修复的检验点" },
+        { "id": "BD-S5", "axis": "SPATIAL", "basis": "design", "frame": "bd_02", "media": "single", "q": "两岸山壁与江面的关系？", "type": "choice", "options": ["山壁内缘即江面左右边界、紧贴无缝", "山壁与江面之间另有一条岸／滩", "江面在画面一侧、山壁在另一侧"], "expect": "山壁内缘即江面左右边界、紧贴无缝", "w": 1.0, "why": "单点透视三层结构，中间不留缝" },
+        { "id": "BD-S6", "axis": "SPATIAL", "basis": "design", "frame": "bd_02", "media": "single", "q": "画面视觉重心位于？", "type": "choice", "options": ["左下", "右下", "正中"], "expect": "左下", "w": 0.5, "why": "重心 (0.41, 0.69)" },
+
+        { "id": "BD-T1", "axis": "TEMPORAL", "basis": "design", "frame": "bd_01+bd_02", "media": "pair", "q": "白帝城是否比轻舟更早出现在画面中？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "城 0.44–0.94s 淡入，舟 0.67–1.14s 淡入，城略先" },
+        { "id": "BD-T2", "axis": "TEMPORAL", "basis": "design", "frame": "bd_01+bd_03+bd_04", "media": "pair", "q": "全片是否为连续长镜头（无场景切换）？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "平韵呼吸连贯，强制单一长镜头" },
+        { "id": "BD-T3", "axis": "TEMPORAL", "basis": "design", "frame": "bd_02+bd_04", "media": "pair", "q": "船尾拖痕是否在动画中后段才明显拉长？", "type": "yes_no", "expect": "是", "w": 0.5, "why": "船迹 3.6–11.5s 渐次拉出（#bd-trail dashoffset，easeIn）" },
+        { "id": "BD-T4", "axis": "TEMPORAL", "basis": "design", "frame": "bd_01+bd_04", "media": "probe", "q": "全片相机是否以持续推进为主、且结尾以加速冲刺收束（无定格收尾）？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "src/o1/o1_probe_cam.mjs 实测 s：1.0000 → 1.8521，30 个采样步递增 / 14 个递减；仅 t=14.5–17 有一次 1.2000→1.1800 的侧掠回望小回退；末段速度升至全片最大 0.2554/s @ t=24，无定格（D7）" },
+        { "id": "BD-T5", "axis": "TEMPORAL", "basis": "design", "frame": "bd_01+bd_04", "media": "probe", "q": "全片相机速度曲线的形状是？", "type": "choice", "options": ["总体渐快、中段有一次侧掠回望的小回退、结尾冲刺（无定格）", "全程匀速", "先快后慢、结尾放缓"], "expect": "总体渐快、中段有一次侧掠回望的小回退、结尾冲刺（无定格）", "w": 1.0, "why": "（v1.2 新增，D5/D7）src/o1/o1_probe_cam.mjs 实测 |v| 总体递增（0.0002 → 0.2554/s），唯 t=14.5–17 出现 1.2000→1.1800 的回退（转段「侧掠两岸 · 一瞬回望」）；结尾 t=24 达最大速度、无定格。原设计只给 speedKeys 的单调序列，探针补出了这段回退" }
+      ]
+    }
+  ]
+}

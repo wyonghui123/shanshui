@@ -1,0 +1,264 @@
+{
+ "poems": {
+  "jys": {
+   "auto": {
+    "form": "五言绝句",
+    "rhyme": "七陽",
+    "rhyme_tone": "平",
+    "rhyme_feet": [
+     "光",
+     "霜",
+     "乡"
+    ],
+    "rusheng": [
+     "月"
+    ],
+    "patterns_meter": [
+     "平平平仄平",
+     "平仄仄仄平",
+     "仄平仄平仄",
+     "平平平仄平"
+    ]
+   },
+   "hand_resolved": [
+    {
+     "line": 3,
+     "col": 3,
+     "char": "望",
+     "options": [
+      "仄",
+      "平"
+     ],
+     "chosen": "仄",
+     "resolved_by": "hand"
+    },
+    {
+     "line": 4,
+     "col": 3,
+     "char": "思",
+     "options": [
+      "仄",
+      "平"
+     ],
+     "chosen": "平",
+     "resolved_by": "hand"
+    }
+   ],
+   "issues": [],
+   "notes": [
+    {
+     "入声字差异": {
+      "auto": [
+       "月"
+      ],
+      "hand": []
+     }
+    },
+    {
+     "手工定夺（歧义字以手工谱为准）": [
+      {
+       "char": "望",
+       "line": 3,
+       "col": 3,
+       "hand": "仄",
+       "default": "平"
+      },
+      {
+       "char": "思",
+       "line": 4,
+       "col": 3,
+       "hand": "平",
+       "default": "平"
+      }
+     ]
+    }
+   ],
+   "voice_option_hit": {
+    "hit": 20,
+    "total": 20
+   },
+   "triple_mismatch": []
+  },
+  "jx": {
+   "auto": {
+    "form": "五言绝句",
+    "rhyme": "九屑",
+    "rhyme_tone": "入",
+    "rhyme_feet": [
+     "绝",
+     "灭",
+     "雪"
+    ],
+    "rusheng": [
+     "绝",
+     "灭",
+     "笠",
+     "独",
+     "雪"
+    ],
+    "patterns_meter": [
+     "平平仄平仄",
+     "仄仄平平仄",
+     "平平平仄平",
+     "仄仄平平仄"
+    ]
+   },
+   "hand_resolved": [],
+   "issues": [],
+   "notes": [
+    {
+     "入声字差异": {
+      "auto": [
+       "绝",
+       "灭",
+       "笠",
+       "独",
+       "雪"
+      ],
+      "hand": [
+       "绝",
+       "灭",
+       "雪"
+      ]
+     }
+    }
+   ],
+   "voice_option_hit": {
+    "hit": 20,
+    "total": 20
+   },
+   "triple_mismatch": []
+  },
+  "bd": {
+   "auto": {
+    "form": "七言绝句",
+    "rhyme": "十五刪",
+    "rhyme_tone": "平",
+    "rhyme_feet": [
+     "间",
+     "还",
+     "山"
+    ],
+    "rusheng": [
+     "白",
+     "一",
+     "日",
+     "不"
+    ],
+    "patterns_meter": [
+     "平平仄仄仄平平",
+     "平仄平平仄仄平",
+     "仄仄平平平仄仄",
+     "平平仄仄仄平平"
+    ]
+   },
+   "hand_resolved": [
+    {
+     "line": 3,
+     "col": 6,
+     "char": "不",
+     "options": [
+      "仄",
+      "平"
+     ],
+     "chosen": "仄",
+     "resolved_by": "hand"
+    },
+    {
+     "line": 4,
+     "col": 1,
+     "char": "轻",
+     "options": [
+      "仄",
+      "平"
+     ],
+     "chosen": "平",
+     "resolved_by": "hand"
+    },
+    {
+     "line": 4,
+     "col": 4,
+     "char": "过",
+     "options": [
+      "仄",
+      "平"
+     ],
+     "chosen": "仄",
+     "resolved_by": "hand"
+    },
+    {
+     "line": 4,
+     "col": 6,
+     "char": "重",
+     "options": [
+      "仄",
+      "平"
+     ],
+     "chosen": "平",
+     "resolved_by": "hand"
+    }
+   ],
+   "issues": [],
+   "notes": [
+    {
+     "平仄谱差异": {
+      "auto": [
+       "平平仄仄仄平平",
+       "平仄平平仄仄平",
+       "仄仄平平平仄仄",
+       "平平仄仄仄平平"
+      ],
+      "hand": [
+       "平平仄仄仄平平",
+       "仄仄平平仄仄平",
+       "仄仄平平平仄仄",
+       "平平仄仄仄平平"
+      ]
+     }
+    },
+    {
+     "手工定夺（歧义字以手工谱为准）": [
+      {
+       "char": "不",
+       "line": 3,
+       "col": 6,
+       "hand": "仄",
+       "default": "平"
+      },
+      {
+       "char": "轻",
+       "line": 4,
+       "col": 1,
+       "hand": "平",
+       "default": "平"
+      },
+      {
+       "char": "过",
+       "line": 4,
+       "col": 4,
+       "hand": "仄",
+       "default": "平"
+      },
+      {
+       "char": "重",
+       "line": 4,
+       "col": 6,
+       "hand": "平",
+       "default": "平"
+      }
+     ]
+    }
+   ],
+   "voice_option_hit": {
+    "hit": 28,
+    "total": 28
+   },
+   "triple_mismatch": []
+  }
+ },
+ "summary": {
+  "poems": 3,
+  "hard_fail": 0,
+  "all_pass": true
+ }
+}

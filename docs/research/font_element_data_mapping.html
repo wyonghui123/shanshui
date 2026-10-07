@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>字体要素 · 数据来源映射</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Zhi+Mang+Xing&family=Long+Cang&family=Liu+Jian+Mao+Cao&display=swap" rel="stylesheet">
+<style>
+/* 已落地的自持子集（相对本文件取 dist/animation/fonts/）；未取到则回退楷体 */
+@font-face{font-family:"PoemDaoLi";src:url("../../dist/animation/fonts/poem-li.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"PoemSeal";src:url("../../dist/animation/fonts/seal-script.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+:root{
+  --paper:#F6F3EC; --paper2:#FBF9F4; --ink:#1C1C1C; --ink2:#3A362F; --ink3:#6E6A60;
+  --line:rgba(28,28,28,.14); --line2:rgba(28,28,28,.08);
+  --zhu:#A83A2C; --jin:#B8860B; --qing:#2F5D62;
+  --serif:"Noto Serif SC","Songti SC","Source Han Serif SC",serif;
+  --sans:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --brushkai:"Ma Shan Zheng","STKaiti","KaiTi",serif;
+  --xing:"Zhi Mang Xing","STKaiti",serif;
+  --shou:"Long Cang","STKaiti",serif;
+  --cao:"Liu Jian Mao Cao","STKaiti",serif;
+  --li:"PoemDaoLi","STKaiti",serif;
+  --zhuan:"PoemSeal","Songti SC",serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:56px 28px 90px}
+h1{font-family:var(--serif);font-size:31px;font-weight:600;letter-spacing:.02em;margin:0 0 8px}
+.sub{font-family:var(--serif);font-size:15px;color:var(--ink3);margin:0 0 14px;letter-spacing:.03em}
+.lead{color:var(--ink2);font-size:14.5px;line-height:1.8;margin:0 0 8px;max-width:86ch}
+.lead b{color:var(--ink)}
+.meta-line{font-size:12.5px;color:var(--ink3);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0;margin:22px 0 34px;letter-spacing:.02em;line-height:1.85}
+section{margin:0 0 50px}
+.sec-head{display:flex;align-items:baseline;gap:12px;margin:0 0 14px;border-bottom:1px solid var(--line);padding-bottom:8px}
+.sec-no{font-family:var(--serif);font-size:13px;color:var(--zhu);letter-spacing:.12em;white-space:nowrap}
+.sec-head h2{font-family:var(--serif);font-size:20px;font-weight:600;margin:0}
+.sec-note{font-size:13.5px;color:var(--ink3);line-height:1.85;margin:0 0 16px;max-width:92ch}
+.sec-note b{color:var(--ink2)}
+table{width:100%;border-collapse:collapse;font-size:12.6px;margin:4px 0 14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line2);vertical-align:top;line-height:1.65}
+th{font-family:var(--serif);font-weight:600;color:var(--ink3);font-size:12px;letter-spacing:.03em;background:rgba(28,28,28,.025)}
+td b{font-weight:600}
+code{font-family:ui-monospace,Consolas,monospace;font-size:11.3px;background:rgba(28,28,28,.05);padding:1px 5px;border-radius:4px}
+.callout{background:var(--paper2);border:1px solid var(--line2);border-left:3px solid var(--jin);border-radius:8px;padding:14px 18px;font-size:13.5px;line-height:1.9;color:var(--ink2);margin:0 0 16px}
+.callout b{color:var(--ink)}
+.callout.z{border-left-color:var(--zhu)}
+.callout.q{border-left-color:var(--qing)}
+.badge{display:inline-block;font-size:10.5px;letter-spacing:.04em;padding:1px 7px;border-radius:6px;white-space:nowrap;font-weight:600;vertical-align:middle}
+.b-ok{background:rgba(47,93,98,.12);color:var(--qing)}
+.b-part{background:rgba(184,134,11,.14);color:#8a6608}
+.b-gap{background:rgba(168,58,44,.12);color:var(--zhu)}
+a{color:var(--zhu)}
+footer{font-size:12px;color:var(--ink3);border-top:1px solid var(--line);padding-top:16px;line-height:1.95}
+footer a{color:var(--zhu)}
+.fspec{display:flex;align-items:baseline;gap:14px;padding:10px 0;border-bottom:1px solid var(--line2)}
+.fspec:last-child{border-bottom:0}
+.fspec .nm{width:150px;flex:none}
+.fspec .nm b{font-size:26px;line-height:1.3;color:var(--ink)}
+.fspec .nm span{display:block;font-size:11.5px;color:var(--ink3);font-family:ui-monospace,Consolas,monospace;margin-top:3px}
+.fspec .ds{font-size:13.2px;color:var(--ink2);line-height:1.8}
+.fspec .ds em{font-style:normal;color:var(--ink);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>字体要素 · 数据来源映射</h1>
+  <p class="sub">诗 ↔ 数据源提取 → 字体 9 维定档</p>
+  <p class="lead">上一份报告（<a href="font_expression_elements.html">字体 · 表达要素研究报告</a>）把字体拆成 <b>9 个可参数化维度</b>，并指出它是唯一同时横跨「构图 / 笔法 / 时间」三层的要素。本文件回答下一步：<b>这 9 维的取值从哪来</b>——不是拍脑袋挑字体，而是从 pipeline 已有的产物里推出来，像 <code>layer_technique</code> 那样进规则体系。</p>
+  <p class="lead">结论：<b>数据侧零缺口</b>。D1 格律、D2 画法、D6 情感、D5 语境、O2 意象已经把 9 维所需的输入全部产出；缺的只是一张把它们接到字体上的<b>规则卡</b>。</p>
+  <div class="meta-line">
+    承接：<a href="font_expression_elements.html">字体 · 表达要素研究报告</a> ·
+    <a href="font_brush_samples.html">毛笔字候选样张</a> ·
+    <a href="generation_control_architecture.html">生成控制架构（卡 1–9）</a><br>
+    数据源：<code>data/derived/d1_prosody.json</code> · <code>data/derived/d2_techniques.json</code> · <code>data/runs/emotion_lexicon.json</code> · <code>data/source/context/*/context.json</code> · <code>data/derived/o2_imagery.json</code> · 日期 2026-10-05
+  </div>
+
+  <section>
+    <div class="sec-head"><span class="sec-no">§1</span><h2>候选字体谱（书体档）</h2></div>
+    <p class="sec-note">已落地 <b>7 款</b>（题款 6 款 + 印章 1 款），实测对题诗 69 字覆盖 <b>69/69</b>。它们不是「好看的字体」，而是<b>书体维上的档位</b>——每档对应一种诗情。题款 5 款与印章为 SIL OFL 1.1（可商用、可自持子集）；刀隶体为「作者声明」授权（非 OFL）；柳建毛草（草档）为 OFL，<b>已落地</b>作谱系档位。</p>
+    <div class="callout q">
+      <div class="fspec"><div class="nm"><b style="font-family:var(--brushkai)">马善政毛笔楷</b><span>Ma Shan Zheng</span></div>
+        <div class="ds"><em>毛笔楷 · 圆厚饱满</em>　起收藏露完整、粗细对比强。适合 <em>V 正区 / A 高</em> 的明朗开张（《早发白帝城》），也可作 <em>V 负 / T 高</em> 的温润小楷（《静夜思》）。21px 下笔画不散，是各款里小字最稳的。<span class="badge b-ok">已落地</span></div></div>
+      <div class="fspec"><div class="nm"><b style="font-family:var(--shou)">龙藏</b><span>Long Cang</span></div>
+        <div class="ds"><em>行楷 · 瘦劲疏朗</em>　笔画细而挺、结体纵长。适合 <em>V 负区 / A 低</em> 的孤峭冷寂（《江雪》），与「寒江独钓」的瘦硬笔调同构。代价是墨色偏淡，需与画面主体墨阶同步提档。<span class="badge b-ok">已落地</span></div></div>
+      <div class="fspec"><div class="nm"><b style="font-family:var(--xing)">志莽行书</b><span>Zhi Mang Xing</span></div>
+        <div class="ds"><em>行书 · 流动</em>　牵丝映带、行气连贯。按「<em>文正款活</em>」作<em>落款</em>首选；12–13px 会糊，落款需放大到正文 0.7 倍以上才可用。<span class="badge b-ok">已落地</span></div></div>
+      <div class="fspec"><div class="nm"><b style="font-family:var(--li)">阿里妈妈刀隶体</b><span>AlimamaDaoLiTi</span></div>
+        <div class="ds"><em>隶 · 方峻</em>　波磔分明、结体扁方。补<b>「隶」档</b>，使书体谱系篆 / 隶 / 楷 / 行 / 草齐备；三首题诗未用（V/A/T 均落楷 / 行档）。授权为「作者声明」免费商用 + 可嵌入，<b>非 OFL</b>，出处见 README。<span class="badge b-part">占位未用</span></div></div>
+      <div class="fspec"><div class="nm"><b style="font-family:var(--cao)">柳建毛草</b><span>Liu Jian Mao Cao</span></div>
+        <div class="ds"><em>毛草 · 狂放</em>　省并连绵、辨识度低。<b>草档谱系占位</b>——补高唤醒情感区（怒 / 惧 / 惊，见 §2）；按「大草不用于落款」通例，三首题诗未用。<span class="badge b-ok">已落地</span></div></div>
+      <div class="fspec"><div class="nm"><b style="font-family:var(--zhuan);font-size:22px">敬峰中山王篆</b><span>JFZSKSealScript（子集 6 字）</span></div>
+        <div class="ds"><em>篆 · 铁线</em>　用于<b>印章</b>（江雪 / 白帝 / 静夜），合「印从篆出」之制；仅取「江雪白帝静夜」6 字，依 OFL §3 改名族为 <code>PoemSeal</code>。动画与三张全链路页均已内嵌。<span class="badge b-ok">已落地</span></div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-no">§2</span><h2>表达角度：书体谱系 ↔ 情感空间（草档补什么）</h2></div>
+    <p class="sec-note">书体的「<b>收 / 放</b>」本身就是情感维度——它直接对应<b>唤醒度 A</b>：篆隶极收（古拙）→ 楷收（端严）→ 行半放（洒脱）→ 草放（狂放）；同一书体内再以「圆厚 / 瘦劲」分<b>冷暖（效价 V）</b>。于是字体谱系可当成 A–V 平面上的一组档位，与 <code>emotion_lexicon.taxonomy</code> 的 14 类情感逐一对照，看哪档接得住哪类诗情。</p>
+    <table>
+      <thead><tr><th style="width:16%">书体档</th><th style="width:18%">收放（↔ A）</th><th style="width:18%">冷暖（↔ V）</th><th style="width:24%">字体</th><th>接住的情感</th></tr></thead>
+      <tbody>
+        <tr><td><b>篆</b></td><td>极收</td><td>—</td><td>敬峰中山王篆（仅印章）</td><td>印章专用，不作题诗</td></tr>
+        <tr><td><b>隶</b></td><td>极收（A 极低）</td><td>古拙</td><td>阿里妈妈刀隶体</td><td>谱系占位，三首未用</td></tr>
+        <tr><td><b>楷 · 温润</b></td><td>收（A 低）</td><td>中性偏暖</td><td>霞鹜文楷</td><td>闲 / 爱</td></tr>
+        <tr><td><b>楷 · 开张</b></td><td>收（A 中低）</td><td>暖（V+）</td><td>马善政毛笔楷</td><td>喜 / 爱</td></tr>
+        <tr><td><b>行楷 · 瘦劲</b></td><td>半放（A 低中）</td><td>冷（V−）</td><td>龙藏</td><td>寂 / 愁 / 哀 / 思</td></tr>
+        <tr><td><b>行 · 流动</b></td><td>半放（A 中）</td><td>中性</td><td>志莽行书</td><td>忧 / 欲 / 恶 / 怨</td></tr>
+        <tr><td><b>草 · 狂放</b></td><td>放（A 高）</td><td>中性偏冷</td><td>柳建毛草 <span class="badge b-ok">新落地</span></td><td>怒 / 惧 / 惊</td></tr>
+      </tbody>
+    </table>
+    <p class="sec-note">把 14 类情感按 <b>A 升序</b>排开，看每档的接管边界：</p>
+    <table>
+      <thead><tr><th>情感</th><th>V</th><th>A</th><th>T</th><th>书体档</th></tr></thead>
+      <tbody>
+        <tr><td>闲</td><td>+0.50</td><td><b>0.15</b></td><td>0.10</td><td>楷 · 温润</td></tr>
+        <tr><td>寂</td><td>−0.40</td><td><b>0.15</b></td><td>0.30</td><td>行楷 · 瘦劲</td></tr>
+        <tr><td>愁</td><td>−0.60</td><td><b>0.20</b></td><td>0.50</td><td>行楷 · 瘦劲</td></tr>
+        <tr><td>哀</td><td>−0.75</td><td><b>0.25</b></td><td>0.50</td><td>行楷 · 瘦劲</td></tr>
+        <tr><td>思</td><td>−0.30</td><td><b>0.25</b></td><td>0.45</td><td>行楷 · 瘦劲</td></tr>
+        <tr><td>忧</td><td>−0.55</td><td><b>0.30</b></td><td>0.55</td><td>行 · 流动</td></tr>
+        <tr><td>爱</td><td>+0.75</td><td><b>0.40</b></td><td>0.20</td><td>楷 · 开张</td></tr>
+        <tr><td>怨</td><td>−0.65</td><td><b>0.50</b></td><td>0.80</td><td>行 · 流动 / 草</td></tr>
+        <tr><td>恶</td><td>−0.70</td><td><b>0.55</b></td><td>0.60</td><td>行 · 流动 / 草</td></tr>
+        <tr><td>喜</td><td>+0.70</td><td><b>0.60</b></td><td>0.15</td><td>楷 · 开张</td></tr>
+        <tr><td>欲</td><td>+0.10</td><td><b>0.60</b></td><td>0.50</td><td>行 · 流动</td></tr>
+        <tr style="background:rgba(47,93,98,.06)"><td>惧</td><td>−0.65</td><td><b>0.70</b></td><td>0.85</td><td>草 · 狂放 <span class="badge b-ok">新增</span></td></tr>
+        <tr style="background:rgba(47,93,98,.06)"><td>怒</td><td>−0.60</td><td><b>0.85</b></td><td>0.85</td><td>草 · 狂放 <span class="badge b-ok">新增</span></td></tr>
+        <tr style="background:rgba(47,93,98,.06)"><td>惊</td><td>0.00</td><td><b>0.85</b></td><td>0.60</td><td>草 · 狂放 <span class="badge b-ok">新增</span></td></tr>
+      </tbody>
+    </table>
+    <div class="callout z"><b>草档补的是「高唤醒空档」</b>：加草档前，A ≥ 0.70 的 <b>怒（0.85）/ 惧（0.70）/ 惊（0.85）</b> 三档无字可接（14 类里 3 类落空，且都集中在 V− 高唤醒区）；加草档后 <b>14/14 全接住</b>。至此书体谱系 <b>篆隶楷行草</b> 齐备，A–V 平面四象限均有档位。</div>
+    <div class="callout q"><b>还要不要更多字体？——不必，除非换赛道。</b>谱系补齐后，剩下的候选各有明确阻碍：<b>瘦金体</b>（峭拔清瘦，本可接「孤冷 / 清峻」）无 OFL 开源源（王汉宗系为 GPL，不可自持子集）；<b>篆 / 隶用于正文</b>辨识度低、不合题诗惯例；<b>再拆一款草（小草 / 大草）</b>属过细，A 轴上已无空档。故结论：<b>字体数到此为止</b>，后续投入应转向「题款卡」（把 14 类情感 ↔ 书体档的映射固化成规则），而非再加字库。</div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-no">§3</span><h2>九维 → 数据源映射（核心）</h2></div>
+    <p class="sec-note">左列是字体要素的 9 个维度，中列是<b>诗的什么属性在决定它</b>，右列是<b>该属性在哪个文件的哪个字段</b>。凡标「裁定」者为工程裁定（无古典原文可依），与 D2 的 <code>grade_scale</code> 口径一致。</p>
+    <table>
+      <thead><tr><th style="width:13%">维度</th><th style="width:26%">诗的什么（依据）</th><th style="width:34%">数据源字段</th><th>取值规则（建议）</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>1 书体</b></td>
+          <td>情感 V/A/T 档 · 诗体 · 语境韵味</td>
+          <td><code>runs/emotion_lexicon.poems.*.y_literal</code>（V/A/T）→ <code>d2.modulators.emotion</code> 的 V 档<br><code>d1_prosody.poems.*.form</code>（五绝 / 七绝）<br><code>context.interpretation_consensus.composite</code></td>
+          <td>正文按 V/A/T 定档：<b>V2 孤冷 + A 低 → 瘦劲</b>（龙藏）；<b>V4 明朗 + A 高 → 开张</b>（马善政）；<b>V2 + T 高 → 温润</b>（马善政·小号）。<br>落款按「文正款活」升一档 → 志莽行书。<span class="badge b-part">裁定</span></td>
+        </tr>
+        <tr>
+          <td><b>2 结体</b></td>
+          <td>随书体</td>
+          <td>—（由 1 决定）</td>
+          <td>不独立取参；各款候选自带结体（圆厚 / 瘦长 / 流动 / 方扁）。</td>
+        </tr>
+        <tr>
+          <td><b>3 笔法</b></td>
+          <td>与画面笔调统一（「款书与画意相谐」）</td>
+          <td><code>d2.class_defaults.&lt;类&gt;.stroke</code><br><code>d2.vocab.stroke_quality</code>（荆浩四势 + 黄宾虹五笔）<br><code>d2.modulators.stroke_quality</code></td>
+          <td>题诗笔调随画面主体：山石 → 中锋·侧锋；水体 → 大晕染；人物 / 舟桥 → 顿笔·侧锋。<span class="badge b-part">裁定</span></td>
+        </tr>
+        <tr>
+          <td><b>4 墨色</b></td>
+          <td>主体墨阶 · 含水 · 飞白阈值</td>
+          <td><code>d2.class_defaults.&lt;类&gt;.ink_grade</code>（焦/浓/重/淡/清/留白）<br><code>…water</code>（极低→极高）<br><code>d2.vocab.ink_method</code>（破/积/泼/宿/焦/飞白）<br><code>d2.modulators.emotion.ink_steps</code><br><code>d2.vocab.material</code>（飞白阈值）</td>
+          <td>题诗墨色不再固定 <code>#161616</code>，改为<b>取画面主体墨阶</b>：江雪主体 ink=淡 → 题诗「清 / 淡」；白帝城地标 ink=重 → 题诗「浓」。飞白由 material 阈值开闸。<span class="badge b-ok">有</span> <span class="badge b-part">待接线</span></td>
+        </tr>
+        <tr>
+          <td><b>5 字号</b></td>
+          <td>留白率 · 主次</td>
+          <td><code>d2.modulators.form</code>（len 20 / 28）<br><code>d2.modulators.blank_rules</code>（留白率区间）<br><code>d2.vocab.composition</code>（边角 / 三叠两段 → 题款留位）</td>
+          <td>留白率高 → 题诗字号相对小（不与留白争气）；落款 = 正文 × 0.58；<b>印不可比字大</b>。<span class="badge b-part">部分</span></td>
+        </tr>
+        <tr>
+          <td><b>6 字距 / 行距</b></td>
+          <td>入声密度 · 仄比 · 句间气口</td>
+          <td><code>context.prosody.rusheng_ratio / ze_ratio</code><br><code>d1_prosody.poems.*.rusheng_chars</code><br>配音行时序（<code>silence</code> 气口）</td>
+          <td>入声密度高 → 字距收紧（江雪 0.25 → 紧）；平韵 → 舒朗（白帝城 0.14）。气口对应列间留空。<span class="badge b-part">裁定</span></td>
+        </tr>
+        <tr>
+          <td><b>7 排列</b></td>
+          <td>装裱形制</td>
+          <td><code>d2.modulators.form</code>（五绝 → 册页 / 扇面 / 手卷；七绝 → 手卷 / 册页）</td>
+          <td>手卷 → 横卷题跋（与「横移换景」同源）；立轴 / 册页 → 竖排右起（现状）。<span class="badge b-ok">有</span></td>
+        </tr>
+        <tr>
+          <td><b>8 书写节奏</b></td>
+          <td>逐字平仄 · 韵脚</td>
+          <td><code>d1_prosody.poems.*.syllables</code>（字 → 声 / 韵 / 平仄）<br>配音实测行时序</td>
+          <td><b>已落地</b>：平 1.35× / 仄 0.85× / 入 0.65× / 韵 1.65×，沿时间高斯平滑（σ=45ms），末字韵脚恰在句末。<span class="badge b-ok">有</span></td>
+        </tr>
+        <tr>
+          <td><b>9 印章</b></td>
+          <td>形制 · 诗体长度 · 情感极性</td>
+          <td><code>d2.vocab.seal</code>（印位 / 印面）<br><code>d2.modulators.seal</code>（<code>len_ref=28</code> → 小幅 / 大幅）<br><code>d2.modulators.polarity</code></td>
+          <td>印位随形制（手卷→卷末；立轴/册页→下角）；印面随长度（五绝 20&lt;28 → 小幅）；<b>朱文 / 白文</b>可由 V 档定：V2 孤冷 → 白文厚重。<span class="badge b-part">部分</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="callout"><b>读法</b>：这张表把「字体」从审美题变成可断言题。例如「江雪题诗该用哪款」不再靠感觉——<code>y_literal.V=-0.4</code> 落 V2「孤冷」档，<code>A=0.15</code> 低、<code>主体 ink_grade=淡</code>，三条一起指向「瘦劲 + 淡墨」，即龙藏 + 清阶。</div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-no">§4</span><h2>三首定档示例（用真实取值）</h2></div>
+    <p class="sec-note">下表全部取自当前仓库产物，非示意值。可作为「题款卡」的首批黄金样本（gold），用于回归——改规则后必须仍复现这张表。</p>
+    <table>
+      <thead><tr><th style="width:11%">诗</th><th style="width:19%">D1 格律</th><th style="width:20%">D6 情感（V/A/T）</th><th style="width:17%">D2 主体墨阶</th><th style="width:14%">建议书体</th><th>题诗墨色 · 字距 · 印</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>江雪</b><br><span style="color:var(--ink3);font-size:11.5px">柳宗元</span></td>
+          <td>五言绝句（len 20）<br>入声·屑韵<br>入声比 <b>0.25</b> · 仄比 0.5</td>
+          <td><b>V −0.40</b> → V2 孤冷<br>A 0.15（低）<br>T 0.30</td>
+          <td>山石处方 ink=<b>淡</b> / water=中<br>远山实测 <b>清</b>（层衰减）<br>寒江·雪 ink=留白</td>
+          <td><b style="font-family:var(--shou);font-size:19px">龙藏</b><br><span style="font-size:11.5px;color:var(--ink3)">瘦劲疏朗</span></td>
+          <td>墨色 <b>清 / 淡</b>（随主体）<br>字距 <b>紧</b>（入声 0.25）<br>印 小幅 · <b>白文</b></td>
+        </tr>
+        <tr>
+          <td><b>早发白帝城</b><br><span style="color:var(--ink3);font-size:11.5px">李白</span></td>
+          <td>七言绝句（len 28）<br>删韵（平声·十五删）<br>入声比 <b>0.143</b> · 仄比 0.5</td>
+          <td><b>V +0.35</b> → V4 明朗<br>A 0.32（高）<br>T 0.17（低）</td>
+          <td>建筑（白帝·地标）ink=<b>重</b><br>彩云 ink=清（虚染）</td>
+          <td><b style="font-family:var(--brushkai);font-size:22px">马善政</b><br><span style="font-size:11.5px;color:var(--ink3)">圆厚开张</span></td>
+          <td>墨色 <b>浓</b>（随地标）<br>字距 <b>舒</b>（平韵 0.14）<br>印 小幅</td>
+        </tr>
+        <tr>
+          <td><b>静夜思</b><br><span style="color:var(--ink3);font-size:11.5px">李白</span></td>
+          <td>五言绝句（len 20）<br>阳韵（平声·七阳）</td>
+          <td><b>V −0.30</b> → V2 孤冷<br>A 0.25<br>T 0.45（高）</td>
+          <td>明月（焦点）ink=<b>淡</b><br>霜 ink=清（虚染）</td>
+          <td><b style="font-family:var(--brushkai);font-size:22px">马善政</b><br><span style="font-size:11.5px;color:var(--ink3)">温润小楷（小号）</span></td>
+          <td>墨色 <b>淡</b>（随焦点）<br>字距 中<br>印 小幅 · <b>白文</b></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="callout z"><b>同档区分（已按 A/T 接线）</b>：江雪与静夜思同落 V2「孤冷」档，单凭 V 会指向同一款书体；现以 <b>A/T 作第二判据</b>——江雪 <code>A 0.15</code>（低）→ 瘦劲（龙藏），静夜思 <code>T 0.45</code>（高）→ 温润小楷（马善政）。A/T 的分档阈值仍需固化为「题款卡」（见 §5 规则侧），否则取值只存在于 <code>cfg.poem</code> 的手工填写里。</div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-no">§5</span><h2>接线点与现状</h2></div>
+    <table>
+      <thead><tr><th style="width:14%">层</th><th style="width:40%">落点</th><th>现状</th></tr></thead>
+      <tbody>
+        <tr><td><b>数据侧</b></td><td>D1 格律 / D2 画法 / D6 情感 / D5 语境 / O2 意象</td><td><span class="badge b-ok">零缺口</span> 9 维所需字段全部已产出，无需新数据源。</td></tr>
+        <tr><td><b>规则侧</b></td><td>新建「题款卡」规则文件（形如 <code>data/source/d2_seed/*.json</code>），含 §3 的映射与 §4 的 gold</td><td><span class="badge b-gap">缺</span> 目前字体无规则卡，取值散落在 <code>ink_animations.html</code> 的 <code>cfg.poem</code> 里手工填。</td></tr>
+        <tr><td><b>渲染侧</b></td><td><code>cfg.poem</code> 增 <code>face / inkGrade / tracking / sealStyle</code>；<code>build/font_subset.py</code> 支持多字族子集；书写动画转 path 字形 + 逐笔遮罩</td><td><span class="badge b-part">部分</span> <code>face / authorFace</code> 已接线（江雪→龙藏、白帝城/静夜思→马善政、落款→志莽）；<code>font_subset.py</code> 已扩为七款字族表（含草档柳建毛草），并把印章篆体内嵌进全链路页；<b>书写动画已升级为真笔顺</b>（<code>build/stroke_data.py</code> → <code>dist/animation/strokes.js</code>，题诗/落款逐笔运笔，数据缺失时降级为矩形揭示）；<code>inkGrade / tracking / sealStyle</code> 未接线。</td></tr>
+        <tr><td><b>校验侧</b></td><td><code>build/verify.py</code> 增：字体覆盖 + 笔锋带覆盖 + 墨色档断言 + 书体档与 V/A/T 档一致</td><td><span class="badge b-part">部分</span> <code>font_subset.py --check</code> 管「子集覆盖 + 动画引用 + 全链路页内嵌印章篆体」；<code>stroke_data.py --check</code> 管「strokes.js 与字体/源同步 + 笔锋带覆盖外凸 ≤ 0（末笔走完即字形本体，无空洞/不串笔）」，均已纳入 <code>build/verify.py</code>；「取值是否符合规则」（书体档 ↔ V/A/T、墨色档）仍未断言。</td></tr>
+      </tbody>
+    </table>
+    <div class="callout q"><b>书写动画已收口</b>：原先「逐字写出」是 <code>clipPath</code> 矩形揭示而非真笔顺——毛笔字被一块矩形自上而下揭开，容易看出是「假书写」。现已升级为 <b>path 字形 + 逐笔中线遮罩</b>：每字取字形轮廓作 <code>&lt;path&gt;</code>，被 mask 遮住，mask 内按笔顺铺「笔锋带」并以 <code>stroke-dashoffset</code> 逐笔展开。笔顺与中线取自 <code>hanzi-writer-data</code>（Make Me a Hanzi，<b>Arphic Public License</b>），字形取自持字体子集，二者在 <code>build/stroke_data.py</code> 合并（中线换算到 <code>upem=1000</code> 并按 RDP 简化，逐笔遮罩带宽由轮廓边界点归属最近中线算出）。</div>
+  </section>
+
+  <footer>
+    字体要素 · 数据来源映射 · 2026-10-05 · 基于仓库实际产物盘点（D1/D2/D6/D5/O2）<br>
+    本文件为「字体 · 表达要素」系列第三篇：<a href="font_expression_elements.html">表达要素研究报告</a> → <a href="font_brush_samples.html">毛笔字候选样张</a> → 本文件（数据来源映射）。
+  </footer>
+</div>
+</body>
+</html>

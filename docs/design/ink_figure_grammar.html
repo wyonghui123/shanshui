@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>水墨画中古代人物的造型语法 · 通用层</title>
+<style>
+:root{
+  --paper:#F6F3EC; --paper2:#FBF9F4; --ink:#1C1C1C; --ink2:#3A362F; --ink3:#6E6A60;
+  --line:rgba(28,28,28,.14); --line2:rgba(28,28,28,.08);
+  --zhu:#A83A2C; --jin:#B8860B; --qing:#2F5D62;
+  --serif:"Noto Serif SC","Songti SC","Source Han Serif SC",serif;
+  --sans:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:56px 28px 90px}
+h1{font-family:var(--serif);font-size:30px;font-weight:600;letter-spacing:.02em;margin:0 0 8px}
+.lead{color:var(--ink3);font-size:14.5px;line-height:1.75;margin:0 0 6px;max-width:76ch}
+.lead b{color:var(--ink)}
+.meta-line{font-size:12.5px;color:var(--ink3);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0;margin:22px 0 34px;letter-spacing:.03em;line-height:1.7}
+section{margin:0 0 46px}
+.sec-head{display:flex;align-items:baseline;gap:12px;margin:0 0 14px}
+.sec-no{font-family:var(--serif);font-size:13px;color:var(--zhu);letter-spacing:.12em}
+.sec-head h2{font-family:var(--serif);font-size:20px;font-weight:600;margin:0}
+.sec-note{font-size:13.5px;color:var(--ink3);line-height:1.8;margin:0 0 16px;max-width:84ch}
+.sec-note b{color:var(--ink2)}
+.card{background:var(--paper2);border:1px solid var(--line2);border-radius:10px;padding:20px 22px;margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:820px){.grid2,.grid3{grid-template-columns:1fr}}
+.src h3{font-family:var(--serif);font-size:15px;margin:0 0 4px;font-weight:600}
+.src .who{font-size:11.5px;color:var(--zhu);letter-spacing:.06em;margin:0 0 8px}
+.src p{font-size:13px;line-height:1.78;color:var(--ink2);margin:0}
+.src b{color:var(--ink)}
+.src .quote{font-family:var(--serif);font-size:13.5px;color:var(--ink);line-height:1.9;border-left:2px solid var(--line);padding-left:12px;margin:8px 0 8px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line2);vertical-align:top}
+th{font-family:var(--serif);font-weight:600;color:var(--ink3);font-size:12px;letter-spacing:.04em}
+td b{font-weight:600}
+code{font-family:ui-monospace,Consolas,monospace;font-size:12px;background:rgba(28,28,28,.05);padding:1px 5px;border-radius:4px}
+.callout{background:var(--paper2);border:1px solid var(--line2);border-left:3px solid var(--jin);border-radius:8px;padding:14px 18px;font-size:13.5px;line-height:1.85;color:var(--ink2);margin:0 0 16px}
+.callout b{color:var(--ink)}
+.layers{display:grid;gap:10px;margin-bottom:18px}
+.layer{background:var(--paper2);border:1px solid var(--line2);border-radius:10px;padding:16px 20px}
+.layer h3{font-family:var(--serif);font-size:14.5px;margin:0 0 4px;font-weight:600}
+.layer .cap{font-size:12px;color:var(--ink3);margin:0 0 12px}
+.layer .foot{font-size:12px;color:var(--ink3);margin:12px 0 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips span{font-size:12.5px;padding:5px 12px;border-radius:8px;border:1px solid var(--line);color:var(--ink2);background:var(--paper)}
+.chips.b span{border-color:rgba(47,93,98,.35);color:var(--qing);background:rgba(47,93,98,.06)}
+.chips.a span{border-color:rgba(168,58,44,.30);color:var(--zhu);background:rgba(168,58,44,.05)}
+.arrow-down{text-align:center;font-size:12px;color:var(--ink3);margin:1px 0 2px}
+.risk{display:grid;grid-template-columns:26px 1fr;gap:10px;font-size:13.5px;line-height:1.72;margin-bottom:12px}
+.risk .lv{font-family:var(--serif);font-size:12px;color:#fff;background:var(--zhu);border-radius:5px;text-align:center;height:20px;line-height:20px;margin-top:2px}
+.risk .lv.m{background:var(--jin)}
+.risk .lv.l{background:var(--ink3)}
+.risk b{font-weight:600}
+/* 生成器 */
+.gen{display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:start}
+@media(max-width:900px){.gen{grid-template-columns:1fr}}
+.stage-box{background:var(--paper2);border:1px solid var(--line2);border-radius:12px;padding:10px;position:relative}
+.stage-box svg{display:block;width:100%;height:auto;border-radius:8px}
+.stage-cap{position:absolute;left:18px;bottom:16px;font-size:12px;color:var(--ink3);background:rgba(246,243,236,.82);padding:2px 8px;border-radius:6px}
+.ctrl h4{font-family:var(--serif);font-size:13px;margin:0 0 7px;font-weight:600;color:var(--ink2)}
+.opt{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.opt button{font-family:var(--sans);font-size:12.5px;padding:5px 12px;border-radius:8px;border:1px solid var(--line);background:var(--paper2);color:var(--ink2);cursor:pointer;transition:.15s}
+.opt button:hover{border-color:var(--ink3)}
+.opt button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.readout{font-size:12.5px;color:var(--ink2);line-height:1.85;background:var(--paper2);border:1px solid var(--line2);border-radius:9px;padding:12px 14px;margin-top:6px}
+.readout b{font-family:var(--serif)}
+.readout .k{color:var(--ink3)}
+.hint{font-size:12px;color:var(--ink3);line-height:1.7;margin-top:12px;border-top:1px dashed var(--line);padding-top:10px}
+.gal{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+@media(max-width:700px){.gal{grid-template-columns:repeat(2,1fr)}}
+.gal figure{margin:0;background:var(--paper2);border:1px solid var(--line2);border-radius:10px;padding:8px 8px 6px}
+.gal svg{display:block;width:100%;height:auto;border-radius:6px;background:var(--paper)}
+.gal figcaption{font-size:11.5px;color:var(--ink3);text-align:center;margin-top:5px;line-height:1.4}
+.gal figcaption b{font-family:var(--serif);color:var(--ink2)}
+a{color:var(--zhu)}
+footer{font-size:12px;color:var(--ink3);border-top:1px solid var(--line);padding-top:16px;line-height:1.9}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>水墨画中古代人物的造型语法 · 通用层</h1>
+<p class="lead">这是 <a href="ink_figure_schemes.html">《水墨画中人的合理展示方案》</a>（以《江雪》蓑笠翁为例）的<b>通用层</b>补全。前者回答「这一首怎么画人」；这里回答「<b>换任何诗、任何身份的人，怎么系统地把它定下来</b>」——不是一套到处套的固定配方，而是一台可取值、可回溯、可复核的<b>参数化生成器</b>。</p>
+<p class="lead">结论先行：古人早已给出三条硬诀——<b>比例诀</b>（丈山尺树，寸马豆人）、<b>简化诀</b>（远人无目……非无也，如无耳）、<b>功能诀</b>（山之人物以标道路，水之渔艇钓竿以足人意）。三条诀加上《芥子园画传》现成的姿态谱，正好凑成四句口诀：<b>身份决定符号，动词决定姿态，景深决定墨色，诗的气质决定尺寸。</b></p>
+<div class="meta-line">依据：王维《山水论》（唐）· 郭熙《林泉高致·山水赋》（北宋）·《芥子园画传》卷四「人物屋宇谱」· 十八描 ·《山水情》(1988)　·　画布参照 900×600　·　日期 2026-10-04　·　上位总纲：<a href="../research/landscape_ink_elements.html">山水画 · 水墨画 表达要素总纲</a>（轴2「三远与人物」/ 轴6「点景」）</div>
+
+<!-- ============ §1 三条古诀 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">§1</span><h2>三条古诀：为什么这样画</h2></div>
+  <p class="sec-note">这不是审美偏好，是有明确出处的三条硬约束。它们共同指向一个反直觉的结论——<b>人的可读性来自比例、轮廓与姿态，不来自细节</b>。</p>
+  <div class="grid3">
+    <div class="card src">
+      <h3>比例诀 · 人是「分母」</h3>
+      <p class="who">王维《山水论》· 郭熙《林泉高致》</p>
+      <p class="quote">丈山尺树，寸马豆人。<br>远人无目，远树无枝。</p>
+      <p>山以丈、树以尺、马以寸、人以豆——人物是<b>整幅尺度的最小单位</b>。这决定了「放大换可读性」在本语法里天然违规：尺寸不是表现手段，是<b>位置声明</b>（我在多远）。</p>
+    </div>
+    <div class="card src">
+      <h3>简化诀 · 不是不画，是画成「像没有」</h3>
+      <p class="who">郭熙《林泉高致》</p>
+      <p class="quote">远人无目……<br><b>非无也，如无耳。</b></p>
+      <p>最要害的是后半句：五官并非不存在，而是<b>画到「像没有」</b>。这正是「留白即表情」的古典出处，也是减笔的合法性来源——简不是省，是<b>把信息压到轮廓</b>。</p>
+    </div>
+    <div class="card src">
+      <h3>功能诀 · 人是「功能件」</h3>
+      <p class="who">郭熙《林泉高致》</p>
+      <p class="quote">山之人物，以标道路……<br>水之渔艇钓竿，以足人意。</p>
+      <p>人物不是主角，是<b>标路的刻度、点题的引信</b>。另有「道路人塞」——路上该有人，画面才「通」。所以放不放人、放几个，是<b>功能判断</b>，不是美术偏好。</p>
+    </div>
+  </div>
+  <div class="callout"><b>附：三远与人物（郭熙）。</b>「其人物之在三远也，高远者明了，深远者细碎，平远者冲淡；明了者不短，细碎者不长，冲淡者不大。」——<b>人物要随景深改档</b>：高远可稍清楚、深远要碎小、平远要冲淡。这与 D2 的 <code>layer_technique</code> 调制器<b>同构</b>（景深→笔墨档），已落地为人物版的 <code>figure_layer</code> 调制器（<code>d2_techniques.json</code>，见 §8）。</div>
+</section>
+
+<!-- ============ §2 身份谱 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">§2</span><h2>身份谱：画谁</h2></div>
+  <p class="sec-note">学界把山水点景人物归为四类，与「渔樵耕读」并置，正好覆盖绝大多数诗境。每类只给<b>最少可识别符号</b>——多一个符号，就多一分图解化风险。</p>
+  <table>
+    <thead><tr><th style="width:120px">类 / 身份</th><th style="width:190px">识别符号（最少集）</th><th style="width:150px">典型姿态式</th><th>语义 · 适用诗境</th></tr></thead>
+    <tbody>
+      <tr><td><b>高雅逸士</b><br>文人 / 高士</td><td>巾（东坡巾式）· 长袍 · 广袖</td><td>负手、袖手、观书、抚松</td><td>清高、闲适、独处 —— 雅集、幽居、独坐</td></tr>
+      <tr><td><b>渔</b>（渔隐）</td><td>斗笠（锥+檐）· 蓑衣 · 钓竿</td><td>垂竿、钓鱼、独坐</td><td>隐逸、孤、忘机 —— 江雪、渔隐、寒江</td></tr>
+      <tr><td><b>樵</b></td><td>短衣 · 斧 / 柴担 · 赤足</td><td>荷锄（担）、缓步</td><td>劳作、山林之乐</td></tr>
+      <tr><td><b>耕</b>（农夫）</td><td>短衣 · 锄 · 笠</td><td>荷锄、缓步</td><td>田园、可居可游</td></tr>
+      <tr><td><b>读</b>（书生）</td><td>巾 · 长袍 · 书 / 卷</td><td>观书、卧读、负书</td><td>寒窗、文会</td></tr>
+      <tr><td><b>行旅</b></td><td>笠 / 幞头 · 行囊 / 担 · 杖</td><td>担行囊、牵马、指点</td><td>羁旅、奔波、赶路</td></tr>
+      <tr><td><b>仕女</b></td><td>高髻 · 长裙 · 广袖</td><td>袖手、闲看、对酌</td><td>闺思、游园、静好</td></tr>
+      <tr><td><b>童子</b></td><td>双髻 · 短衣 · 小</td><td>捧书、捧茶、提壶</td><td>侍读、生趣（配景）</td></tr>
+    </tbody>
+  </table>
+  <div class="callout" style="margin-top:16px"><b>选身份的纪律：</b>身份由<b>诗中实有的意象词</b>决定（「蓑笠翁」→渔；「童子」→童），不由画面美感决定。诗中无身份词时，默认<b>不落身份</b>——宁可用「视点」或极简背影，也不凭空安一个「文人」（那会变成 design 附加，需半权重登记）。</div>
+</section>
+
+<!-- ============ §3 姿态式谱 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">§3</span><h2>姿态式谱：在做什么</h2></div>
+  <p class="sec-note">《芥子园画传》卷四「人物屋宇谱」已把点景人物整理成现成谱式：<b>点景人物六十二式 · 中号三十二式 · 极小十九式 · 极写意七式</b>。这是一份可"查表"的姿态词典——我们要做的是把式名<b>归一到诗句动词</b>。</p>
+  <div class="card">
+    <div class="chips" style="margin-bottom:14px"><span>缓步式</span><span>负手式</span><span>袖手式</span><span>拈须式</span><span>荷锄式</span><span>把菊式</span><span>题壁式</span><span>对谈式</span><span>抚松式</span><span>倚杖式</span><span>系杖式</span><span>指点式</span><span>藜杖式</span><span>闲看式</span><span>据石式</span><span>卧读式</span><span>临流式</span><span>卧云式</span><span>看云式</span><span>坐石式</span><span>对酌式</span><span>观书式</span><span>垂竿式</span><span>钓鱼式</span><span>独坐式</span><span>两人看云式</span><span>促膝式</span><span>提壶式</span><span>捧书式</span><span>负书式</span><span>担行囊式</span><span>牵马式</span></div>
+    <p style="font-size:12px;color:var(--ink3);margin:0">（上为节选。原谱另有「极小点景十九式」「极写意七式」——分别对应本方案 §5 的极小档与极写意档。）</p>
+  </div>
+  <h3 style="font-family:var(--serif);font-size:15px;margin:22px 0 10px">归一：诗句动词 → 姿态式</h3>
+  <table>
+    <thead><tr><th style="width:110px">诗句动词</th><th style="width:230px">对应谱式</th><th>身体怎么说（可执行要点）</th></tr></thead>
+    <tbody>
+      <tr><td><b>望 / 看 / 临</b></td><td>看云式、望山式、临流式、指点式</td><td>一臂上抬至额（或前伸指），头微仰；重心后移。是「观」不是「动」。</td></tr>
+      <tr><td><b>行 / 辞 / 过</b></td><td>缓步式、担行囊式、牵马式、负书式</td><td>整体前倾 3–5°，衣裾后曳；步幅靠<b>倾斜</b>表达，不画双腿交替。</td></tr>
+      <tr><td><b>立 / 待</b></td><td>负手式、袖手式、倚杖式</td><td>手拢于背或袖中，不见手；肩线平——「闲」全在<b>手的消失</b>。</td></tr>
+      <tr><td><b>坐 / 据</b></td><td>坐石式、据石式、独坐式、卧读式</td><td>身下压，袍裾铺地成一横；重心低而稳。</td></tr>
+      <tr><td><b>钓</b></td><td>垂竿式、钓鱼式</td><td>坐姿前倾，一手持竿前伸，竿→丝一线垂下。<b>竿是「钓」的主语</b>，缺竿则动作不成立。</td></tr>
+      <tr><td><b>对 / 会</b></td><td>对谈式、对酌式、促膝式、两人看云式</td><td>两人成组、身体微向对方倾——但注意「孤」类诗<b>禁多人</b>（见 §8）。</td></tr>
+      <tr><td><b>举头 / 低头</b></td><td>（谱外）俯仰式</td><td>头（含髻/巾）绕<b>颈枢</b>旋转：正角=低头，负角=举头。姿态即节拍，镜头不必动。</td></tr>
+      <tr><td><b>抚 / 拈</b></td><td>抚松式、把菊式、拈须式</td><td>一臂伸向所抚之物，指尖即触点；无物可抚时<b>不摆此式</b>。</td></tr>
+    </tbody>
+  </table>
+  <div class="callout" style="margin-top:16px"><b>驱动规则：</b>姿态由<b>诗句动词</b>驱动，不由画师偏好。一首诗只取 1–2 个式；动词缺席（纯写景句）则<b>不给姿态</b>——静立或省人。这与既有方案「动作档由动词定」完全一致。</div>
+</section>
+
+<!-- ============ §4 笔法 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">§4</span><h2>笔法：怎么下笔</h2></div>
+  <p class="sec-note">「十八描」是人物衣纹的线描谱系。写意水墨动画只需其中<b>极少数几描</b>——其余（如高古游丝、铁线描）属于工笔/白描语言，一旦引入就把写意拉向插画。</p>
+  <div class="grid3">
+    <div class="card src">
+      <h3>减笔描（主力）</h3>
+      <p class="who">南宋 · 梁楷</p>
+      <p>《泼墨仙人》《李白行吟图》所用。<b>用笔粗、一气呵成，一笔中有墨色变化</b>；高度概括对象，王瀛称「<b>以少胜多，少许难于多</b>」。这是本语法唯一的主力笔法。</p>
+    </div>
+    <div class="card src">
+      <h3>行云流水描（衣纹）</h3>
+      <p class="who">传统十八描之一</p>
+      <p>表现<b>软而弯转</b>的衣纹，流畅如行云流水。用于长袍/裙裾的少量走向线，交代体积与风向，不勾封闭轮廓。</p>
+    </div>
+    <div class="card src">
+      <h3>柳叶描（可选）</h3>
+      <p class="who">传吴道子</p>
+      <p>两头细、中间粗，虚入虚出。可作为袖口/衣褶的<b>点缀一笔</b>；用多则近白描，慎用。</p>
+    </div>
+  </div>
+  <div class="callout"><b>一条硬护栏：不勾线。</b>凡出现<b>连续封闭的轮廓线</b>（把人的外形一笔圈住），写意立刻破功、滑向连环画。所以笔法只用「<b>块面 + 断线</b>」：身体是墨块，衣纹是断口，边界靠飞白与浓淡拉开，不靠勾边。这条护栏与既有方案 §6「勾线即插画」同源。</div>
+</section>
+
+<!-- ============ §5 四档 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">§5</span><h2>四档：多大、多简</h2></div>
+  <p class="sec-note">芥子园的四层谱式，天然对应四个「尺寸 × 造型」档。这解决了一个关键问题——<b>不是所有人物都该做成点景</b>：主体（如《静夜思》的背影）必须升到中景档，否则读不出「举头/低头」。</p>
+  <table>
+    <thead><tr><th style="width:120px">档</th><th style="width:170px">芥子园对应</th><th style="width:120px">人高 / 画幅</th><th style="width:130px">造型</th><th>用途 · 护栏</th></tr></thead>
+    <tbody>
+      <tr><td><b>极写意</b></td><td>极写意人物七式</td><td>≤ 4%</td><td>一两笔，近乎墨点</td><td>极远景；只表「有人迹」，不辨身份</td></tr>
+      <tr><td><b>极小点景</b></td><td>极小点景人物十九式</td><td>4–6%</td><td>剪影 + 单一符号</td><td>远景点景；符号须极准（笠=渔）</td></tr>
+      <tr><td><b>点景</b>（默认）</td><td>点景人物六十二式</td><td>6–9%</td><td>减笔：轮廓 + 姿态</td><td>中景点景；<b>尺寸上限所在档</b>，不得再放大</td></tr>
+      <tr><td><b>中号 / 主体</b></td><td>中号点景人物三十二式</td><td>9–30%</td><td>减笔 + 少量衣纹</td><td>主体在场（背影/正面）；<b>仍不画五官、不勾线</b></td></tr>
+    </tbody>
+  </table>
+  <div class="callout" style="margin-top:16px"><b>为什么默认停在「点景」档：</b>尺寸上限是「留白率 ρ 不降」与「孤的强度不稀释」的操作化表达（见既有方案 §3 尺寸守则）。<b>升档只在一种情况下允许</b>——人物是全诗唯一可画的实体与动作主体（如《静夜思》），此时升到中景是<b>语义必需</b>，不是审美选择。</div>
+</section>
+
+<!-- ============ §6 生成器 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">§6</span><h2>生成器：把语法做成可调参数</h2></div>
+  <p class="sec-note">下面把这套语法装成一台可交互的<b>参数化生成器</b>：左边是场景，右边是四个旋钮（身份 × 姿态 × 尺寸档 × 墨色）。改任一项，右边读数会同步给出「人高占比」与「取值依据」。<b>注意这不是「要素拼贴」</b>——每类只用一个最少符号，姿态由谱式给骨架，正是为了压低图解化。</p>
+  <div class="gen">
+    <div class="stage-box">
+      <svg id="stage" viewBox="0 0 900 600" role="img" aria-label="参数化人物生成器预览">
+        <rect width="900" height="600" fill="#F6F3EC"/>
+        <g filter="url(#bgEdge)">
+          <path d="M0 330 L150 250 L268 322 L392 236 L520 326 L636 268 L780 330 L900 296 L900 380 L0 380 Z" fill="#6E6A60" opacity="0.13"/>
+          <path d="M0 330 L120 292 L262 330 L400 276 L556 330 L900 330 L900 380 L0 380 Z" fill="#3A362F" opacity="0.14"/>
+        </g>
+        <path d="M0 336 Q240 350 470 340 Q700 330 900 344" fill="none" stroke="#3A362F" stroke-width="1.6" opacity="0.16"/>
+        <g stroke="#2A2724" fill="none" opacity="0.42">
+          <path d="M60 520 Q76 452 58 388" stroke-width="1.8"/><path d="M92 524 Q108 464 132 410" stroke-width="1.3"/>
+        </g>
+        <path d="M0 500 L900 500" stroke="#3A362F" stroke-width="1.2" opacity="0.22"/>
+        <path d="M0 500 Q120 494 250 502 Q400 512 560 500 Q730 490 900 502" fill="none" stroke="#3A362F" stroke-width="2.2" opacity="0.5"/>
+        <g id="figStage" filter="url(#figInk)"></g>
+        <defs>
+          <filter id="figInk" x="-40%" y="-40%" width="180%" height="180%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.016" numOctaves="4" seed="23" result="n"/>
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="6" xChannelSelector="R" yChannelSelector="G"/>
+          </filter>
+          <filter id="bgEdge" x="-20%" y="-20%" width="140%" height="140%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.016" numOctaves="4" seed="17" result="n"/>
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="10" xChannelSelector="R" yChannelSelector="G"/>
+          </filter>
+        </defs>
+      </svg>
+      <div class="stage-cap" id="stageCap">渔翁 · 立 · 点景档 · 分档墨</div>
+    </div>
+    <div class="ctrl">
+      <h4>身份（符号）</h4>
+      <div class="opt" id="optId"></div>
+      <h4>姿态（动词 → 式）</h4>
+      <div class="opt" id="optPos"></div>
+      <h4>尺寸档</h4>
+      <div class="opt" id="optSize"></div>
+      <h4>墨色</h4>
+      <div class="opt" id="optInk"></div>
+      <div class="readout" id="readout"></div>
+      <p class="hint">判读建议：先看「不放大」时能否认出身份（靠那一个符号）；再看姿态是否读得出动词；最后看人高占比是否越过点景档的 9% 红线。</p>
+    </div>
+  </div>
+
+  <h3 style="font-family:var(--serif);font-size:15px;margin:24px 0 10px">身份画廊：八类的最少符号</h3>
+  <div class="gal" id="gal"></div>
+</section>
+
+<!-- ============ §7 取值驱动 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">§7</span><h2>取值驱动：从诗到人</h2></div>
+  <p class="sec-note">「每诗单独定」不等于拍脑袋。下面五条规则把诗句映射到六个取值，每一条都<b>可回溯</b>——这正是既有方案 §7 所说的「取值层」的操作化。</p>
+  <table>
+    <thead><tr><th style="width:150px">输入（诗句层）</th><th style="width:150px">输出（人物取值）</th><th>判据 · 可回溯字段</th></tr></thead>
+    <tbody>
+      <tr><td>意象表含<b>人物意象词</b>（蓑笠翁、童子…）</td><td>在场=1；身份=该词</td><td>回溯到 O2 意象 id + 词；身份由符号词直取</td></tr>
+      <tr><td>无人物词，但有<b>第一人称画面动词</b>（举头/低头）</td><td>在场=1；角色=主体；姿态=俯仰式</td><td>动词可画 → 人必须在场；否则动作无主语</td></tr>
+      <tr><td>无人物词，动词是<b>叙述性/位移</b>（朝辞、已过）</td><td>在场=0；角色=视点</td><td>主语是「我」但动作在镜头外 → 视点在场（白帝城例）</td></tr>
+      <tr><td>纯写景，<b>无人称动词</b></td><td>在场=0；可留人迹（极写意档）</td><td>「可游可居」必要时放极小点景，否则省</td></tr>
+      <tr><td>诗句动词 → 谱式；诗气质 V/A/T + 景深 → 尺寸/墨色</td><td>姿态档；尺寸档；墨色分档值</td><td>姿态挂动词；尺寸挂「是否唯一实体」；墨色挂景深与气质</td></tr>
+    </tbody>
+  </table>
+  <div class="callout" style="margin-top:16px"><b>两个要害（沿用既有方案）：</b>① 通用的是「<b>取值规则 + 边界</b>」，不是「这套参数」——把 §6 的一组参数原样搬到别处，就退化成模板化的要素匹配。② 每个取值都要能指回<b>诗句里的一句话</b>（意象词 / 动词 / 气质），否则就是审美主观、无法复核。</div>
+</section>
+
+<!-- ============ §8 接口与风险 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">§8</span><h2>与既有系统的接口 · 风险</h2></div>
+  <div class="grid2">
+    <div class="card">
+      <h3 style="font-family:var(--serif);font-size:14px;margin:0 0 8px">接口：接到三套既有系统</h3>
+      <p style="font-size:13px;line-height:1.85;color:var(--ink2);margin:0">
+        <b>① O2 意象表</b> ——「在场/身份」就是意象表的一行；人不是一个新对象，是意象的一类。<br>
+        <b>② O1 忠实度护栏</b> —— 存在题（如 <code>JX-E2</code>）必须命中；「孤」类诗<b>全片仅 1 人</b>；探针可见性 &gt; 0.05。<br>
+        <b>③ O3 留白代理</b> —— 尺寸档 = ρ 上限的操作化；「孤舟」是正节点，不能因降墨跌成负节点。<br>
+        <b>④ 与 D2 同构</b> —— 郭熙「三远与人物」已落地为 <code>figure_layer</code> 调制器（<code>d2_techniques.json</code>）：景深 → 人物尺寸档 / 墨阶，与 <code>layer_technique</code> 并列；词覆盖优先，中号档仅角色=主体可用（§5 护栏已内建）。<br>
+        <b>⑤ 尺寸档输出</b> —— <code>resolve_node</code> 现返回人物 <code>size</code> 字段（极写意 / 极小点景 / 点景 / 中号），与四档表一一对应，可被下游动画直接取用。
+      </p>
+    </div>
+    <div class="card">
+      <h3 style="font-family:var(--serif);font-size:14px;margin:0 0 8px">落地下游：既有三首的取值</h3>
+      <p style="font-size:13px;line-height:1.85;color:var(--ink2);margin:0">
+        本通用层不改变既有裁定，只是给它一个统一出处：<br>
+        · 《江雪》→ 身份=渔；姿态=垂竿；档=点景（§5 默认档）<br>
+        · 《早发白帝城》→ 在场=0；角色=视点（规则 3）<br>
+        · 《静夜思》→ 角色=主体；档=中号；姿态=俯仰（规则 2）<br>
+        详见 <a href="ink_figure_schemes.html">ink_figure_schemes.html</a> §7–§9。
+      </p>
+    </div>
+  </div>
+
+  <div class="risk"><span class="lv">高</span><div><b>可读性 ↔ 意境是零和的。</b>任何「为了让人看清」而升档/放大的改动，都直接稀释「孤」与留白。尺寸上限是第一纪律。</div></div>
+  <div class="risk"><span class="lv">高</span><div><b>符号过载即图解化。</b>给渔翁同时配笠、蓑、竿、鱼篓、水纹……就变成「要素全中」的插图。每类只留<b>最少符号</b>，其余交给留白。</div></div>
+  <div class="risk"><span class="lv m">中</span><div><b>勾线即插画。</b>只要外形被连续线描圈住，写意即破功。笔法只用「块面 + 断线」。</div></div>
+  <div class="risk"><span class="lv m">中</span><div><b>动态过强会卡通化。</b>行/望/抚的幅度都要极小（倾角 ±1°、位移 ±1px 级）；姿态靠「形」不靠「动」。</div></div>
+  <div class="risk"><span class="lv l">低</span><div><b>服饰考据陷阱。</b>身份符号须与诗的语境自洽（唐巾 vs 宋笠 vs 幞头）；考据过细会把减笔拖回写实，得不偿失——<b>符号准即可，形制不求全</b>。</div></div>
+</section>
+
+<footer>
+  <b>出处：</b>王维《山水论》「丈山尺树，寸马分人；远人无目，远树无枝」（<a href="https://m.gushiwen.cn/shiwenv_1324613679b8.aspx">古文岛</a>）；郭熙《林泉高致·山水赋》「远人无目……非无也，如无耳」「山之人物以标道路……水之渔艇钓竿以足人意」（<a href="https://gj.zdic.net/zibu/318/9108.html">汉典古籍</a>）；郭熙「其人物之在三远也，高远者明了，深远者细碎，平远者冲淡」（<a href="https://qsshc.mond.jp/guqingb/cpaint/cpaintlin1.html">林泉高致集</a>）；《芥子园画传》卷四「人物屋宇谱」点景人物六十二式 / 中号三十二式 / 极小十九式 / 极写意七式（<a href="https://m.thepaper.cn/newsDetail_forward_27173203">澎湃·艺术开卷</a>）；十八描「减笔描·以少胜多，少许难于多」（<a href="http://epaper.gmw.cn/gmrb/html/2014-03/12/nw.D110000gmrb_20140312_4-11.htm">光明日报《画中"十八描"》</a>）；点景人物四类归纳（<a href="http://xueshu.qikan.com.cn/preview/1/156/1476518">山水画中的点景人物研究</a>）。<br>
+  本页为<b>通用层</b>；每诗的具体取值与落地回归见 <a href="ink_figure_schemes.html">ink_figure_schemes.html</a>。
+</footer>
+</div>
+
+<script>
+(function(){
+  var CX = 110, GROUND = 258;
+
+  var ID = {
+    yu:  {label:'渔翁', hat:'dou',   robe:'suo',   hw:33, sw:16, prop:'gan',   note:'斗笠（锥+檐）+ 蓑衣 + 钓竿'},
+    wen: {label:'文人', hat:'jin',   robe:'long',  hw:30, sw:15, prop:'shu',   note:'东坡巾 + 长袍 + 手中书'},
+    tong:{label:'童子', hat:'ji',    robe:'short', hw:21, sw:12, prop:'none',  note:'双髻 + 短衣（唯一露腿者）'},
+    nv:  {label:'仕女', hat:'gaoji', robe:'long',  hw:27, sw:13, prop:'none',  note:'高髻 + 长裙 + 广袖'},
+    lv:  {label:'行旅', hat:'dou',   robe:'long',  hw:28, sw:15, prop:'zhang', note:'笠 + 行囊 + 杖'},
+    qiao:{label:'樵夫', hat:'dou',   robe:'short', hw:22, sw:13, prop:'dan',   note:'短衣 + 柴担'},
+    geng:{label:'农夫', hat:'dou',   robe:'short', hw:22, sw:13, prop:'chu',   note:'短衣 + 锄'},
+    shu: {label:'书生', hat:'jin',   robe:'long',  hw:28, sw:14, prop:'shu',   note:'巾 + 长袍 + 书卷'}
+  };
+  var POS = {
+    li:  {label:'立', sy:78,  hy:206, cy:64, lean:0,  hr:0,  sit:false},
+    zuo: {label:'坐', sy:104, hy:228, cy:92, lean:0,  hr:0,  sit:true},
+    xing:{label:'行', sy:80,  hy:206, cy:66, lean:-5, hr:-5, sit:false},
+    fu:  {label:'俯', sy:78,  hy:206, cy:66, lean:2,  hr:22, sit:false}
+  };
+  var SIZE = {
+    jx: {label:'极写意', sc:0.095, pct:'≤4%'},
+    jx2:{label:'极小点景', sc:0.135, pct:'4–6%'},
+    dj: {label:'点景',   sc:0.20, pct:'6–9%'},
+    zt: {label:'中号/主体', sc:0.67, pct:'9–30%'}
+  };
+  var HAT_TOP = {dou:30, jin:23, ji:18, gaoji:23};
+  var INK = {
+    single:{label:'单色'},
+    tier:  {label:'分档'}
+  };
+
+  function inkPalette(tier){
+    if(tier) return {head:'#1C1C1C', ho:0.96, body:'#3A362F', bo:0.72, prop:'#6E6A60', po:0.55};
+    return {head:'#1C1C1C', ho:0.95, body:'#1C1C1C', bo:0.88, prop:'#1C1C1C', po:0.8};
+  }
+
+  function buildFigure(idKey, posKey, inkTier){
+    var id = ID[idKey], p = POS[posKey], k = inkPalette(inkTier);
+    var cx = CX, sy = p.sy, hy = p.hy, cy = p.cy;
+    var hw = id.hw, sw = id.sw;
+    var hy2 = (id.robe === 'short') ? (hy - 44) : hy;
+    var g = '';
+
+    // 袍/衣（块面，非勾线）
+    g += '<path d="M'+(cx-sw)+' '+sy+' L'+(cx+sw)+' '+sy+' L'+(cx+hw)+' '+hy2+' Q'+cx+' '+(hy2+9)+' '+(cx-hw)+' '+hy2+' Z" fill="'+k.body+'" opacity="'+k.bo+'"/>';
+    if(id.robe === 'suo'){
+      for(var i=-2;i<=2;i++){
+        g += '<path d="M'+(cx+i*10)+' '+(sy+8)+' L'+(cx+i*13)+' '+(hy2-6)+'" stroke="#F6F3EC" stroke-width="0.9" fill="none" opacity="0.35"/>';
+      }
+    }
+    if(id.robe === 'short'){
+      g += '<path d="M'+(cx-6)+' '+hy2+' L'+(cx-8)+' '+GROUND+'" stroke="'+k.body+'" stroke-width="3.2" fill="none" opacity="'+k.bo+'"/>';
+      g += '<path d="M'+(cx+6)+' '+hy2+' L'+(cx+8)+' '+GROUND+'" stroke="'+k.body+'" stroke-width="3.2" fill="none" opacity="'+k.bo+'"/>';
+    }
+    if(p.sit){
+      g += '<ellipse cx="'+cx+'" cy="'+(GROUND-5)+'" rx="'+(hw+4)+'" ry="9" fill="'+k.body+'" opacity="'+k.bo+'"/>';
+    }
+
+    // 手臂 / 袖
+    if(posKey === 'li' || posKey === 'zuo'){
+      g += '<path d="M'+(cx-13)+' '+(sy+28)+' Q'+cx+' '+(sy+37)+' '+(cx+13)+' '+(sy+28)+'" stroke="'+k.body+'" stroke-width="2.2" fill="none" opacity="'+k.bo+'"/>';
+    } else if(posKey === 'xing'){
+      g += '<path d="M'+(cx-9)+' '+(sy+14)+' Q'+(cx-20)+' '+(sy+26)+' '+(cx-14)+' '+(sy+36)+'" stroke="'+k.body+'" stroke-width="2.2" fill="none" opacity="'+k.bo+'"/>';
+    } else if(posKey === 'fu'){
+      g += '<path d="M'+(cx-12)+' '+(sy+22)+' Q'+cx+' '+(sy+30)+' '+(cx+12)+' '+(sy+22)+'" stroke="'+k.body+'" stroke-width="2.2" fill="none" opacity="'+k.bo+'"/>';
+    }
+
+    // 道具
+    if(id.prop === 'gan'){
+      g += '<path d="M'+(cx+12)+' '+(sy+18)+' L'+(cx+46)+' '+(sy+42)+'" stroke="'+k.prop+'" stroke-width="2" fill="none" opacity="'+k.po+'"/>';
+      g += '<path d="M'+(cx+46)+' '+(sy+42)+' Q'+(cx+50)+' '+(sy+80)+' '+(cx+44)+' '+(sy+120)+'" stroke="'+k.prop+'" stroke-width="1" fill="none" opacity="'+(k.po*0.8)+'"/>';
+    }
+    if(id.prop === 'shu'){
+      g += '<path d="M'+(cx-9)+' '+(sy+20)+' L'+(cx+9)+' '+(sy+20)+' L'+(cx+9)+' '+(sy+33)+' L'+(cx-9)+' '+(sy+33)+' Z" fill="none" stroke="'+k.prop+'" stroke-width="1.6" opacity="'+k.po+'"/>';
+    }
+    if(id.prop === 'zhang'){
+      g += '<path d="M'+(cx+22)+' '+(GROUND-2)+' L'+(cx+30)+' '+(sy+16)+'" stroke="'+k.prop+'" stroke-width="2" fill="none" opacity="'+k.po+'"/>';
+      g += '<ellipse cx="'+(cx-16)+'" cy="'+(sy+12)+'" rx="10" ry="8" fill="'+k.body+'" opacity="'+k.bo+'"/>';
+    }
+    if(id.prop === 'dan'){
+      g += '<path d="M'+(cx-30)+' '+(sy+6)+' L'+(cx+18)+' '+(sy+30)+'" stroke="'+k.prop+'" stroke-width="2.2" fill="none" opacity="'+k.po+'"/>';
+      g += '<ellipse cx="'+(cx-30)+'" cy="'+(sy+16)+'" rx="9" ry="7" fill="'+k.body+'" opacity="'+k.bo+'"/>';
+    }
+    if(id.prop === 'chu'){
+      g += '<path d="M'+(cx+16)+' '+(GROUND-2)+' L'+(cx+26)+' '+(sy+16)+'" stroke="'+k.prop+'" stroke-width="2" fill="none" opacity="'+k.po+'"/>';
+      g += '<path d="M'+(cx+22)+' '+(GROUND-8)+' L'+(cx+34)+' '+(GROUND-14)+'" stroke="'+k.prop+'" stroke-width="2.4" fill="none" opacity="'+k.po+'"/>';
+    }
+
+    // 头 + 冠巾笠（绕颈枢旋转，实现俯仰）
+    var head = '<circle cx="'+cx+'" cy="'+cy+'" r="10" fill="'+k.head+'" opacity="'+k.ho+'"/>';
+    if(id.hat === 'dou'){
+      head += '<path d="M'+(cx-24)+' '+(cy-3)+' L'+cx+' '+(cy-30)+' L'+(cx+24)+' '+(cy-3)+' Q'+cx+' '+(cy+4)+' '+(cx-24)+' '+(cy-3)+' Z" fill="'+k.head+'" opacity="'+k.ho+'"/>';
+    } else if(id.hat === 'jin'){
+      head += '<path d="M'+(cx-11)+' '+(cy-3)+' Q'+cx+' '+(cy-23)+' '+(cx+11)+' '+(cy-3)+' Z" fill="'+k.head+'" opacity="'+k.ho+'"/>';
+      head += '<path d="M'+(cx+10)+' '+(cy-6)+' Q'+(cx+18)+' '+(cy+2)+' '+(cx+13)+' '+(cy+10)+'" stroke="'+k.head+'" stroke-width="1.6" fill="none" opacity="'+(k.ho*0.8)+'"/>';
+    } else if(id.hat === 'ji'){
+      head += '<circle cx="'+(cx-8)+'" cy="'+(cy-13)+'" r="4.5" fill="'+k.head+'" opacity="'+k.ho+'"/>';
+      head += '<circle cx="'+(cx+8)+'" cy="'+(cy-13)+'" r="4.5" fill="'+k.head+'" opacity="'+k.ho+'"/>';
+    } else if(id.hat === 'gaoji'){
+      head += '<ellipse cx="'+cx+'" cy="'+(cy-14)+'" rx="7" ry="9" fill="'+k.head+'" opacity="'+k.ho+'"/>';
+    }
+    g += '<g transform="rotate('+p.hr+' '+cx+' '+sy+')">'+head+'</g>';
+
+    return '<g transform="rotate('+p.lean+' '+cx+' '+GROUND+')">'+g+'</g>';
+  }
+
+  // ---- 场景（生成器）----
+  var state = {id:'yu', pos:'li', size:'dj', ink:'tier'};
+  var stageFig = document.getElementById('figStage');
+  var stageCap = document.getElementById('stageCap');
+  var readout = document.getElementById('readout');
+
+  function localHeight(idKey, posKey){
+    var p = POS[posKey];
+    var top = p.cy - (HAT_TOP[ID[idKey].hat] || 30);
+    return GROUND - top;
+  }
+  function renderStage(){
+    var sc = SIZE[state.size].sc;
+    var x0 = 470, y0 = 500;
+    var tr = 'translate('+x0+' '+y0+') scale('+sc+') translate('+(-CX)+' '+(-GROUND)+')';
+    stageFig.innerHTML = '<g transform="'+tr+'">'+buildFigure(state.id, state.pos, state.ink==='tier')+'</g>';
+    var hpx = localHeight(state.id, state.pos) * sc;
+    var pct = (hpx / 600 * 100);
+    stageCap.textContent = ID[state.id].label+' · '+POS[state.pos].label+' · '+SIZE[state.size].label+' · '+INK[state.ink].label;
+    var over = pct > 9 && (state.size==='dj');
+    readout.innerHTML =
+      '<div><span class="k">人高占比</span> <b>'+pct.toFixed(1)+'%</b>　<span class="k">（'+SIZE[state.size].label+' 档标称 '+SIZE[state.size].pct+'）</span></div>'
+      + '<div><span class="k">身份符号</span> '+ID[state.id].note+'</div>'
+      + '<div><span class="k">姿态来源</span> 谱式骨架（'+POS[state.pos].label+'）</div>'
+      + (over ? '<div style="color:#A83A2C"><b>⚠ 已越过点景档 9% 红线</b>：若此诗人物不是唯一实体，应退回点景档。</div>' : '')
+      + (state.size==='zt' ? '<div style="color:#B8860B"><b>※ 中号档</b>：仅当人物是全诗唯一实体与动作主体（如《静夜思》背影）时使用。</div>' : '');
+  }
+
+  function makeOpts(container, dict, key){
+    Object.keys(dict).forEach(function(k){
+      var b = document.createElement('button');
+      b.textContent = dict[k].label;
+      b.setAttribute('aria-pressed', state[key]===k ? 'true' : 'false');
+      b.addEventListener('click', function(){ state[key]=k; syncOpts(); renderStage(); });
+      container.appendChild(b);
+    });
+  }
+  function syncOpts(){
+    [['optId',ID,'id'],['optPos',POS,'pos'],['optSize',SIZE,'size'],['optInk',INK,'ink']].forEach(function(t){
+      var c = document.getElementById(t[0]);
+      Array.prototype.forEach.call(c.children, function(b, i){
+        b.setAttribute('aria-pressed', Object.keys(t[1])[i]===state[t[2]] ? 'true':'false');
+      });
+    });
+  }
+  makeOpts(document.getElementById('optId'), ID, 'id');
+  makeOpts(document.getElementById('optPos'), POS, 'pos');
+  makeOpts(document.getElementById('optSize'), SIZE, 'size');
+  makeOpts(document.getElementById('optInk'), INK, 'ink');
+  syncOpts(); renderStage();
+
+  // ---- 身份画廊 ----
+  var gal = document.getElementById('gal');
+  var GAL_ORDER = ['yu','wen','shu','nv','lv','qiao','geng','tong'];
+  GAL_ORDER.forEach(function(k){
+    var f = document.createElement('figure');
+    f.innerHTML = '<svg viewBox="30 24 160 246" aria-hidden="true">'
+      + '<rect x="30" y="24" width="160" height="246" fill="#F6F3EC"/>'
+      + '<g filter="url(#figInk)">'+buildFigure(k,'li',true)+'</g></svg>'
+      + '<figcaption><b>'+ID[k].label+'</b><br>'+ID[k].note+'</figcaption>';
+    gal.appendChild(f);
+  });
+})();
+</script>
+</body>
+</html>

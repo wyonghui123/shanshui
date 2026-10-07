@@ -1,0 +1,2682 @@
+{
+  "meta": {
+    "generated": "2026-10-05T01:01:35",
+    "qset": "o1_qset.json @ v1.3",
+    "inputs": [
+      "o1_source_facts.json",
+      "o1_vis.json",
+      "o1_probe.json",
+      "o1_cam_trace.json",
+      "o1_vlm_answers.json"
+    ],
+    "vlm_seeded_from_baseline": false,
+    "note": "自动层判据全部来自源码事实与像素/DOM 探针，不含目视；目视类题读 VLM 作答记录。两层不一致时 effective 采自动层，并列入 conflicts 供复核。",
+    "counts": {
+      "total": 57,
+      "auto": 45,
+      "vlm": 12,
+      "none": 0,
+      "conflicts": 0
+    }
+  },
+  "conflicts": [],
+  "cards": [
+    {
+      "id": "JX-E1",
+      "poem": "jx",
+      "axis": "EXIST",
+      "basis": "poem",
+      "w": 1,
+      "type": "yes_no",
+      "q": "画面中是否出现山（远山／群山）？",
+      "options": null,
+      "expect": "是",
+      "frame": "jx_02",
+      "frameTimes": [
+        {
+          "name": "jx_02",
+          "t": 5.09
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "是",
+        "rule": "V.jx@5.09 #jx-far 可见性",
+        "conf": "high",
+        "data": 1
+      },
+      "vlm": {
+        "answer": "是",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "三重远山；脊线 y 0.26–0.33，山体填充至 y 0.50"
+      },
+      "effective": {
+        "answer": "是",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-E2",
+      "poem": "jx",
+      "axis": "EXIST",
+      "basis": "poem",
+      "w": 1,
+      "type": "yes_no",
+      "q": "画面中是否出现一条小船？",
+      "options": null,
+      "expect": "是",
+      "frame": "jx_03",
+      "frameTimes": [
+        {
+          "name": "jx_03",
+          "t": 12.14
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "是",
+        "rule": "V.jx@12.14 #jx-boat 可见性",
+        "conf": "high",
+        "data": 1
+      },
+      "vlm": {
+        "answer": "是",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "#jx-boat，x 0.52–0.78；jx_01/jx_02 未出现，符合节拍"
+      },
+      "effective": {
+        "answer": "是",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-E3",
+      "poem": "jx",
+      "axis": "EXIST",
+      "basis": "poem",
+      "w": 1,
+      "type": "yes_no",
+      "q": "画面中是否出现人物（渔翁）？",
+      "options": null,
+      "expect": "是",
+      "frame": "jx_04",
+      "frameTimes": [
+        {
+          "name": "jx_04",
+          "t": 19.03
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "是",
+        "rule": "V.jx@19.03 #jx-boat 可见性 + 组内人物笔触数",
+        "conf": "high",
+        "data": {
+          "vis": 1,
+          "paints": 4
+        }
+      },
+      "vlm": {
+        "answer": "是",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "斗笠 + 躯干两笔，fill #1C1C1C opacity 0.88–0.92；jx_04 实看为画面正中偏上的深色剪影"
+      },
+      "effective": {
+        "answer": "是",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-E4",
+      "poem": "jx",
+      "axis": "EXIST",
+      "basis": "design",
+      "w": 0.5,
+      "type": "yes_no",
+      "q": "画面中是否出现芦苇／枯草？",
+      "options": null,
+      "expect": "是",
+      "frame": "jx_02",
+      "frameTimes": [
+        {
+          "name": "jx_02",
+          "t": 5.09
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "是",
+        "rule": "V.jx@5.09 #jx-reed 可见性",
+        "conf": "high",
+        "data": 0.52
+      },
+      "vlm": {
+        "answer": "是",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "左下三茎（x 0.10–0.18, y 0.61–0.87）"
+      },
+      "effective": {
+        "answer": "是",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-E5",
+      "poem": "jx",
+      "axis": "EXIST",
+      "basis": "poem",
+      "w": 1,
+      "type": "yes_no",
+      "q": "画面中是否出现钓丝／钓线？",
+      "options": null,
+      "expect": "是",
+      "frame": "jx_04",
+      "frameTimes": [
+        {
+          "name": "jx_04",
+          "t": 19.03
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "是",
+        "rule": "V.jx@19.03 #jx-line 描边可见比例（dashoffset）",
+        "conf": "high",
+        "data": 1
+      },
+      "vlm": {
+        "answer": "是",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "#jx-line 自 (600,452) 垂至 (620,558)；jx_03(t=15.5) 尚无"
+      },
+      "effective": {
+        "answer": "是",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-E6",
+      "poem": "jx",
+      "axis": "EXIST",
+      "basis": "poem",
+      "w": 1,
+      "type": "yes_no",
+      "q": "画面中是否出现雪？",
+      "options": null,
+      "expect": "是",
+      "frame": "jx_02",
+      "frameTimes": [
+        {
+          "name": "jx_02",
+          "t": 5.09
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "是",
+        "rule": "V.jx@5.09 #jx-snow 可见性",
+        "conf": "high",
+        "data": 1
+      },
+      "vlm": {
+        "answer": "是",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "snowCount=46；jx_02 实见散落雪点。v1.2 已收窄为纯存在题，过程性移出至 JX-T6"
+      },
+      "effective": {
+        "answer": "是",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-N1",
+      "poem": "jx",
+      "axis": "NEGATIVE",
+      "basis": "poem",
+      "w": 1.5,
+      "type": "yes_no",
+      "q": "画面中是否出现飞鸟？",
+      "options": null,
+      "expect": "否",
+      "frame": "jx_05_nopoem",
+      "frameTimes": [
+        {
+          "name": "jx_05_nopoem",
+          "t": 7.83
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": false,
+        "verdict": "否",
+        "rule": "源码无任何鸟形元素（交叉核对，需目视确认）",
+        "conf": "low",
+        "data": null
+      },
+      "vlm": {
+        "answer": "否",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "无鸟形几何；去诗帧（jx_05_nopoem）实看无任何鸟形，题诗「鸟」字已排除"
+      },
+      "effective": {
+        "answer": "否",
+        "source": "vlm"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-N2",
+      "poem": "jx",
+      "axis": "NEGATIVE",
+      "basis": "poem",
+      "w": 1.5,
+      "type": "yes_no",
+      "q": "画面中是否出现除渔翁以外的第二个人？",
+      "options": null,
+      "expect": "否",
+      "frame": "jx_04_nopoem",
+      "frameTimes": [
+        {
+          "name": "jx_04_nopoem",
+          "t": 19.03
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": false,
+        "verdict": "是",
+        "rule": "源码中含人物笔触的组仅 2 个（jx-boat/bd-boat）",
+        "conf": "low",
+        "data": [
+          "jx-boat",
+          "bd-boat"
+        ]
+      },
+      "vlm": {
+        "answer": "否",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "全片仅 1 个人物；v1.2 改绑去诗帧后，题诗「人踪」二字不再构成假阳性"
+      },
+      "effective": {
+        "answer": "否",
+        "source": "vlm"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-N3",
+      "poem": "jx",
+      "axis": "NEGATIVE",
+      "basis": "poem",
+      "w": 1,
+      "type": "yes_no",
+      "q": "画面中是否出现人的脚印／足迹？",
+      "options": null,
+      "expect": "否",
+      "frame": "jx_05_nopoem",
+      "frameTimes": [
+        {
+          "name": "jx_05_nopoem",
+          "t": 7.83
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": false,
+        "verdict": "否",
+        "rule": "源码无足迹/脚印元素（交叉核对）",
+        "conf": "low",
+        "data": null
+      },
+      "vlm": {
+        "answer": "否",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "无足迹几何；探针显示下半幅除雪点外无笔画（非纸面 1.04%，最暗点 174 落在山带边缘）"
+      },
+      "effective": {
+        "answer": "否",
+        "source": "vlm"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-A1",
+      "poem": "jx",
+      "axis": "ATTR",
+      "basis": "poem",
+      "w": 1,
+      "type": "choice",
+      "q": "全画面墨色最浓的实体是？",
+      "options": [
+        "孤舟与蓑笠翁",
+        "远山",
+        "芦苇",
+        "雪"
+      ],
+      "expect": "孤舟与蓑笠翁",
+      "frame": "jx_04",
+      "frameTimes": [
+        {
+          "name": "jx_04",
+          "t": 19.03
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "孤舟与蓑笠翁",
+        "rule": "最浓 = 最暗单笔合成亮度 argmin",
+        "conf": "high",
+        "data": [
+          {
+            "o": "孤舟与蓑笠翁",
+            "id": "jx-boat",
+            "lum": 45
+          },
+          {
+            "o": "远山",
+            "id": "jx-far",
+            "lum": 215
+          },
+          {
+            "o": "芦苇",
+            "id": "jx-reed",
+            "lum": 137
+          }
+        ]
+      },
+      "vlm": {
+        "answer": "孤舟与蓑笠翁",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "#1C1C1C @0.88–0.92（lum≈30–45）vs 远山合成 lum≈188；实测浓墨像素 1.73%"
+      },
+      "effective": {
+        "answer": "孤舟与蓑笠翁",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-A2",
+      "poem": "jx",
+      "axis": "ATTR",
+      "basis": "poem",
+      "w": 1,
+      "type": "choice",
+      "q": "远山的墨色浓淡？",
+      "options": [
+        "很淡",
+        "中等",
+        "很浓"
+      ],
+      "expect": "很淡",
+      "frame": "jx_02",
+      "frameTimes": [
+        {
+          "name": "jx_02",
+          "t": 5.09
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "很淡",
+        "rule": "远山最浓笔合成亮度 215",
+        "conf": "high",
+        "data": {
+          "lum": 215
+        }
+      },
+      "vlm": {
+        "answer": "很淡",
+        "conf": "mid",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "三层远山 opacity 0.13/0.17/0.15，合成 lum≈188（浅中灰）—— 相对焦点极淡，但绝对亮度并非「极淡」"
+      },
+      "effective": {
+        "answer": "很淡",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-A3",
+      "poem": "jx",
+      "axis": "ATTR",
+      "basis": "design",
+      "w": 1,
+      "type": "choice",
+      "q": "画面整体是「大面留白」还是「画满」？",
+      "options": [
+        "大面积留白",
+        "大致均衡",
+        "画得很满"
+      ],
+      "expect": "大面积留白",
+      "frame": "jx_02",
+      "frameTimes": [
+        {
+          "name": "jx_02",
+          "t": 5.09
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "大面积留白",
+        "rule": "P.jx_02 全幅 留白率 0.8275",
+        "conf": "high",
+        "data": {
+          "paperFrac": 0.8275
+        }
+      },
+      "vlm": {
+        "answer": "大面积留白",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "ρ_layout = 0.79（线稿口径）／ρ_render = 0.831（探针实测，jx_02）—— 两口径同向（D4 已分列）"
+      },
+      "effective": {
+        "answer": "大面积留白",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-A4",
+      "poem": "jx",
+      "axis": "ATTR",
+      "basis": "poem",
+      "w": 1,
+      "type": "choice",
+      "q": "江面（寒江）是否用水波／水纹描绘？",
+      "options": [
+        "几乎不画，以留白表现",
+        "画了少量水纹",
+        "画满水纹"
+      ],
+      "expect": "几乎不画，以留白表现",
+      "frame": "jx_05",
+      "frameTimes": [
+        {
+          "name": "jx_05",
+          "t": 7.83
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "几乎不画，以留白表现",
+        "rule": "源码 ROWS 在 jx 下道数 = 0（无 #jx-water 组）",
+        "conf": "high",
+        "data": {
+          "rows": 0
+        }
+      },
+      "vlm": {
+        "answer": "几乎不画，以留白表现",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "源码中《江雪》无 #jx-water 组 → 水纹道数 = 0；仅 #jx-waterline 一道岸线。jx_05 实看江面为整片留白"
+      },
+      "effective": {
+        "answer": "几乎不画，以留白表现",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-A5",
+      "poem": "jx",
+      "axis": "ATTR",
+      "basis": "design",
+      "w": 0.5,
+      "type": "choice",
+      "q": "小路（万径）在画面中是否可辨认？",
+      "options": [
+        "清晰可见",
+        "极淡、几乎不可见",
+        "完全没有"
+      ],
+      "expect": "极淡、几乎不可见",
+      "frame": "jx_05_nopoem",
+      "frameTimes": [
+        {
+          "name": "jx_05_nopoem",
+          "t": 7.83
+        }
+      ],
+      "media": "single",
+      "probe_assisted": true,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "极淡、几乎不可见",
+        "rule": "#jx-path 组透明度 0.2、@jx_05 可见性 0.2 → 已画出但极淡",
+        "conf": "low",
+        "data": {
+          "opacity": 0.2,
+          "vis": 0.2
+        }
+      },
+      "vlm": {
+        "answer": "极淡、几乎不可见",
+        "conf": "low",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "#jx-path 三条斜线（x 0.03–0.27, y 0.43–0.51），group opacity 0.20 + jxSoft 柔化；探针实测把中景带由 lum 186 压到 166（对比度约 11%）。按 reading_protocol：探针说有 → 判「有」，记 low conf（D6）"
+      },
+      "effective": {
+        "answer": "极淡、几乎不可见",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-A6",
+      "poem": "jx",
+      "axis": "ATTR",
+      "basis": "design",
+      "w": 1,
+      "type": "choice",
+      "q": "画面最浓实体（孤舟蓑笠翁）与最淡实体（远山）之间的墨色对比属于？",
+      "options": [
+        "强对比（浓淡悬殊）",
+        "中等对比",
+        "弱对比（几乎同色）"
+      ],
+      "expect": "强对比（浓淡悬殊）",
+      "frame": "jx_04",
+      "frameTimes": [
+        {
+          "name": "jx_04",
+          "t": 19.03
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "强对比（浓淡悬殊）",
+        "rule": "Δlum = 远山 215 − 孤舟 45 = 170",
+        "conf": "high",
+        "data": {
+          "dark": 45,
+          "light": 215,
+          "delta": 170
+        }
+      },
+      "vlm": {
+        "answer": "强对比（浓淡悬殊）",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "jx_04 实看：画面顶端残留远山带为浅灰（lum≈188），正中孤舟剪影近黑（lum≈35），Δlum≈153。新题，原三档浓淡题测不出对比量"
+      },
+      "effective": {
+        "answer": "强对比（浓淡悬殊）",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-A7",
+      "poem": "jx",
+      "axis": "ATTR",
+      "basis": "design",
+      "w": 1,
+      "type": "choice",
+      "q": "实写笔触（芦苇茎）的墨色边缘特征是？",
+      "options": [
+        "毛边干笔（边缘毛涩、无晕染）",
+        "湿笔晕染（边缘柔化、墨色外溢）",
+        "均匀实线（边缘光滑）"
+      ],
+      "expect": "毛边干笔（边缘毛涩、无晕染）",
+      "frame": "jx_02",
+      "frameTimes": [
+        {
+          "name": "jx_02",
+          "t": 5.09
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "毛边干笔（边缘毛涩、无晕染）",
+        "rule": "#jx-reed 滤镜 jxDry：模糊[] 位移[6] feComposite=false",
+        "conf": "high",
+        "data": {
+          "filter": "jxDry",
+          "kind": "dry"
+        }
+      },
+      "vlm": {
+        "answer": "毛边干笔（边缘毛涩、无晕染）",
+        "conf": "mid",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "#jx-reed 挂 jxDry（feDisplacementMap scale 6）→ 只做位移毛边、无飞白无晕染；jx_02 实看三茎为细、抖、毛涩的线，无湿墨外溢。对照 BD-A6 山壁的湿笔"
+      },
+      "effective": {
+        "answer": "毛边干笔（边缘毛涩、无晕染）",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-A8",
+      "poem": "jx",
+      "axis": "ATTR",
+      "basis": "design",
+      "w": 1,
+      "type": "choice",
+      "q": "画面疏密的分布特征是？",
+      "options": [
+        "大面积疏（留白）中藏着极小的密（孤舟焦点）",
+        "疏密均匀分布",
+        "大面积密（画满）中留小空白"
+      ],
+      "expect": "大面积疏（留白）中藏着极小的密（孤舟焦点）",
+      "frame": "jx_04",
+      "frameTimes": [
+        {
+          "name": "jx_04",
+          "t": 19.03
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "大面积疏（留白）中藏着极小的密（孤舟焦点）",
+        "rule": "P.jx_04 全幅 留白 0.8006、浓墨 0.0127",
+        "conf": "high",
+        "data": {
+          "paperFrac": 0.8006,
+          "darkFrac": 0.0127
+        }
+      },
+      "vlm": {
+        "answer": "大面积疏（留白）中藏着极小的密（孤舟焦点）",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "ρ_render = 0.866，浓墨像素仅 1.73% 且集中于孤舟；jx_04 实看为「一张白纸 + 一个黑点」。新题，测疏密势能而非比例"
+      },
+      "effective": {
+        "answer": "大面积疏（留白）中藏着极小的密（孤舟焦点）",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-A9",
+      "poem": "jx",
+      "axis": "ATTR",
+      "basis": "design",
+      "w": 0.5,
+      "type": "choice",
+      "q": "画面中最大的一块连续留白位于？",
+      "options": [
+        "中下部（远山以下的寒江江面）",
+        "上部（远山以上的天空）",
+        "四周边缘"
+      ],
+      "expect": "中下部（远山以下的寒江江面）",
+      "frame": "jx_05",
+      "frameTimes": [
+        {
+          "name": "jx_05",
+          "t": 7.83
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "中下部（远山以下的寒江江面）",
+        "rule": "P.jx_05去诗 下半(排芦苇) 留白率 0.9849（下半幅近乎全白）",
+        "conf": "mid",
+        "data": {
+          "paperFrac": 0.9849
+        }
+      },
+      "vlm": {
+        "answer": "中下部（远山以下的寒江江面）",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "远山脊线 y 0.26–0.33，其下至底缘为江面；jx_05 实看最大连续留白在中下部，上部天空次之。探针：下半幅非纸面像素仅 1.04%。新题，测留白形状"
+      },
+      "effective": {
+        "answer": "中下部（远山以下的寒江江面）",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-S1",
+      "poem": "jx",
+      "axis": "SPATIAL",
+      "basis": "design",
+      "w": 1,
+      "type": "choice",
+      "q": "远山位于画面的？",
+      "options": [
+        "上部",
+        "中部",
+        "下部"
+      ],
+      "expect": "上部",
+      "frame": "jx_02",
+      "frameTimes": [
+        {
+          "name": "jx_02",
+          "t": 5.09
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "上部",
+        "rule": "V.jx@5.09 #jx-far 归一化中心 y=0.3815",
+        "conf": "high",
+        "data": {
+          "cx": 0.4733,
+          "cy": 0.3815,
+          "x": -0.1822,
+          "y": 0.2631,
+          "w": 1.3111,
+          "h": 0.2369
+        }
+      },
+      "vlm": {
+        "answer": "上部",
+        "conf": "mid",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "脊线 y 0.26–0.33 落在上 1/3；但山体延伸至 0.50，主体重心约 0.38，接近上/中分界"
+      },
+      "effective": {
+        "answer": "上部",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-S2",
+      "poem": "jx",
+      "axis": "SPATIAL",
+      "basis": "design",
+      "w": 1,
+      "type": "choice",
+      "q": "孤舟与蓑笠翁位于画面的？",
+      "options": [
+        "左上",
+        "右上",
+        "左下",
+        "右下"
+      ],
+      "expect": "右下",
+      "frame": "jx_03",
+      "frameTimes": [
+        {
+          "name": "jx_03",
+          "t": 12.14
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "右下",
+        "rule": "V.jx@12.14 #jx-boat 中心 (0.6411,0.7432)",
+        "conf": "high",
+        "data": {
+          "cx": 0.6411,
+          "cy": 0.7432,
+          "x": 0.5151,
+          "y": 0.6825,
+          "w": 0.2519,
+          "h": 0.1212
+        }
+      },
+      "vlm": {
+        "answer": "右下",
+        "conf": "mid",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "jx_03(t=15.5) 孤舟+翁落于 (0.60, 0.73) = 右下；终帧因相机推进落至正中，故判读帧绑 jx_03（D2）"
+      },
+      "effective": {
+        "answer": "右下",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-S3",
+      "poem": "jx",
+      "axis": "SPATIAL",
+      "basis": "design",
+      "w": 0.5,
+      "type": "choice",
+      "q": "芦苇位于画面的？",
+      "options": [
+        "左下",
+        "右下",
+        "左上"
+      ],
+      "expect": "左下",
+      "frame": "jx_02",
+      "frameTimes": [
+        {
+          "name": "jx_02",
+          "t": 5.09
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "左下",
+        "rule": "V.jx@5.09 #jx-reed 中心 (0.1056,0.7419)",
+        "conf": "high",
+        "data": {
+          "cx": 0.1056,
+          "cy": 0.7419,
+          "x": 0.0622,
+          "y": 0.6134,
+          "w": 0.0867,
+          "h": 0.2569
+        }
+      },
+      "vlm": {
+        "answer": "左下",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "x 0.10–0.18, y 0.61–0.87"
+      },
+      "effective": {
+        "answer": "左下",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-S4",
+      "poem": "jx",
+      "axis": "SPATIAL",
+      "basis": "design",
+      "w": 0.5,
+      "type": "choice",
+      "q": "地平线大致在画面高度的？",
+      "options": [
+        "上 1/3 附近（0.28–0.40H）",
+        "中部偏上（0.40–0.50H）",
+        "正中（0.48–0.52H）",
+        "下 1/3 附近（0.52–0.68H）"
+      ],
+      "expect": "中部偏上（0.40–0.50H）",
+      "frame": "jx_02",
+      "frameTimes": [
+        {
+          "name": "jx_02",
+          "t": 5.09
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": {
+        "value": 0.43,
+        "unit": "H",
+        "source": "山带顶缘实测 0.42–0.44H／底缘 0.50H；设计值 0.42H"
+      },
+      "auto": {
+        "decidable": true,
+        "verdict": "中部偏上（0.40–0.50H）",
+        "rule": "题内 measured = 0.43H，落在档位「中部偏上（0.40–0.50H）」",
+        "conf": "high",
+        "data": {
+          "value": 0.43
+        }
+      },
+      "vlm": {
+        "answer": "中部偏上（0.40–0.50H）",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "实测地平线 0.42–0.44H（山带顶缘）／0.50H（底缘）；jx_02 实看山带下缘约在画面 0.44 处。v1.2 补入「中部偏上（0.40–0.50H）」档后本题恢复可判（v1.1 因此判为 defect）"
+      },
+      "effective": {
+        "answer": "中部偏上（0.40–0.50H）",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-S5",
+      "poem": "jx",
+      "axis": "SPATIAL",
+      "basis": "design",
+      "w": 1,
+      "type": "choice",
+      "q": "远山与孤舟的前后关系？",
+      "options": [
+        "孤舟在前、远山在后",
+        "远山在前、孤舟在后",
+        "两者同一平面"
+      ],
+      "expect": "孤舟在前、远山在后",
+      "frame": "jx_03",
+      "frameTimes": [
+        {
+          "name": "jx_03",
+          "t": 12.14
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "孤舟在前、远山在后",
+        "rule": "孤舟 45 < 远山 215 → 近景更浓",
+        "conf": "high",
+        "data": {
+          "boat": 45,
+          "far": 215
+        }
+      },
+      "vlm": {
+        "answer": "孤舟在前、远山在后",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "浓墨焦点（lum≈35）vs 淡墨远景（lum≈188），层序明确"
+      },
+      "effective": {
+        "answer": "孤舟在前、远山在后",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-T1",
+      "poem": "jx",
+      "axis": "TEMPORAL",
+      "basis": "design",
+      "w": 1,
+      "type": "yes_no",
+      "q": "远山是否比孤舟更早出现在画面中？",
+      "options": null,
+      "expect": "是",
+      "frame": "jx_01+jx_03",
+      "frameTimes": [
+        {
+          "name": "jx_01",
+          "t": 0.78
+        },
+        {
+          "name": "jx_03",
+          "t": 12.14
+        }
+      ],
+      "media": "pair",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "是",
+        "rule": "V.jx@0.78 远山 0.623 / 孤舟 0",
+        "conf": "high",
+        "data": {
+          "far": 0.623,
+          "boat": 0
+        }
+      },
+      "vlm": {
+        "answer": "是",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "jx_01(t=1) 只有远山；孤舟 13s 后才实写"
+      },
+      "effective": {
+        "answer": "是",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-T2",
+      "poem": "jx",
+      "axis": "TEMPORAL",
+      "basis": "design",
+      "w": 1,
+      "type": "yes_no",
+      "q": "钓丝是否在动画后段才被画出？",
+      "options": null,
+      "expect": "是",
+      "frame": "jx_03+jx_04",
+      "frameTimes": [
+        {
+          "name": "jx_03",
+          "t": 12.14
+        },
+        {
+          "name": "jx_04",
+          "t": 19.03
+        }
+      ],
+      "media": "pair",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "是",
+        "rule": "V #jx-line 描边比例 @12.14=0 @19.03=1",
+        "conf": "high",
+        "data": {
+          "at155": 0,
+          "at243": 1
+        }
+      },
+      "vlm": {
+        "answer": "是",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "jx_03 无钓丝，jx_04 有；#jx-line dashoffset 于 17.2–19.2s 拉出"
+      },
+      "effective": {
+        "answer": "是",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-T3",
+      "poem": "jx",
+      "axis": "TEMPORAL",
+      "basis": "design",
+      "w": 0.5,
+      "type": "yes_no",
+      "q": "雪是否在全片多个时段都可见？",
+      "options": null,
+      "expect": "是",
+      "frame": "jx_01+jx_02+jx_04",
+      "frameTimes": [
+        {
+          "name": "jx_01",
+          "t": 0.78
+        },
+        {
+          "name": "jx_02",
+          "t": 5.09
+        },
+        {
+          "name": "jx_04",
+          "t": 19.03
+        }
+      ],
+      "media": "pair",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "是",
+        "rule": "V.jx 雪可见性 @0.78/5.09/19.03 = 1/1/1",
+        "conf": "high",
+        "data": [
+          1,
+          1,
+          1
+        ]
+      },
+      "vlm": {
+        "answer": "是",
+        "conf": "mid",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "snowKeys v = 0.45 / 1.00 / 0.30 / 0.85 / 0.85，最小值不为 0，三帧均见雪点"
+      },
+      "effective": {
+        "answer": "是",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-T4",
+      "poem": "jx",
+      "axis": "TEMPORAL",
+      "basis": "design",
+      "w": 1,
+      "type": "yes_no",
+      "q": "全片是否只有一个场景（无场景切换）？",
+      "options": null,
+      "expect": "是",
+      "frame": "jx_01+jx_04",
+      "frameTimes": [
+        {
+          "name": "jx_01",
+          "t": 0.78
+        },
+        {
+          "name": "jx_04",
+          "t": 19.03
+        }
+      ],
+      "media": "pair",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": false,
+        "verdict": null,
+        "rule": "（未定义自动判据，走目视层）",
+        "conf": "mid",
+        "data": null
+      },
+      "vlm": {
+        "answer": "是",
+        "conf": "high",
+        "source": "baseline-v1.3",
+        "replaceable": true,
+        "evidence": "jx_01 与 jx_04 为同一场景的不同倍率（1.00× / 1.12×），仅相机推近变换，无硬切／黑场／叠化"
+      },
+      "effective": {
+        "answer": "是",
+        "source": "vlm"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-T5",
+      "poem": "jx",
+      "axis": "TEMPORAL",
+      "basis": "design",
+      "w": 1,
+      "type": "choice",
+      "q": "全片相机运动的速度曲线形状是？",
+      "options": [
+        "前段近乎静止，后段极缓推近（无急推）",
+        "前段近乎静止、中段急推加速、末段又归于近乎静止",
+        "全程匀速推近（无速度变化）"
+      ],
+      "expect": "前段近乎静止，后段极缓推近（无急推）",
+      "frame": "jx_01+jx_03+jx_04",
+      "frameTimes": [
+        {
+          "name": "jx_01",
+          "t": 0.78
+        },
+        {
+          "name": "jx_03",
+          "t": 12.14
+        },
+        {
+          "name": "jx_04",
+          "t": 19.03
+        }
+      ],
+      "media": "probe",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "前段近乎静止，后段极缓推近（无急推）",
+        "rule": "C.jx：前段 |v|max=0、峰值 @t=14.5 v=0.04360（≤0.05/s＝无急推）、s 1→1.12",
+        "conf": "high",
+        "data": {
+          "early": 0,
+          "peak": 14.5,
+          "vmax": 0.0436,
+          "tail": 0.0002
+        }
+      },
+      "vlm": {
+        "answer": "前段近乎静止，后段极缓推近（无急推）",
+        "conf": "high",
+        "source": "baseline-v1.3",
+        "replaceable": true,
+        "evidence": "o1_probe_cam 实测 s：1.0000（0–7s 完全静止）→ 0.9600（13s 轻推远）→ 1.1200（25s 极缓推近），vmax ≈ 0.04/s（低于 5% 阈值）→ 无急推。v1.3 压平后的新曲线；由探针判定，非目视（D5/D7）"
+      },
+      "effective": {
+        "answer": "前段近乎静止，后段极缓推近（无急推）",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "JX-T6",
+      "poem": "jx",
+      "axis": "TEMPORAL",
+      "basis": "poem",
+      "w": 1,
+      "type": "yes_no",
+      "q": "雪在片中是否持续飘落（而非静止悬停）？",
+      "options": null,
+      "expect": "是",
+      "frame": "jx_01+jx_04",
+      "frameTimes": [
+        {
+          "name": "jx_01",
+          "t": 0.78
+        },
+        {
+          "name": "jx_04",
+          "t": 19.03
+        }
+      ],
+      "media": "pair",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": false,
+        "verdict": null,
+        "rule": "（未定义自动判据，走目视层）",
+        "conf": "mid",
+        "data": null
+      },
+      "vlm": {
+        "answer": "是",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "源码：每片雪 cy = (y0 + vy·t) % 660 持续下移、cx 叠 ±16px 正弦横摆；jx_01 与 jx_04 雪点位置不同 → 确为飘落。由 JX-E6 拆出的新题（D7）"
+      },
+      "effective": {
+        "answer": "是",
+        "source": "vlm"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-E1",
+      "poem": "bd",
+      "axis": "EXIST",
+      "basis": "poem",
+      "w": 1,
+      "type": "yes_no",
+      "q": "画面中是否出现一座城／城楼？",
+      "options": null,
+      "expect": "是",
+      "frame": "bd_02",
+      "frameTimes": [
+        {
+          "name": "bd_02",
+          "t": 2.56
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "是",
+        "rule": "V.bd@2.56 #bd-city 可见性",
+        "conf": "high",
+        "data": 1
+      },
+      "vlm": {
+        "answer": "是",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "#bd-city 立于左崖顶（x 0.22–0.28, y 0.10–0.18）；bd_02 实看左上角有塔形城楼"
+      },
+      "effective": {
+        "answer": "是",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-E2",
+      "poem": "bd",
+      "axis": "EXIST",
+      "basis": "poem",
+      "w": 1,
+      "type": "yes_no",
+      "q": "画面中是否出现云？",
+      "options": null,
+      "expect": "是",
+      "frame": "bd_02",
+      "frameTimes": [
+        {
+          "name": "bd_02",
+          "t": 2.56
+        }
+      ],
+      "media": "single",
+      "probe_assisted": true,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "是",
+        "rule": "V.bd@2.56 #bd-cloud 可见性",
+        "conf": "low",
+        "data": 1
+      },
+      "vlm": {
+        "answer": "是",
+        "conf": "low",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "#bd-cloud 三椭圆（cy 56/84/118），fill 渐变 + 0.06 灰 —— 极淡，接近雾/霭观感；bd_02 实看上部有极淡柔光带。按 reading_protocol 判「有」，记 low conf（D6）"
+      },
+      "effective": {
+        "answer": "是",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-E3",
+      "poem": "bd",
+      "axis": "EXIST",
+      "basis": "poem",
+      "w": 1,
+      "type": "yes_no",
+      "q": "画面中是否出现一条小船？",
+      "options": null,
+      "expect": "是",
+      "frame": "bd_02",
+      "frameTimes": [
+        {
+          "name": "bd_02",
+          "t": 2.56
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "是",
+        "rule": "V.bd@2.56 #bd-boat 可见性",
+        "conf": "high",
+        "data": 1
+      },
+      "vlm": {
+        "answer": "是",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "#bd-boat（x 0.33–0.46, y 0.78–0.85）；bd_01 未出，符合节拍"
+      },
+      "effective": {
+        "answer": "是",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-E4",
+      "poem": "bd",
+      "axis": "EXIST",
+      "basis": "poem",
+      "w": 1,
+      "type": "yes_no",
+      "q": "画面中是否出现两侧夹峙的山壁／峡谷？",
+      "options": null,
+      "expect": "是",
+      "frame": "bd_02",
+      "frameTimes": [
+        {
+          "name": "bd_02",
+          "t": 2.56
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "是",
+        "rule": "V.bd@2.56 #bd-cliff 可见性",
+        "conf": "high",
+        "data": 1
+      },
+      "vlm": {
+        "answer": "是",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "#bd-cliff 左右两片，占画面左右各约 1/4；bd_02 实看两侧灰色壁面"
+      },
+      "effective": {
+        "answer": "是",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-E5",
+      "poem": "bd",
+      "axis": "EXIST",
+      "basis": "poem",
+      "w": 1,
+      "type": "yes_no",
+      "q": "画面中是否出现层层叠叠的远山？",
+      "options": null,
+      "expect": "是",
+      "frame": "bd_02",
+      "frameTimes": [
+        {
+          "name": "bd_02",
+          "t": 2.56
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "是",
+        "rule": "V.bd@2.56 #bd-far 可见性 + 层数",
+        "conf": "high",
+        "data": {
+          "vis": 1,
+          "layers": 4
+        }
+      },
+      "vlm": {
+        "answer": "是",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "#bd-far 四层（opacity 0.09/0.12/0.14/0.15），层层后退；bd_02 实看峡口内多层浅灰山影"
+      },
+      "effective": {
+        "answer": "是",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-E6",
+      "poem": "bd",
+      "axis": "EXIST",
+      "basis": "poem",
+      "w": 1,
+      "type": "yes_no",
+      "q": "画面中是否出现江面／水面？",
+      "options": null,
+      "expect": "是",
+      "frame": "bd_02",
+      "frameTimes": [
+        {
+          "name": "bd_02",
+          "t": 2.56
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "是",
+        "rule": "V.bd@2.56 #bd-water 可见性",
+        "conf": "high",
+        "data": 1
+      },
+      "vlm": {
+        "answer": "是",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "楔形江面 #FAF8F3 + 渐变，y 0.50→1.00；bd_02 实看中下部白色楔形江面"
+      },
+      "effective": {
+        "answer": "是",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-E7",
+      "poem": "bd",
+      "axis": "EXIST",
+      "basis": "design",
+      "w": 0.5,
+      "type": "yes_no",
+      "q": "画面中是否出现船尾拖痕／尾迹？",
+      "options": null,
+      "expect": "是",
+      "frame": "bd_04",
+      "frameTimes": [
+        {
+          "name": "bd_04",
+          "t": 13.27
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "是",
+        "rule": "V.bd@13.27 #bd-trail 描边可见比例",
+        "conf": "high",
+        "data": 1
+      },
+      "vlm": {
+        "answer": "是",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "#bd-trail 两笔（opacity 0.26/0.18），bd_04 中明显可见；实看轻舟左侧拖出长痕"
+      },
+      "effective": {
+        "answer": "是",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-N1",
+      "poem": "bd",
+      "axis": "NEGATIVE",
+      "basis": "poem",
+      "w": 1.5,
+      "type": "yes_no",
+      "q": "画面中是否出现猿／猴子？",
+      "options": null,
+      "expect": "否",
+      "frame": "bd_04_nopoem",
+      "frameTimes": [
+        {
+          "name": "bd_04_nopoem",
+          "t": 13.27
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": false,
+        "verdict": "否",
+        "rule": "源码无猿/猴形元素（交叉核对，需目视确认）",
+        "conf": "low",
+        "data": null
+      },
+      "vlm": {
+        "answer": "否",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "无猿形几何；去诗帧实看无猿，题诗「猿」字已排除。跨通道节点（听觉正 / 视觉负）"
+      },
+      "effective": {
+        "answer": "否",
+        "source": "vlm"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-N2",
+      "poem": "bd",
+      "axis": "NEGATIVE",
+      "basis": "poem",
+      "w": 1,
+      "type": "yes_no",
+      "q": "画面中是否出现江陵城（终点）？",
+      "options": null,
+      "expect": "否",
+      "frame": "bd_04_nopoem",
+      "frameTimes": [
+        {
+          "name": "bd_04_nopoem",
+          "t": 13.27
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": false,
+        "verdict": "否",
+        "rule": "源码仅 #bd-city 一座城，无江陵城元素（交叉核对）",
+        "conf": "low",
+        "data": null
+      },
+      "vlm": {
+        "answer": "否",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "全片仅白帝城一座城；v1.2 改绑去诗帧后，题诗「江陵」二字不再构成假阳性"
+      },
+      "effective": {
+        "answer": "否",
+        "source": "vlm"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-A1",
+      "poem": "bd",
+      "axis": "ATTR",
+      "basis": "poem",
+      "w": 1,
+      "type": "choice",
+      "q": "全画面墨色最浓的实体是？",
+      "options": [
+        "轻舟",
+        "白帝城",
+        "彩云",
+        "两岸山壁"
+      ],
+      "expect": "轻舟",
+      "frame": "bd_02",
+      "frameTimes": [
+        {
+          "name": "bd_02",
+          "t": 2.56
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "轻舟",
+        "rule": "最浓 = 最暗单笔合成亮度 argmin",
+        "conf": "high",
+        "data": [
+          {
+            "o": "轻舟",
+            "id": "bd-boat",
+            "lum": 45
+          },
+          {
+            "o": "白帝城",
+            "id": "bd-city",
+            "lum": 125
+          },
+          {
+            "o": "彩云",
+            "id": "bd-cloud",
+            "lum": 213
+          },
+          {
+            "o": "两岸山壁",
+            "id": "bd-cliff",
+            "lum": 149
+          }
+        ]
+      },
+      "vlm": {
+        "answer": "轻舟",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "#bd-boat #1C1C1C @0.90 → lum≈50；白帝城 #2A2724 @0.58 → lum≈126；山壁渐变 ≈190。v1.2 改绑 bd_02（四者同框），bd_04 时城与云已出画"
+      },
+      "effective": {
+        "answer": "轻舟",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-A2",
+      "poem": "bd",
+      "axis": "ATTR",
+      "basis": "poem",
+      "w": 1,
+      "type": "choice",
+      "q": "云的墨色？",
+      "options": [
+        "淡墨浅灰",
+        "浓墨",
+        "彩色（红黄等）"
+      ],
+      "expect": "淡墨浅灰",
+      "frame": "bd_02",
+      "frameTimes": [
+        {
+          "name": "bd_02",
+          "t": 2.56
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "淡墨浅灰",
+        "rule": "云填充是否灰阶 = true、最浓笔亮度 213",
+        "conf": "high",
+        "data": {
+          "gray": true,
+          "lum": 213
+        }
+      },
+      "vlm": {
+        "answer": "淡墨浅灰",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "云为渐变灰 + 0.06 灰椭圆，无任何设色"
+      },
+      "effective": {
+        "answer": "淡墨浅灰",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-A3",
+      "poem": "bd",
+      "axis": "ATTR",
+      "basis": "design",
+      "w": 1,
+      "type": "choice",
+      "q": "江面水纹的疏密？",
+      "options": [
+        "稀疏、仅数道",
+        "中等",
+        "密集布满"
+      ],
+      "expect": "稀疏、仅数道",
+      "frame": "bd_02",
+      "frameTimes": [
+        {
+          "name": "bd_02",
+          "t": 2.56
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "稀疏、仅数道",
+        "rule": "源码 ROWS 在 bd 下道数 = 5",
+        "conf": "high",
+        "data": {
+          "rows": 5
+        }
+      },
+      "vlm": {
+        "answer": "稀疏、仅数道",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "ROWS 共 5 道（y 412/462/500/548/590），每道 3–4 短笔，opacity 0.13–0.27；bd_02 实看江面仅寥寥数道短纹"
+      },
+      "effective": {
+        "answer": "稀疏、仅数道",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-A4",
+      "poem": "bd",
+      "axis": "ATTR",
+      "basis": "design",
+      "w": 1,
+      "type": "choice",
+      "q": "画面整体留白程度？",
+      "options": [
+        "大面积留白",
+        "约一半",
+        "几乎不留白"
+      ],
+      "expect": "约一半",
+      "frame": "bd_04",
+      "frameTimes": [
+        {
+          "name": "bd_04",
+          "t": 13.27
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "约一半",
+        "rule": "P.bd_04去诗 全幅（渲染口径 ρ_render）留白 0.4418",
+        "conf": "mid",
+        "data": {
+          "paperFrac": 0.4418
+        }
+      },
+      "vlm": {
+        "answer": "约一半",
+        "conf": "mid",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "ρ_layout = 0.52（线稿口径）／ρ_render = 0.307（bd_02）–0.441（bd_04 去诗）；bd_04 实看山壁与留白大致相当。两口径分列（D4）"
+      },
+      "effective": {
+        "answer": "约一半",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-A5",
+      "poem": "bd",
+      "axis": "ATTR",
+      "basis": "design",
+      "w": 1,
+      "type": "choice",
+      "q": "按墨色由浓到淡排序，正确的是？",
+      "options": [
+        "轻舟 > 白帝城 > 两岸山壁 > 彩云",
+        "两岸山壁 > 轻舟 > 白帝城 > 彩云",
+        "彩云 > 白帝城 > 轻舟 > 两岸山壁"
+      ],
+      "expect": "轻舟 > 白帝城 > 两岸山壁 > 彩云",
+      "frame": "bd_02",
+      "frameTimes": [
+        {
+          "name": "bd_02",
+          "t": 2.56
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "轻舟 > 白帝城 > 两岸山壁 > 彩云",
+        "rule": "按最浓笔亮度升序（浓→淡）",
+        "conf": "high",
+        "data": [
+          {
+            "o": "轻舟",
+            "id": "bd-boat",
+            "lum": 45
+          },
+          {
+            "o": "白帝城",
+            "id": "bd-city",
+            "lum": 125
+          },
+          {
+            "o": "两岸山壁",
+            "id": "bd-cliff",
+            "lum": 149
+          },
+          {
+            "o": "彩云",
+            "id": "bd-cloud",
+            "lum": 213
+          }
+        ]
+      },
+      "vlm": {
+        "answer": "轻舟 > 白帝城 > 两岸山壁 > 彩云",
+        "conf": "mid",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "轻舟 lum≈50 < 白帝城≈126 < 山壁≈190 < 彩云（0.06 灰椭圆，最淡）。bd_02 四者同框，实看浓淡次序一致。新题，测整条浓淡谱而非极值"
+      },
+      "effective": {
+        "answer": "轻舟 > 白帝城 > 两岸山壁 > 彩云",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-A6",
+      "poem": "bd",
+      "axis": "ATTR",
+      "basis": "design",
+      "w": 1,
+      "type": "choice",
+      "q": "两岸山壁主体的渲染方式是？",
+      "options": [
+        "湿笔晕染（边缘柔化、墨色向两侧渗开）",
+        "干笔飞白（边缘毛涩、有断白）",
+        "硬边实线（无晕染无飞白）"
+      ],
+      "expect": "湿笔晕染（边缘柔化、墨色向两侧渗开）",
+      "frame": "bd_02",
+      "frameTimes": [
+        {
+          "name": "bd_02",
+          "t": 2.56
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": false,
+        "verdict": null,
+        "rule": "自动层不可独立作答（属观感判断，非二值滤镜特征）：#bd-cliff 组滤镜是 bdEdge（模糊[]、位移[16]，干笔位移、无高斯模糊），主体笔触为横向渐变填充 [\"url(#bdCliffL)\",\"url(#bdCliffR)\"]（无描边硬边 → 观感柔化、无断白，读作湿笔晕染）；湿笔模糊 bdSoft 实际用于 bd-cloud/bd-mist。口径已修正（原 why 误把 bdSoft 挂到山壁，见 o1_lint.json）；湿笔感来自渐变而非模糊，故仍交目视层定案",
+        "conf": "low",
+        "data": {
+          "filter": "bdEdge",
+          "kind": "dry",
+          "fills": [
+            "url(#bdCliffL)",
+            "url(#bdCliffR)"
+          ],
+          "softUsers": [
+            "bd-cloud",
+            "bd-mist"
+          ]
+        }
+      },
+      "vlm": {
+        "answer": "湿笔晕染（边缘柔化、墨色向两侧渗开）",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "（O1.2 修正口径）湿笔模糊 bdSoft 实用于云与雾，山壁并非湿笔模糊；#bd-cliff 组滤镜实为 bdEdge（干笔位移 scale 16，无高斯模糊），主体为 bdCliffL/R 横向渐变填充（外缘 0.13 → 内缘 0.46、无描边）→ 无硬边的柔化渐变、无断白，读作湿笔晕染；仅皴线 #bd-cun 用 bdDry 干笔。新题"
+      },
+      "effective": {
+        "answer": "湿笔晕染（边缘柔化、墨色向两侧渗开）",
+        "source": "vlm"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-A7",
+      "poem": "bd",
+      "axis": "ATTR",
+      "basis": "design",
+      "w": 1,
+      "type": "choice",
+      "q": "画面疏密的分布特征是？",
+      "options": [
+        "两侧山壁密、中央峡口疏（留白）",
+        "疏密均匀分布",
+        "中央密、两侧疏"
+      ],
+      "expect": "两侧山壁密、中央峡口疏（留白）",
+      "frame": "bd_02",
+      "frameTimes": [
+        {
+          "name": "bd_02",
+          "t": 2.56
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "两侧山壁密、中央峡口疏（留白）",
+        "rule": "P：左壁墨 0.8415 / 中央 0.1962 / 右壁 0.8605",
+        "conf": "high",
+        "data": {
+          "left": 0.8415,
+          "center": 0.1962,
+          "right": 0.8605
+        }
+      },
+      "vlm": {
+        "answer": "两侧山壁密、中央峡口疏（留白）",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "左右壁各占约 1/4 为最密区，中央峡口 x 0.44–0.62 露出远山并下展为江面留白；bd_02 实看「两实夹一虚」。新题，测疏密势能"
+      },
+      "effective": {
+        "answer": "两侧山壁密、中央峡口疏（留白）",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-A8",
+      "poem": "bd",
+      "axis": "ATTR",
+      "basis": "design",
+      "w": 0.5,
+      "type": "choice",
+      "q": "画面中最大的一块连续留白位于？",
+      "options": [
+        "中央峡口并向下展开为江面，呈向纵深收束的透光带",
+        "上方天空",
+        "左右两侧"
+      ],
+      "expect": "中央峡口并向下展开为江面，呈向纵深收束的透光带",
+      "frame": "bd_02",
+      "frameTimes": [
+        {
+          "name": "bd_02",
+          "t": 2.56
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "中央峡口并向下展开为江面，呈向纵深收束的透光带",
+        "rule": "P 留白：中央 0.5868 vs 左 0.1479 / 右 0.1349",
+        "conf": "mid",
+        "data": {
+          "center": 0.5868,
+          "left": 0.1479,
+          "right": 0.1349
+        }
+      },
+      "vlm": {
+        "answer": "中央峡口并向下展开为江面，呈向纵深收束的透光带",
+        "conf": "mid",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "楔形江面 #bdRiverClip 由峡口 (400,302)-(560,302) 下展至底缘，沿消失点收束；探针 bd_02 留白 30.7% 集中于中央。新题，测留白形状"
+      },
+      "effective": {
+        "answer": "中央峡口并向下展开为江面，呈向纵深收束的透光带",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-S1",
+      "poem": "bd",
+      "axis": "SPATIAL",
+      "basis": "design",
+      "w": 1,
+      "type": "choice",
+      "q": "白帝城位于画面的？",
+      "options": [
+        "左上",
+        "右上",
+        "左下",
+        "右下",
+        "正中"
+      ],
+      "expect": "左上",
+      "frame": "bd_02",
+      "frameTimes": [
+        {
+          "name": "bd_02",
+          "t": 2.56
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "左上",
+        "rule": "V.bd@2.56 #bd-city 中心 (0.2047,0.0682)",
+        "conf": "high",
+        "data": {
+          "cx": 0.2047,
+          "cy": 0.0682,
+          "x": 0.1602,
+          "y": 0.0277,
+          "w": 0.089,
+          "h": 0.0809
+        }
+      },
+      "vlm": {
+        "answer": "左上",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "x 0.22–0.28, y 0.10–0.18"
+      },
+      "effective": {
+        "answer": "左上",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-S2",
+      "poem": "bd",
+      "axis": "SPATIAL",
+      "basis": "design",
+      "w": 1,
+      "type": "choice",
+      "q": "轻舟位于画面的？",
+      "options": [
+        "左上",
+        "左下",
+        "右上",
+        "右下",
+        "正中"
+      ],
+      "expect": "左下",
+      "frame": "bd_02",
+      "frameTimes": [
+        {
+          "name": "bd_02",
+          "t": 2.56
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "左下",
+        "rule": "V.bd@2.56 #bd-boat 中心 (0.371,0.767)",
+        "conf": "high",
+        "data": {
+          "cx": 0.371,
+          "cy": 0.767,
+          "x": 0.3054,
+          "y": 0.7353,
+          "w": 0.1312,
+          "h": 0.0633
+        }
+      },
+      "vlm": {
+        "answer": "左下",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "x 0.33–0.46, y 0.78–0.85"
+      },
+      "effective": {
+        "answer": "左下",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-S3",
+      "poem": "bd",
+      "axis": "SPATIAL",
+      "basis": "design",
+      "w": 1,
+      "type": "choice",
+      "q": "江水在画面中的走向？",
+      "options": [
+        "从画面中央向远处纵深延伸",
+        "横贯画面左右",
+        "沿画面右缘垂直而下"
+      ],
+      "expect": "从画面中央向远处纵深延伸",
+      "frame": "bd_02",
+      "frameTimes": [
+        {
+          "name": "bd_02",
+          "t": 2.56
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": false,
+        "verdict": null,
+        "rule": "（未定义自动判据，走目视层）",
+        "conf": "mid",
+        "data": null
+      },
+      "vlm": {
+        "answer": "从画面中央向远处纵深延伸",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "楔形江面收敛于消失点 (480, 290)，属单点透视"
+      },
+      "effective": {
+        "answer": "从画面中央向远处纵深延伸",
+        "source": "vlm"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-S4",
+      "poem": "bd",
+      "axis": "SPATIAL",
+      "basis": "design",
+      "w": 1,
+      "type": "choice",
+      "q": "万重山与两岸山壁的关系？",
+      "options": [
+        "万重山在两道山壁的缺口之间、层层后退",
+        "万重山在山壁之上、位于画面顶部",
+        "万重山覆盖在山壁之上"
+      ],
+      "expect": "万重山在两道山壁的缺口之间、层层后退",
+      "frame": "bd_02",
+      "frameTimes": [
+        {
+          "name": "bd_02",
+          "t": 2.56
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": false,
+        "verdict": null,
+        "rule": "（未定义自动判据，走目视层）",
+        "conf": "mid",
+        "data": null
+      },
+      "vlm": {
+        "answer": "万重山在两道山壁的缺口之间、层层后退",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "#bd-far 跨 x 0.33–0.73，先画；#bd-cliff 后画并覆盖其外缘，最终只从峡口 x 0.44–0.62 露出 —— 用户反馈的空间混乱问题的修复检验点，已达标"
+      },
+      "effective": {
+        "answer": "万重山在两道山壁的缺口之间、层层后退",
+        "source": "vlm"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-S5",
+      "poem": "bd",
+      "axis": "SPATIAL",
+      "basis": "design",
+      "w": 1,
+      "type": "choice",
+      "q": "两岸山壁与江面的关系？",
+      "options": [
+        "山壁内缘即江面左右边界、紧贴无缝",
+        "山壁与江面之间另有一条岸／滩",
+        "江面在画面一侧、山壁在另一侧"
+      ],
+      "expect": "山壁内缘即江面左右边界、紧贴无缝",
+      "frame": "bd_02",
+      "frameTimes": [
+        {
+          "name": "bd_02",
+          "t": 2.56
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": false,
+        "verdict": null,
+        "rule": "（未定义自动判据，走目视层）",
+        "conf": "mid",
+        "data": null
+      },
+      "vlm": {
+        "answer": "山壁内缘即江面左右边界、紧贴无缝",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "左壁内缘 (104,600)→(400,302) 与江面左缘 (104,600)→(400,302) 完全同点，中间无独立岸带；bd_02 实看山壁与江面紧贴"
+      },
+      "effective": {
+        "answer": "山壁内缘即江面左右边界、紧贴无缝",
+        "source": "vlm"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-S6",
+      "poem": "bd",
+      "axis": "SPATIAL",
+      "basis": "design",
+      "w": 0.5,
+      "type": "choice",
+      "q": "画面视觉重心位于？",
+      "options": [
+        "左下",
+        "右下",
+        "正中"
+      ],
+      "expect": "左下",
+      "frame": "bd_02",
+      "frameTimes": [
+        {
+          "name": "bd_02",
+          "t": 2.56
+        }
+      ],
+      "media": "single",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "左下",
+        "rule": "焦点（浓墨轻舟）中心 x=0.371 → 重心侧",
+        "conf": "high",
+        "data": {
+          "cx": 0.371,
+          "cy": 0.767,
+          "x": 0.3054,
+          "y": 0.7353,
+          "w": 0.1312,
+          "h": 0.0633
+        }
+      },
+      "vlm": {
+        "answer": "左下",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "轻舟中心 (0.40, 0.82)，白帝城在左上，合成重心落左下"
+      },
+      "effective": {
+        "answer": "左下",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-T1",
+      "poem": "bd",
+      "axis": "TEMPORAL",
+      "basis": "design",
+      "w": 1,
+      "type": "yes_no",
+      "q": "白帝城是否比轻舟更早出现在画面中？",
+      "options": null,
+      "expect": "是",
+      "frame": "bd_01+bd_02",
+      "frameTimes": [
+        {
+          "name": "bd_01",
+          "t": 0.57
+        },
+        {
+          "name": "bd_02",
+          "t": 2.56
+        }
+      ],
+      "media": "pair",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "是",
+        "rule": "V.bd@0.57 城 0.595 / 舟 0",
+        "conf": "high",
+        "data": {
+          "city": 0.595,
+          "boat": 0
+        }
+      },
+      "vlm": {
+        "answer": "是",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "bd_01(t=1) 只见城与峡，无舟；城 0.6–1.9s、舟 1.2–2.4s 淡入"
+      },
+      "effective": {
+        "answer": "是",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-T2",
+      "poem": "bd",
+      "axis": "TEMPORAL",
+      "basis": "design",
+      "w": 1,
+      "type": "yes_no",
+      "q": "全片是否为连续长镜头（无场景切换）？",
+      "options": null,
+      "expect": "是",
+      "frame": "bd_01+bd_03+bd_04",
+      "frameTimes": [
+        {
+          "name": "bd_01",
+          "t": 0.57
+        },
+        {
+          "name": "bd_03",
+          "t": 8.26
+        },
+        {
+          "name": "bd_04",
+          "t": 13.27
+        }
+      ],
+      "media": "pair",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": false,
+        "verdict": null,
+        "rule": "（未定义自动判据，走目视层）",
+        "conf": "mid",
+        "data": null
+      },
+      "vlm": {
+        "answer": "是",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "三帧同为一条峡谷，仅相机推进/侧掠，无场景切换"
+      },
+      "effective": {
+        "answer": "是",
+        "source": "vlm"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-T3",
+      "poem": "bd",
+      "axis": "TEMPORAL",
+      "basis": "design",
+      "w": 0.5,
+      "type": "yes_no",
+      "q": "船尾拖痕是否在动画中后段才明显拉长？",
+      "options": null,
+      "expect": "是",
+      "frame": "bd_02+bd_04",
+      "frameTimes": [
+        {
+          "name": "bd_02",
+          "t": 2.56
+        },
+        {
+          "name": "bd_04",
+          "t": 13.27
+        }
+      ],
+      "media": "pair",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "是",
+        "rule": "V #bd-trail 描边比例 @2.56=0 @13.27=1",
+        "conf": "high",
+        "data": {
+          "at45": 0,
+          "at233": 1
+        }
+      },
+      "vlm": {
+        "answer": "是",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "bd_02 拖痕极短，bd_04 明显拉长；#bd-trail dashoffset 于 6.5–20s 渐次拉出（easeIn）"
+      },
+      "effective": {
+        "answer": "是",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-T4",
+      "poem": "bd",
+      "axis": "TEMPORAL",
+      "basis": "design",
+      "w": 1,
+      "type": "yes_no",
+      "q": "全片相机是否以持续推进为主、且结尾以加速冲刺收束（无定格收尾）？",
+      "options": null,
+      "expect": "是",
+      "frame": "bd_01+bd_04",
+      "frameTimes": [
+        {
+          "name": "bd_01",
+          "t": 0.57
+        },
+        {
+          "name": "bd_04",
+          "t": 13.27
+        }
+      ],
+      "media": "probe",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "是",
+        "rule": "C.bd：s 1→1.793、递增步 17 / 递减步 10、vmax @t=13.5、无定格",
+        "conf": "high",
+        "data": {
+          "inc": 17,
+          "dec": 10,
+          "vmaxT": 13.5
+        }
+      },
+      "vlm": {
+        "answer": "是",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "o1_probe_cam 实测 s：1.0000 → 1.8521；30 步递增 / 14 步递减；仅 t=14.5–17 有一次 1.2000→1.1800 的侧掠回望小回退；末段速度升至全片最大 0.2554/s @ t=24，无定格（D7）"
+      },
+      "effective": {
+        "answer": "是",
+        "source": "auto"
+      },
+      "conflict": false
+    },
+    {
+      "id": "BD-T5",
+      "poem": "bd",
+      "axis": "TEMPORAL",
+      "basis": "design",
+      "w": 1,
+      "type": "choice",
+      "q": "全片相机速度曲线的形状是？",
+      "options": [
+        "总体渐快、中段有一次侧掠回望的小回退、结尾冲刺（无定格）",
+        "全程匀速",
+        "先快后慢、结尾放缓"
+      ],
+      "expect": "总体渐快、中段有一次侧掠回望的小回退、结尾冲刺（无定格）",
+      "frame": "bd_01+bd_04",
+      "frameTimes": [
+        {
+          "name": "bd_01",
+          "t": 0.57
+        },
+        {
+          "name": "bd_04",
+          "t": 13.27
+        }
+      ],
+      "media": "probe",
+      "probe_assisted": false,
+      "measured": null,
+      "auto": {
+        "decidable": true,
+        "verdict": "总体渐快、中段有一次侧掠回望的小回退、结尾冲刺（无定格）",
+        "rule": "C.bd：vmax @t=13.5、中段负速采样 3 个（t=8.5–9.5）、无定格",
+        "conf": "high",
+        "data": {
+          "vmaxT": 13.5,
+          "dipCount": 3
+        }
+      },
+      "vlm": {
+        "answer": "总体渐快、中段有一次侧掠回望的小回退、结尾冲刺（无定格）",
+        "conf": "high",
+        "source": "baseline-v1.2",
+        "replaceable": true,
+        "evidence": "o1_probe_cam 实测 |v| 总体递增（0.0002 → 0.2554/s），唯 t=14.5–17 出现回退（转段「侧掠两岸 · 一瞬回望」）；结尾 t=24 达最大速度、无定格。新题，探针补出了设计 speedKeys 未体现的回退（D5/D7）"
+      },
+      "effective": {
+        "answer": "总体渐快、中段有一次侧掠回望的小回退、结尾冲刺（无定格）",
+        "source": "auto"
+      },
+      "conflict": false
+    }
+  ]
+}

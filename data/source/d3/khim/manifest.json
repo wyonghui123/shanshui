@@ -1,0 +1,240 @@
+{
+ "instrument": "khim_yangqin",
+ "source": "NeoSoundFonts/pattingthestar-instruments → Khim.sf2",
+ "author": "pattingthestar（本人录音）",
+ "post_process": "Yingchun Soul / Polyphone",
+ "license": "CC0 1.0",
+ "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+ "url": "https://github.com/NeoSoundFonts/pattingthestar-instruments",
+ "license_note": "仓库根目录有 LICENSE 全文（CC0 1.0 Universal），非仅 README 自述；SF2 内 ICOP 字段亦写 CC0 1.0。",
+ "sf2_note": "Polyphone 写出的数值字段全坏：RIFF size 为垃圾值、shdr 的 start/end/loop 是无意义的大数（如 3,750,953,984）、smpl 音高可能给出不可能值。只信任 shdr 的 name 与样值区音频。",
+ "segmentation": "扬琴实录之间有真实静音间隙（−35 dB 阈值下检出 22 个 >250ms 间隙，与 22 条 shdr 一一对应），故用静音检测切边界。注意与北箫相反：北箫的 16 条首尾相接（无低于 −25 dB 的间隙），只能按 name 等分。",
+ "derived": "静音检测分段 → 起音检测裁剪 → 70Hz 高通 → L/R 取均值 → 峰值归一(-1 dBFS) → 单声道 44.1k",
+ "octave_check": "name 音高与实测 f0 的偏差中位数 1224 音分（|偏差| 最大 2424）；MIDI 一律以实测 f0 标注。",
+ "role": "《早发白帝城》支持层，替掉「古琴代琵琶」。扬琴是中国乐器，拨弦音色（起音瞬态中位 +9 dB）与笛的吹管音色形成层次差。",
+ "sr": 44100,
+ "n": 11,
+ "range": "A3–D#7",
+ "samples": [
+  {
+   "midi": 57,
+   "label": "A3",
+   "f0_hz": 220.0,
+   "file": "khim_057.wav",
+   "dur_s": 1.332,
+   "sf2_names": [
+    "Khim A3L"
+   ],
+   "src_channels": [
+    "L"
+   ],
+   "roll_db_oct": -2.47,
+   "centroid_hz": 273.0,
+   "breath_db": -29.25,
+   "noise_db": -18.45,
+   "attack_db": -0.99
+  },
+  {
+   "midi": 69,
+   "label": "A4",
+   "f0_hz": 440.0,
+   "file": "khim_069.wav",
+   "dur_s": 1.329,
+   "sf2_names": [
+    "Khim C4L",
+    "Khim C4R"
+   ],
+   "src_channels": [
+    "L",
+    "R"
+   ],
+   "roll_db_oct": -1.07,
+   "centroid_hz": 1015.0,
+   "breath_db": -12.52,
+   "noise_db": -33.51,
+   "attack_db": 9.21
+  },
+  {
+   "midi": 72,
+   "label": "C5",
+   "f0_hz": 523.25,
+   "file": "khim_072.wav",
+   "dur_s": 0.752,
+   "sf2_names": [
+    "Khim D#6L",
+    "Khim D#6R"
+   ],
+   "src_channels": [
+    "L",
+    "R"
+   ],
+   "roll_db_oct": -3.25,
+   "centroid_hz": 1265.5,
+   "breath_db": -3.3,
+   "noise_db": -37.48,
+   "attack_db": 10.24
+  },
+  {
+   "midi": 75,
+   "label": "D#5",
+   "f0_hz": 622.25,
+   "file": "khim_075.wav",
+   "dur_s": 1.054,
+   "sf2_names": [
+    "Khim A4R",
+    "Khim D#4L"
+   ],
+   "src_channels": [
+    "R",
+    "L"
+   ],
+   "roll_db_oct": -3.68,
+   "centroid_hz": 1125.0,
+   "breath_db": -15.25,
+   "noise_db": -31.64,
+   "attack_db": 8.07
+  },
+  {
+   "midi": 78,
+   "label": "F#5",
+   "f0_hz": 739.99,
+   "file": "khim_078.wav",
+   "dur_s": 1.681,
+   "sf2_names": [
+    "Khim F#4L",
+    "Khim F#4R"
+   ],
+   "src_channels": [
+    "L",
+    "R"
+   ],
+   "roll_db_oct": -8.04,
+   "centroid_hz": 810.5,
+   "breath_db": -21.36,
+   "noise_db": -29.03,
+   "attack_db": 6.81
+  },
+  {
+   "midi": 81,
+   "label": "A5",
+   "f0_hz": 880.0,
+   "file": "khim_081.wav",
+   "dur_s": 0.99,
+   "sf2_names": [
+    "Khim A3R",
+    "Khim A4L"
+   ],
+   "src_channels": [
+    "R",
+    "L"
+   ],
+   "roll_db_oct": -6.73,
+   "centroid_hz": 1539.0,
+   "breath_db": 0.17,
+   "noise_db": -35.42,
+   "attack_db": 10.84
+  },
+  {
+   "midi": 84,
+   "label": "C6",
+   "f0_hz": 1046.5,
+   "file": "khim_084.wav",
+   "dur_s": 1.242,
+   "sf2_names": [
+    "Khim C5L",
+    "Khim C5R"
+   ],
+   "src_channels": [
+    "L",
+    "R"
+   ],
+   "roll_db_oct": -8.64,
+   "centroid_hz": 1131.0,
+   "breath_db": -12.93,
+   "noise_db": -33.12,
+   "attack_db": 11.45
+  },
+  {
+   "midi": 87,
+   "label": "D#6",
+   "f0_hz": 1244.51,
+   "file": "khim_087.wav",
+   "dur_s": 0.415,
+   "sf2_names": [
+    "Khim D#4R",
+    "Khim D#5L",
+    "Khim D#5R"
+   ],
+   "src_channels": [
+    "R",
+    "L",
+    "R"
+   ],
+   "roll_db_oct": -13.92,
+   "centroid_hz": 1195.67,
+   "breath_db": -17.75,
+   "noise_db": -24.37,
+   "attack_db": 9.91
+  },
+  {
+   "midi": 90,
+   "label": "F#6",
+   "f0_hz": 1479.98,
+   "file": "khim_090.wav",
+   "dur_s": 0.734,
+   "sf2_names": [
+    "Khim F#5L",
+    "Khim F#5R"
+   ],
+   "src_channels": [
+    "L",
+    "R"
+   ],
+   "roll_db_oct": -12.32,
+   "centroid_hz": 1544.5,
+   "breath_db": -14.21,
+   "noise_db": -41.06,
+   "attack_db": 8.74
+  },
+  {
+   "midi": 93,
+   "label": "A6",
+   "f0_hz": 1760.0,
+   "file": "khim_093.wav",
+   "dur_s": 0.54,
+   "sf2_names": [
+    "Khim A5L",
+    "Khim A5R"
+   ],
+   "src_channels": [
+    "L",
+    "R"
+   ],
+   "roll_db_oct": -14.74,
+   "centroid_hz": 1790.0,
+   "breath_db": 32.98,
+   "noise_db": -36.17,
+   "attack_db": 19.37
+  },
+  {
+   "midi": 99,
+   "label": "D#7",
+   "f0_hz": 2489.02,
+   "file": "khim_099.wav",
+   "dur_s": 0.441,
+   "sf2_names": [
+    "Khim C6L",
+    "Khim C6R"
+   ],
+   "src_channels": [
+    "L",
+    "R"
+   ],
+   "roll_db_oct": -21.05,
+   "centroid_hz": 2521.0,
+   "breath_db": 27.32,
+   "noise_db": -37.46,
+   "attack_db": 21.63
+  }
+ ]
+}

@@ -1,0 +1,623 @@
+{
+ "meta": {
+  "name": "d1_prosody",
+  "version": "1.1",
+  "role": "D1 通用化的产物：由 d1_rhyme.json 自动解析三首诗的体式/韵脚/入声/平仄/三元组；替代 context.json 与 voice_prosody_process.py 中手工标注的 prosody。v1.1：兼平仄的非韵脚字以 context.json 手工谱定夺（经全行一致性校验，见 hand_authority），避免启发式默认读在「一三五不论」位取错（如「望」误取平）。",
+  "source": "data/derived/d1_rhyme.json + data/source/context/<诗>/context.json（text.base + prosody.pingze）",
+  "consumption": "voice_prosody_process.py 的 (字,tone,role)；卡1 格律；O2 分词格律先验"
+ },
+ "poems": {
+  "jx": {
+   "lines": [
+    "千山鸟飞绝",
+    "万径人踪灭",
+    "孤舟蓑笠翁",
+    "独钓寒江雪"
+   ],
+   "form": "五言绝句",
+   "n_syl": 5,
+   "rhyme": "九屑",
+   "rhyme_tone": "入",
+   "rhyme_feet": [
+    "绝",
+    "灭",
+    "雪"
+   ],
+   "rhyme_feet_lines": [
+    1,
+    2,
+    4
+   ],
+   "rusheng_chars": [
+    "绝",
+    "灭",
+    "笠",
+    "独",
+    "雪"
+   ],
+   "patterns": [
+    "平平仄平仄",
+    "仄仄平平仄",
+    "平平平仄平",
+    "仄仄平平仄"
+   ],
+   "patterns_meter": [
+    "平平仄平仄",
+    "仄仄平平仄",
+    "平平平仄平",
+    "仄仄平平仄"
+   ],
+   "syllables": [
+    [
+     "千",
+     "level",
+     "level"
+    ],
+    [
+     "山",
+     "level",
+     "level"
+    ],
+    [
+     "鸟",
+     "oblique",
+     "oblique"
+    ],
+    [
+     "飞",
+     "level",
+     "level"
+    ],
+    [
+     "绝",
+     "entering",
+     "entering"
+    ],
+    [
+     "万",
+     "oblique",
+     "oblique"
+    ],
+    [
+     "径",
+     "oblique",
+     "oblique"
+    ],
+    [
+     "人",
+     "level",
+     "level"
+    ],
+    [
+     "踪",
+     "level",
+     "level"
+    ],
+    [
+     "灭",
+     "entering",
+     "entering"
+    ],
+    [
+     "孤",
+     "level",
+     "level"
+    ],
+    [
+     "舟",
+     "level",
+     "level"
+    ],
+    [
+     "蓑",
+     "level",
+     "level"
+    ],
+    [
+     "笠",
+     "entering",
+     "entering"
+    ],
+    [
+     "翁",
+     "level",
+     "level"
+    ],
+    [
+     "独",
+     "entering",
+     "entering"
+    ],
+    [
+     "钓",
+     "oblique",
+     "oblique"
+    ],
+    [
+     "寒",
+     "level",
+     "level"
+    ],
+    [
+     "江",
+     "level",
+     "level"
+    ],
+    [
+     "雪",
+     "entering",
+     "entering"
+    ]
+   ],
+   "unknown": [],
+   "ambiguous": [],
+   "hand_resolved": [],
+   "title": "江雪"
+  },
+  "jys": {
+   "lines": [
+    "床前明月光",
+    "疑是地上霜",
+    "举头望明月",
+    "低头思故乡"
+   ],
+   "form": "五言绝句",
+   "n_syl": 5,
+   "rhyme": "七陽",
+   "rhyme_tone": "平",
+   "rhyme_feet": [
+    "光",
+    "霜",
+    "乡"
+   ],
+   "rhyme_feet_lines": [
+    1,
+    2,
+    4
+   ],
+   "rusheng_chars": [
+    "月"
+   ],
+   "patterns": [
+    "平平平仄平",
+    "平仄仄仄平",
+    "仄平仄平仄",
+    "平平平仄平"
+   ],
+   "patterns_meter": [
+    "平平平仄平",
+    "平仄仄仄平",
+    "仄平仄平仄",
+    "平平平仄平"
+   ],
+   "syllables": [
+    [
+     "床",
+     "level",
+     "level"
+    ],
+    [
+     "前",
+     "level",
+     "level"
+    ],
+    [
+     "明",
+     "level",
+     "level"
+    ],
+    [
+     "月",
+     "entering",
+     "entering"
+    ],
+    [
+     "光",
+     "rhyme",
+     "rhyme"
+    ],
+    [
+     "疑",
+     "level",
+     "level"
+    ],
+    [
+     "是",
+     "oblique",
+     "oblique"
+    ],
+    [
+     "地",
+     "oblique",
+     "oblique"
+    ],
+    [
+     "上",
+     "oblique",
+     "oblique"
+    ],
+    [
+     "霜",
+     "rhyme",
+     "rhyme"
+    ],
+    [
+     "举",
+     "oblique",
+     "oblique"
+    ],
+    [
+     "头",
+     "level",
+     "level"
+    ],
+    [
+     "望",
+     "oblique",
+     "oblique"
+    ],
+    [
+     "明",
+     "level",
+     "level"
+    ],
+    [
+     "月",
+     "entering",
+     "entering"
+    ],
+    [
+     "低",
+     "level",
+     "level"
+    ],
+    [
+     "头",
+     "level",
+     "level"
+    ],
+    [
+     "思",
+     "level",
+     "level"
+    ],
+    [
+     "故",
+     "oblique",
+     "oblique"
+    ],
+    [
+     "乡",
+     "rhyme",
+     "rhyme"
+    ]
+   ],
+   "unknown": [],
+   "ambiguous": [
+    {
+     "line": 3,
+     "col": 3,
+     "char": "望",
+     "options": [
+      "仄",
+      "平"
+     ],
+     "chosen": "仄",
+     "resolved_by": "hand"
+    },
+    {
+     "line": 4,
+     "col": 3,
+     "char": "思",
+     "options": [
+      "仄",
+      "平"
+     ],
+     "chosen": "平",
+     "resolved_by": "hand"
+    }
+   ],
+   "hand_resolved": [
+    {
+     "line": 3,
+     "col": 3,
+     "char": "望",
+     "options": [
+      "仄",
+      "平"
+     ],
+     "chosen": "仄",
+     "resolved_by": "hand"
+    },
+    {
+     "line": 4,
+     "col": 3,
+     "char": "思",
+     "options": [
+      "仄",
+      "平"
+     ],
+     "chosen": "平",
+     "resolved_by": "hand"
+    }
+   ],
+   "title": "静夜思"
+  },
+  "bd": {
+   "lines": [
+    "朝辞白帝彩云间",
+    "千里江陵一日还",
+    "两岸猿声啼不住",
+    "轻舟已过万重山"
+   ],
+   "form": "七言绝句",
+   "n_syl": 7,
+   "rhyme": "十五刪",
+   "rhyme_tone": "平",
+   "rhyme_feet": [
+    "间",
+    "还",
+    "山"
+   ],
+   "rhyme_feet_lines": [
+    1,
+    2,
+    4
+   ],
+   "rusheng_chars": [
+    "白",
+    "一",
+    "日",
+    "不"
+   ],
+   "patterns": [
+    "平平仄仄仄平平",
+    "平仄平平仄仄平",
+    "仄仄平平平仄仄",
+    "平平仄仄仄平平"
+   ],
+   "patterns_meter": [
+    "平平仄仄仄平平",
+    "平仄平平仄仄平",
+    "仄仄平平平仄仄",
+    "平平仄仄仄平平"
+   ],
+   "syllables": [
+    [
+     "朝",
+     "level",
+     "level"
+    ],
+    [
+     "辞",
+     "level",
+     "level"
+    ],
+    [
+     "白",
+     "entering",
+     "entering"
+    ],
+    [
+     "帝",
+     "oblique",
+     "oblique"
+    ],
+    [
+     "彩",
+     "oblique",
+     "oblique"
+    ],
+    [
+     "云",
+     "level",
+     "level"
+    ],
+    [
+     "间",
+     "rhyme",
+     "rhyme"
+    ],
+    [
+     "千",
+     "level",
+     "level"
+    ],
+    [
+     "里",
+     "oblique",
+     "oblique"
+    ],
+    [
+     "江",
+     "level",
+     "level"
+    ],
+    [
+     "陵",
+     "level",
+     "level"
+    ],
+    [
+     "一",
+     "entering",
+     "entering"
+    ],
+    [
+     "日",
+     "entering",
+     "entering"
+    ],
+    [
+     "还",
+     "rhyme",
+     "rhyme"
+    ],
+    [
+     "两",
+     "oblique",
+     "oblique"
+    ],
+    [
+     "岸",
+     "oblique",
+     "oblique"
+    ],
+    [
+     "猿",
+     "level",
+     "level"
+    ],
+    [
+     "声",
+     "level",
+     "level"
+    ],
+    [
+     "啼",
+     "level",
+     "level"
+    ],
+    [
+     "不",
+     "entering",
+     "entering"
+    ],
+    [
+     "住",
+     "oblique",
+     "oblique"
+    ],
+    [
+     "轻",
+     "level",
+     "level"
+    ],
+    [
+     "舟",
+     "level",
+     "level"
+    ],
+    [
+     "已",
+     "oblique",
+     "oblique"
+    ],
+    [
+     "过",
+     "oblique",
+     "oblique"
+    ],
+    [
+     "万",
+     "oblique",
+     "oblique"
+    ],
+    [
+     "重",
+     "level",
+     "level"
+    ],
+    [
+     "山",
+     "rhyme",
+     "rhyme"
+    ]
+   ],
+   "unknown": [],
+   "ambiguous": [
+    {
+     "line": 3,
+     "col": 6,
+     "char": "不",
+     "options": [
+      "仄",
+      "平"
+     ],
+     "chosen": "仄",
+     "resolved_by": "hand"
+    },
+    {
+     "line": 4,
+     "col": 1,
+     "char": "轻",
+     "options": [
+      "仄",
+      "平"
+     ],
+     "chosen": "平",
+     "resolved_by": "hand"
+    },
+    {
+     "line": 4,
+     "col": 4,
+     "char": "过",
+     "options": [
+      "仄",
+      "平"
+     ],
+     "chosen": "仄",
+     "resolved_by": "hand"
+    },
+    {
+     "line": 4,
+     "col": 6,
+     "char": "重",
+     "options": [
+      "仄",
+      "平"
+     ],
+     "chosen": "平",
+     "resolved_by": "hand"
+    }
+   ],
+   "hand_resolved": [
+    {
+     "line": 3,
+     "col": 6,
+     "char": "不",
+     "options": [
+      "仄",
+      "平"
+     ],
+     "chosen": "仄",
+     "resolved_by": "hand"
+    },
+    {
+     "line": 4,
+     "col": 1,
+     "char": "轻",
+     "options": [
+      "仄",
+      "平"
+     ],
+     "chosen": "平",
+     "resolved_by": "hand"
+    },
+    {
+     "line": 4,
+     "col": 4,
+     "char": "过",
+     "options": [
+      "仄",
+      "平"
+     ],
+     "chosen": "仄",
+     "resolved_by": "hand"
+    },
+    {
+     "line": 4,
+     "col": 6,
+     "char": "重",
+     "options": [
+      "仄",
+      "平"
+     ],
+     "chosen": "平",
+     "resolved_by": "hand"
+    }
+   ],
+   "title": "早发白帝城"
+  }
+ }
+}

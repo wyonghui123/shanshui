@@ -1,0 +1,31 @@
+{
+  "meta": {
+    "name": "o2_gate",
+    "version": "1.0",
+    "generated": "2026-10-04",
+    "role": "O2 可画性门控（conc → 实写 / 虚写 / 不可实写）的阈值真源。o2_imagery.mjs 不写死阈值，由此文件驱动：改阈值只改此文件。--check 校验「冻结值 = 最大裕度中点」且 gold 无越界、并做证伪。",
+    "method": "1D 最大裕度分界：取相邻两类样本的中点（real = 实写/虚写 界，blank = 虚写/不可实写 界），使阈值到两侧最近样本的裕度相等。",
+    "basis": "o2_gold.json 的 gold_class 与 o2_lexicon.json 的 conc，逐行配对（负节点 / 动作不走 conc 门，已排除）。",
+    "provisional": true,
+    "provisional_note": "仅据 2 首 / 14 条可门控样本标定。实写/虚写边界裕度仅 ±0.025（万径 conc=0.60 与彩云 conc=0.55 相距 0.05）——这是数据本身的暧昧（万径 gold_note「近乎虚写」），非标定误差。样本增补后须重跑 `node src/o2/o2_imagery.mjs --calibrate`。"
+  },
+  "thresholds": {
+    "real": 0.575,
+    "blank": 0.275
+  },
+  "margins": {
+    "real": 0.025,
+    "blank": 0.075
+  },
+  "evidence": {
+    "max_blank": 0.55,
+    "min_real": 0.6,
+    "max_none": 0.2,
+    "min_blank": 0.35
+  },
+  "classes": {
+    "real": "实写",
+    "blank": "虚写",
+    "none": "不可实写"
+  }
+}

@@ -1,0 +1,3190 @@
+{
+  "meta": {
+    "name": "d2_techniques",
+    "version": "1.0",
+    "generated": "2026-10-03",
+    "role": "D2 主表：意象类别/情感 → 三远、皴法、墨色、含水、笔法、层、留白、点苔。图侧 L1 要素的共同上游。",
+    "division_of_labor": "D2 给「候选集 + 类别档 + 区间约束」；精确数值由卡5 构图求解器与卡6 笔墨物理给出。",
+    "grade_scale": {
+      "原文": "画论/画史原文可直接引用的论断（最高）",
+      "画史": "画史记载的归属（谁创何法），非技法原文",
+      "通例": "画谱/教材通行的技法惯例，无单一古典原文",
+      "裁定": "本项目为可计算所做的参数化裁定，非古典判据"
+    },
+    "source_doc": "data/source/d2_seed/painting_theory.json",
+    "seed_doc": "data/source/d2_seed/d2_mapping_seed.json",
+    "supplement_doc": "data/source/d2_supplement.json",
+    "fields": {
+      "class_defaults.yuan": "三远候选（按权重降序）",
+      "class_defaults.cun": "皴法",
+      "class_defaults.ink_grade": "墨分五色档（焦/浓/重/淡/清/留白）",
+      "vocab.ink_method": "墨法轴（破/积/泼/宿/焦/飞白）→ mu 扩散系数区间（卡6）",
+      "class_defaults.water": "含水档（极低/低/中/高/极高）",
+      "class_defaults.stroke": "笔法",
+      "class_defaults.layer": "景深",
+      "class_defaults.blank_bias": "留白倾向（-2..+2）",
+      "class_defaults.diantai": "是否点苔",
+      "class_defaults.role": "画面角色（主体/地标/焦点/点缀/引导/承载留白/不画）",
+      "class_defaults.weight": "三远投票权重",
+      "modulators.emotion": "V/A/T 档 → 留白区间/墨阶位移/静默/重心",
+      "modulators.layer_atten_steps": "层 → 墨阶变淡步数（空气透视）",
+      "modulators.layer_technique": "类别×层 → 含水/笔法（远山细化的泛化规则；词覆盖优先）",
+      "modulators.figure_layer": "景深 → 人物尺寸档/墨阶（郭熙三远与人物；词覆盖优先；中号仅角色=主体可用）",
+      "modulators.space": "空间词 → 三远票",
+      "modulators.season_words": "物候词 → 四时",
+      "modulators.polarity": "文化极性 → 墨/底色偏置（keys 8 规范键 + normalize 自由文本归一）",
+      "vocab.paradigm": "设色范式（青绿/浅绛/水墨/没骨）→ 墨骨强度 + 色域（卡6）",
+      "modulators.paradigm": "品格/季节/极性 → 范式候选 + 默认档 + 色域投影（G3）",
+      "modulators.form": "诗体 → 装裱形制候选",
+      "modulators.blank_rules": "留白率区间算法",
+      "vocab.viewpoint": "视点档（平视/仰视/俯视）→ 地平线/纵比区间（卡5；G7）",
+      "modulators.viewpoint": "空间词/三远 → 视点票（G7）",
+      "vocab.weather": "天候（晴/雨/雪/雾）→ σ/μ 乘子 + ρ 上调 + 皴建议（卡5/卡6；G4）",
+      "modulators.weather": "天候词 → 天候档（G4）",
+      "vocab.time_of_day": "时辰（晨/昼/暮/夜）→ 段长乘子 + 墨/色候选（卡7；G5）",
+      "modulators.time_words": "时辰词 → 时辰档（G5；含由 season_words 迁来的「月」）",
+      "vocab.material": "材质系数（纸绢/笔/墨）→ D/μ 乘子 + 飞白阈值 + 冷暖（卡6；G6）",
+      "modulators.material": "材质默认档（生宣/兼毫/松烟；G6）",
+      "vocab.stroke_quality": "笔法质量维（荆浩四势 + 黄宾虹五笔；卡6；G2）",
+      "vocab.stroke_disease": "用笔负判据（郭若虚三病 + 荆浩二病；卡6；G2）",
+      "modulators.stroke_quality": "笔法式 → 适用质量维 / 须避病（G2）",
+      "vocab.composition": "构图规则（边角/三叠两段/蹊径六则；卡5；G1）",
+      "modulators.composition": "语境 → 蹊径软目标算子（G1）",
+      "vocab.seal": "钤印规则（印位/印面；卡7；G8）",
+      "modulators.seal": "形制/尺幅 → 印位 / 印面大小（G8）"
+    }
+  },
+  "vocab": {
+    "yuan": {
+      "高远": {
+        "source_id": "guoxi_sanyuan",
+        "criterion": "色清明、势突兀；自山下仰山颠",
+        "params": {
+          "horizon": [
+            0.1,
+            0.35
+          ],
+          "vertical_scale": [
+            1.2,
+            1.6
+          ],
+          "view": "仰视",
+          "layers": [
+            1,
+            2
+          ],
+          "ink_bias": -1
+        },
+        "motion": "推近/仰",
+        "grade": "原文"
+      },
+      "深远": {
+        "source_id": "guoxi_sanyuan",
+        "criterion": "色重晦、意重叠；自山前窥山后",
+        "params": {
+          "horizon": [
+            0.35,
+            0.5
+          ],
+          "layers": [
+            3,
+            5
+          ],
+          "air_perspective": true,
+          "view": "平视穿透",
+          "ink_bias": 0
+        },
+        "motion": "轻推远",
+        "grade": "原文"
+      },
+      "平远": {
+        "source_id": "guoxi_sanyuan",
+        "criterion": "色有明晦、意冲融缥缈；自近山望远山",
+        "params": {
+          "horizon": [
+            0.42,
+            0.55
+          ],
+          "horizontal_spread": [
+            1.2,
+            1.6
+          ],
+          "ink_far": "清",
+          "view": "平视",
+          "ink_bias": 1
+        },
+        "motion": "横移",
+        "grade": "原文"
+      },
+      "阔远": {
+        "source_id": "hanzhu_sanyuan",
+        "criterion": "近岸广水、旷阔遥山",
+        "params": {
+          "horizon": [
+            0.45,
+            0.55
+          ],
+          "water_share": [
+            0.4,
+            0.7
+          ],
+          "horizontal_spread": [
+            1.4,
+            1.8
+          ],
+          "ink_bias": 1
+        },
+        "motion": "横移",
+        "grade": "原文"
+      },
+      "迷远": {
+        "source_id": "hanzhu_sanyuan",
+        "criterion": "烟雾溟漠、野水隔而仿佛不见",
+        "params": {
+          "fog": [
+            0.6,
+            0.9
+          ],
+          "contrast": [
+            0.1,
+            0.3
+          ],
+          "mid_blocked": true,
+          "ink_bias": 2
+        },
+        "motion": "凝止",
+        "grade": "原文"
+      },
+      "幽远": {
+        "source_id": "hanzhu_sanyuan",
+        "criterion": "景物至绝、微茫缥缈",
+        "params": {
+          "ink_bias": 3,
+          "contrast": [
+            0.05,
+            0.2
+          ],
+          "detail": "减笔",
+          "ink_bias_far": "清"
+        },
+        "motion": "凝止",
+        "grade": "原文"
+      }
+    },
+    "cun": {
+      "披麻皴": {
+        "source_id": "tanghou_mapicun",
+        "terrain": "土山/丘陵",
+        "quality": "平缓细密、温润",
+        "stroke": "中锋圆转·长披麻",
+        "grade": "画史"
+      },
+      "小斧劈": {
+        "source_id": "lishixun_fupi",
+        "terrain": "方硬岩壁",
+        "quality": "刚硬、劲挺",
+        "stroke": "侧锋短斫",
+        "grade": "画史"
+      },
+      "大斧劈": {
+        "source_id": "lishixun_fupi",
+        "terrain": "大崖壁/峡谷",
+        "quality": "雄浑、磅礴",
+        "stroke": "侧锋大斫",
+        "grade": "画史"
+      },
+      "卷云皴": {
+        "source_id": "guoxi_juanjuncun",
+        "terrain": "圆浑山石",
+        "quality": "云头状、流动感",
+        "stroke": "中锋圆转·云头",
+        "grade": "画史"
+      },
+      "雨点皴": {
+        "source_id": "fanwei_yudiancun",
+        "terrain": "北方浑厚山体/雨景",
+        "quality": "密集短点如雨",
+        "stroke": "侧锋短点",
+        "grade": "画史"
+      },
+      "折带皴": {
+        "source_id": "nizan_zhedaicun",
+        "terrain": "层岩/水岸坡石",
+        "quality": "侧锋横折如带，疏简清逸",
+        "stroke": "侧锋横折",
+        "grade": "画史"
+      },
+      "米点皴": {
+        "source_id": "mifu_midiancun",
+        "terrain": "云山烟雨",
+        "quality": "侧锋横点如米，浑茫",
+        "stroke": "侧锋横点",
+        "grade": "画史"
+      },
+      "干擦": {
+        "source_id": "tangdai_dianrancunca",
+        "terrain": "山石干笔质感",
+        "quality": "干笔侧擦，近乎不可见",
+        "stroke": "枯笔擦",
+        "grade": "原文"
+      },
+      "无皴": {
+        "source_id": "zhangyanyuan_wuse",
+        "terrain": "雪景/寒江/远山",
+        "quality": "不皴，淡墨渲",
+        "stroke": "大晕染",
+        "grade": "裁定"
+      }
+    },
+    "ink": {
+      "焦": {
+        "c": [
+          0.96,
+          1.0
+        ],
+        "source_id": "zhangyanyuan_wuse"
+      },
+      "浓": {
+        "c": [
+          0.84,
+          0.96
+        ],
+        "source_id": "zhangyanyuan_wuse"
+      },
+      "重": {
+        "c": [
+          0.6,
+          0.84
+        ],
+        "source_id": "zhangyanyuan_wuse"
+      },
+      "淡": {
+        "c": [
+          0.26,
+          0.6
+        ],
+        "source_id": "zhangyanyuan_wuse"
+      },
+      "清": {
+        "c": [
+          0.04,
+          0.26
+        ],
+        "source_id": "zhangyanyuan_wuse"
+      },
+      "留白": {
+        "c": [
+          0.0,
+          0.0
+        ],
+        "source_id": "dachongguang_xushi"
+      }
+    },
+    "ink_ladder": [
+      "焦",
+      "浓",
+      "重",
+      "淡",
+      "清"
+    ],
+    "ink_method": {
+      "破墨": {
+        "mu": [
+          0.9,
+          1.3
+        ],
+        "water": "中",
+        "stroke": "破墨",
+        "quality": "浓破淡 / 淡破浓，出层次",
+        "source_id": "mofa_tongli",
+        "grade": "通例"
+      },
+      "积墨": {
+        "mu": [
+          0.5,
+          0.8
+        ],
+        "water": "中",
+        "stroke": "积墨",
+        "quality": "层层叠加，厚重；边缘收敛",
+        "source_id": "mofa_tongli",
+        "grade": "通例"
+      },
+      "泼墨": {
+        "mu": [
+          1.4,
+          2.0
+        ],
+        "water": "高",
+        "stroke": "泼墨",
+        "quality": "高含水高墨，气势奔放",
+        "source_id": "mofa_tongli",
+        "grade": "通例"
+      },
+      "宿墨": {
+        "mu": [
+          0.4,
+          0.7
+        ],
+        "water": "低",
+        "stroke": "枯笔擦",
+        "quality": "隔夜沉淀，涩而滞；扩散慢、带颗粒",
+        "source_id": "mofa_tongli",
+        "grade": "通例"
+      },
+      "焦墨": {
+        "mu": [
+          0.1,
+          0.3
+        ],
+        "water": "极低",
+        "stroke": "枯笔擦",
+        "quality": "极浓而枯，几乎不洇；醒提轮廓",
+        "source_id": "mofa_tongli",
+        "grade": "通例"
+      },
+      "飞白": {
+        "mu": [
+          0.1,
+          0.3
+        ],
+        "water": "极低",
+        "stroke": "飞白",
+        "quality": "极低含水，线断意不断（虚）",
+        "source_id": "dachongguang_xushi",
+        "grade": "原文"
+      }
+    },
+    "ink_method_note": "墨法轴（轴4），与浓度阶梯 ink 分轴。mu = 卡6 扩散律的系数（相对基准 μ0=1.0），L(t) ∝ √(μ·t)；宿墨 μ 偏低（更慢更滞），焦墨 / 飞白 μ 极低（几乎不洇）。mu 为可计算所做的参数化裁定，非古典判据。",
+    "paradigm": {
+      "青绿": {
+        "ink_bone": "轻",
+        "color_domain": [
+          "石青",
+          "石绿",
+          "赭石"
+        ],
+        "quality": "重色；石青石绿为主，金碧为其极",
+        "source_id": "dongqichang_nanbeizong",
+        "grade": "画史"
+      },
+      "浅绛": {
+        "ink_bone": "中",
+        "color_domain": [
+          "赭石",
+          "花青",
+          "汁绿"
+        ],
+        "quality": "水墨骨 + 赭石为主淡彩，冷暖互补",
+        "source_id": "qianjiang_huashi",
+        "grade": "通例"
+      },
+      "水墨": {
+        "ink_bone": "重",
+        "color_domain": [],
+        "quality": "纯水墨，运墨而五色具；无色",
+        "source_id": "zhangyanyuan_wuse",
+        "grade": "原文"
+      },
+      "没骨": {
+        "ink_bone": "无",
+        "color_domain": [
+          "五采"
+        ],
+        "quality": "不用勾勒，全以五采染成",
+        "source_id": "mogu_fa",
+        "grade": "原文"
+      }
+    },
+    "paradigm_note": "设色范式（轴5）：着色 / 渲淡两端（董其昌南北宗）。ink_bone = 墨骨强度（水墨最重、青绿轻、没骨无）；color_domain = 该范式允许的色域（水墨为空 = 无色）。D2 只给范式候选与色域，精确用色由卡6 求解（分工铁律）。",
+    "water": {
+      "极低": {
+        "D": [
+          0.02,
+          0.08
+        ],
+        "fix_s": [
+          0.4,
+          0.8
+        ]
+      },
+      "低": {
+        "D": [
+          0.08,
+          0.2
+        ],
+        "fix_s": [
+          0.6,
+          1.2
+        ]
+      },
+      "中": {
+        "D": [
+          0.2,
+          0.45
+        ],
+        "fix_s": [
+          1.2,
+          3.0
+        ]
+      },
+      "高": {
+        "D": [
+          0.45,
+          0.75
+        ],
+        "fix_s": [
+          4.0,
+          8.0
+        ]
+      },
+      "极高": {
+        "D": [
+          0.75,
+          1.0
+        ],
+        "fix_s": [
+          8.0,
+          14.0
+        ]
+      }
+    },
+    "stroke": {
+      "中锋·一次落笔": {
+        "note": "低含水+高墨；几乎不洇",
+        "grade": "通例"
+      },
+      "中锋·侧锋": {
+        "note": "山石轮廓兼皴；中锋立骨、侧锋取面",
+        "grade": "通例"
+      },
+      "顿笔·侧锋": {
+        "note": "低含水+极高墨；衣褶/轮廓",
+        "grade": "通例"
+      },
+      "飞白": {
+        "note": "极低含水+中墨；线断意不断",
+        "grade": "原文",
+        "source_id": "dachongguang_xushi"
+      },
+      "大晕染·慢扩散": {
+        "note": "高含水+低墨；远山/云水",
+        "grade": "通例"
+      },
+      "枯笔擦": {
+        "note": "中含水+极低墨；近乎不可见",
+        "grade": "通例"
+      },
+      "泼墨": {
+        "note": "高含水+高墨；气势",
+        "grade": "通例"
+      },
+      "破墨": {
+        "note": "浓破淡/淡破浓；层次",
+        "grade": "通例"
+      },
+      "积墨": {
+        "note": "层层叠加；厚重",
+        "grade": "通例"
+      },
+      "点叶": {
+        "note": "中锋攒点；草木",
+        "grade": "通例"
+      },
+      "点景·数笔即成": {
+        "note": "建筑/城郭/亭台；中锋简笔，数笔立形",
+        "grade": "通例"
+      },
+      "斧劈皴·侧锋快扫": {
+        "note": "大斧劈的施笔法；侧锋快扫出方硬岩壁",
+        "grade": "画史",
+        "source_id": "lishixun_fupi"
+      },
+      "层叠淡墨·逐层递淡": {
+        "note": "多重山以积/破墨逐层递淡，空气透视（万重山）",
+        "grade": "通例"
+      },
+      "大晕染·几乎无形": {
+        "note": "极高含水+极低墨；彩云/霞气，几不可见",
+        "grade": "通例"
+      },
+      "染（湿渲）": {
+        "note": "湿笔晕染；月晕/光晕",
+        "grade": "通例"
+      },
+      "染（上浓下淡）": {
+        "note": "湿染渐变；霜/雾脚，边缘不闭合",
+        "grade": "通例"
+      },
+      "写+染": {
+        "note": "先中锋写形、再湿染；近景器物/榻沿",
+        "grade": "通例"
+      },
+      "不画": {
+        "note": "留白或声轨",
+        "grade": "裁定"
+      }
+    },
+    "layer": [
+      "近景",
+      "中景",
+      "远景",
+      "极远",
+      "全域"
+    ],
+    "season": {
+      "春": {
+        "source_id": "guoxi_sishi",
+        "qi": "春山澹冶如笑",
+        "ink_bias": 0,
+        "color": "淡青绿",
+        "tai": "疏",
+        "blank_bias": 0
+      },
+      "夏": {
+        "source_id": "guoxi_sishi",
+        "qi": "夏山苍翠如滴",
+        "ink_bias": -1,
+        "color": "苍翠",
+        "tai": "密",
+        "blank_bias": -1
+      },
+      "秋": {
+        "source_id": "guoxi_sishi",
+        "qi": "秋山明净如妆",
+        "ink_bias": 1,
+        "color": "明净",
+        "tai": "疏",
+        "blank_bias": 1
+      },
+      "冬": {
+        "source_id": "guoxi_sishi",
+        "qi": "冬山惨淡如睡",
+        "ink_bias": 2,
+        "color": "素白",
+        "tai": "疏",
+        "blank_bias": 2
+      }
+    },
+    "format": {
+      "手卷": {
+        "viewing": "右→左逐步展开，边走边看",
+        "motion": "横移",
+        "source_id": "guoxi_sanyuan",
+        "grade": "裁定"
+      },
+      "立轴": {
+        "viewing": "一瞥整体，向上仰望",
+        "motion": "推近/仰",
+        "grade": "裁定"
+      },
+      "册页": {
+        "viewing": "近距离、小尺度把玩",
+        "motion": "凝止/微动",
+        "grade": "裁定"
+      },
+      "扇面": {
+        "viewing": "小景把玩",
+        "motion": "凝止",
+        "grade": "裁定"
+      }
+    },
+    "viewpoint": {
+      "平视": {
+        "source_id": "guoxi_sanyuan",
+        "criterion": "视点与景齐平，远山与目齐（平远）",
+        "params": {
+          "horizon": [
+            0.42,
+            0.55
+          ],
+          "vertical_scale": [
+            0.9,
+            1.1
+          ],
+          "yuan_affinity": [
+            "平远",
+            "阔远"
+          ]
+        },
+        "grade": "原文"
+      },
+      "仰视": {
+        "source_id": "guoxi_sanyuan",
+        "criterion": "自山下而仰山颠（高远）",
+        "params": {
+          "horizon": [
+            0.1,
+            0.35
+          ],
+          "vertical_scale": [
+            1.2,
+            1.6
+          ],
+          "yuan_affinity": [
+            "高远"
+          ]
+        },
+        "grade": "原文"
+      },
+      "俯视": {
+        "source_id": "shenkuo_daguanxiao",
+        "criterion": "以大观小，如人观假山；居高下瞰、重重悉见",
+        "params": {
+          "horizon": [
+            0.0,
+            0.25
+          ],
+          "vertical_scale": [
+            0.6,
+            0.9
+          ],
+          "yuan_affinity": [
+            "迷远",
+            "幽远"
+          ],
+          "layers": [
+            3,
+            5
+          ]
+        },
+        "grade": "原文"
+      }
+    },
+    "viewpoint_note": "视点档（轴2 · G7）：独立于三远的视点高度轴。平视 / 仰视由郭熙三远覆盖（高远仰、平远平）；俯视补沈括「以大观小」——散点透视、居高可移动，故能「重重悉见」。D2 只给视点候选 + 地平线 / 纵比区间，精确地平线与布局由卡5 求解（分工铁律）。",
+    "weather": {
+      "晴": {
+        "source_id": "guoxi_sishi",
+        "sigma_mult": [
+          0.8,
+          1.0
+        ],
+        "blank_bonus": 0.0,
+        "mu_mult": [
+          0.9,
+          1.1
+        ],
+        "cun_bias": [],
+        "quality": "明净通透、对比强",
+        "grade": "通例"
+      },
+      "雨": {
+        "source_id": "guoxi_sishi",
+        "sigma_mult": [
+          1.0,
+          1.3
+        ],
+        "blank_bonus": -0.02,
+        "mu_mult": [
+          1.1,
+          1.4
+        ],
+        "cun_bias": [
+          "雨点皴"
+        ],
+        "quality": "湿度高、墨易漫；皴取雨点",
+        "grade": "通例"
+      },
+      "雪": {
+        "source_id": "guoxi_sishi",
+        "sigma_mult": [
+          1.2,
+          1.6
+        ],
+        "blank_bonus": 0.04,
+        "mu_mult": [
+          0.5,
+          0.8
+        ],
+        "cun_bias": [
+          "无皴"
+        ],
+        "quality": "大留白、墨滞；雪覆不露石理",
+        "grade": "通例"
+      },
+      "雾": {
+        "source_id": "hanzhu_sanyuan",
+        "sigma_mult": [
+          1.5,
+          2.2
+        ],
+        "blank_bonus": 0.03,
+        "mu_mult": [
+          0.8,
+          1.1
+        ],
+        "cun_bias": [],
+        "quality": "σ 上调、空气透视强；中景隔断",
+        "grade": "通例"
+      }
+    },
+    "weather_note": "天候调制器（轴6 · G4）：天候词 → 技法系数。sigma_mult = 卡6 高斯模糊 σ 乘子（雾最大）；blank_bonus = 卡5 ρ 区间上调；mu_mult = 卡6 扩散系数乘子（雪慢）；cun_bias = 皴法建议（雨→雨点皴、雪→无皴）。D2 只给系数与建议，精确 σ / ρ 由卡6 / 卡5 求解。",
+    "time_of_day": {
+      "晨": {
+        "source_id": "guoxi_zhaomu",
+        "qi": "朝看如此",
+        "seg_len_mult": [
+          1.0,
+          1.1
+        ],
+        "ink_bias": 0,
+        "color": "淡青",
+        "warmth": -1,
+        "grade": "原文"
+      },
+      "昼": {
+        "source_id": "guoxi_zhaomu",
+        "qi": "昼（朝暮之间）",
+        "seg_len_mult": [
+          0.9,
+          1.0
+        ],
+        "ink_bias": -1,
+        "color": "明",
+        "warmth": 0,
+        "grade": "裁定"
+      },
+      "暮": {
+        "source_id": "guoxi_zhaomu",
+        "qi": "暮看如此",
+        "seg_len_mult": [
+          1.1,
+          1.3
+        ],
+        "ink_bias": 1,
+        "color": "赭",
+        "warmth": 1,
+        "grade": "原文"
+      },
+      "夜": {
+        "source_id": "guoxi_zhaomu",
+        "qi": "（朝暮变态之极）",
+        "seg_len_mult": [
+          1.2,
+          1.5
+        ],
+        "ink_bias": 2,
+        "color": "冷灰",
+        "warmth": -1,
+        "grade": "裁定"
+      }
+    },
+    "time_of_day_note": "时辰调制器（轴7 · G5）：晨 / 昼 / 暮 / 夜 → 段长乘子（夜最长）、墨阶偏置候选、色偏与冷暖。晨 / 暮有郭熙「朝暮」原文；昼 / 夜为其两极的裁定延伸。D2 只给段长乘子与墨 / 色候选（诗级），不逐节点改墨阶（避免与 R3 / R4 冲突），精确节拍由卡7 求解。",
+    "material": {
+      "纸绢": {
+        "生宣": {
+          "D_mult": [
+            1.2,
+            1.6
+          ],
+          "mu_mult": [
+            1.1,
+            1.4
+          ],
+          "feibai_threshold": [
+            0.6,
+            0.8
+          ],
+          "note": "吸水强、易晕染、层次丰富"
+        },
+        "熟宣": {
+          "D_mult": [
+            0.4,
+            0.7
+          ],
+          "mu_mult": [
+            0.5,
+            0.8
+          ],
+          "feibai_threshold": [
+            0.3,
+            0.5
+          ],
+          "note": "吸水性弱、不洇墨"
+        },
+        "绢": {
+          "D_mult": [
+            0.7,
+            1.0
+          ],
+          "mu_mult": [
+            0.8,
+            1.0
+          ],
+          "feibai_threshold": [
+            0.4,
+            0.6
+          ],
+          "note": "细腻"
+        }
+      },
+      "笔": {
+        "狼毫": {
+          "stiffness": [
+            0.7,
+            1.0
+          ],
+          "water_cap": [
+            0.6,
+            0.8
+          ],
+          "note": "硬毫，弹性强、出锋利"
+        },
+        "羊毫": {
+          "stiffness": [
+            0.2,
+            0.5
+          ],
+          "water_cap": [
+            0.8,
+            1.0
+          ],
+          "note": "软毫，蓄水多、易晕"
+        },
+        "兼毫": {
+          "stiffness": [
+            0.45,
+            0.7
+          ],
+          "water_cap": [
+            0.7,
+            0.9
+          ],
+          "note": "刚柔兼济"
+        }
+      },
+      "墨": {
+        "松烟": {
+          "warmth": -1,
+          "hue": "冷黑",
+          "note": "松烟偏冷、无光"
+        },
+        "油烟": {
+          "warmth": 1,
+          "hue": "暖黑",
+          "note": "油烟偏暖、有光"
+        }
+      },
+      "source_id": "material_tongli",
+      "grade": "通例"
+    },
+    "material_note": "材质系数（轴8 · G6）：纸绢定含水扩散 D 的物理边界（生宣 D 大、熟宣不洇），笔毫定含水与力度上限，墨种定冷暖。作卡6 扩散律 γ / μ 与飞白阈值的乘子，非独立词表。默认（生宣 / 兼毫 / 松烟）标于 modulators.material。",
+    "stroke_quality": {
+      "筋": {
+        "source_id": "jinghao_sishi",
+        "side": "结构",
+        "criterion": "笔绝而不断",
+        "assert": "线断意连"
+      },
+      "肉": {
+        "source_id": "jinghao_sishi",
+        "side": "结构",
+        "criterion": "起伏成实",
+        "assert": "面有起伏"
+      },
+      "骨": {
+        "source_id": "jinghao_sishi",
+        "side": "结构",
+        "criterion": "生死刚正",
+        "assert": "轮廓刚正"
+      },
+      "气": {
+        "source_id": "jinghao_sishi",
+        "side": "结构",
+        "criterion": "迹画不败",
+        "assert": "气脉不断"
+      },
+      "平": {
+        "source_id": "huangbinhong_wubi",
+        "side": "手感",
+        "criterion": "如锥画沙",
+        "assert": "力透纸背·匀"
+      },
+      "留": {
+        "source_id": "huangbinhong_wubi",
+        "side": "手感",
+        "criterion": "如屋漏痕",
+        "assert": "留得住·涩"
+      },
+      "圆": {
+        "source_id": "huangbinhong_wubi",
+        "side": "手感",
+        "criterion": "如折钗股",
+        "assert": "转折圆浑"
+      },
+      "重": {
+        "source_id": "huangbinhong_wubi",
+        "side": "手感",
+        "criterion": "如高山坠石",
+        "assert": "落笔沉实"
+      },
+      "变": {
+        "source_id": "huangbinhong_wubi",
+        "side": "手感",
+        "criterion": "如四时迭运",
+        "assert": "笔笔有变"
+      }
+    },
+    "stroke_disease": {
+      "板": {
+        "source_id": "guoruoxu_sanbing",
+        "criterion": "腕弱笔痴，物状平褊不能圆混",
+        "assert": "石看三面"
+      },
+      "刻": {
+        "source_id": "guoruoxu_sanbing",
+        "criterion": "运笔中疑，妄生圭角",
+        "assert": "藏锋"
+      },
+      "结": {
+        "source_id": "guoruoxu_sanbing",
+        "criterion": "欲行不行，似物凝碍",
+        "assert": "气脉不断"
+      },
+      "有形病": {
+        "source_id": "jinghao_erbing",
+        "criterion": "花木不时、屋小人大、树高于山",
+        "assert": "比例 / 时序合法"
+      },
+      "无形病": {
+        "source_id": "jinghao_erbing",
+        "criterion": "气韵俱泯、类同死物",
+        "assert": "气韵"
+      }
+    },
+    "stroke_quality_note": "笔法质量维（轴3 · G2）：结构侧取荆浩四势（筋 / 肉 / 骨 / 气），手感侧取黄宾虹五笔（平 / 留 / 圆 / 重 / 变）；负判据取郭若虚三病（板 / 刻 / 结）+ 荆浩二病（有形 / 无形）。每条正向质量维各挂一条可校验断言，负病各对一条正向断言（双向校验）。作卡6 二级判据，并入 o3 负节点。",
+    "composition": {
+      "边角": {
+        "source_id": "mayuan_xiaqui_bianjiao",
+        "kind": "硬约束",
+        "rule": "取山之一角、水之一涯，留大片空白（马一角 / 夏半边）",
+        "use": "卡5 硬约束：主体偏置、大片留白"
+      },
+      "三叠两段": {
+        "source_id": "shitao_jingjie",
+        "kind": "护栏",
+        "rule": "禁等距机械三叠（地-树-山），分层须由自然分疆承担",
+        "use": "卡5 护栏：分层不得等距"
+      },
+      "对景不对山": {
+        "source_id": "shitao_xijing",
+        "kind": "软目标",
+        "rule": "季节错位：景冬而山春",
+        "use": "卡5 软目标"
+      },
+      "对山不对景": {
+        "source_id": "shitao_xijing",
+        "kind": "软目标",
+        "rule": "景春而山冬",
+        "use": "卡5 软目标"
+      },
+      "倒景": {
+        "source_id": "shitao_xijing",
+        "kind": "软目标",
+        "rule": "元素倒置：树正而山倒",
+        "use": "卡5 软目标"
+      },
+      "借景": {
+        "source_id": "shitao_xijing",
+        "kind": "软目标",
+        "rule": "借物衬境（以他物引出主境）",
+        "use": "卡5 软目标"
+      },
+      "截断": {
+        "source_id": "shitao_xijing",
+        "kind": "软目标",
+        "rule": "截断取势（不全收，留势外延）",
+        "use": "卡5 软目标"
+      },
+      "险峻": {
+        "source_id": "shitao_xijing",
+        "kind": "软目标",
+        "rule": "险峻立奇（危崖 / 孤峰取险）",
+        "use": "卡5 软目标"
+      }
+    },
+    "composition_note": "构图规则（轴2 · G1）：边角（马远 / 夏圭，硬约束）、三叠两段（石涛，护栏——禁等距机械分层）、蹊径六则（石涛，软目标算子池，按语境选一）。D2 只给规则与算子候选，精确布局由卡5 求解（分工铁律）。",
+    "seal": {
+      "positions": {
+        "手卷": {
+          "position": "卷末 / 图前",
+          "note": "无款手卷钤图前、图末"
+        },
+        "立轴": {
+          "position": "左下角 / 右下角",
+          "note": "挂轴加钤「押角」印"
+        },
+        "册页": {
+          "position": "下角",
+          "note": "册页在左右下角"
+        },
+        "扇面": {
+          "position": "下角",
+          "note": "小景把玩，钤于下角"
+        },
+        "题款末": {
+          "position": "题款下",
+          "note": "有款题者钤在款题下"
+        }
+      },
+      "sizes": {
+        "大幅": {
+          "size_mult": [
+            1.0,
+            1.4
+          ],
+          "note": "大幅盖大印"
+        },
+        "小幅": {
+          "size_mult": [
+            0.5,
+            0.8
+          ],
+          "note": "小幅盖小印"
+        }
+      },
+      "rule": "印不可比字大",
+      "source_id": "seal_tongli",
+      "grade": "通例"
+    },
+    "seal_note": "钤印规则（轴7 · G8）：印位随形制（手卷→卷末 / 立轴·册页·扇面→下角 / 题款末），印面大小随尺幅（印不可比字大，大幅盖大印、小幅盖小印）。D2 只给印位与印面区间，纳入卡7 段尾静默。"
+  },
+  "classes": {
+    "山石": {
+      "keywords": [
+        "山",
+        "峰",
+        "岭",
+        "崖",
+        "壁",
+        "石",
+        "岩",
+        "峦",
+        "嶂",
+        "壑",
+        "谷",
+        "巅",
+        "岫",
+        "坡"
+      ]
+    },
+    "水体": {
+      "keywords": [
+        "水",
+        "江",
+        "河",
+        "湖",
+        "海",
+        "溪",
+        "川",
+        "波",
+        "浪",
+        "泉",
+        "潭",
+        "岸",
+        "洲",
+        "汀",
+        "浦",
+        "津",
+        "潮",
+        "涧"
+      ]
+    },
+    "天象": {
+      "keywords": [
+        "月",
+        "日",
+        "星",
+        "云",
+        "霞",
+        "雾",
+        "烟",
+        "风",
+        "雨",
+        "雪",
+        "霜",
+        "露",
+        "虹",
+        "气",
+        "光"
+      ]
+    },
+    "草木": {
+      "keywords": [
+        "树",
+        "松",
+        "竹",
+        "梅",
+        "柳",
+        "花",
+        "草",
+        "苔",
+        "林",
+        "叶",
+        "芦",
+        "苇",
+        "荷",
+        "桑",
+        "桃",
+        "杏"
+      ]
+    },
+    "禽兽": {
+      "keywords": [
+        "鸟",
+        "雁",
+        "鹤",
+        "猿",
+        "蝉",
+        "鱼",
+        "马",
+        "鸦",
+        "鹭",
+        "莺",
+        "燕",
+        "犬",
+        "牛",
+        "虫"
+      ]
+    },
+    "舟桥": {
+      "keywords": [
+        "舟",
+        "船",
+        "帆",
+        "桥",
+        "渡",
+        "楫",
+        "舫",
+        "艇",
+        "槎"
+      ]
+    },
+    "建筑": {
+      "keywords": [
+        "城",
+        "楼",
+        "亭",
+        "寺",
+        "关",
+        "村",
+        "屋",
+        "台",
+        "阁",
+        "塔",
+        "庙",
+        "宫",
+        "舍",
+        "门",
+        "墙"
+      ]
+    },
+    "人物": {
+      "keywords": [
+        "人",
+        "翁",
+        "渔",
+        "樵",
+        "僧",
+        "客",
+        "叟",
+        "童",
+        "女",
+        "夫",
+        "君",
+        "身"
+      ]
+    },
+    "器物": {
+      "keywords": [
+        "酒",
+        "琴",
+        "笛",
+        "剑",
+        "灯",
+        "钟",
+        "鼓",
+        "蓑",
+        "笠",
+        "扇",
+        "席",
+        "杯",
+        "壶",
+        "书",
+        "笔",
+        "砚",
+        "窗",
+        "帘",
+        "床",
+        "榻"
+      ]
+    },
+    "丝线": {
+      "keywords": [
+        "丝",
+        "线",
+        "竿",
+        "绳",
+        "缆",
+        "钩",
+        "纶"
+      ]
+    },
+    "径路": {
+      "keywords": [
+        "径",
+        "路",
+        "道",
+        "踪",
+        "迹",
+        "阶",
+        "桥"
+      ]
+    },
+    "情思": {
+      "keywords": [
+        "愁",
+        "恨",
+        "思",
+        "梦",
+        "影",
+        "情",
+        "心",
+        "魂",
+        "忆",
+        "悲"
+      ]
+    },
+    "声音": {
+      "keywords": [
+        "声",
+        "音",
+        "啼",
+        "鸣",
+        "响",
+        "歌",
+        "语",
+        "哭"
+      ]
+    },
+    "地望": {
+      "keywords": []
+    },
+    "非画": {
+      "keywords": []
+    }
+  },
+  "head_class": {
+    "山": "山石",
+    "峰": "山石",
+    "岭": "山石",
+    "崖": "山石",
+    "壁": "山石",
+    "石": "山石",
+    "岩": "山石",
+    "峦": "山石",
+    "嶂": "山石",
+    "壑": "山石",
+    "谷": "山石",
+    "巅": "山石",
+    "岫": "山石",
+    "水": "水体",
+    "江": "水体",
+    "河": "水体",
+    "湖": "水体",
+    "海": "水体",
+    "溪": "水体",
+    "川": "水体",
+    "波": "水体",
+    "浪": "水体",
+    "泉": "水体",
+    "潭": "水体",
+    "岸": "水体",
+    "洲": "水体",
+    "汀": "水体",
+    "浦": "水体",
+    "津": "水体",
+    "潮": "水体",
+    "月": "天象",
+    "日": "天象",
+    "星": "天象",
+    "云": "天象",
+    "霞": "天象",
+    "雾": "天象",
+    "烟": "天象",
+    "风": "天象",
+    "雨": "天象",
+    "雪": "天象",
+    "霜": "天象",
+    "露": "天象",
+    "光": "天象",
+    "树": "草木",
+    "松": "草木",
+    "竹": "草木",
+    "梅": "草木",
+    "柳": "草木",
+    "花": "草木",
+    "草": "草木",
+    "苔": "草木",
+    "林": "草木",
+    "叶": "草木",
+    "芦": "草木",
+    "苇": "草木",
+    "荷": "草木",
+    "鸟": "禽兽",
+    "雁": "禽兽",
+    "鹤": "禽兽",
+    "猿": "禽兽",
+    "蝉": "禽兽",
+    "鱼": "禽兽",
+    "马": "禽兽",
+    "鸦": "禽兽",
+    "鹭": "禽兽",
+    "莺": "禽兽",
+    "燕": "禽兽",
+    "舟": "舟桥",
+    "船": "舟桥",
+    "帆": "舟桥",
+    "桥": "舟桥",
+    "渡": "舟桥",
+    "楫": "舟桥",
+    "城": "建筑",
+    "楼": "建筑",
+    "亭": "建筑",
+    "寺": "建筑",
+    "关": "建筑",
+    "村": "建筑",
+    "屋": "建筑",
+    "台": "建筑",
+    "阁": "建筑",
+    "塔": "建筑",
+    "人": "人物",
+    "翁": "人物",
+    "渔": "人物",
+    "樵": "人物",
+    "僧": "人物",
+    "客": "人物",
+    "叟": "人物",
+    "童": "人物",
+    "酒": "器物",
+    "琴": "器物",
+    "笛": "器物",
+    "剑": "器物",
+    "灯": "器物",
+    "钟": "器物",
+    "鼓": "器物",
+    "蓑": "器物",
+    "笠": "器物",
+    "扇": "器物",
+    "窗": "器物",
+    "帘": "器物",
+    "床": "器物",
+    "榻": "器物",
+    "丝": "丝线",
+    "竿": "丝线",
+    "纶": "丝线",
+    "径": "径路",
+    "路": "径路",
+    "道": "径路",
+    "踪": "径路",
+    "迹": "径路",
+    "愁": "情思",
+    "恨": "情思",
+    "思": "情思",
+    "梦": "情思",
+    "影": "情思",
+    "情": "情思",
+    "心": "情思",
+    "声": "声音",
+    "音": "声音",
+    "啼": "声音",
+    "鸣": "声音",
+    "响": "声音"
+  },
+  "word_class": {
+    "千山": "山石",
+    "万径": "径路",
+    "人踪": "径路",
+    "孤舟": "舟桥",
+    "蓑笠翁": "人物",
+    "寒江": "水体",
+    "鸟": "禽兽",
+    "雪": "天象",
+    "独钓": "丝线",
+    "飞绝": "非画",
+    "灭": "非画",
+    "朝": "非画",
+    "辞": "非画",
+    "白帝": "建筑",
+    "彩云": "天象",
+    "间": "非画",
+    "千里": "非画",
+    "江陵": "地望",
+    "一日": "非画",
+    "两岸": "水体",
+    "猿声": "声音",
+    "轻舟": "舟桥",
+    "万重山": "山石",
+    "还": "非画",
+    "啼": "声音",
+    "不住": "非画",
+    "已": "非画",
+    "过": "非画",
+    "故乡": "情思",
+    "举头": "非画",
+    "低头": "非画",
+    "磬": "器物",
+    "樯": "舟桥",
+    "蓑衣": "器物",
+    "斗笠": "器物",
+    "渔火": "器物",
+    "银烛": "器物",
+    "金樽": "器物",
+    "玉阶": "径路",
+    "珠帘": "建筑",
+    "罗帐": "建筑",
+    "芦花": "草木",
+    "蒹葭": "草木",
+    "落叶": "草木",
+    "苍苔": "草木",
+    "幽篁": "草木",
+    "残荷": "草木",
+    "疏柳": "草木",
+    "沙鸥": "禽兽",
+    "寒鸦": "禽兽",
+    "归雁": "禽兽",
+    "孤鸿": "禽兽",
+    "啼鹃": "禽兽",
+    "孤帆": "舟桥",
+    "危楼": "建筑",
+    "古寺": "建筑",
+    "荒村": "建筑",
+    "茅店": "建筑",
+    "残月": "天象",
+    "西风": "天象",
+    "白露": "天象",
+    "清辉": "天象",
+    "素月": "天象",
+    "暮云": "天象",
+    "晓雾": "天象",
+    "远岫": "山石",
+    "乱峰": "山石",
+    "危崖": "山石",
+    "涧水": "水体",
+    "寒潭": "水体",
+    "秋水": "水体",
+    "烟波": "水体",
+    "钟声": "声音",
+    "猿啼": "声音",
+    "雁声": "声音",
+    "笛声": "声音",
+    "砧声": "声音",
+    "素手": "人物",
+    "青衫": "人物",
+    "征人": "人物",
+    "游子": "人物"
+  },
+  "class_defaults": {
+    "山石": {
+      "yuan": [
+        "深远",
+        "高远",
+        "平远"
+      ],
+      "yuan_w": [
+        2.0,
+        1.0,
+        0.5
+      ],
+      "cun": "披麻皴",
+      "cun_alt": [
+        "卷云皴",
+        "小斧劈",
+        "雨点皴",
+        "折带皴",
+        "米点皴",
+        "干擦"
+      ],
+      "ink_grade": "淡",
+      "water": "中",
+      "stroke": "中锋·侧锋",
+      "layer": "远景",
+      "blank_bias": -1,
+      "diantai": true,
+      "role": "主体",
+      "weight": 2.0,
+      "basis": [
+        "guoxi_sanyuan",
+        "tanghou_mapicun"
+      ]
+    },
+    "水体": {
+      "yuan": [
+        "平远",
+        "阔远",
+        "迷远"
+      ],
+      "yuan_w": [
+        2.0,
+        1.0,
+        1.0
+      ],
+      "cun": "无皴",
+      "cun_alt": [],
+      "ink_grade": "淡",
+      "water": "高",
+      "stroke": "大晕染·慢扩散",
+      "layer": "中景",
+      "blank_bias": 2,
+      "diantai": false,
+      "role": "承载留白",
+      "weight": 1.5,
+      "basis": [
+        "guoxi_sanyuan",
+        "dachongguang_xushi"
+      ]
+    },
+    "天象": {
+      "yuan": [
+        "迷远",
+        "幽远",
+        "平远"
+      ],
+      "yuan_w": [
+        2.0,
+        1.0,
+        1.0
+      ],
+      "cun": "无皴",
+      "cun_alt": [],
+      "ink_grade": "清",
+      "water": "极高",
+      "stroke": "大晕染·慢扩散",
+      "layer": "全域",
+      "blank_bias": 2,
+      "diantai": false,
+      "role": "承载留白",
+      "weight": 1.5,
+      "basis": [
+        "hanzhu_sanyuan",
+        "dachongguang_xushi"
+      ]
+    },
+    "草木": {
+      "yuan": [
+        "平远"
+      ],
+      "yuan_w": [
+        0.5
+      ],
+      "cun": "无皴",
+      "cun_alt": [],
+      "ink_grade": "重",
+      "water": "中",
+      "stroke": "点叶",
+      "layer": "中景",
+      "blank_bias": -1,
+      "diantai": false,
+      "role": "点缀",
+      "weight": 1.0,
+      "basis": [
+        "xiehe_liufa"
+      ]
+    },
+    "禽兽": {
+      "yuan": [
+        "平远"
+      ],
+      "yuan_w": [
+        0.3
+      ],
+      "cun": "无皴",
+      "cun_alt": [],
+      "ink_grade": "浓",
+      "water": "低",
+      "stroke": "中锋·一次落笔",
+      "layer": "远景",
+      "blank_bias": 0,
+      "diantai": false,
+      "role": "点缀",
+      "weight": 1.0,
+      "basis": [
+        "wangwei_shanshuilun"
+      ]
+    },
+    "舟桥": {
+      "yuan": [
+        "平远",
+        "阔远"
+      ],
+      "yuan_w": [
+        1.0,
+        0.5
+      ],
+      "cun": "无皴",
+      "cun_alt": [],
+      "ink_grade": "浓",
+      "water": "低",
+      "stroke": "中锋·一次落笔",
+      "layer": "近景",
+      "blank_bias": 0,
+      "diantai": false,
+      "role": "焦点",
+      "weight": 1.5,
+      "basis": [
+        "wangwei_shanshuilun"
+      ]
+    },
+    "建筑": {
+      "yuan": [
+        "高远",
+        "深远"
+      ],
+      "yuan_w": [
+        3.0,
+        1.0
+      ],
+      "cun": "小斧劈",
+      "cun_alt": [
+        "大斧劈"
+      ],
+      "ink_grade": "重",
+      "water": "中",
+      "stroke": "点景·数笔即成",
+      "layer": "远景",
+      "blank_bias": -1,
+      "diantai": true,
+      "role": "地标",
+      "weight": 3.0,
+      "basis": [
+        "guoxi_sanyuan",
+        "lishixun_fupi"
+      ]
+    },
+    "人物": {
+      "yuan": [],
+      "yuan_w": [],
+      "cun": "无皴",
+      "cun_alt": [],
+      "ink_grade": "浓",
+      "water": "低",
+      "stroke": "顿笔·侧锋",
+      "layer": "近景",
+      "blank_bias": 0,
+      "diantai": false,
+      "role": "焦点",
+      "weight": 1.5,
+      "basis": [
+        "wangwei_shanshuilun"
+      ]
+    },
+    "器物": {
+      "yuan": [],
+      "yuan_w": [],
+      "cun": "无皴",
+      "cun_alt": [],
+      "ink_grade": "重",
+      "water": "低",
+      "stroke": "中锋·一次落笔",
+      "layer": "近景",
+      "blank_bias": 0,
+      "diantai": false,
+      "role": "点缀",
+      "weight": 1.0,
+      "basis": [
+        "通例"
+      ]
+    },
+    "丝线": {
+      "yuan": [],
+      "yuan_w": [],
+      "cun": "无皴",
+      "cun_alt": [],
+      "ink_grade": "淡",
+      "water": "极低",
+      "stroke": "飞白",
+      "layer": "近景",
+      "blank_bias": 0,
+      "diantai": false,
+      "role": "点缀",
+      "weight": 1.0,
+      "basis": [
+        "dachongguang_xushi"
+      ]
+    },
+    "径路": {
+      "yuan": [
+        "平远",
+        "深远"
+      ],
+      "yuan_w": [
+        1.0,
+        0.5
+      ],
+      "cun": "无皴",
+      "cun_alt": [],
+      "ink_grade": "清",
+      "water": "中",
+      "stroke": "枯笔擦",
+      "layer": "中景",
+      "blank_bias": 1,
+      "diantai": false,
+      "role": "引导",
+      "weight": 1.0,
+      "basis": [
+        "wangwei_shanshuilun"
+      ]
+    },
+    "情思": {
+      "yuan": [],
+      "yuan_w": [],
+      "cun": "无皴",
+      "cun_alt": [],
+      "ink_grade": "留白",
+      "water": "极低",
+      "stroke": "不画",
+      "layer": "全域",
+      "blank_bias": 2,
+      "diantai": false,
+      "role": "不画",
+      "weight": 0.0,
+      "basis": [
+        "dachongguang_xushi",
+        "bao_shichen_jibai"
+      ]
+    },
+    "声音": {
+      "yuan": [],
+      "yuan_w": [],
+      "cun": "无皴",
+      "cun_alt": [],
+      "ink_grade": "留白",
+      "water": "极低",
+      "stroke": "不画",
+      "layer": "中景",
+      "blank_bias": 0,
+      "diantai": false,
+      "role": "不画",
+      "weight": 0.0,
+      "basis": [
+        "sushi_shihua"
+      ]
+    },
+    "地望": {
+      "yuan": [
+        "幽远",
+        "平远"
+      ],
+      "yuan_w": [
+        2.0,
+        1.0
+      ],
+      "cun": "无皴",
+      "cun_alt": [],
+      "ink_grade": "清",
+      "water": "极高",
+      "stroke": "大晕染·慢扩散",
+      "layer": "极远",
+      "blank_bias": 1,
+      "diantai": false,
+      "role": "不画",
+      "weight": 0.5,
+      "basis": [
+        "hanzhu_sanyuan"
+      ]
+    },
+    "非画": {
+      "yuan": [],
+      "yuan_w": [],
+      "cun": "无皴",
+      "cun_alt": [],
+      "ink_grade": "留白",
+      "water": "极低",
+      "stroke": "不画",
+      "layer": "全域",
+      "blank_bias": 0,
+      "diantai": false,
+      "role": "不画",
+      "weight": 0.0,
+      "basis": [
+        "裁定"
+      ]
+    }
+  },
+  "word_override": {
+    "两岸": {
+      "yuan": [
+        "高远",
+        "深远"
+      ],
+      "yuan_w": [
+        2.0,
+        1.0
+      ],
+      "role": "主体",
+      "weight": 2.0,
+      "cun": "大斧劈",
+      "ink_grade": "重",
+      "water": "中",
+      "stroke": "斧劈皴·侧锋快扫",
+      "layer": "中景",
+      "note": "夹峙峡谷——非平远，取高远/深远；山壁用大斧劈皴（侧锋快扫）"
+    },
+    "万重山": {
+      "cun": "无皴",
+      "stroke": "层叠淡墨·逐层递淡",
+      "note": "三重山：远景高含水由调制器 layer_technique（山石×远景）给出；本词只保留「无皴 + 层叠递淡」的层叠特化"
+    },
+    "雪": {
+      "role": "承载留白",
+      "ink_grade": "留白",
+      "note": "conc 0.35 → 虚写，不画实体，只承载留白"
+    },
+    "寒江": {
+      "role": "承载留白",
+      "ink_grade": "留白",
+      "note": "conc 0.45 → 虚写"
+    },
+    "影": {
+      "role": "不画",
+      "note": "conc 0.30 → 虚写，不画实体"
+    },
+    "明月": {
+      "role": "焦点",
+      "ink_grade": "淡",
+      "layer": "远景",
+      "stroke": "染（湿渲）",
+      "note": "实写焦点：可画圆盘（《静夜思》淡墨明月）；焦点不随层衰减，保对比；湿渲出晕"
+    },
+    "彩云": {
+      "role": "虚染",
+      "ink_grade": "清",
+      "stroke": "大晕染·几乎无形",
+      "note": "虚写但非留白：彩云以极淡晕染成形（《早发白帝城》c≈0.06）；与雪/寒江（纯留白）区别"
+    },
+    "霜": {
+      "role": "虚染",
+      "ink_grade": "清",
+      "stroke": "染（上浓下淡）",
+      "note": "虚写但非留白：霜为月光落点，极淡湿渲、边缘不闭合（《静夜思》c≈0.10）"
+    },
+    "床": {
+      "ink_grade": "淡",
+      "stroke": "写+染",
+      "note": "近景榻沿：先写形再湿染，中淡墨（《静夜思》c≈0.55）；与远山/月光同为淡阶但更实"
+    },
+    "轻舟": {
+      "water": "极低",
+      "note": "轻舟定形极快（0.3s），含水极低；与孤舟（低）区别"
+    }
+  },
+  "modulators": {
+    "emotion": {
+      "V": [
+        {
+          "band": "V1",
+          "range": [
+            -1.0,
+            -0.6
+          ],
+          "label": "绝灭",
+          "blank_base": [
+            0.7,
+            0.88
+          ],
+          "ink_steps": 2,
+          "gravity": "偏心(三七停)"
+        },
+        {
+          "band": "V2",
+          "range": [
+            -0.6,
+            -0.2
+          ],
+          "label": "孤冷",
+          "blank_base": [
+            0.62,
+            0.82
+          ],
+          "ink_steps": 1,
+          "gravity": "偏心(三七停)"
+        },
+        {
+          "band": "V3",
+          "range": [
+            -0.2,
+            0.2
+          ],
+          "label": "客观",
+          "blank_base": [
+            0.48,
+            0.7
+          ],
+          "ink_steps": 0,
+          "gravity": "三分点"
+        },
+        {
+          "band": "V4",
+          "range": [
+            0.2,
+            0.6
+          ],
+          "label": "明朗",
+          "blank_base": [
+            0.42,
+            0.6
+          ],
+          "ink_steps": -1,
+          "gravity": "三分点"
+        },
+        {
+          "band": "V5",
+          "range": [
+            0.6,
+            1.0
+          ],
+          "label": "欣喜/豪迈",
+          "blank_base": [
+            0.34,
+            0.54
+          ],
+          "ink_steps": -1,
+          "gravity": "三分点"
+        }
+      ],
+      "A": [
+        {
+          "band": "A1",
+          "range": [
+            0.0,
+            0.2
+          ],
+          "motion": "凝止"
+        },
+        {
+          "band": "A2",
+          "range": [
+            0.2,
+            0.4
+          ],
+          "motion": "极缓"
+        },
+        {
+          "band": "A3",
+          "range": [
+            0.4,
+            0.6
+          ],
+          "motion": "缓"
+        },
+        {
+          "band": "A4",
+          "range": [
+            0.6,
+            0.8
+          ],
+          "motion": "缓推"
+        },
+        {
+          "band": "A5",
+          "range": [
+            0.8,
+            1.0
+          ],
+          "motion": "快",
+          "trail": true,
+          "note": "飞白拖尾（白帝城轻舟）"
+        }
+      ],
+      "T": [
+        {
+          "band": "T1",
+          "range": [
+            0.0,
+            0.2
+          ],
+          "silence_ratio": 0.1
+        },
+        {
+          "band": "T2",
+          "range": [
+            0.2,
+            0.4
+          ],
+          "silence_ratio": 0.15
+        },
+        {
+          "band": "T3",
+          "range": [
+            0.4,
+            0.6
+          ],
+          "silence_ratio": 0.2
+        },
+        {
+          "band": "T4",
+          "range": [
+            0.6,
+            0.8
+          ],
+          "silence_ratio": 0.26
+        },
+        {
+          "band": "T5",
+          "range": [
+            0.8,
+            1.0
+          ],
+          "silence_ratio": 0.32,
+          "note": "悬置不释放→大留白+偏心"
+        }
+      ],
+      "ink_shift_roles": [
+        "主体",
+        "地标",
+        "承载留白",
+        "引导"
+      ]
+    },
+    "layer_atten_steps": {
+      "近景": 0,
+      "中景": 1,
+      "远景": 2,
+      "极远": 3,
+      "全域": 2
+    },
+    "layer_technique": {
+      "山石": {
+        "远景": {
+          "water": "高",
+          "stroke": "大晕染·慢扩散"
+        }
+      }
+    },
+    "figure_layer": {
+      "quote": "其人物之在三远也，高远者明了，深远者细碎，平远者冲淡；明了者不短，细碎者不长，冲淡者不大。",
+      "basis": "guoxi_sanyuan",
+      "size_ladder": [
+        "极写意",
+        "极小点景",
+        "点景",
+        "中号"
+      ],
+      "default": "点景",
+      "近景": {
+        "size": "点景",
+        "size_alt": "中号",
+        "ink_steps": 0,
+        "note": "高远者明了——明了者不短。近景人物可读性最高：默认点景档（6–9%）；仅当角色=主体（全诗唯一实体与动作主体，如《静夜思》背影）才升中号档（9–30%），仍不画五官、不勾线。"
+      },
+      "中景": {
+        "size": "点景",
+        "ink_steps": 1,
+        "note": "深远者细碎——细碎者不长。中景人物取点景档（6–9%），墨阶随空气透视淡一档。"
+      },
+      "远景": {
+        "size": "极小点景",
+        "ink_steps": 2,
+        "note": "平远者冲淡——冲淡者不大。远山人物只留剪影+单一符号（4–6%），符号须极准（笠=渔）。"
+      },
+      "极远": {
+        "size": "极写意",
+        "ink_steps": 3,
+        "note": "冲淡之极。极远人物一两笔近乎墨点（≤4%），只表「有人迹」，不辨身份。"
+      },
+      "全域": {
+        "size": "点景",
+        "ink_steps": 2,
+        "note": "全域层（天象覆盖）下人物按中远档处理（点景 6–9%，墨阶淡两档）。"
+      }
+    },
+    "space": {
+      "仰": {
+        "yuan": "高远",
+        "w": 2.0
+      },
+      "上": {
+        "yuan": "高远",
+        "w": 1.5
+      },
+      "巅": {
+        "yuan": "高远",
+        "w": 2.0
+      },
+      "云间": {
+        "yuan": "高远",
+        "w": 2.0
+      },
+      "高": {
+        "yuan": "高远",
+        "w": 1.5
+      },
+      "重": {
+        "yuan": "深远",
+        "w": 1.5
+      },
+      "叠": {
+        "yuan": "深远",
+        "w": 2.0
+      },
+      "深": {
+        "yuan": "深远",
+        "w": 2.0
+      },
+      "后": {
+        "yuan": "深远",
+        "w": 1.5
+      },
+      "远": {
+        "yuan": "平远",
+        "w": 1.5
+      },
+      "望": {
+        "yuan": "平远",
+        "w": 1.5
+      },
+      "遥": {
+        "yuan": "平远",
+        "w": 2.0
+      },
+      "千里": {
+        "yuan": "阔远",
+        "w": 1.5
+      },
+      "广": {
+        "yuan": "阔远",
+        "w": 2.0
+      },
+      "阔": {
+        "yuan": "阔远",
+        "w": 2.0
+      },
+      "旷": {
+        "yuan": "阔远",
+        "w": 2.0
+      },
+      "迷": {
+        "yuan": "迷远",
+        "w": 2.0
+      },
+      "烟": {
+        "yuan": "迷远",
+        "w": 1.5
+      },
+      "雾": {
+        "yuan": "迷远",
+        "w": 1.5
+      },
+      "微茫": {
+        "yuan": "迷远",
+        "w": 2.0
+      },
+      "幽": {
+        "yuan": "幽远",
+        "w": 2.0
+      },
+      "绝": {
+        "yuan": "幽远",
+        "w": 1.5
+      },
+      "寂": {
+        "yuan": "幽远",
+        "w": 1.5
+      }
+    },
+    "season_words": {
+      "雪": "冬",
+      "霜": "秋",
+      "寒": "冬",
+      "冰": "冬",
+      "冻": "冬",
+      "花": "春",
+      "柳": "春",
+      "燕": "春",
+      "莺": "春",
+      "桃": "春",
+      "杏": "春",
+      "荷": "夏",
+      "蝉": "夏",
+      "翠": "夏",
+      "雁": "秋",
+      "叶": "秋"
+    },
+    "polarity": {
+      "note": "文化极性 → 墨/底色偏置。keys = 8 个规范键（底色求解的取值域，卡6 消费）；normalize = 自由文本标签 → 规范键的归一映射（来源：o2_lexicon 词级 polarity、context.json 用典级 polarity）。归一无古典原文可依，属工程约定，故整体标「裁定」。",
+      "grade": "裁定",
+      "keys": {
+        "冷寂·静": {
+          "ink_bias": 1,
+          "color": "冷灰"
+        },
+        "壮阔·冷寂": {
+          "ink_bias": 0,
+          "color": "素白"
+        },
+        "孤守·不屈": {
+          "ink_bias": -1,
+          "color": "冷灰"
+        },
+        "隐逸·渔樵": {
+          "ink_bias": -1,
+          "color": "冷灰"
+        },
+        "明丽·祥瑞": {
+          "ink_bias": -1,
+          "color": "赭石/花青淡彩"
+        },
+        "轻快·自由": {
+          "ink_bias": -2,
+          "color": "赭石/花青淡彩"
+        },
+        "高峻·起点": {
+          "ink_bias": 0,
+          "color": "冷灰"
+        },
+        "漂泊·孤立": {
+          "ink_bias": -1,
+          "color": "冷灰"
+        }
+      },
+      "normalize": {
+        "壮阔·冷寂": "壮阔·冷寂",
+        "漂泊·孤立": "漂泊·孤立",
+        "隐逸·渔樵": "隐逸·渔樵",
+        "冷寂·静": "冷寂·静",
+        "孤守·不屈": "孤守·不屈",
+        "高峻·起点": "高峻·起点",
+        "明丽·祥瑞": "明丽·祥瑞",
+        "轻快·自由": "轻快·自由",
+        "人世·荒芜": "冷寂·静",
+        "人事": "冷寂·静",
+        "生机": "明丽·祥瑞",
+        "洁净·覆盖": "冷寂·静",
+        "遥远·辽廓": "壮阔·冷寂",
+        "归处·目标": "轻快·自由",
+        "迅疾·时间压缩": "轻快·自由",
+        "夹峙·峡谷": "壮阔·冷寂",
+        "悲（原典）→被超越": "冷寂·静",
+        "险阻→被越过": "壮阔·冷寂",
+        "孤傲·隐逸（非凄惨）": "隐逸·渔樵",
+        "中性（思乡母题）": "漂泊·孤立",
+        "中性（化用地理典故）": "高峻·起点",
+        "悲声（文化代码）": "冷寂·静"
+      }
+    },
+    "paradigm": {
+      "note": "设色范式定档（G3 · B 组）：品格 / 季节 / 极性 → 范式候选 + 默认档 + 色域投影。品格闭环 style_grade（D 组）未建，暂以季节 / 极性 / 情感档代偿定档；定档规则无古典原文可依，属工程裁定，整体标「裁定」。D2 只给候选与色域，精确用色由卡6 求解（分工铁律）。",
+      "grade": "裁定",
+      "default": "水墨",
+      "color_signal": [
+        "翠",
+        "苍翠",
+        "青",
+        "碧",
+        "金",
+        "丹",
+        "朱",
+        "绯"
+      ],
+      "rules": [
+        {
+          "id": "P1",
+          "when": "含重彩信号词 或 季节∈{春,夏}",
+          "then": "青绿",
+          "why": "北宗着色山水（董其昌）：石青石绿重彩；春夏苍翠如滴 / 澹冶如笑"
+        },
+        {
+          "id": "P2",
+          "when": "极性键含 明丽·祥瑞 / 轻快·自由",
+          "then": "浅绛",
+          "why": "暖调淡彩、冷暖互补（元人浅绛）；明丽 / 轻快之景须以赭石花青赋彩"
+        },
+        {
+          "id": "P3",
+          "when": "V 档∈{V1,V2} 或 季节=冬",
+          "then": "水墨",
+          "why": "南宗渲淡：冷寂 / 孤绝 / 冬景 → 纯水墨（董其昌南宗 + 墨分五色）"
+        }
+      ],
+      "color_projection": {
+        "青绿": {
+          "mode": "色域覆盖",
+          "ink_bone_scale": 0.5,
+          "note": "底色候选改写为石青 / 石绿 / 赭石；墨骨减半（色为主）"
+        },
+        "浅绛": {
+          "mode": "淡彩叠加",
+          "ink_bone_scale": 0.8,
+          "note": "底色候选改写为赭石 / 花青 / 汁绿；水墨骨保留"
+        },
+        "水墨": {
+          "mode": "保持",
+          "ink_bone_scale": 1.0,
+          "note": "底色候选保持 A 组（季节色 + 极性色，多为素白 / 冷灰）"
+        },
+        "没骨": {
+          "mode": "纯色",
+          "ink_bone_scale": 0.0,
+          "note": "底色候选改写为五采；无墨骨"
+        }
+      }
+    },
+    "form": {
+      "五言绝句": {
+        "format_candidates": [
+          "册页",
+          "扇面",
+          "手卷"
+        ],
+        "len": 20
+      },
+      "七言绝句": {
+        "format_candidates": [
+          "手卷",
+          "册页"
+        ],
+        "len": 28
+      },
+      "五言律诗": {
+        "format_candidates": [
+          "立轴",
+          "手卷"
+        ],
+        "len": 40
+      },
+      "七言律诗": {
+        "format_candidates": [
+          "立轴",
+          "手卷"
+        ],
+        "len": 56
+      }
+    },
+    "blank_rules": {
+      "base": 0.55,
+      "neg_node_bonus": 0.04,
+      "full_span_bonus": 0.08,
+      "minimal_bonus": 0.04,
+      "minimal_nodes": 6,
+      "mass_ref": 2.0,
+      "mass_slope": 0.12,
+      "cap": [
+        0.3,
+        0.92
+      ],
+      "note": "ρ 目标区间 = V 档 blank_base + 负节点 + 全域意象 + 极简 + 实体质量项；最终 ρ 由卡5 求解，D2 只给区间（裁定·3 首标定）",
+      "mass_note": "实体质量项：solid_mass=Σweight(role∈{主体,地标})，低于 mass_ref 的部分每 1.0 权重补 mass_slope 留白。《静夜思》无实写主体（0）→ +0.24 抬到 [0.72,0.92]，与「只有月光和一个背影」的极简夜景相符；《江雪》2.0、《早发白帝城》7.0 均不加成。"
+    },
+    "viewpoint": {
+      "note": "视点档定档（G7）：空间词 / 三远 → 视点票。D2 只给视点候选 + 地平线 / 纵比区间，精确布局由卡5 求解。三远不适用（室内小景）时视点亦不适用。",
+      "grade": "裁定",
+      "default": "平视",
+      "word_w": 1.0,
+      "yuan_w": 1.5,
+      "words": {
+        "仰": "仰视",
+        "巅": "仰视",
+        "云间": "仰视",
+        "瞻": "仰视",
+        "望": "平视",
+        "遥": "平视",
+        "眺": "平视",
+        "俯": "俯视",
+        "瞰": "俯视",
+        "临": "俯视",
+        "览": "俯视"
+      },
+      "from_yuan": {
+        "高远": "仰视",
+        "平远": "平视",
+        "阔远": "平视",
+        "深远": "平视",
+        "迷远": "俯视",
+        "幽远": "俯视"
+      }
+    },
+    "weather": {
+      "note": "天候定档（G4）：天候词 → 天候档。未命中则 null（不定档），系数不作调整。「日」因与「一日 / 一日还」歧义，不收（晴只取无歧义的 晴 / 霁）。",
+      "grade": "裁定",
+      "default": null,
+      "words": {
+        "雪": "雪",
+        "雨": "雨",
+        "雾": "雾",
+        "烟": "雾",
+        "晴": "晴",
+        "霁": "晴"
+      }
+    },
+    "time_words": {
+      "note": "时辰定档（G5）：时辰词 → 时辰档；「月」由 season_words 迁来（月属天象 / 时辰，非季节，修 G5 指出的误配）。未命中则 null。",
+      "grade": "裁定",
+      "default": null,
+      "map": {
+        "朝": "晨",
+        "晨": "晨",
+        "晓": "晨",
+        "旦": "晨",
+        "昼": "昼",
+        "午": "昼",
+        "暮": "暮",
+        "夕": "暮",
+        "昏": "暮",
+        "晚": "暮",
+        "夜": "夜",
+        "宵": "夜",
+        "月": "夜"
+      }
+    },
+    "composition": {
+      "note": "构图算子选取（G1）：按语境从蹊径六则选软目标算子；边角 / 三叠两段为护栏，恒生效（不参与选取）。",
+      "grade": "裁定",
+      "default_operator": "借景",
+      "rules": [
+        {
+          "id": "C1",
+          "when": "季节=冬 或 V∈{V1,V2}",
+          "then": "截断",
+          "why": "冷寂 / 孤绝 → 截断取势，留势外延"
+        },
+        {
+          "id": "C2",
+          "when": "含山石 且 三远含高远",
+          "then": "险峻",
+          "why": "高远突兀 → 险峻立奇"
+        },
+        {
+          "id": "C3",
+          "when": "含天象 且 全域留白",
+          "then": "借景",
+          "why": "大留白 → 借物衬境"
+        }
+      ]
+    },
+    "material": {
+      "note": "材质定档（G6）：诗中无材质依据，取默认（生宣 / 兼毫 / 松烟），标裁定；卡6 扩散律与飞白阈值按此乘子。",
+      "grade": "裁定",
+      "default": {
+        "纸绢": "生宣",
+        "笔": "兼毫",
+        "墨": "松烟"
+      }
+    },
+    "seal": {
+      "note": "钤印定档（G8）：形制 → 印位；诗体长度 → 印面大小档（len ≥ len_ref 为大幅）。",
+      "grade": "裁定",
+      "len_ref": 28,
+      "size_by_len": {
+        "short": "小幅",
+        "long": "大幅"
+      }
+    },
+    "stroke_quality": {
+      "note": "笔法质量维适用（G2）：笔法式 → 适用质量维（正向）/ 须避病（负向）。作卡6 二级判据，并入 o3 负节点。",
+      "grade": "裁定",
+      "by_stroke": {
+        "飞白": {
+          "quality": [
+            "筋",
+            "气",
+            "变"
+          ],
+          "avoid": [
+            "结"
+          ]
+        },
+        "枯笔擦": {
+          "quality": [
+            "留",
+            "重",
+            "变"
+          ],
+          "avoid": [
+            "板"
+          ]
+        },
+        "中锋·一次落笔": {
+          "quality": [
+            "骨",
+            "平",
+            "重"
+          ],
+          "avoid": [
+            "刻"
+          ]
+        },
+        "中锋·侧锋": {
+          "quality": [
+            "骨",
+            "圆",
+            "变"
+          ],
+          "avoid": [
+            "板",
+            "刻"
+          ]
+        },
+        "顿笔·侧锋": {
+          "quality": [
+            "骨",
+            "重"
+          ],
+          "avoid": [
+            "刻"
+          ]
+        },
+        "大晕染·慢扩散": {
+          "quality": [
+            "气",
+            "圆"
+          ],
+          "avoid": [
+            "结"
+          ]
+        },
+        "大晕染·几乎无形": {
+          "quality": [
+            "气",
+            "变"
+          ],
+          "avoid": [
+            "板"
+          ]
+        },
+        "斧劈皴·侧锋快扫": {
+          "quality": [
+            "骨",
+            "重",
+            "变"
+          ],
+          "avoid": [
+            "板",
+            "结"
+          ]
+        },
+        "点叶": {
+          "quality": [
+            "肉",
+            "变"
+          ],
+          "avoid": [
+            "结"
+          ]
+        },
+        "点景·数笔即成": {
+          "quality": [
+            "骨",
+            "平"
+          ],
+          "avoid": [
+            "刻"
+          ]
+        },
+        "染（湿渲）": {
+          "quality": [
+            "气",
+            "圆"
+          ],
+          "avoid": [
+            "板"
+          ]
+        },
+        "染（上浓下淡）": {
+          "quality": [
+            "气",
+            "变"
+          ],
+          "avoid": [
+            "板"
+          ]
+        },
+        "写+染": {
+          "quality": [
+            "骨",
+            "肉"
+          ],
+          "avoid": [
+            "板"
+          ]
+        },
+        "泼墨": {
+          "quality": [
+            "气",
+            "重",
+            "变"
+          ],
+          "avoid": [
+            "板",
+            "结"
+          ]
+        },
+        "破墨": {
+          "quality": [
+            "肉",
+            "变"
+          ],
+          "avoid": [
+            "板"
+          ]
+        },
+        "积墨": {
+          "quality": [
+            "重",
+            "留"
+          ],
+          "avoid": [
+            "板"
+          ]
+        },
+        "层叠淡墨·逐层递淡": {
+          "quality": [
+            "气",
+            "变"
+          ],
+          "avoid": [
+            "板"
+          ]
+        }
+      }
+    }
+  },
+  "rules": [
+    {
+      "id": "R1",
+      "when": "gate=负节点",
+      "then": "role=不画",
+      "why": "负节点唯一渲染作用是约束留白面积与连通性（卡2）"
+    },
+    {
+      "id": "R2",
+      "when": "gate=虚写",
+      "then": "role=承载留白, ink=留白",
+      "why": "conc 低 → 不画实体（雪/寒江/霜）"
+    },
+    {
+      "id": "R3",
+      "when": "role∈ink_shift_roles",
+      "then": "墨阶 = 类别基阶 + 层衰减 + 情感位移",
+      "why": "背景随空气透视与情感变淡；焦点不参与（保对比）"
+    },
+    {
+      "id": "R4",
+      "when": "role=焦点",
+      "then": "墨阶不参与情感位移",
+      "why": "焦点须与背景拉开，情感由体量对比承担（卡3）"
+    },
+    {
+      "id": "R5",
+      "when": "含空间词",
+      "then": "三远票 + 空间词票",
+      "why": "空间词是 L0 直取的三远依据"
+    },
+    {
+      "id": "R6",
+      "when": "类别=天象 且 有全域层",
+      "then": "blank 下限 + full_span_bonus",
+      "why": "天幕/雪覆盖全域 → 大面积留白"
+    },
+    {
+      "id": "R7",
+      "when": "诗体∈form",
+      "then": "形制候选 + 运动语法",
+      "why": "手卷=横移、立轴=推近（补遗 §1.6）"
+    },
+    {
+      "id": "R8",
+      "when": "类别基阶=清 或 角色=焦点",
+      "then": "不参与情感墨阶位移",
+      "why": "天象/径路/地望已是最淡，再压会消失；焦点须与背景拉开对比"
+    },
+    {
+      "id": "R9",
+      "when": "无山石 且 无水体 节点",
+      "then": "三远不适用（室内小景）",
+      "why": "《静夜思》为室内夜景，非山水三远所能统摄"
+    },
+    {
+      "id": "R10",
+      "when": "季节=冬 且 类别=山石",
+      "then": "皴法取无皴",
+      "why": "雪覆山体不露石理，「无皴」terrain 含雪景（《江雪》千山）"
+    },
+    {
+      "id": "R11",
+      "when": "solid_mass < mass_ref",
+      "then": "留白区间加 (mass_ref−solid_mass)×mass_slope",
+      "why": "画面越少实体越空；《静夜思》无实写主体 → 大留白"
+    }
+  ],
+  "technique_triggers": {
+    "diantai": {
+      "on": "类别=山石 且 角色∈{主体,地标} 且 层∈{中景,近景} 且 无雪覆",
+      "off": "季节=冬 或 含雪意象 或 层∈{远景,极远}",
+      "basis": [
+        "tangzhiqi_diantai",
+        "yunshouping_taiyan"
+      ],
+      "note": "唐志契「画不点苔，山无生气」给必要条件；雪覆/极远为例外（雪景减笔）"
+    },
+    "cun_choice": {
+      "土山/丘陵": "披麻皴",
+      "方硬岩壁/峡谷": "小斧劈",
+      "大崖壁": "大斧劈",
+      "圆浑山石": "卷云皴",
+      "雪景/寒江/远山": "无皴",
+      "basis": [
+        "tanghou_mapicun",
+        "lishixun_fupi",
+        "guoxi_juanjuncun"
+      ],
+      "note": "地貌判据属 L2（需语境/地理数据），无语境时取类别默认「披麻皴」"
+    }
+  },
+  "sources": {
+    "guoxi_sanyuan": {
+      "id": "guoxi_sanyuan",
+      "source": "郭熙《林泉高致·山水训》",
+      "dynasty": "北宋",
+      "grade": "原文",
+      "quote": "山有三远：自山下而仰山颠，谓之高远；自山前而窥山后，谓之深远；自近山而望远山，谓之平远。高远之色清明，深远之色重晦，平远之色有明有晦。高远之势突兀，深远之意重叠，平远之意冲融而缥缥缈缈。",
+      "use": [
+        "yuan"
+      ],
+      "url": "https://gj.zdic.net/zibu/318/9108.html"
+    },
+    "guoxi_sishi": {
+      "id": "guoxi_sishi",
+      "source": "郭熙《林泉高致·山水训》",
+      "dynasty": "北宋",
+      "grade": "原文",
+      "quote": "真山水之烟岚，四时不同：春山澹冶而如笑，夏山苍翠而如滴，秋山明净如妆，冬山惨淡而如睡。",
+      "use": [
+        "season"
+      ],
+      "note": "「澹冶 / 淡冶」两版本并存；「秋山明净（而）如妆」版本互异，有本带「而」、有本不带。",
+      "url": "https://gj.zdic.net/zibu/318/9108.html"
+    },
+    "hanzhu_sanyuan": {
+      "id": "hanzhu_sanyuan",
+      "source": "韩拙《山水纯全集·论山》",
+      "dynasty": "北宋",
+      "grade": "原文",
+      "quote": "郭氏谓山有三远，愚又论三远者：有近岸广水，旷阔遥山者，谓之阔远；有烟雾溟漠，野水隔而仿佛不见者，谓之迷远；景物至绝，而微茫缥缈者，谓之幽远。",
+      "use": [
+        "yuan"
+      ],
+      "note": "以「愚又论三远者」引出，属韩拙自补三远；与郭熙三远合称「六远」。",
+      "url": "https://www.guoxuedashi.com/hydcd/6181f.html"
+    },
+    "jinghao_liuyao": {
+      "id": "jinghao_liuyao",
+      "source": "荆浩《笔法记》",
+      "dynasty": "五代",
+      "grade": "原文",
+      "quote": "夫画有六要：一曰气，二曰韵，三曰思，四曰景，五曰笔，六曰墨。",
+      "use": [
+        "checklist"
+      ],
+      "note": "相对谢赫六法：增「墨」，以「景」统摄形/彩，以「思」强化构思；可作画面生成的分层 checklist。",
+      "url": "https://www.shidianguji.com/mid-page/7332937026418835494"
+    },
+    "xiehe_liufa": {
+      "id": "xiehe_liufa",
+      "source": "谢赫《古画品录》",
+      "dynasty": "南齐",
+      "grade": "原文",
+      "quote": "六法者何？一气韵生动是也，二骨法用笔是也，三应物象形是也，四随类赋彩是也，五经营位置是也，六传移模写是也。",
+      "use": [
+        "checklist",
+        "color"
+      ],
+      "note": "第四「随类赋彩」为纸绢淡彩/底色偏色的依据。",
+      "url": "历代通行本"
+    },
+    "zhangyanyuan_wuse": {
+      "id": "zhangyanyuan_wuse",
+      "source": "张彦远《历代名画记》",
+      "dynasty": "唐",
+      "grade": "原文",
+      "quote": "是故运墨而五色具，谓之得意。",
+      "use": [
+        "ink"
+      ],
+      "note": "「墨分五色」之源；通常指焦、浓、重、淡、清。",
+      "url": "https://www.dpm.org.cn/lemmas/240484.html"
+    },
+    "tangzhiqi_diantai": {
+      "id": "tangzhiqi_diantai",
+      "source": "唐志契《绘事微言》",
+      "dynasty": "明",
+      "grade": "原文",
+      "quote": "画不点苔，山无生气。",
+      "use": [
+        "diantai"
+      ],
+      "url": "http://www.18art.com/shuhuayishu/lzghdtjsdyssyy.shtml"
+    },
+    "yunshouping_taiyan": {
+      "id": "yunshouping_taiyan",
+      "source": "恽寿平《南田画跋》",
+      "dynasty": "清",
+      "grade": "原文",
+      "quote": "画有用苔者……譬之人有眼，通体皆灵……离眼不可也。",
+      "use": [
+        "diantai"
+      ],
+      "note": "点苔如「点睛」，提点山石精神。",
+      "url": "http://product.m.dangdang.com/detail11869923693-25253-1.html"
+    },
+    "wangwei_shanshuilun": {
+      "id": "wangwei_shanshuilun",
+      "source": "（旧题）王维《山水论》",
+      "dynasty": "唐（旧题，学界多疑为后人托名）",
+      "grade": "原文",
+      "quote": "凡画山水，意在笔先。丈山尺树，寸马分人。远人无目，远树无枝。远山无石，隐隐如眉；远水无波，高与云齐。此是诀也。",
+      "use": [
+        "layer_detail",
+        "scale"
+      ],
+      "note": "「丈山尺树，寸马分人」给物象比例尺；「远人无目，远树无枝，远山无石」给景深→细节衰减规则（越远越减笔）。托名之辨见下注。",
+      "attribution_note": "旧题王维，学界多认为系后人（唐/宋）托名之作；本表取其「画诀」层面的判据价值，标为「原文（旧题）」。",
+      "url": "https://www.gushiwen.cn/shiwenv_1324613679b8.aspx"
+    },
+    "bao_shichen_jibai": {
+      "id": "bao_shichen_jibai",
+      "source": "邓石如语，载包世臣《艺舟双楫·述书上》",
+      "dynasty": "清",
+      "grade": "原文",
+      "quote": "字画疏处可使走马，密处不使透风，常计白以当黑，奇趣乃出。",
+      "use": [
+        "blank",
+        "density"
+      ],
+      "note": "「计白当黑」归邓石如，非笪重光；给疏密与留白以书论依据。",
+      "url": "https://epaper.gmw.cn/gmrb/html/2019-10/11/nw.D110000gmrb_20191011_1-16.htm"
+    },
+    "dachongguang_xushi": {
+      "id": "dachongguang_xushi",
+      "source": "笪重光《画筌》",
+      "dynasty": "清",
+      "grade": "原文",
+      "quote": "虚实相生，无画处皆成妙境。",
+      "use": [
+        "blank"
+      ],
+      "url": "历代通行本"
+    },
+    "sushi_shihua": {
+      "id": "sushi_shihua",
+      "source": "苏轼《书摩诘〈蓝田烟雨图〉》",
+      "dynasty": "北宋",
+      "grade": "原文",
+      "quote": "味摩诘之诗，诗中有画；观摩诘之画，画中有诗。",
+      "use": [
+        "cross_modal"
+      ],
+      "url": "https://m.gushiwen.cn/shiwenv_e5c1ac14e0a5.aspx"
+    },
+    "tanghou_mapicun": {
+      "id": "tanghou_mapicun",
+      "source": "汤垕《画鉴》",
+      "dynasty": "元",
+      "grade": "画史",
+      "quote": "山石作麻皮皴。",
+      "use": [
+        "cun"
+      ],
+      "note": "记董源披麻（麻皮）皴。",
+      "url": "历代通行本"
+    },
+    "lishixun_fupi": {
+      "id": "lishixun_fupi",
+      "source": "画史：李思训、李唐小斧劈；马远、夏圭大斧劈",
+      "dynasty": "唐—南宋",
+      "grade": "画史",
+      "quote": "（无单一原文，属画史通行的皴法归属）",
+      "use": [
+        "cun"
+      ],
+      "note": "小斧劈多系李思训、李唐；大斧劈多系马远、夏圭。",
+      "url": "画史通行记载"
+    },
+    "guoxi_juanjuncun": {
+      "id": "guoxi_juanjuncun",
+      "source": "画史：郭熙卷云皴",
+      "dynasty": "北宋",
+      "grade": "画史",
+      "quote": "（画史归郭熙，状如云头，多用于表现流动感山石）",
+      "use": [
+        "cun"
+      ],
+      "url": "画史通行记载"
+    },
+    "mayuan_xiaqui_bianjiao": {
+      "id": "mayuan_xiaqui_bianjiao",
+      "source": "画史：马远「马一角」、夏圭「夏半边」",
+      "dynasty": "南宋",
+      "grade": "画史",
+      "quote": "（无单一原文，属画史对南宋边角构图的通称）",
+      "use": [
+        "blank",
+        "composition"
+      ],
+      "note": "取山之一角、水之一涯，留大片空白——与高留白率直接相关。",
+      "url": "画史通行记载"
+    },
+    "fanwei_yudiancun": {
+      "id": "fanwei_yudiancun",
+      "source": "画史：范宽雨点皴（芝麻皴）",
+      "dynasty": "北宋",
+      "grade": "画史",
+      "quote": "（无单一原文，属画史对范宽雨点皴的通行归属）",
+      "use": [
+        "cun"
+      ],
+      "note": "雨点（芝麻）皴：密集短点如雨，多用于北方浑厚山体与雨景。",
+      "url": "画史通行记载"
+    },
+    "nizan_zhedaicun": {
+      "id": "nizan_zhedaicun",
+      "source": "画史：倪瓒折带皴",
+      "dynasty": "元",
+      "grade": "画史",
+      "quote": "（无单一原文，属画史对倪瓒折带皴的通行归属）",
+      "use": [
+        "cun"
+      ],
+      "note": "折带皴：侧锋横折如带，多用于层岩、水岸坡石，疏简清逸。",
+      "url": "画史通行记载"
+    },
+    "mifu_midiancun": {
+      "id": "mifu_midiancun",
+      "source": "画史：米芾、米友仁米点皴（落茄皴）",
+      "dynasty": "北宋",
+      "grade": "画史",
+      "quote": "（无单一原文，属画史对米氏云山米点皴的通行归属）",
+      "use": [
+        "cun"
+      ],
+      "note": "米点（落茄）皴：侧锋横点如米，积染成云山烟雨，浑茫。",
+      "url": "画史通行记载"
+    },
+    "tangdai_dianrancunca": {
+      "id": "tangdai_dianrancunca",
+      "source": "唐岱《绘事发微》",
+      "dynasty": "清",
+      "grade": "原文",
+      "quote": "画家所谓点、染、皴、擦四则而已。",
+      "use": [
+        "cun",
+        "stroke"
+      ],
+      "note": "「擦」（干笔侧擦）独立于「皴」；本表据此在 cun 词表补「干擦」值，使山石干笔质感可显式表达。",
+      "url": "历代通行本"
+    },
+    "mofa_tongli": {
+      "id": "mofa_tongli",
+      "source": "历代通行墨法（画史通例）",
+      "dynasty": "历代",
+      "grade": "通例",
+      "quote": "（无单一原文；破墨 / 积墨 / 泼墨 / 宿墨 / 焦墨为历代通行墨法，非一家之言）",
+      "use": [
+        "ink_method"
+      ],
+      "note": "墨法六式：破（浓破淡 / 淡破浓，层次）· 积（层层叠加，厚重）· 泼（高含水高墨，气势）· 宿（隔夜沉淀，涩）· 焦（极浓而枯）· 飞白（极低含水，虚）。D2 据此在 vocab.ink_method 立独立墨法档，与浓度阶梯 ink 分轴。",
+      "url": "历代通行本"
+    },
+    "huangbinhong_qimo": {
+      "id": "huangbinhong_qimo",
+      "source": "黄宾虹「七墨」说（画史通行归纳）",
+      "dynasty": "近现代",
+      "grade": "画史",
+      "quote": "（画史对黄宾虹七墨的通行归纳：浓墨、淡墨、破墨、泼墨、渍墨、焦墨、宿墨）",
+      "use": [
+        "ink_method"
+      ],
+      "note": "七墨可作墨法完备性 checklist。其中「浓 / 淡」属浓度阶梯（D2 ink 阶已含），「破 / 泼 / 焦 / 宿」入 ink_method；「渍墨」暂登记为待补项（gaps）。",
+      "url": "画史通行记载"
+    },
+    "dongqichang_nanbeizong": {
+      "id": "dongqichang_nanbeizong",
+      "source": "董其昌《画禅室随笔·卷二》",
+      "dynasty": "明",
+      "grade": "原文",
+      "quote": "禅家有南北二宗，唐时始分。画之南北二宗，亦唐时分也，但其人非南北耳。北宗则李思训父子着色山水，流传而为宋之赵干、赵伯驹、伯骕，以至马、夏辈。南宗则王摩诘始用渲淡，一变钩斫之法。",
+      "use": [
+        "paradigm"
+      ],
+      "note": "「着色」（北宗：李思训父子青绿 / 金碧）对「渲淡」（南宗：王维水墨 / 浅绛）——为设色范式轴的「着色 ↔ 渲淡」两端提供画史依据。",
+      "url": "https://gj.zdic.net/zibu/297/9043.html"
+    },
+    "qianjiang_huashi": {
+      "id": "qianjiang_huashi",
+      "source": "故宫博物院藏品页「浅绛」释义（画史通例）",
+      "dynasty": "元（盛）",
+      "grade": "通例",
+      "quote": "浅绛，即浅绛山水……在水墨勾勒皴染的基础上敷染以赭石为主色的淡彩山水画。可能始于五代董源，盛于元代黄公望，亦称「吴装」山水。",
+      "use": [
+        "paradigm"
+      ],
+      "note": "浅绛 = 水墨骨 + 赭石为主淡彩；清吴修「赭色微黄画里春，墨青墨绿染精神」给冷暖互补的用色依据。",
+      "url": "https://www.dpm.org.cn/collection/paint/234406.html"
+    },
+    "mogu_fa": {
+      "id": "mogu_fa",
+      "source": "恽寿平论写生二途（《南田画跋》一系）",
+      "dynasty": "清",
+      "grade": "原文",
+      "quote": "不用笔墨，全以五采染成，谓之没骨，徐崇嗣独称入圣。",
+      "use": [
+        "paradigm"
+      ],
+      "note": "没骨 = 不用勾勒，全以五采（色）染成；与水墨 / 浅绛的「墨骨」范式相反，为设色范式轴的第三极（纯色无墨骨）。另恽寿平《瓯香馆集》：「惟徐崇嗣创制没骨为能深得造化之意，尽态极妍，不为刻画。」",
+      "url": "http://www.whysb.org/whysb/20240302/html/content_20240302009001.htm"
+    },
+    "shitao_jingjie": {
+      "id": "shitao_jingjie",
+      "source": "石涛《画语录·境界章》",
+      "dynasty": "清",
+      "grade": "原文",
+      "quote": "分疆三叠两段，似乎山水之失，然有不失之者，如自然分疆者，到江吴地尽，隔岸越山多是也……三叠者：一层地，二层树，三层山，望之何分远近，写此三叠奚翅印刻。",
+      "use": [
+        "composition"
+      ],
+      "note": "三叠两段是**护栏而非配方**——它警告机械分层（地-树-山等距）会沦为「印刻」。D2 取作构图护栏（禁等距机械三叠），须由自然分疆承担分层，与 R9「室内小景三远不适用」同列。",
+      "url": "http://ab.newdu.com/book/ms203785.html"
+    },
+    "shitao_xijing": {
+      "id": "shitao_xijing",
+      "source": "石涛《画语录·蹊径章》",
+      "dynasty": "清",
+      "grade": "原文",
+      "quote": "写画有蹊径六则：对景不对山，对山不对景，倒景，借景，截断，险峻，此六则者，须辨明之。",
+      "use": [
+        "composition"
+      ],
+      "note": "六个构图算子：季节错位（景冬山春）、元素倒置（树正山倒）、借物衬境、截断取势、险峻立奇。作卡5 构图求解器的算子池，按语境选一。",
+      "url": "https://m.baike.com/wiki/%E8%8B%A6%E7%93%9C%E5%92%8C%E5%B0%9A%E7%94%BB%E8%AF%AD%E5%BD%95/1222240"
+    },
+    "shenkuo_daguanxiao": {
+      "id": "shenkuo_daguanxiao",
+      "source": "沈括《梦溪笔谈》卷十七·书画",
+      "dynasty": "北宋",
+      "grade": "原文",
+      "quote": "大都山水之法，盖以大观小，如人观假山耳；若同真山之法，以下望上，只合见一重山，岂可重重悉见？……折高折远自有妙理。",
+      "use": [
+        "composition",
+        "viewpoint"
+      ],
+      "note": "散点透视总纲：视点不钉在地面而「如观假山」，居高且可移动，故能「重重悉见」。为视点档补「俯视」提供古典依据，并明文否定单点透视校验（写入「不校验什么」清单）。",
+      "url": "https://m.gushiwen.cn/guwen/bookv_3d1ac283484b.aspx"
+    },
+    "guoxi_zhaomu": {
+      "id": "guoxi_zhaomu",
+      "source": "郭熙《林泉高致·山水训》",
+      "dynasty": "北宋",
+      "grade": "原文",
+      "quote": "山，朝看如此，暮看如此，阴晴看又如此，所谓朝暮之变态不同也。",
+      "use": [
+        "time_of_day"
+      ],
+      "note": "与「四时之景不同」并举，为「晨昏」独立成轴（time_of_day）的古典依据：同一山因朝暮阴晴而变态不同。",
+      "url": "https://inindex.com/literature/bookDetails/1004696254405767169/1004696363566723074"
+    },
+    "jinghao_sishi": {
+      "id": "jinghao_sishi",
+      "source": "荆浩《笔法记》",
+      "dynasty": "五代",
+      "grade": "原文",
+      "quote": "凡笔有四势，谓筋、肉、骨、气。笔绝而不断谓之筋，起伏成实谓之肉，生死刚正谓之骨，迹画不败谓之气。",
+      "use": [
+        "stroke_quality"
+      ],
+      "note": "笔法质量维（结构侧）：筋=笔断意连、肉=起伏成实、骨=刚正、气=迹画不败。作 stroke 的质量判据（与黄宾虹五笔「手感侧」互补）。",
+      "url": "https://m.ruiwen.com/guji/1370004.html"
+    },
+    "jinghao_erbing": {
+      "id": "jinghao_erbing",
+      "source": "荆浩《笔法记》",
+      "dynasty": "五代",
+      "grade": "原文",
+      "quote": "夫病有二：一曰无形，二曰有形。有形病者，花木不时，屋小人大，或树高于山……无形之病，气韵俱泯，物象全乖，笔墨虽行，类同死物。",
+      "use": [
+        "stroke_quality"
+      ],
+      "note": "古典负判据组之一：有形病（比例失序 屋小人大/树高于山、时序错乱 花木不时）＋ 无形病（气韵俱泯）。并入 o3 负节点。",
+      "url": "https://www.shidianguji.com/zh/mid-page/7332937026418835494"
+    },
+    "guoruoxu_sanbing": {
+      "id": "guoruoxu_sanbing",
+      "source": "郭若虚《图画见闻志·论用笔得失》",
+      "dynasty": "北宋",
+      "grade": "原文",
+      "quote": "画有三病，皆系用笔。所谓三者，一曰版，二曰刻，三曰结。版者，腕弱笔痴，全亏取与，物状平褊，不能圆混也；刻者，运笔中疑，心手相戾，勾画之际，妄生圭角也；结者，欲行不行，当散不散，似物凝碍，不能流畅也。",
+      "use": [
+        "stroke_quality"
+      ],
+      "note": "用笔三病（板 / 刻 / 结）——与荆浩「二病」并为古典负判据组：板对「石看三面」、刻对「藏锋」、结对「气脉不断」，各挂一条正向断言，便于双向校验。",
+      "url": "https://gj.zdic.net/zibu/199/8790.html"
+    },
+    "huangbinhong_wubi": {
+      "id": "huangbinhong_wubi",
+      "source": "黄宾虹《画法要旨》（《画谈》一系）",
+      "dynasty": "近代",
+      "grade": "原文",
+      "quote": "用笔之道，其要有五：一曰平，如锥画沙；二曰留，如屋漏痕；三曰圆，如折钗股；四曰重，如高山坠石；五曰变，如四时迭运。",
+      "use": [
+        "stroke_quality"
+      ],
+      "note": "把散见的「用笔四喻」系统化为五字质量维（平 / 留 / 圆 / 重 / 变，手感侧），与荆浩四势（结构侧）互补，作 stroke 的质量断言维。",
+      "url": "https://www.kuhw.com/hhjc/rwjc/2020-01-07/28973_2.html"
+    },
+    "material_tongli": {
+      "id": "material_tongli",
+      "source": "中国画基底材料通例（生宣 / 熟宣 / 绢；狼毫 / 羊毫 / 兼毫；松烟 / 油烟）",
+      "dynasty": "今",
+      "grade": "通例",
+      "quote": "生宣……吸水性较强而墨色易晕染，层次感丰富；熟宣……吸水性较弱而不洇墨；绢……细腻。",
+      "use": [
+        "material"
+      ],
+      "note": "材质系数（轴8 器与材）：纸绢定含水扩散 D 的物理边界（生宣 D 大、熟宣不洇），笔毫定含水与力度上限，墨种定冷暖。作卡6 扩散律 γ / μ 与飞白阈值的乘子，非独立词表。",
+      "url": "https://wyb.chinawriter.com.cn/Pad/content/202506/23/content79760.html"
+    },
+    "seal_tongli": {
+      "id": "seal_tongli",
+      "source": "书画钤印通例（故宫博物院《书画艺术中的钤印及收藏印鉴》；钤印二十五条规矩）",
+      "dynasty": "今",
+      "grade": "通例",
+      "quote": "绘画有款题的大都钤在款题下……挂轴、册页则在左右下角加钤「押角」印；无款的手卷钤在图前、图末。",
+      "use": [
+        "seal"
+      ],
+      "note": "钤印位置与印面规则：印位随形制（手卷→卷末 / 立轴·册页·扇面→下角 / 题款末），印面大小随尺幅（「印不可比字大，大幅盖大印，小幅盖小印」）。纳入卡7 段尾静默。",
+      "url": "https://www.dpm.org.cn/Uploads/pdf/1564/T00081_00.pdf"
+    }
+  },
+  "stats": {
+    "n_classes": 15,
+    "n_head_class": 125,
+    "n_word_class": 81,
+    "n_word_class_from_supplement": 50,
+    "n_class_defaults": 15,
+    "n_yuan": 6,
+    "n_cun": 9,
+    "n_ink_method": 6,
+    "n_paradigm": 4,
+    "n_viewpoint": 3,
+    "n_weather": 4,
+    "n_time_of_day": 4,
+    "n_material": 8,
+    "n_stroke_quality": 9,
+    "n_stroke_disease": 5,
+    "n_composition": 8,
+    "n_seal_positions": 5,
+    "n_polarity_keys": 8,
+    "n_polarity_normalize": 22,
+    "n_sources": 35,
+    "n_rules": 11
+  }
+}

@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>《江雪》全链路推演 · 诗文 → 意境隐变量 → 水墨动画</title>
+<style>
+  :root {
+    --paper: #F6F3EC;
+    --paper-2: #FFFFFF;
+    --ink: #1C1C1C;
+    --ink-2: #4A4640;
+    --ink-3: #8A8578;
+    --line: rgba(28, 28, 28, 0.14);
+    --line-2: rgba(28, 28, 28, 0.07);
+    --zhu: #A83A2C;
+    --zhu-soft: rgba(168, 58, 44, 0.10);
+    --qing: #3E5C76;
+    --qing-soft: rgba(62, 92, 118, 0.10);
+    --serif: "Songti SC", "STSong", "SimSun", "Noto Serif SC", Georgia, serif;
+    --sans: "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 56px 32px 96px; }
+
+  /* ---------- header ---------- */
+  header { border-bottom: 1px solid var(--line); padding-bottom: 32px; margin-bottom: 48px; }
+  .eyebrow { font-size: 12px; letter-spacing: .22em; color: var(--ink-3); text-transform: uppercase; margin-bottom: 20px; }
+  h1 { font-family: var(--serif); font-size: 34px; font-weight: 600; margin: 0 0 6px; letter-spacing: .04em; }
+  .sub { color: var(--ink-3); font-size: 13px; margin-bottom: 28px; }
+  .poem { font-family: var(--serif); font-size: 26px; line-height: 2.1; letter-spacing: .16em; margin: 0 0 20px; }
+  .poem span { display: inline-block; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag {
+    font-size: 12px; padding: 3px 11px; border-radius: 999px;
+    border: 1px solid var(--line); color: var(--ink-2); background: var(--paper-2);
+  }
+  .tag.zhu { color: var(--zhu); border-color: rgba(168,58,44,.32); background: var(--zhu-soft); }
+  .tag.qing { color: var(--qing); border-color: rgba(62,92,118,.30); background: var(--qing-soft); }
+
+  /* ---------- sections ---------- */
+  section { margin-bottom: 56px; }
+  .sec-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 8px; }
+  .sec-no {
+    font-family: var(--mono); font-size: 12px; color: var(--zhu);
+    border: 1px solid rgba(168,58,44,.32); border-radius: 4px; padding: 1px 7px; flex: none;
+  }
+  h2 { font-family: var(--serif); font-size: 21px; font-weight: 600; margin: 0; letter-spacing: .03em; }
+  .sec-note { color: var(--ink-3); font-size: 12.5px; margin: 0 0 22px; }
+  h3 { font-size: 14px; font-weight: 600; margin: 26px 0 10px; color: var(--ink); }
+
+  .card {
+    background: var(--paper-2); border: 1px solid var(--line-2);
+    border-radius: 10px; padding: 22px 24px; margin-bottom: 16px;
+  }
+  .card.tight { padding: 18px 20px; }
+
+  /* ---------- tables ---------- */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line-2); vertical-align: middle; }
+  th { font-weight: 600; font-size: 12px; color: var(--ink-3); letter-spacing: .06em; border-bottom: 1px solid var(--line); }
+  tbody tr:last-child td { border-bottom: none; }
+  td.num, th.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  .ok { color: var(--qing); font-weight: 600; }
+  .bad { color: var(--zhu); font-weight: 600; }
+
+  /* ---------- 平仄 grid ---------- */
+  .prosody { display: grid; grid-template-columns: 108px repeat(5, 1fr); gap: 8px; }
+  .prosody > div { text-align: center; }
+  .ph-label {
+    display: flex; align-items: center; font-family: var(--serif);
+    font-size: 15px; letter-spacing: .1em; color: var(--ink-2); justify-content: flex-start;
+  }
+  .ph-cell {
+    border: 1px solid var(--line); border-radius: 6px; padding: 7px 4px 6px;
+    background: var(--paper-2); line-height: 1.35;
+  }
+  .ph-char { font-family: var(--serif); font-size: 20px; display: block; }
+  .ph-tone { font-size: 11.5px; font-family: var(--mono); display: block; margin-top: 2px; }
+  .ph-rhyme { font-size: 10.5px; display: block; color: var(--ink-3); }
+  .ping { background: rgba(62,92,118,.055); border-color: rgba(62,92,118,.22); }
+  .ping .ph-tone { color: var(--qing); }
+  .ze { background: rgba(168,58,44,.05); border-color: rgba(168,58,44,.20); }
+  .ze .ph-tone { color: var(--zhu); }
+  .ru { box-shadow: inset 0 0 0 1px rgba(168,58,44,.45); }
+  .rhyme-dot { color: var(--zhu); font-size: 12px; }
+  .grid-head { font-size: 11.5px; color: var(--ink-3); font-family: var(--mono); padding-bottom: 2px; }
+
+  /* ---------- misc ---------- */
+  .kv { display: grid; grid-template-columns: 150px 1fr; gap: 6px 18px; font-size: 13px; }
+  .kv dt { color: var(--ink-3); }
+  .kv dd { margin: 0; }
+  ul.plain { margin: 8px 0 0; padding-left: 18px; }
+  ul.plain li { margin-bottom: 5px; font-size: 13px; }
+  code { font-family: var(--mono); font-size: 12.5px; background: rgba(28,28,28,.045); padding: 1px 5px; border-radius: 4px; }
+  .formula {
+    font-family: var(--mono); font-size: 13px; background: rgba(28,28,28,.045);
+    border-left: 2px solid var(--line); padding: 10px 14px; border-radius: 0 6px 6px 0;
+    margin: 10px 0; overflow-x: auto; white-space: nowrap;
+  }
+  .callout {
+    border-left: 2px solid var(--zhu); background: var(--zhu-soft);
+    padding: 12px 16px; border-radius: 0 6px 6px 0; font-size: 13px; margin: 14px 0;
+  }
+  .callout .h { font-weight: 600; color: var(--zhu); display: block; margin-bottom: 3px; font-size: 12px; letter-spacing: .06em; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 780px) { .two-col { grid-template-columns: 1fr; } .prosody { grid-template-columns: 84px repeat(5, 1fr); } }
+  figure { margin: 0; }
+  figcaption { font-size: 12px; color: var(--ink-3); margin-top: 10px; text-align: center; }
+  svg { display: block; width: 100%; height: auto; }
+  .caption { font-size: 12px; color: var(--ink-3); }
+  .divider { height: 1px; background: var(--line-2); margin: 26px 0; }
+  .footnote { font-size: 12px; color: var(--ink-3); border-top: 1px solid var(--line); padding-top: 20px; }
+  .footnote a { color: var(--ink-3); }
+  .badge-inline {
+    font-family: var(--mono); font-size: 11px; padding: 1px 6px; border-radius: 4px;
+    background: rgba(28,28,28,.05); color: var(--ink-2); margin-left: 6px;
+  }
+</style>
+  <style id="d2-style">
+  .d2-badge { display:inline-block; margin-left:8px; padding:1px 6px; border-radius:4px;
+    font-family:var(--mono); font-size:10px; letter-spacing:.08em; vertical-align:middle;
+    color:var(--qing); border:1px solid rgba(62,92,118,.35); background:var(--qing-soft); cursor:help; }
+  .d2-note { margin:-12px 0 18px; font-size:12px; color:var(--ink-3); }
+  .d2-note code { font-family:var(--mono); font-size:11px; color:var(--qing); }
+  .d2-tag { display:inline-block; margin-left:4px; padding:0 4px; border-radius:3px;
+    font-family:var(--mono); font-size:10px; color:var(--qing);
+    border:1px solid rgba(62,92,118,.3); background:var(--qing-soft); cursor:help; }
+  .d2-tag.warn { color:var(--zhu); border-color:rgba(168,58,44,.35); background:var(--zhu-soft); }
+  /* 顶部横幅：一眼看到「本页参数已改为读 D2」 */
+  .d2-banner { display:flex; gap:12px; align-items:flex-start; margin:0 0 40px;
+    padding:15px 18px 15px 20px; border-radius:10px;
+    border:1px solid rgba(62,92,118,.30); background:var(--qing-soft);
+    box-shadow: inset 4px 0 0 var(--qing); }
+  .d2-banner .d2-badge { margin:3px 0 0; flex:none; }
+  .d2-banner-body { font-size:12.5px; color:var(--ink-2); line-height:1.75; }
+  .d2-banner-body b { color:var(--qing); }
+  .d2-banner code { font-family:var(--mono); font-size:11px; color:var(--qing); }
+  .d2-diff { margin-top:7px; font-family:var(--mono); font-size:12px; color:var(--ink-2); }
+  .d2-diff s { color:var(--ink-3); }
+  .d2-diff b { color:var(--qing); }
+  /* D2 拥有的单元格：淡底 + 左细线，便于扫读 */
+  td[data-d2] { background:rgba(62,92,118,.055); box-shadow: inset 2px 0 0 rgba(62,92,118,.38); }
+</style>
+<!-- poem-seal-font:begin -->
+<style id="poem-seal-font">
+/* 印章篆体子集内嵌（敬峰中山王篆，SIL OFL 1.1，依 OFL §3 改名 PoemSeal）。
+   全链路页为自足单文件，内嵌后方与动画的篆书印章一致；由 build/font_subset.py 生成，勿手改。 */
+@font-face{font-family:"PoemSeal";src:url("data:font/woff2;base64,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") format("woff2");font-weight:400;font-style:normal;font-display:swap;}
+</style>
+<!-- poem-seal-font:end -->
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Full-chain walkthrough · 全链路推演</div>
+  <h1>江雪</h1>
+  <div class="sub">唐 · 柳宗元　五言绝句　押入声屑韵</div>
+  <div class="poem">
+    <span>千山鸟飞绝，</span><br>
+    <span>万径人踪灭。</span><br>
+    <span>孤舟蓑笠翁，</span><br>
+    <span>独钓寒江雪。</span>
+  </div>
+  <div class="meta">
+    <span class="tag">藏头：千万孤独</span>
+    <span class="tag zhu">仄韵 · 入声九屑</span>
+    <span class="tag zhu">折腰体（二三句失粘）</span>
+    <span class="tag qing">系年：谪永州期间 805–815</span>
+    <span class="tag qing">触发锚点：元和二年冬大雪</span>
+  </div>
+</header>
+
+<div class="d2-banner" id="d2-banner">
+  <span class="d2-badge" title="本节画法参数由 D2 构建期注入（d2_techniques.json → src/d2/d2_inject.py）">D2</span>
+  <div class="d2-banner-body"><b>本页画法参数已改为「读 D2」</b>（构建期注入 · <code>d2_techniques.json</code> → <code>src/d2/d2_inject.py</code>）：STEP 5 的留白率 / 三远、STEP 6 的含水 / 墨阶 / 笔法不再逐首硬编码，由 D2 现算后写入；下表带淡蓝底纹的单元格即为 D2 拥有的字段。C 组新算子（视点 G7 / 天候 G4 / 构图 G1 / 材质 G6 / 笔法质量维 G2 / 时辰 G5 / 钤印 G8）已注入 <b>5.1–5.3</b> / <b>6.6–6.7</b> / <b>7.2–7.3</b>。
+    <div class="d2-diff">留白率区间：<s>[0.72, 0.85]</s> → <b>[0.78, 0.92]</b>　·　三远：平远 + 深远　·　皴法：无皴</div>
+  </div>
+</div>
+
+
+
+<!-- ============ STEP 1 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">STEP 1</span><h2>格律解析</h2></div>
+  <p class="sec-note">模型：查表映射 σ: 汉字 → (平/仄, 韵部)，再以约束满足（CSP）校验诗体模板。这一层不使用机器学习。</p>
+
+  <div class="card">
+    <h3>1.1 逐字平仄与韵部（依平水韵）</h3>
+    <div class="prosody">
+      <div class="grid-head"></div>
+      <div class="grid-head">一</div><div class="grid-head">二</div><div class="grid-head">三</div><div class="grid-head">四</div><div class="grid-head">五</div>
+
+      <div class="ph-label">千山鸟飞绝</div>
+      <div class="ph-cell ping"><span class="ph-char">千</span><span class="ph-tone">平</span><span class="ph-rhyme">先</span></div>
+      <div class="ph-cell ping"><span class="ph-char">山</span><span class="ph-tone">平</span><span class="ph-rhyme">删</span></div>
+      <div class="ph-cell ze"><span class="ph-char">鸟</span><span class="ph-tone">仄</span><span class="ph-rhyme">筱</span></div>
+      <div class="ph-cell ping"><span class="ph-char">飞</span><span class="ph-tone">平</span><span class="ph-rhyme">微</span></div>
+      <div class="ph-cell ze ru"><span class="ph-char">绝</span><span class="ph-tone">仄</span><span class="ph-rhyme">屑 <span class="rhyme-dot">◉</span></span></div>
+
+      <div class="ph-label">万径人踪灭</div>
+      <div class="ph-cell ze"><span class="ph-char">万</span><span class="ph-tone">仄</span><span class="ph-rhyme">愿</span></div>
+      <div class="ph-cell ze"><span class="ph-char">径</span><span class="ph-tone">仄</span><span class="ph-rhyme">径</span></div>
+      <div class="ph-cell ping"><span class="ph-char">人</span><span class="ph-tone">平</span><span class="ph-rhyme">真</span></div>
+      <div class="ph-cell ping"><span class="ph-char">踪</span><span class="ph-tone">平</span><span class="ph-rhyme">冬</span></div>
+      <div class="ph-cell ze ru"><span class="ph-char">灭</span><span class="ph-tone">仄</span><span class="ph-rhyme">屑 <span class="rhyme-dot">◉</span></span></div>
+
+      <div class="ph-label">孤舟蓑笠翁</div>
+      <div class="ph-cell ping"><span class="ph-char">孤</span><span class="ph-tone">平</span><span class="ph-rhyme">虞</span></div>
+      <div class="ph-cell ping"><span class="ph-char">舟</span><span class="ph-tone">平</span><span class="ph-rhyme">尤</span></div>
+      <div class="ph-cell ping"><span class="ph-char">蓑</span><span class="ph-tone">平</span><span class="ph-rhyme">歌</span></div>
+      <div class="ph-cell ze ru"><span class="ph-char">笠</span><span class="ph-tone">仄</span><span class="ph-rhyme">缉</span></div>
+      <div class="ph-cell ping"><span class="ph-char">翁</span><span class="ph-tone">平</span><span class="ph-rhyme">东</span></div>
+
+      <div class="ph-label">独钓寒江雪</div>
+      <div class="ph-cell ze ru"><span class="ph-char">独</span><span class="ph-tone">仄</span><span class="ph-rhyme">屋</span></div>
+      <div class="ph-cell ze"><span class="ph-char">钓</span><span class="ph-tone">仄</span><span class="ph-rhyme">啸</span></div>
+      <div class="ph-cell ping"><span class="ph-char">寒</span><span class="ph-tone">平</span><span class="ph-rhyme">寒</span></div>
+      <div class="ph-cell ping"><span class="ph-char">江</span><span class="ph-tone">平</span><span class="ph-rhyme">江</span></div>
+      <div class="ph-cell ze ru"><span class="ph-char">雪</span><span class="ph-tone">仄</span><span class="ph-rhyme">屑 <span class="rhyme-dot">◉</span></span></div>
+    </div>
+    <p class="caption" style="margin-top:14px">
+      ◉ 韵脚　·　红框（<span class="rhyme-dot">入声</span>）= 入声字，入声归仄。全诗入声字 5 个：绝、灭、笠、独、雪。
+    </p>
+  </div>
+
+  <div class="two-col">
+    <div class="card tight">
+      <h3 style="margin-top:0">1.2 句式模板校验（CSP）</h3>
+      <div class="formula">平平仄平仄　← 特拗（三拗四救）<br>仄仄平平仄　← 标准律句<br>平平平仄平　← 标准律句<br>仄仄平平仄　← 标准律句</div>
+      <ul class="plain">
+        <li><b>句 1</b> 第三字当平而用仄（鸟）、第四字当仄而用平（飞）——即"三拗四救"，是唐诗极常见的特拗句，不算出律。</li>
+        <li><b>对</b>：句 1–2 第二字 山(平)/径(仄) 相反 <span class="ok">✓</span>；句 3–4 第二字 舟(平)/钓(仄) 相反 <span class="ok">✓</span></li>
+        <li><b>粘</b>：句 2–3 第二字 径(仄)/舟(平) 应同而反 <span class="bad">✗ 失粘</span></li>
+      </ul>
+      <div class="callout" style="margin-bottom:0">
+        <span class="h">判定结果</span>
+        四句皆律句，但二三句失粘 → 属<b>仄韵折腰体</b>（亦称律古），非正格律绝。
+      </div>
+    </div>
+
+    <div class="card tight">
+      <h3 style="margin-top:0">1.3 韵与对仗</h3>
+      <div class="kv">
+        <dt>韵脚</dt><dd>绝、灭、雪 —— 均属<b>入声九屑</b></dd>
+        <dt>句 3 末字</dt><dd>翁（上平一东），不押韵 <span class="ok">✓ 合绝句惯例</span></dd>
+        <dt>句 1–2</dt><dd><b>工对</b>：千山↔万径（数量+地貌）、鸟↔人（禽↔人）、飞绝↔踪灭</dd>
+        <dt>句 3–4</dt><dd><b>宽对</b>：孤↔独、舟↔钓、蓑笠翁↔寒江雪</dd>
+      </div>
+      <p class="caption" style="margin-top:12px">对仗求解方式：词性 + 义类二分图最大权匹配（匈牙利算法），匹配总权重即对仗强度。句 1–2 强度 0.86，句 3–4 强度 0.54。</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">1.4 输出：节拍表 R（这一层直接喂给动画时间轴）</h3>
+    <table>
+      <thead><tr><th>特征</th><th class="num">数值</th><th>对动画的约束</th></tr></thead>
+      <tbody>
+        <tr><td>强停顿点（韵脚句末）</td><td class="num">句 1 / 2 / 4</td><td>每个韵脚后插入静帧或长镜，作为"时间上的留白"</td></tr>
+        <tr><td>呼吸口（无韵句末）</td><td class="num">句 3</td><td>不停顿，让"转"处一气呵成，形成节奏断点</td></tr>
+        <tr><td>入声密度</td><td class="num">5 / 20 = 25%</td><td>节奏基调为"促、顿、冷"，禁止悠长绵软的运镜</td></tr>
+        <tr><td>仄声占比</td><td class="num">10 / 20 = 50%</td><td>运动能量包络呈"短促脉冲"，非平滑正弦</td></tr>
+        <tr><td>句末收束</td><td class="num">仄仄仄</td><td>三段式收束 → 结尾必须"顿住"，不能渐隐</td></tr>
+      </tbody>
+    </table>
+    <div class="callout">
+      <span class="h">关键结论</span>
+      入声韵短促压迫，是这首诗"峭拔骨力"的物理载体。若把动画节奏做成舒缓悠长的山水长卷，即便画面再美，也已背离诗的音质——这是格律层能给出的、最硬的一条约束。
+    </div>
+  </div>
+</section>
+
+<!-- ============ STEP 2 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">STEP 2</span><h2>意象抽取与场景图</h2></div>
+  <p class="sec-note">模型：意象词典匹配 + 古汉语 PLM 消歧 → 意象多重集；再由空间介词/动词抽关系边，构成场景图 G_scene。</p>
+
+  <div class="card">
+    <table>
+      <thead><tr><th>意象</th><th>句</th><th>位置</th><th>文化情感极性</th><th>层级</th><th>类型</th></tr></thead>
+      <tbody>
+        <tr><td>千山</td><td>1</td><td>1–2</td><td>壮阔 · 冷寂</td><td>远景</td><td>实</td></tr>
+        <tr><td>鸟（飞绝）</td><td>1</td><td>3–5</td><td>生机 → 断绝</td><td>远景</td><td class="bad">负节点（缺席）</td></tr>
+        <tr><td>万径</td><td>2</td><td>1–2</td><td>人世 · 荒芜</td><td>中景</td><td>实（近乎虚写）</td></tr>
+        <tr><td>人踪（灭）</td><td>2</td><td>3–5</td><td>人事 → 湮灭</td><td>中景</td><td class="bad">负节点（缺席）</td></tr>
+        <tr><td>孤舟</td><td>3</td><td>1–2</td><td>漂泊 · 孤立</td><td>近景</td><td>实（焦点）</td></tr>
+        <tr><td>蓑笠翁</td><td>3</td><td>3–5</td><td>隐逸 · 渔樵</td><td>近景</td><td>实（焦点）</td></tr>
+        <tr><td>独钓</td><td>4</td><td>1–2</td><td>孤守 · 不屈</td><td>近景</td><td>动作</td></tr>
+        <tr><td>寒江</td><td>4</td><td>3–4</td><td>冷寂 · 静</td><td>中景</td><td>虚（留白）</td></tr>
+        <tr><td>雪</td><td>4</td><td>5</td><td>洁净 · 覆盖</td><td>全域</td><td>虚（留白）</td></tr>
+      </tbody>
+    </table>
+    <div class="callout">
+      <span class="h">关键发现 · 两个负节点</span>
+      "鸟飞绝""人踪灭"是<b>否定性存在</b>——画面里绝不能出现鸟和人，但必须让人感到"本该有而没有"。因此场景图中它们被建模为 <code>negative node</code>，其唯一渲染作用是<b>约束留白的面积与连通性</b>：空缺越大、越完整，越有效。这是普通文生图模型最容易画错的地方（它会给"千山"配上飞鸟）。
+    </div>
+    <h3>用典链路</h3>
+    <p class="caption" style="margin:0">"蓑笠"与"独钓"接入渔隐传统边：严子陵钓台（不仕光武）→ 《楚辞·渔父》（众人皆醉我独醒）→ 张志和《渔歌子》。用典检测方式：在古籍语料中检索候选源文本，相似度过阈后再做蕴含验证，命中后为语义图外接一条历史上下文边。</p>
+  </div>
+
+  <div class="card">
+    <figure>
+      <svg viewBox="0 0 900 320" role="img" aria-label="江雪场景图：远山、空径、寒江、孤舟蓑笠翁，以及两个缺席节点">
+        <defs>
+          <marker id="sgArrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+            <path d="M1 1 L7 4 L1 7 Z" fill="#8A8578"/>
+          </marker>
+          <marker id="sgArrowNeg" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto">
+            <path d="M1 1 L7 4 L1 7 Z" fill="#A83A2C"/>
+          </marker>
+        </defs>
+
+        <line x1="60" y1="46" x2="840" y2="46" stroke="#8A8578" stroke-width="1" stroke-dasharray="4 4"/>
+        <text x="60" y="36" font-size="12" fill="#8A8578" font-family="PingFang SC, sans-serif">远景层</text>
+        <line x1="60" y1="152" x2="840" y2="152" stroke="#8A8578" stroke-width="1" stroke-dasharray="4 4"/>
+        <text x="60" y="142" font-size="12" fill="#8A8578" font-family="PingFang SC, sans-serif">中景层</text>
+        <line x1="60" y1="238" x2="840" y2="238" stroke="#8A8578" stroke-width="1" stroke-dasharray="4 4"/>
+        <text x="60" y="228" font-size="12" fill="#8A8578" font-family="PingFang SC, sans-serif">近景层</text>
+
+        <rect x="150" y="66" width="150" height="56" rx="8" fill="#FFFFFF" stroke="rgba(28,28,28,.22)"/>
+        <text x="225" y="90" font-size="15" text-anchor="middle" fill="#1C1C1C" font-family="Songti SC, serif">千山</text>
+        <text x="225" y="108" font-size="11.5" text-anchor="middle" fill="#8A8578" font-family="PingFang SC, sans-serif">壮阔 · 冷寂</text>
+
+        <rect x="340" y="66" width="150" height="56" rx="8" fill="#FFFFFF" stroke="#A83A2C" stroke-dasharray="5 4"/>
+        <text x="415" y="90" font-size="15" text-anchor="middle" fill="#A83A2C" font-family="Songti SC, serif">鸟 · 飞绝</text>
+        <text x="415" y="108" font-size="11.5" text-anchor="middle" fill="#A83A2C" font-family="PingFang SC, sans-serif">负节点 · 不可绘制</text>
+
+        <rect x="530" y="66" width="150" height="56" rx="8" fill="#FFFFFF" stroke="rgba(28,28,28,.22)"/>
+        <text x="605" y="90" font-size="15" text-anchor="middle" fill="#1C1C1C" font-family="Songti SC, serif">万径</text>
+        <text x="605" y="108" font-size="11.5" text-anchor="middle" fill="#8A8578" font-family="PingFang SC, sans-serif">人世 · 荒芜</text>
+
+        <rect x="720" y="66" width="140" height="56" rx="8" fill="#FFFFFF" stroke="#A83A2C" stroke-dasharray="5 4"/>
+        <text x="790" y="90" font-size="15" text-anchor="middle" fill="#A83A2C" font-family="Songti SC, serif">人踪 · 灭</text>
+        <text x="790" y="108" font-size="11.5" text-anchor="middle" fill="#A83A2C" font-family="PingFang SC, sans-serif">负节点 · 不可绘制</text>
+
+        <rect x="230" y="170" width="150" height="56" rx="8" fill="#FFFFFF" stroke="rgba(28,28,28,.22)"/>
+        <text x="305" y="194" font-size="15" text-anchor="middle" fill="#1C1C1C" font-family="Songti SC, serif">寒江</text>
+        <text x="305" y="212" font-size="11.5" text-anchor="middle" fill="#8A8578" font-family="PingFang SC, sans-serif">虚 · 留白承载</text>
+
+        <rect x="470" y="170" width="150" height="56" rx="8" fill="#FFFFFF" stroke="rgba(28,28,28,.22)"/>
+        <text x="545" y="194" font-size="15" text-anchor="middle" fill="#1C1C1C" font-family="Songti SC, serif">雪</text>
+        <text x="545" y="212" font-size="11.5" text-anchor="middle" fill="#8A8578" font-family="PingFang SC, sans-serif">全域 · 留白承载</text>
+
+        <rect x="60" y="256" width="150" height="56" rx="8" fill="#F6F3EC" stroke="#3E5C76" stroke-width="1.5"/>
+        <text x="135" y="280" font-size="15" text-anchor="middle" fill="#3E5C76" font-family="Songti SC, serif">孤舟</text>
+        <text x="135" y="298" font-size="11.5" text-anchor="middle" fill="#3E5C76" font-family="PingFang SC, sans-serif">焦点 · 浓墨</text>
+
+        <rect x="260" y="256" width="150" height="56" rx="8" fill="#F6F3EC" stroke="#3E5C76" stroke-width="1.5"/>
+        <text x="335" y="280" font-size="15" text-anchor="middle" fill="#3E5C76" font-family="Songti SC, serif">蓑笠翁</text>
+        <text x="335" y="298" font-size="11.5" text-anchor="middle" fill="#3E5C76" font-family="PingFang SC, sans-serif">焦点 · 浓墨</text>
+
+        <rect x="460" y="256" width="150" height="56" rx="8" fill="#FFFFFF" stroke="rgba(28,28,28,.22)"/>
+        <text x="535" y="280" font-size="15" text-anchor="middle" fill="#1C1C1C" font-family="Songti SC, serif">独钓</text>
+        <text x="535" y="298" font-size="11.5" text-anchor="middle" fill="#8A8578" font-family="PingFang SC, sans-serif">动作 · 一根钓丝</text>
+
+        <path d="M300 94 H334" stroke="#A83A2C" stroke-width="1.5" fill="none" marker-end="url(#sgArrowNeg)"/>
+        <path d="M690 94 H714" stroke="#A83A2C" stroke-width="1.5" fill="none" marker-end="url(#sgArrowNeg)"/>
+        <path d="M605 122 Q605 146 545 166" stroke="#8A8578" stroke-width="1.5" fill="none" marker-end="url(#sgArrow)"/>
+        <path d="M415 122 Q415 200 360 250" stroke="#8A8578" stroke-width="1.5" fill="none" marker-end="url(#sgArrow)"/>
+        <path d="M210 284 H254" stroke="#8A8578" stroke-width="1.5" fill="none" marker-end="url(#sgArrow)"/>
+        <path d="M410 284 H454" stroke="#8A8578" stroke-width="1.5" fill="none" marker-end="url(#sgArrow)"/>
+        <path d="M135 250 Q135 190 280 172" stroke="#8A8578" stroke-width="1.5" fill="none" marker-end="url(#sgArrow)"/>
+      </svg>
+      <figcaption>场景图 G_scene：实线框为实意象，朱色虚线框为负节点（其渲染作用仅为约束留白），青框为视觉焦点。箭头表示空间与动作关系。</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============ STEP 3 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">STEP 3</span><h2>韵味画像</h2></div>
+  <p class="sec-note">模型：以《二十四诗品》为风格空间基，y ∈ Δ²³（24 维单纯形），加 L1 稀疏正则，使画像落在 2–4 品上，保持可读。</p>
+
+  <div class="two-col">
+    <div class="card tight">
+      <h3 style="margin-top:0">3.1 稀疏风格画像 <span class="badge-inline">模型输出 · 示意</span></h3>
+      <svg viewBox="0 0 460 210" role="img" aria-label="江雪二十四诗品稀疏画像条形图">
+        <g font-family="PingFang SC, sans-serif" font-size="13" fill="#4A4640">
+          <text x="0" y="20">清奇</text>
+          <rect x="66" y="8" width="330" height="16" rx="4" fill="rgba(28,28,28,.06)"/>
+          <rect x="66" y="8" width="198" height="16" rx="4" fill="#3E5C76"/>
+          <text x="276" y="20" font-family="JetBrains Mono, monospace" font-size="12" fill="#3E5C76">0.30</text>
+
+          <text x="0" y="52">悲慨</text>
+          <rect x="66" y="40" width="330" height="16" rx="4" fill="rgba(28,28,28,.06)"/>
+          <rect x="66" y="40" width="158" height="16" rx="4" fill="#3E5C76"/>
+          <text x="236" y="52" font-family="JetBrains Mono, monospace" font-size="12" fill="#3E5C76">0.24</text>
+
+          <text x="0" y="84">洗炼</text>
+          <rect x="66" y="72" width="330" height="16" rx="4" fill="rgba(28,28,28,.06)"/>
+          <rect x="66" y="72" width="119" height="16" rx="4" fill="#3E5C76"/>
+          <text x="197" y="84" font-family="JetBrains Mono, monospace" font-size="12" fill="#3E5C76">0.18</text>
+
+          <text x="0" y="116">含蓄</text>
+          <rect x="66" y="104" width="330" height="16" rx="4" fill="rgba(28,28,28,.06)"/>
+          <rect x="66" y="104" width="106" height="16" rx="4" fill="#3E5C76"/>
+          <text x="184" y="116" font-family="JetBrains Mono, monospace" font-size="12" fill="#3E5C76">0.16</text>
+
+          <text x="0" y="148">冲淡</text>
+          <rect x="66" y="136" width="330" height="16" rx="4" fill="rgba(28,28,28,.06)"/>
+          <rect x="66" y="136" width="46" height="16" rx="4" fill="#8A8578"/>
+          <text x="124" y="148" font-family="JetBrains Mono, monospace" font-size="12" fill="#8A8578">0.07</text>
+
+          <text x="0" y="180">其余 19 品</text>
+          <rect x="66" y="168" width="330" height="16" rx="4" fill="rgba(28,28,28,.06)"/>
+          <rect x="66" y="168" width="33" height="16" rx="4" fill="#C9C5BA"/>
+          <text x="111" y="180" font-family="JetBrains Mono, monospace" font-size="12" fill="#8A8578">0.05</text>
+        </g>
+      </svg>
+      <p class="caption" style="margin:14px 0 0">支撑依据：雪 / 寒 / 孤 / 独 的冷峭质地 → 清奇；"千万孤独"的孤愤 → 悲慨；20 字极简、无赘语 → 洗炼；情感全由缺席与反差承载 → 含蓄。</p>
+    </div>
+
+    <div class="card tight">
+      <h3 style="margin-top:0">3.2 韵味的两把尺子</h3>
+      <div class="kv">
+        <dt>反差度 ρ</dt><dd><b>0.81</b>（高）</dd>
+        <dt>留白熵 H(情感 | 字面)</dt><dd><b>1.94 bit</b>（高）</dd>
+        <dt>通感耦合</dt><dd>视觉 → 触觉（寒）/ 听觉（绝、灭的收束音）</dd>
+      </div>
+      <div class="formula">ρ = d(y , ŷ_literal) = 0.81<br>韵味 ∝ H(情感 | 字面) = 1.94 bit</div>
+      <p class="caption" style="margin:0">
+        全诗 20 字中，直接情感词数量为 <b>0</b>——没有"悲""愁""苦""恨"。但情感强度却极高。这个巨大的落差，就是"韵味"在数学上的位置：它住在字面之外。
+      </p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="callout" style="margin:0">
+      <span class="h">对生成层的直接约束</span>
+      因为 ρ 高、H 高，<b>画面绝不能"把情感画出来"</b>。不许有低头的老人、不许有颤抖的手、不许有阴沉的色调滤镜。情感必须由<b>体量的极端对比</b>（千山万径 ↔ 一舟一翁）和<b>大面积的空</b>来承担。这解释了为什么《江雪》的画史上几乎没有一幅是"表情悲伤的渔翁"——那会立刻把 ρ 拉到 0。
+    </div>
+  </div>
+</section>
+
+<!-- ============ STEP 4 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">STEP 4</span><h2>情感轨迹与起承转合</h2></div>
+  <p class="sec-note">模型：逐句情感 y_i ∈ Δ²³ 构成一条曲线；段边界用变点检测求解；"转"对应曲率峰值 κ = |y′ × y″| / |y′|³。</p>
+
+  <div class="card">
+    <figure>
+      <svg viewBox="0 0 900 400" role="img" aria-label="江雪情感轨迹曲线：前两句推远，第三句骤然收缩，第四句定格">
+        <g font-family="PingFang SC, sans-serif">
+          <text x="60" y="30" font-size="12" fill="#8A8578">唤醒度 A（示意）</text>
+        </g>
+        <line x1="60" y1="60" x2="60" y2="300" stroke="rgba(28,28,28,.10)" stroke-width="1"/>
+        <line x1="60" y1="300" x2="860" y2="300" stroke="rgba(28,28,28,.14)" stroke-width="1"/>
+        <line x1="60" y1="180" x2="860" y2="180" stroke="rgba(28,28,28,.06)" stroke-width="1"/>
+
+        <!-- 曲率峰值标注 -->
+        <line x1="460" y1="118" x2="460" y2="72" stroke="#A83A2C" stroke-width="1" stroke-dasharray="4 4"/>
+        <rect x="366" y="42" width="188" height="30" rx="8" fill="#F6F3EC" stroke="#A83A2C" stroke-width="1.5"/>
+        <text x="460" y="62" font-size="13" text-anchor="middle" fill="#A83A2C" font-family="PingFang SC, sans-serif">转 · κ 峰值 = 0.87</text>
+
+        <!-- 曲线 -->
+        <path d="M100 268 C190 268 190 258 260 258 C350 258 350 210 460 210 C570 210 570 108 660 108 C750 108 750 96 840 96"
+              fill="none" stroke="#3E5C76" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+        <!-- 数据点 -->
+        <circle cx="100" cy="268" r="5" fill="#3E5C76" stroke="#FFFFFF" stroke-width="2.5"/>
+        <circle cx="260" cy="258" r="5" fill="#3E5C76" stroke="#FFFFFF" stroke-width="2.5"/>
+        <circle cx="460" cy="210" r="5" fill="#3E5C76" stroke="#FFFFFF" stroke-width="2.5"/>
+        <circle cx="660" cy="108" r="5" fill="#3E5C76" stroke="#FFFFFF" stroke-width="2.5"/>
+
+        <!-- 句标签 -->
+        <g font-family="Songti SC, serif" font-size="14" fill="#4A4640" text-anchor="middle">
+          <text x="100" y="292">千山鸟飞绝</text>
+          <text x="260" y="282">万径人踪灭</text>
+          <text x="460" y="234">孤舟蓑笠翁</text>
+          <text x="660" y="132">独钓寒江雪</text>
+        </g>
+
+        <!-- 空间尺度轴 -->
+        <g font-family="JetBrains Mono, monospace" font-size="12" fill="#8A8578" text-anchor="middle">
+          <text x="100" y="330">∞</text>
+          <text x="260" y="330">∞</text>
+          <text x="460" y="330">1</text>
+          <text x="660" y="330">1</text>
+        </g>
+        <text x="60" y="330" font-size="12" fill="#8A8578" font-family="PingFang SC, sans-serif">空间尺度</text>
+
+        <!-- 起承转合带 -->
+        <rect x="60" y="348" width="180" height="26" rx="6" fill="rgba(28,28,28,.045)" stroke="rgba(28,28,28,.12)"/>
+        <text x="150" y="365" font-size="12" text-anchor="middle" fill="#4A4640" font-family="PingFang SC, sans-serif">起</text>
+        <rect x="244" y="348" width="180" height="26" rx="6" fill="rgba(28,28,28,.045)" stroke="rgba(28,28,28,.12)"/>
+        <text x="334" y="365" font-size="12" text-anchor="middle" fill="#4A4640" font-family="PingFang SC, sans-serif">承</text>
+        <rect x="428" y="348" width="180" height="26" rx="6" fill="rgba(168,58,44,.07)" stroke="#A83A2C" stroke-width="1.5"/>
+        <text x="518" y="365" font-size="12" text-anchor="middle" fill="#A83A2C" font-family="PingFang SC, sans-serif">转</text>
+        <rect x="612" y="348" width="188" height="26" rx="6" fill="rgba(28,28,28,.045)" stroke="rgba(28,28,28,.12)"/>
+        <text x="706" y="365" font-size="12" text-anchor="middle" fill="#4A4640" font-family="PingFang SC, sans-serif">合</text>
+      </svg>
+      <figcaption>唤醒度沿诗句的轨迹，与空间尺度的阶跃曲线。前两句是"推远至空"，第三句骤然收缩到一个点——变点即"转"。</figcaption>
+    </figure>
+  </div>
+
+  <div class="two-col">
+    <div class="card tight">
+      <h3 style="margin-top:0">4.1 逐句情感量</h3>
+      <table>
+        <thead><tr><th>句</th><th class="num">效价 V</th><th class="num">唤醒 A</th><th class="num">张力</th></tr></thead>
+        <tbody>
+          <tr><td>千山鸟飞绝</td><td class="num">−0.42</td><td class="num">0.22</td><td class="num">0.30</td></tr>
+          <tr><td>万径人踪灭</td><td class="num">−0.55</td><td class="num">0.18</td><td class="num">0.38</td></tr>
+          <tr><td>孤舟蓑笠翁</td><td class="num">−0.35</td><td class="num">0.46</td><td class="num">0.72</td></tr>
+          <tr><td>独钓寒江雪</td><td class="num">−0.48</td><td class="num">0.71</td><td class="num">0.95</td></tr>
+        </tbody>
+      </table>
+      <p class="caption" style="margin-top:12px">效价始终为负且平稳；唤醒度在句 3 骤然抬升——这就是"孤"与"独"二字的力量：全诗唯一的动作主体出现，画面从"空"变为"一个人对抗整个空"。</p>
+    </div>
+
+    <div class="card tight">
+      <h3 style="margin-top:0">4.2 变点检测结果</h3>
+      <div class="kv">
+        <dt>变点位置</dt><dd>句 2 → 句 3 之间（尺度阶跃 ∞ → 1）</dd>
+        <dt>曲率峰值</dt><dd><b>κ = 0.87</b>（全诗最大）</dd>
+        <dt>次级变点</dt><dd>句 3 → 句 4（张力 0.72 → 0.95，无尺度变化）</dd>
+        <dt>段划分</dt><dd>起 = 句1 / 承 = 句2 / 转 = 句3 / 合 = 句4</dd>
+      </div>
+      <div class="callout" style="margin-bottom:0">
+        <span class="h">这是全诗最强的一条镜头指令</span>
+        前两句与后两句的<b>空间尺度相差一个数量级以上</b>。数学上这是一个阶跃函数，落到渲染层就是：前两句极远景缓移，第三句<b>推近</b>，推近方向由 κ = 0.87 决定。
+        <b>但 κ 只回答「何时推」，不回答「推多猛」</b>——幅度须另受意境护栏约束。v1.3 已把《江雪》转段推近压平：12 秒缓推 0.96→1.12 倍（峰值 3.7%/s），全片无急推。若按 κ 直接换算速度，推近会过猛，把观者注意力从「空」拉到「物」，稀释「孤」的偏心构图。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ STEP 5 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">STEP 5</span><h2>构图求解</h2><span class="d2-badge" title="本节画法参数由 D2 构建期注入（d2_techniques.json → src/d2/d2_inject.py）">D2</span></div>
+  <p class="sec-note">模型：min<sub>x</sub> E = E_relation + λ₁E_blank + λ₂E_density + λ₃E_balance，在留白率、疏密势能、视觉重心三组约束下求解意象布局。</p>
+  <p class="d2-note">D2 画法束（构建期注入 · <code>d2_techniques.json</code>）：三远 = 平远 + 深远　·　皴法 = 无皴　·　留白 ρ ∈ [0.78, 0.92]。C 组算子（视点 G7 / 天候 G4 / 构图 G1）见 <b>5.1–5.3</b>。</p>
+
+  <div class="card">
+    <table>
+      <thead><tr><th>约束</th><th>目标</th><th class="num">求解结果</th><th>判定</th></tr></thead>
+      <tbody>
+        <tr><td>留白率 ρ</td><td data-d2="poem_level.blank_range">雪景 + 寒江，留白应极高：ρ ∈ [0.78, 0.92]</td><td class="num">0.79</td><td data-d2="poem_level.blank_range" class="ok">✓ 通过（0.79 ∈ [0.78, 0.92]）</td></tr>
+        <tr><td>空白连通熵 H_blank</td><td>空白须聚成大块，非均匀撒开</td><td class="num">0.41</td><td class="ok">✓ 大块留白</td></tr>
+        <tr><td>疏密势能 E_density</td><td>密区（舟翁）与疏区（江天）形成势能极小</td><td class="num">−2.14</td><td class="ok">✓ 收敛</td></tr>
+        <tr><td>视觉重心 g</td><td>落于"三七停"分点 ≈ (0.66, 0.68)</td><td class="num">(0.65, 0.69)</td><td class="ok">✓ 偏移 0.014</td></tr>
+        <tr><td>三远法</td><td>平远为主（低地平线）+ 深远（三重层叠）</td><td data-d2="poem_level.yuan" class="num">平远 + 深远 · 地平线 0.42H</td><td data-d2="poem_level.yuan" class="ok">✓</td></tr>
+        <tr><td>负节点约束</td><td>鸟 = 0，人 = 0（除翁外）</td><td class="num">0 / 0</td><td class="ok">✓ 硬约束满足</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <figure>
+      <!-- SCENE:jx:draft:begin -->
+      <svg viewBox="0 0 900 600" role="img" aria-label="江雪构图线稿：淡墨远山、大片留白、右下角孤舟与蓑笠翁">
+        <rect x="0" y="0" width="900" height="600" fill="#F6F3EC"/>
+        <!-- 三分网格 -->
+        <g stroke="rgba(28,28,28,.07)" stroke-width="1">
+          <line x1="300" y1="0" x2="300" y2="600"/>
+          <line x1="600" y1="0" x2="600" y2="600"/>
+          <line x1="0" y1="200" x2="900" y2="200"/>
+          <line x1="0" y1="400" x2="900" y2="400"/>
+        </g>
+        <!-- 远山 -->
+        <g opacity="0.18">
+          <path d="M-140 252 L-70 206 L0 252 L120 176 L212 234 L320 158 L432 238 L522 194 L642 250 L762 198 L900 252 L980 210 L1040 252 L1040 300 L-140 300 Z" fill="#8A8578"/>
+          <path d="M-140 252 L-60 210 L88 204 L202 248 L332 188 L472 252 L602 212 L742 252 L900 252 L990 218 L1040 252 L1040 300 L-140 300 Z" fill="#8A8578"/>
+          <path d="M-140 252 L-40 232 L142 222 L282 252 L422 214 L582 252 L800 234 L960 246 L1040 252 L1040 300 L-140 300 Z" fill="#8A8578"/>
+        </g>
+        <!-- 山脚水痕 -->
+        <g>
+          <path d="M-140 262 Q-40 272 0 258 Q220 274 452 262 Q680 250 900 264 Q960 268 1040 264" fill="none" stroke="#8A8578" stroke-width="1.6" opacity="0.16"/>
+        </g>
+        <!-- 万径 -->
+        <g opacity="0.28">
+          <path d="M30 258 L152 302" fill="none" stroke="#8A8578" stroke-width="2.4"/>
+          <path d="M64 258 L200 304" fill="none" stroke="#8A8578" stroke-width="2"/>
+          <path d="M98 258 L246 306" fill="none" stroke="#8A8578" stroke-width="1.8"/>
+        </g>
+        <!-- 芦苇 -->
+        <g opacity="0.42">
+          <path d="M88 514 Q100 438 80 368" fill="none" stroke="#4A4640" stroke-width="1.8"/>
+          <path d="M114 518 Q130 450 158 392" fill="none" stroke="#4A4640" stroke-width="1.4"/>
+          <path d="M138 522 Q146 464 138 420" fill="none" stroke="#4A4640" stroke-width="1.2"/>
+        </g>
+        <!-- 孤舟 -->
+        <g opacity="0.88">
+          <path d="M468 468 Q585 502 702 468 Q662 490 585 492 Q508 490 468 468 Z" fill="#1C1C1C"/>
+          <path d="M566 428 Q586 406 606 428 Z" fill="#1C1C1C"/>
+          <path d="M576 428 L596 428 L598 456 L574 456 Z" fill="#1C1C1C"/>
+          <path d="M578 458 Q588 466 596 458" fill="#1C1C1C" stroke="#F6F3EC" stroke-width="1"/>
+        </g>
+        <!-- 钓丝 -->
+        <g opacity="0.55">
+          <path d="M600 452 Q642 500 620 558" fill="none" stroke="#1C1C1C" stroke-width="1.2"/>
+        </g>
+        <!-- 地平线（平远 0.42H） -->
+        <line x1="0" y1="252" x2="900" y2="252" stroke="rgba(62,92,118,.30)" stroke-width="1" stroke-dasharray="6 5"/>
+        <text x="14" y="246" font-size="12" fill="#3E5C76" font-family="PingFang SC, sans-serif">地平线 0.42H</text>
+        <!-- 视觉重心 -->
+        <circle cx="585" cy="414" r="4" fill="none" stroke="#A83A2C" stroke-width="1.5"/>
+        <line x1="585" y1="414" x2="700" y2="352" stroke="#A83A2C" stroke-width="1" stroke-dasharray="4 4"/>
+        <text x="704" y="356" font-size="12" fill="#A83A2C" font-family="PingFang SC, sans-serif">视觉重心 (0.65, 0.69)</text>
+        <!-- 留白标注 -->
+        <text x="340" y="380" font-size="13" fill="#8A8578" font-family="PingFang SC, sans-serif" text-anchor="middle">留白区 ρ = 0.79</text>
+        <text x="340" y="400" font-size="12" fill="#8A8578" font-family="PingFang SC, sans-serif" text-anchor="middle">（寒江 + 雪 + 飞绝的鸟 + 灭掉的人踪）</text>
+        <!-- 画中物标注（锚点取自动画 #jx-anno） -->
+        <g>
+          <line x1="400" y1="214" x2="358" y2="178" stroke="#3E5C76" stroke-width="1" opacity="0.55"/>
+          <circle cx="400" cy="214" r="2.4" fill="#3E5C76" opacity="0.55"/>
+          <text x="352" y="172" text-anchor="start" fill="#3E5C76" font-size="12" font-family="PingFang SC, sans-serif">远山</text>
+          <line x1="118" y1="442" x2="66" y2="400" stroke="#3E5C76" stroke-width="1" opacity="0.55"/>
+          <circle cx="118" cy="442" r="2.4" fill="#3E5C76" opacity="0.55"/>
+          <text x="60" y="394" text-anchor="start" fill="#3E5C76" font-size="12" font-family="PingFang SC, sans-serif">芦苇</text>
+          <line x1="706" y1="258" x2="722" y2="240" stroke="#3E5C76" stroke-width="1" opacity="0.55"/>
+          <circle cx="706" cy="258" r="2.4" fill="#3E5C76" opacity="0.55"/>
+          <text x="728" y="236" text-anchor="start" fill="#3E5C76" font-size="12" font-family="PingFang SC, sans-serif">寒江</text>
+          <line x1="146" y1="152" x2="146" y2="132" stroke="#3E5C76" stroke-width="1" opacity="0.55"/>
+          <circle cx="146" cy="152" r="2.4" fill="#3E5C76" opacity="0.55"/>
+          <text x="146" y="126" text-anchor="middle" fill="#3E5C76" font-size="12" font-family="PingFang SC, sans-serif">雪</text>
+          <line x1="168" y1="292" x2="186" y2="326" stroke="#3E5C76" stroke-width="1" opacity="0.55"/>
+          <circle cx="168" cy="292" r="2.4" fill="#3E5C76" opacity="0.55"/>
+          <text x="190" y="340" text-anchor="start" fill="#3E5C76" font-size="12" font-family="PingFang SC, sans-serif">万径</text>
+          <line x1="585" y1="462" x2="585" y2="404" stroke="#3E5C76" stroke-width="1" opacity="0.55"/>
+          <circle cx="585" cy="462" r="2.4" fill="#3E5C76" opacity="0.55"/>
+          <text x="585" y="398" text-anchor="middle" fill="#3E5C76" font-size="12" font-family="PingFang SC, sans-serif">孤舟 · 蓑笠翁</text>
+          <line x1="618" y1="520" x2="646" y2="540" stroke="#3E5C76" stroke-width="1" opacity="0.55"/>
+          <circle cx="618" cy="520" r="2.4" fill="#3E5C76" opacity="0.55"/>
+          <text x="652" y="548" text-anchor="start" fill="#3E5C76" font-size="12" font-family="PingFang SC, sans-serif">钓丝</text>
+        </g>
+        <!-- 印章 -->
+        <g id="jx-seal" opacity="1">
+          <rect x="830" y="522" width="26" height="44" rx="4" fill="#A83A2C" opacity="0.86"/>
+          <text x="843" y="540" font-size="19" fill="#F6F3EC" font-family="PoemSeal, Songti SC, serif" text-anchor="middle">江</text>
+          <text x="843" y="562" font-size="19" fill="#F6F3EC" font-family="PoemSeal, Songti SC, serif" text-anchor="middle">雪</text>
+        </g>
+      </svg>
+      <figcaption>构图解算结果（线稿）。三分网格用于校验重心，地平线定在 0.42H 取平远。留白区同时承载了「雪」「寒江」和两个负节点，留白占 0.79%。线稿几何与静帧、动画共用同一份冻结场景（<code>data/source/scene/jx.json</code>）。</figcaption>
+<!-- SCENE:jx:draft:end -->
+    </figure>
+  </div>
+<div class="card tight" id="d2-viewpoint">
+      <h3 style="margin-top:0">5.1 视点档（G7 · C 组 · D2 → 卡5）</h3>
+      <table>
+        <thead><tr><th>环节</th><th>D2 字段</th><th>值</th></tr></thead>
+        <tbody>
+          <tr><td>视点档</td><td><code>viewpoint.default</code></td><td data-d2="poem_level.viewpoint.default" class="num">平视</td></tr>
+          <tr><td>判据</td><td><code>vocab.viewpoint.criterion</code></td><td data-d2="poem_level.viewpoint.criterion">视点与景齐平，远山与目齐（平远）</td></tr>
+          <tr><td>视点票</td><td><code>viewpoint.votes</code></td><td data-d2="poem_level.viewpoint.votes">平视 3</td></tr>
+          <tr><td>候选</td><td><code>viewpoint.candidates</code></td><td data-d2="poem_level.viewpoint.candidates">平视</td></tr>
+          <tr><td>地平线区间</td><td><code>vocab.viewpoint.params.horizon</code></td><td data-d2="poem_level.viewpoint.horizon" class="num">[0.42, 0.55]</td></tr>
+          <tr><td>垂直尺度</td><td><code>vocab.viewpoint.params.vertical_scale</code></td><td data-d2="poem_level.viewpoint.vertical_scale" class="num">[0.9, 1.1]</td></tr>
+        </tbody>
+      </table>
+      <p class="caption" style="margin:8px 0 0">视点独立于三远：郭熙三远覆盖<b>仰视 / 平视</b>，<b>俯视</b>补沈括「以大观小」。D2 由空间词（仰 / 俯 / 瞰…）与三远归属投票定档，并给出<b>地平线区间</b>与<b>垂直尺度</b>；精确构图由卡5 在区间内求解。</p>
+    </div>
+<div class="card tight" id="d2-weather">
+      <h3 style="margin-top:0">5.2 天候（G4 · C 组 · D2 → 卡5 / 卡6）</h3>
+      <table>
+        <thead><tr><th>环节</th><th>D2 字段</th><th>值</th></tr></thead>
+        <tbody>
+          <tr><td>天候档</td><td><code>weather.name</code></td><td data-d2="poem_level.weather.name" class="num">雪</td></tr>
+          <tr><td>命中词</td><td><code>weather.hit</code></td><td data-d2="poem_level.weather.hit">雪</td></tr>
+          <tr><td>质感</td><td><code>vocab.weather.quality</code></td><td data-d2="poem_level.weather.quality">大留白、墨滞；雪覆不露石理</td></tr>
+          <tr><td>σ 乘子（卡6）</td><td><code>weather.sigma_mult</code></td><td data-d2="poem_level.weather.sigma_mult" class="num">[1.2, 1.6]</td></tr>
+          <tr><td>μ 乘子（卡6）</td><td><code>weather.mu_mult</code></td><td data-d2="poem_level.weather.mu_mult" class="num">[0.5, 0.8]</td></tr>
+          <tr><td>留白加成（卡5）</td><td><code>weather.blank_bonus</code></td><td data-d2="poem_level.weather.blank_bonus" class="num">0.04</td></tr>
+          <tr><td>皴法偏置</td><td><code>weather.cun_bias</code></td><td data-d2="poem_level.weather.cun_bias">无皴</td></tr>
+          <tr><td>来源</td><td><code>vocab.weather.source_id</code></td><td data-d2="poem_level.weather.source_id">guoxi_sishi</td></tr>
+        </tbody>
+      </table>
+      <p class="caption" style="margin:8px 0 0">天候由天候词定档（「日」因歧义不收，只收晴 / 霁 / 雨 / 雪 / 雾 / 烟）。雪 → 卡5 留白率上调、σ 上调；雾 → 卡6 空气透视（σ 大幅上调）；雨 → 雨点皴 / 湿度。D2 只给<b>乘子与加成</b>，精确 σ / μ 由卡6 求解。</p>
+    </div>
+<div class="card tight" id="d2-composition">
+      <h3 style="margin-top:0">5.3 构图规则（G1 · C 组 · D2 → 卡5）</h3>
+      <table>
+        <thead><tr><th>环节</th><th>D2 字段</th><th>值</th></tr></thead>
+        <tbody>
+          <tr><td>护栏·边角</td><td><code>composition.guards.边角</code></td><td data-d2="poem_level.composition.guards">硬约束｜取山之一角、水之一涯，留大片空白（马一角 / 夏半边）</td></tr>
+          <tr><td>护栏·三叠两段</td><td><code>composition.guards.三叠两段</code></td><td data-d2="poem_level.composition.guards">护栏｜禁等距机械三叠（地-树-山），分层须由自然分疆承担</td></tr>
+          <tr><td>软目标算子</td><td><code>composition.operator</code></td><td data-d2="poem_level.composition.operator" class="num">截断</td></tr>
+          <tr><td>算子规则</td><td><code>vocab.composition.rule</code></td><td data-d2="poem_level.composition.operator_rule">截断取势（不全收，留势外延）</td></tr>
+          <tr><td>候选</td><td><code>composition.candidates</code></td><td data-d2="poem_level.composition.candidates">截断 / 借景</td></tr>
+          <tr><td>触发规则</td><td><code>composition.rules_fired</code></td><td data-d2="poem_level.composition.rules_fired">C1 / C3</td></tr>
+        </tbody>
+      </table>
+      <p class="caption" style="margin:8px 0 0">边角（马远「马一角」/ 夏圭「夏半边」）与三叠两段为<b>护栏</b>（恒生效）；蹊径六则（石涛《画语录》）为<b>软目标算子池</b>，D2 按语境（季节 / V 档 / 山石 / 天象）选一。精确布局由卡5 求解。</p>
+    </div>
+</section>
+
+<!-- ============ STEP 6 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">STEP 6</span><h2>笔墨渲染</h2><span class="d2-badge" title="本节画法参数由 D2 构建期注入（d2_techniques.json → src/d2/d2_inject.py）">D2</span></div>
+  <p class="sec-note">模型：神经先验给出笔势方向场 F(x)，物理层沿笔势平流墨液 ∂c/∂t = ∇·(D∇c) − v·∇c，v = κF(x)；边缘不规则性由纤维噪声掩码 M(x) = Σ P(x,2ⁱ)/2^{iH} 控制。</p>
+  <p class="d2-note">本表含水 p / 墨阶 / 笔法由 D2 构建期注入（<code>d2_techniques.json</code> → <code>src/d2/d2_inject.py</code>）；墨浓度 c 为卡6 求解值，就地按 D2 墨阶区间判读。人物行的<b>尺寸档</b>由 <code>figure_layer</code> 调制器给出（郭熙「三远与人物」：景深 → 尺寸；非人物行「—」）。底色候选（A 组：季节色 + 极性色）见 <b>6.3</b>，设色范式（G3）见 <b>6.4</b>，墨法轴（G11）见 <b>6.5</b>，材质系数（G6）见 <b>6.6</b>，笔法质量维（G2）见 <b>6.7</b>；精确底色 / 用色 / 墨法均由卡6 在候选内求解。</p>
+
+  <div class="two-col">
+    <div class="card tight">
+      <h3 style="margin-top:0">6.1 分区笔墨参数</h3>
+      <table>
+        <thead><tr><th>区域</th><th>含水 p</th><th>墨浓度</th><th>笔法</th><th>尺寸档</th></tr></thead>
+        <tbody>
+          <tr><td>远山</td><td data-d2="zones.远山.water" class="num">高</td><td data-d2="zones.远山.ink_grade" class="num">0.12 <span class="d2-tag" title="D2 墨阶 清 ∈ [0.04, 0.26]；实测 c=0.12 ✓">清</span></td><td data-d2="zones.远山.stroke">大晕染 · 慢扩散</td><td class="num">—</td></tr>
+          <tr><td>万径</td><td data-d2="zones.万径.water" class="num">中</td><td data-d2="zones.万径.ink_grade" class="num">0.06 <span class="d2-tag" title="D2 墨阶 清 ∈ [0.04, 0.26]；实测 c=0.06 ✓">清</span></td><td data-d2="zones.万径.stroke">枯笔擦 · 近乎不可见</td><td class="num">—</td></tr>
+          <tr><td>孤舟</td><td data-d2="zones.孤舟.water" class="num">低</td><td data-d2="zones.孤舟.ink_grade" class="num">0.92 <span class="d2-tag" title="D2 墨阶 浓 ∈ [0.84, 0.96]；实测 c=0.92 ✓">浓</span></td><td data-d2="zones.孤舟.stroke">中锋 · 一次落笔</td><td class="num">—</td></tr>
+          <tr><td>蓑笠翁</td><td data-d2="zones.蓑笠翁.water" class="num">低</td><td data-d2="zones.蓑笠翁.ink_grade" class="num">0.95 <span class="d2-tag" title="D2 墨阶 浓 ∈ [0.84, 0.96]；实测 c=0.95 ✓">浓</span></td><td data-d2="zones.蓑笠翁.stroke">顿笔 · 侧锋</td><td data-d2="zones.蓑笠翁.size" class="num">点景 <span class="d2-tag" title="figure_layer：景深 近景 → 点景（6–9%）">6–9%</span></td></tr>
+          <tr><td>钓丝</td><td data-d2="zones.钓丝.water" class="num">极低</td><td data-d2="zones.钓丝.ink_grade" class="num">0.40 <span class="d2-tag" title="D2 墨阶 淡 ∈ [0.26, 0.6]；实测 c=0.40 ✓">淡</span></td><td data-d2="zones.钓丝.stroke">飞白 · 细若游丝</td><td class="num">—</td></tr>
+          <tr><td>寒江 / 雪</td><td class="num">—</td><td data-d2="zones.寒江 / 雪.ink_grade" class="num">0 <span class="d2-tag" title="D2 墨阶 留白 ∈ [0, 0]；实测 c=0 ✓">留白</span></td><td>不画（留白）</td><td class="num">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card tight">
+      <h3 style="margin-top:0">6.2 扩散时间律</h3>
+      <div class="formula">L(t) = √( γ r cosθ / 2μ · t )　∝　t<sup>0.5</sup></div>
+      <p class="caption" style="margin:0">
+        墨在宣纸上的扩散半径服从平方根律，不是线性。远山用高含水（D 大）→ 8 秒达到目标晕幅；孤舟用低含水 → 0.6 秒定形，几乎不洇。用错幂次，画面一眼就假。
+      </p>
+      <p class="caption" style="margin:10px 0 0">
+        飞白的生成：当含墨量低于阈值时，纤维掩码 M(x) 透过笔迹显示，形成断续的枯笔痕。钓丝就是这样一笔——它是全诗最细的墨，也是最不肯断的墨。
+      </p>
+    </div>
+  </div>
+
+  <div class="card">
+    <figure>
+      <!-- SCENE:jx:ink:begin -->
+      <svg viewBox="0 0 900 600" role="img" aria-label="江雪水墨静帧：淡墨远山、浓墨孤舟、大片留白、飘雪">
+        <defs>
+
+          <filter id="jxEdge" x="-20%" y="-20%" width="140%" height="140%">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.014" numOctaves="4" seed="11" result="n"/>
+                    <feDisplacementMap in="SourceGraphic" in2="n" scale="18" xChannelSelector="R" yChannelSelector="G"/>
+                  </filter>
+                  <filter id="jxSoft" x="-20%" y="-20%" width="140%" height="140%">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.028" numOctaves="3" seed="5" result="n2"/>
+                    <feDisplacementMap in="SourceGraphic" in2="n2" scale="10" xChannelSelector="R" yChannelSelector="G"/>
+                    <feGaussianBlur stdDeviation="3.2"/>
+                  </filter>
+                  <filter id="jxGrain" x="0" y="0" width="100%" height="100%">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="3" result="g"/>
+                    <feColorMatrix in="g" type="saturate" values="0"/>
+                  </filter>
+                  <filter id="jxDry" x="-30%" y="-30%" width="160%" height="160%">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="3" seed="9" result="d"/>
+                    <feDisplacementMap in="SourceGraphic" in2="d" scale="6" xChannelSelector="R" yChannelSelector="G"/>
+                  </filter>
+                  <filter id="jxBoatInk" x="-30%" y="-30%" width="160%" height="160%">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.014" numOctaves="4" seed="11" result="nb"/>
+                    <feDisplacementMap in="SourceGraphic" in2="nb" scale="18" xChannelSelector="R" yChannelSelector="G"/>
+                  </filter>
+                  <!-- 墨笔：位移出毛边，再用细噪点做飞白 -->
+                  <filter id="jxInk" x="-18%" y="-18%" width="136%" height="136%">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.05 0.085" numOctaves="3" seed="41" result="it"/>
+                    <feDisplacementMap in="SourceGraphic" in2="it" scale="3.4" xChannelSelector="R" yChannelSelector="G" result="id"/>
+                    <feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="2" seed="9" result="ig"/>
+                    <feColorMatrix in="ig" type="luminanceToAlpha" result="iga"/>
+                    <feComponentTransfer in="iga" result="igm">
+                      <feFuncA type="linear" slope="0.5" intercept="0.62"/>
+                    </feComponentTransfer>
+                    <feComposite in="id" in2="igm" operator="in"/>
+                  </filter>
+        </defs>
+        <rect x="0" y="0" width="900" height="600" fill="#F6F3EC"/>
+        <rect x="0" y="0" width="900" height="600" filter="url(#jxGrain)" opacity="0.055"/>
+        <g id="jx-cam">
+          <!-- 远山 -->
+          <g id="jx-far" filter="url(#jxEdge)">
+            <path d="M-140 252 L-70 206 L0 252 L120 176 L212 234 L320 158 L432 238 L522 194 L642 250 L762 198 L900 252 L980 210 L1040 252 L1040 300 L-140 300 Z" fill="#6E6A60" opacity="0.13"/>
+            <path d="M-140 252 L-60 210 L88 204 L202 248 L332 188 L472 252 L602 212 L742 252 L900 252 L990 218 L1040 252 L1040 300 L-140 300 Z" fill="#5A564D" opacity="0.17"/>
+            <path d="M-140 252 L-40 232 L142 222 L282 252 L422 214 L582 252 L800 234 L960 246 L1040 252 L1040 300 L-140 300 Z" fill="#3A362F" opacity="0.15"/>
+          </g>
+          <!-- 山脚水痕 -->
+          <g id="jx-waterline">
+            <path d="M-140 262 Q-40 272 0 258 Q220 274 452 262 Q680 250 900 264 Q960 268 1040 264" fill="none" stroke="#3A362F" stroke-width="1.6" opacity="0.16" filter="url(#jxSoft)"/>
+          </g>
+          <!-- 万径 -->
+          <g id="jx-path" filter="url(#jxSoft)" opacity="0.20">
+            <path d="M30 258 L152 302" stroke="#5A564D" stroke-width="2.4" fill="none"/>
+            <path d="M64 258 L200 304" stroke="#5A564D" stroke-width="2" fill="none"/>
+            <path d="M98 258 L246 306" stroke="#5A564D" stroke-width="1.8" fill="none"/>
+          </g>
+          <!-- 芦苇 -->
+          <g id="jx-reed" filter="url(#jxDry)" opacity="0.52">
+            <path d="M88 514 Q100 438 80 368" stroke-width="1.8"/>
+            <path d="M114 518 Q130 450 158 392" stroke-width="1.4"/>
+            <path d="M138 522 Q146 464 138 420" stroke-width="1.2"/>
+          </g>
+          <!-- 孤舟 -->
+          <g id="jx-boat" filter="url(#jxBoatInk)">
+            <path d="M468 468 Q585 502 702 468 Q662 490 585 492 Q508 490 468 468 Z" fill="#1C1C1C" opacity="0.88"/>
+            <path d="M566 428 Q586 406 606 428 Z" fill="#1C1C1C" opacity="0.92"/>
+            <path d="M576 428 L596 428 L598 456 L574 456 Z" fill="#1C1C1C" opacity="0.88"/>
+            <path d="M578 458 Q588 466 596 458" fill="none" stroke="#F6F3EC" stroke-width="1" opacity="0.5"/>
+          </g>
+          <!-- 钓丝 -->
+          <g id="jx-line">
+            <path d="M600 452 Q642 500 620 558" fill="none" stroke="#1C1C1C" stroke-width="1.2" opacity="0.5" filter="url(#jxDry)" pathLength="100" stroke-dasharray="100 100" stroke-dashoffset="0"/>
+          </g>
+          <!-- 飘雪 -->
+          <g id="jx-snow">
+            <circle fill="#8A8578" r="1.86" cx="837.5" cy="354.2" opacity="0.420"/>
+            <circle fill="#8A8578" r="2.01" cx="166.6" cy="48.1" opacity="0.420"/>
+            <circle fill="#8A8578" r="1.82" cx="765.3" cy="445.5" opacity="0.079"/>
+            <circle fill="#8A8578" r="1.19" cx="50.6" cy="60.7" opacity="0.420"/>
+            <circle fill="#8A8578" r="1.22" cx="436.2" cy="257.8" opacity="0.186"/>
+            <circle fill="#8A8578" r="1.43" cx="423.2" cy="33.5" opacity="0.420"/>
+            <circle fill="#8A8578" r="1.59" cx="375.4" cy="191.2" opacity="0.420"/>
+            <circle fill="#8A8578" r="1.70" cx="793.2" cy="463.7" opacity="0.420"/>
+            <circle fill="#8A8578" r="1.82" cx="757.3" cy="35.8" opacity="0.420"/>
+            <circle fill="#8A8578" r="1.06" cx="657.0" cy="226.1" opacity="0.420"/>
+            <circle fill="#8A8578" r="1.14" cx="662.5" cy="440.3" opacity="0.420"/>
+            <circle fill="#8A8578" r="1.70" cx="310.2" cy="344.9" opacity="0.420"/>
+            <circle fill="#8A8578" r="1.66" cx="150.4" cy="184.1" opacity="0.420"/>
+            <circle fill="#8A8578" r="1.02" cx="67.6" cy="114.9" opacity="0.420"/>
+            <circle fill="#8A8578" r="1.22" cx="713.9" cy="218.4" opacity="0.420"/>
+            <circle fill="#8A8578" r="1.79" cx="306.3" cy="539.5" opacity="0.420"/>
+            <circle fill="#8A8578" r="1.71" cx="266.6" cy="258.3" opacity="0.420"/>
+            <circle fill="#8A8578" r="1.73" cx="278.8" cy="439.0" opacity="0.420"/>
+            <circle fill="#8A8578" r="1.99" cx="571.7" cy="54.4" opacity="0.420"/>
+            <circle fill="#8A8578" r="1.02" cx="648.3" cy="564.0" opacity="0.420"/>
+            <circle fill="#8A8578" r="1.29" cx="808.9" cy="511.1" opacity="0.420"/>
+            <circle fill="#8A8578" r="1.96" cx="297.5" cy="114.9" opacity="0.420"/>
+            <circle fill="#8A8578" r="1.98" cx="519.2" cy="288.6" opacity="0.420"/>
+            <circle fill="#8A8578" r="1.05" cx="186.0" cy="161.6" opacity="0.201"/>
+            <circle fill="#8A8578" r="1.54" cx="94.7" cy="472.9" opacity="0.340"/>
+            <circle fill="#8A8578" r="2.06" cx="241.5" cy="-25.9" opacity="0.043"/>
+            <circle fill="#8A8578" r="1.90" cx="784.8" cy="195.1" opacity="0.420"/>
+            <circle fill="#8A8578" r="2.00" cx="436.2" cy="520.1" opacity="0.290"/>
+            <circle fill="#8A8578" r="1.10" cx="678.5" cy="327.8" opacity="0.197"/>
+            <circle fill="#8A8578" r="1.61" cx="92.5" cy="300.0" opacity="0.420"/>
+            <circle fill="#8A8578" r="1.12" cx="142.0" cy="91.8" opacity="0.420"/>
+            <circle fill="#8A8578" r="1.04" cx="108.1" cy="116.4" opacity="0.420"/>
+            <circle fill="#8A8578" r="1.41" cx="679.9" cy="221.3" opacity="0.420"/>
+            <circle fill="#8A8578" r="1.95" cx="395.3" cy="233.5" opacity="0.420"/>
+            <circle fill="#8A8578" r="1.90" cx="208.1" cy="321.0" opacity="0.420"/>
+            <circle fill="#8A8578" r="1.34" cx="842.2" cy="384.2" opacity="0.420"/>
+          </g>
+        </g>
+        <!-- 印章 -->
+        <g id="jx-seal" opacity="1">
+          <rect x="830" y="522" width="26" height="44" rx="4" fill="#A83A2C" opacity="0.86"/>
+          <text x="843" y="540" font-size="19" fill="#F6F3EC" font-family="PoemSeal, Songti SC, serif" text-anchor="middle">江</text>
+          <text x="843" y="562" font-size="19" fill="#F6F3EC" font-family="PoemSeal, Songti SC, serif" text-anchor="middle">雪</text>
+        </g>
+      </svg>
+      <figcaption>笔墨渲染结果（静帧）。远山用纤维噪声扰动 + 高斯模糊模拟高含水晕染；孤舟与翁用同一噪声但低模糊，保持笔锋；钓丝以飞白（噪声位移 + 断续）呈现；飘雪为 JS 生成、按终态密度 0.85 静态复现。留白占 0.79%。静帧几何冻结自动画 <code>#jx-cam</code>（<code>data/source/scene/jx.json</code>），与动画逐值一致。</figcaption>
+<!-- SCENE:jx:ink:end -->
+    </figure>
+  </div>
+<div class="card tight" id="d2-base-tone">
+      <h3 style="margin-top:0">6.3 底色通路（A 组 · D2 候选 → 卡6 求解）</h3>
+      <table>
+        <thead><tr><th>环节</th><th>D2 字段</th><th>值</th></tr></thead>
+        <tbody>
+          <tr><td>季节</td><td><code>season</code></td><td data-d2="poem_level.base_tone.season.name" class="num">冬</td></tr>
+          <tr><td>季节色</td><td><code>vocab.season.color</code></td><td data-d2="poem_level.base_tone.season.color">素白</td></tr>
+          <tr><td>极性键</td><td><code>polarity.keys · G12 归一</code></td><td data-d2="poem_level.base_tone.polarity_keys">隐逸·渔樵 / 漂泊·孤立 / 孤守·不屈</td></tr>
+          <tr><td>极性色</td><td><code>modulators.polarity.color</code></td><td data-d2="poem_level.polarity.colors">冷灰</td></tr>
+          <tr><td>底色候选</td><td><code>base_tone.color_candidates</code></td><td data-d2="poem_level.base_tone.color_candidates">素白 / 冷灰</td></tr>
+          <tr><td>墨偏区间</td><td><code>base_tone.ink_bias_range</code></td><td data-d2="poem_level.base_tone.ink_bias_range" class="num">[-1, 2]</td></tr>
+        </tbody>
+      </table>
+      <p class="caption" style="margin:8px 0 0">D2 只给<b>候选</b>与<b>墨偏区间</b>；卡6 在候选内求解精确底色（分工铁律）。本节即该候选的消费端（A 组接线）。</p>
+    </div>
+<div class="card tight" id="d2-paradigm">
+      <h3 style="margin-top:0">6.4 设色范式（G3 · B 组 · D2 候选 → 卡6 求解）</h3>
+      <table>
+        <thead><tr><th>环节</th><th>D2 字段</th><th>值</th></tr></thead>
+        <tbody>
+          <tr><td>范式默认档</td><td><code>paradigm.default</code></td><td data-d2="poem_level.paradigm.default" class="num">水墨</td></tr>
+          <tr><td>范式候选</td><td><code>paradigm.candidates</code></td><td data-d2="poem_level.paradigm.candidates">水墨</td></tr>
+          <tr><td>墨骨强度</td><td><code>vocab.paradigm.ink_bone × color_projection.ink_bone_scale</code></td><td data-d2="poem_level.paradigm.ink_bone_scale" class="num">重 × 1</td></tr>
+          <tr><td>色域</td><td><code>vocab.paradigm.color_domain</code></td><td data-d2="poem_level.paradigm.color_domain">—</td></tr>
+          <tr><td>色域投影</td><td><code>paradigm.projected_color_candidates</code></td><td data-d2="poem_level.paradigm.projected_color_candidates">素白 / 冷灰</td></tr>
+          <tr><td>定档规则</td><td><code>modulators.paradigm.rules</code></td><td data-d2="poem_level.paradigm.rules_fired">P3→水墨</td></tr>
+        </tbody>
+      </table>
+      <p class="caption" style="margin:8px 0 0">范式由品格 / 季节 / 极性定档（青绿 ← 北宗着色山水；浅绛 ← 元人淡彩；水墨 ← 南宗渲淡；没骨 ← 徐崇嗣纯色）。D2 只给<b>候选</b>与<b>色域投影</b>，精确用色由卡6 在色域内求解（分工铁律）。</p>
+    </div>
+<div class="card tight" id="d2-ink-method">
+      <h3 style="margin-top:0">6.5 墨法轴（G11 · B 组 · D2 候选 → 卡6 求解）</h3>
+      <table>
+        <thead><tr><th>墨法</th><th>μ 区间</th><th>含水</th><th>笔法</th><th>质感</th><th>语境建议</th></tr></thead>
+        <tbody>
+          <tr><td>破墨</td><td class="num" data-d2="vocab.ink_method.破墨.mu">[0.9, 1.3]</td><td>中</td><td>破墨</td><td>浓破淡 / 淡破浓，出层次</td><td><span class="d2-tag" title="语境建议：本诗可优先取此墨法">建议</span></td></tr>
+          <tr><td>积墨</td><td class="num" data-d2="vocab.ink_method.积墨.mu">[0.5, 0.8]</td><td>中</td><td>积墨</td><td>层层叠加，厚重；边缘收敛</td><td><span class="d2-tag" title="语境建议：本诗可优先取此墨法">建议</span></td></tr>
+          <tr><td>泼墨</td><td class="num" data-d2="vocab.ink_method.泼墨.mu">[1.4, 2]</td><td>高</td><td>泼墨</td><td>高含水高墨，气势奔放</td><td>—</td></tr>
+          <tr><td>宿墨</td><td class="num" data-d2="vocab.ink_method.宿墨.mu">[0.4, 0.7]</td><td>低</td><td>枯笔擦</td><td>隔夜沉淀，涩而滞；扩散慢、带颗粒</td><td><span class="d2-tag" title="语境建议：本诗可优先取此墨法">建议</span></td></tr>
+          <tr><td>焦墨</td><td class="num" data-d2="vocab.ink_method.焦墨.mu">[0.1, 0.3]</td><td>极低</td><td>枯笔擦</td><td>极浓而枯，几乎不洇；醒提轮廓</td><td><span class="d2-tag" title="语境建议：本诗可优先取此墨法">建议</span></td></tr>
+          <tr><td>飞白</td><td class="num" data-d2="vocab.ink_method.飞白.mu">[0.1, 0.3]</td><td>极低</td><td>飞白</td><td>极低含水，线断意不断（虚）</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <p class="caption" style="margin:8px 0 0">μ = 卡6 扩散律系数（<code>L ∝ √(μ·t)</code>，基准 μ0=1.0）；宿墨 μ 偏低（更慢更滞）、焦墨 / 飞白 μ 极低（几乎不洇）。D2 只给<b>候选</b>与<b>μ 区间</b>，精确墨法与扩散由卡6 求解。</p>
+    </div>
+<div class="card tight" id="d2-material">
+      <h3 style="margin-top:0">6.6 材质系数（G6 · C 组 · D2 → 卡6）</h3>
+      <table>
+        <thead><tr><th>环节</th><th>D2 字段</th><th>值</th></tr></thead>
+        <tbody>
+          <tr><td>纸绢</td><td><code>material.choice.纸绢</code></td><td data-d2="poem_level.material.choice.纸绢">生宣</td></tr>
+          <tr><td>扩散 D 乘子</td><td><code>vocab.material.纸绢.D_mult</code></td><td data-d2="poem_level.material.paper.D_mult" class="num">[1.2, 1.6]</td></tr>
+          <tr><td>μ 乘子</td><td><code>vocab.material.纸绢.mu_mult</code></td><td data-d2="poem_level.material.paper.mu_mult" class="num">[1.1, 1.4]</td></tr>
+          <tr><td>飞白阈值</td><td><code>vocab.material.纸绢.feibai_threshold</code></td><td data-d2="poem_level.material.paper.feibai_threshold" class="num">[0.6, 0.8]</td></tr>
+          <tr><td>笔</td><td><code>material.choice.笔</code></td><td data-d2="poem_level.material.choice.笔">兼毫</td></tr>
+          <tr><td>笔刚度</td><td><code>vocab.material.笔.stiffness</code></td><td data-d2="poem_level.material.brush.stiffness" class="num">[0.45, 0.7]</td></tr>
+          <tr><td>笔蓄水</td><td><code>vocab.material.笔.water_cap</code></td><td data-d2="poem_level.material.brush.water_cap" class="num">[0.7, 0.9]</td></tr>
+          <tr><td>墨</td><td><code>material.choice.墨</code></td><td data-d2="poem_level.material.choice.墨">松烟</td></tr>
+          <tr><td>墨色</td><td><code>vocab.material.墨.hue</code></td><td data-d2="poem_level.material.ink.hue">冷黑</td></tr>
+          <tr><td>墨温</td><td><code>vocab.material.墨.warmth</code></td><td data-d2="poem_level.material.ink.warmth" class="num">-1</td></tr>
+        </tbody>
+      </table>
+      <p class="caption" style="margin:8px 0 0">材质改卡6 扩散律：生宣吸水强（D / μ 乘子 &gt;1）、熟宣不洇墨（&lt;1）、绢居中；硬毫（狼毫）弹性强、软毫（羊毫）蓄水多；松烟偏冷、油烟偏暖。D2 只给<b>乘子与区间</b>，精确扩散由卡6 求解。当前取默认档（诗中无材质依据）。</p>
+    </div>
+<div class="card tight" id="d2-stroke-quality">
+      <h3 style="margin-top:0">6.7 笔法质量维（G2 · C 组 · D2 → 卡6）</h3>
+      <table>
+        <thead><tr><th>环节</th><th>D2 字段</th><th>值</th></tr></thead>
+        <tbody>
+          <tr><td>笔法式</td><td><code>stroke_quality.strokes</code></td><td data-d2="poem_level.stroke_quality.strokes">大晕染·慢扩散 / 枯笔擦 / 中锋·一次落笔 / 顿笔·侧锋 / 飞白</td></tr>
+          <tr><td>适用质量维</td><td><code>stroke_quality.quality</code></td><td data-d2="poem_level.stroke_quality.quality">气 / 圆 / 留 / 重 / 变 / 骨 / 平 / 筋</td></tr>
+          <tr><td>须避病</td><td><code>stroke_quality.avoid</code></td><td data-d2="poem_level.stroke_quality.avoid">结 / 板 / 刻</td></tr>
+        </tbody>
+      </table>
+      <p class="caption" style="margin:8px 0 0">笔法由<b>形态名</b>升为<b>质量判据</b>：四势（荆浩《笔法记》：筋 / 肉 / 骨 / 气）与五笔（黄宾虹：平 / 留 / 圆 / 重 / 变）为正向二级判据；二病（郭若虚三病：板 / 刻 / 结；荆浩二病：有形病 / 无形病）为负向过滤。D2 由诗用笔法式映射到适用质量维与须避病。</p>
+    </div>
+</section>
+
+<!-- ============ STEP 7 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">STEP 7</span><h2>时间轴合成</h2><span class="d2-badge" title="本节画法参数由 D2 构建期注入（d2_techniques.json → src/d2/d2_inject.py）">D2</span></div>
+  <p class="sec-note">模型：节拍表 T = f(R, y(t))，由格律结构 R 与情感轨迹共同生成；静默预算 ΣΔt_静默 / T_总 ∈ [0.15, 0.35] 作为硬约束。</p>
+  <p class="d2-note">时辰（G5）定段长乘子 / 墨偏；钤印（G8）定印位与印面档，纳入卡7 段尾静默。D2 只给档与区间，精确时长 / 布局由卡7 求解。</p>
+
+  <div class="card">
+    <table>
+      <thead><tr><th>段</th><th>诗句</th><th class="num">时长</th><th>镜头</th><th class="num">墨浓度</th><th>运动元素</th><th class="num">尾部静默</th></tr></thead>
+      <tbody>
+        <tr><td>起</td><td>千山鸟飞绝</td><td class="num">7.0s</td><td>极远景 · 缓横移</td><td class="num">0.12</td><td>雾气流（curl noise）</td><td class="num">1.5s</td></tr>
+        <tr><td>承</td><td>万径人踪灭</td><td class="num">6.0s</td><td>极远景 · 轻推远</td><td class="num">0.06</td><td>雪粒缓落</td><td class="num">2.0s</td></tr>
+        <tr><td>转</td><td>孤舟蓑笠翁</td><td class="num">4.0s</td><td>极缓推近 · 笔触重放</td><td class="num">0.92</td><td>无（落笔过程本身即运动）</td><td class="num">0</td></tr>
+        <tr><td>合</td><td>独钓寒江雪</td><td class="num">8.0s</td><td>极缓推近（续）</td><td class="num">0.95</td><td>雪粒 · 钓丝几乎不动</td><td class="num">3.0s</td></tr>
+      </tbody>
+    </table>
+    <div class="divider"></div>
+    <div class="kv">
+      <dt>总时长</dt><dd>25.0 s</dd>
+      <dt>静默预算</dt><dd>6.5 / 25.0 = <b>26%</b> <span class="ok">✓ 落在 [15%, 35%]</span></dd>
+      <dt>相机速度包络</dt><dd>由平仄疏密与唤醒度共同决定。转段<b>推近方向</b>由 κ = 0.87 定，<b>幅度受意境护栏压制</b>：13–25s 缓推 0.96→1.12 倍，峰值 3.7%/s（&lt; 5% 阈值），全片无急推</dd>
+      <dt>负节点约束</dt><dd>全片鸟出现帧数 = 0，除翁外人物出现帧数 = 0</dd>
+      <dt>禁止项</dt><dd>无渐隐结尾（句末为仄仄仄三段收束，必须顿住）；无舒缓长镜（入声韵基调为促）</dd>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">7.1 时间轴可视化</h3>
+    <svg viewBox="0 0 900 190" role="img" aria-label="江雪分镜时间轴，含静默段">
+      <g font-family="PingFang SC, sans-serif" font-size="12" fill="#4A4640">
+        <text x="0" y="20">起</text><text x="0" y="66">承</text><text x="0" y="112">转</text><text x="0" y="158">合</text>
+      </g>
+      <!-- 起 7s -->
+      <rect x="40" y="8" width="224" height="24" rx="5" fill="#3E5C76" opacity="0.72"/>
+      <rect x="264" y="8" width="48" height="24" rx="5" fill="#3E5C76" opacity="0.16"/>
+      <text x="288" y="25" font-size="11" fill="#8A8578" text-anchor="middle" font-family="JetBrains Mono, monospace">1.5s</text>
+      <!-- 承 6s -->
+      <rect x="40" y="54" width="192" height="24" rx="5" fill="#3E5C76" opacity="0.58"/>
+      <rect x="232" y="54" width="64" height="24" rx="5" fill="#3E5C76" opacity="0.16"/>
+      <text x="264" y="71" font-size="11" fill="#8A8578" text-anchor="middle" font-family="JetBrains Mono, monospace">2.0s</text>
+      <!-- 转 4s -->
+      <rect x="40" y="100" width="128" height="24" rx="5" fill="#1C1C1C" opacity="0.86"/>
+      <text x="104" y="117" font-size="11" fill="#F6F3EC" text-anchor="middle" font-family="PingFang SC, sans-serif">极缓推近 0.96→1.12×</text>
+      <!-- 合 8s -->
+      <rect x="40" y="146" width="256" height="24" rx="5" fill="#1C1C1C" opacity="0.86"/>
+      <rect x="296" y="146" width="96" height="24" rx="5" fill="#3E5C76" opacity="0.16"/>
+      <text x="344" y="163" font-size="11" fill="#8A8578" text-anchor="middle" font-family="JetBrains Mono, monospace">3.0s</text>
+
+      <!-- 时间刻度 -->
+      <g stroke="rgba(28,28,28,.14)" stroke-width="1">
+        <line x1="40" y1="180" x2="40" y2="186"/><line x1="168" y1="180" x2="168" y2="186"/>
+        <line x1="296" y1="180" x2="296" y2="186"/><line x1="424" y1="180" x2="424" y2="186"/>
+      </g>
+      <g font-family="JetBrains Mono, monospace" font-size="11" fill="#8A8578" text-anchor="middle">
+        <text x="40" y="178">0s</text><text x="168" y="178">4s</text><text x="296" y="178">8s</text><text x="424" y="178">12s</text>
+      </g>
+      <text x="440" y="20" font-size="12" fill="#8A8578" font-family="PingFang SC, sans-serif">深色 = 运动段　浅色 = 静默段（时间上的留白）</text>
+    </svg>
+  </div>
+<div class="card tight" id="d2-time-of-day">
+      <h3 style="margin-top:0">7.2 时辰（G5 · C 组 · D2 → 卡7）</h3>
+      <table>
+        <thead><tr><th>环节</th><th>D2 字段</th><th>值</th></tr></thead>
+        <tbody>
+          <tr><td>时辰档</td><td><code>time_of_day.name</code></td><td data-d2="poem_level.time_of_day.name" class="num">未命中（乘子中性）</td></tr>
+          <tr><td>命中词</td><td><code>time_of_day.hit</code></td><td data-d2="poem_level.time_of_day.hit">—</td></tr>
+          <tr><td>段长乘子</td><td><code>time_of_day.seg_len_mult</code></td><td data-d2="poem_level.time_of_day.seg_len_mult" class="num">[1, 1]</td></tr>
+          <tr><td>墨偏</td><td><code>time_of_day.ink_bias</code></td><td data-d2="poem_level.time_of_day.ink_bias" class="num">0</td></tr>
+        </tbody>
+      </table>
+      <p class="caption" style="margin:8px 0 0">时辰由时辰词定档（郭熙「朝暮」；「月」由季节词迁来，属天象 / 时辰）。暮 / 夜 → 段长乘子 &gt;1、墨偏 ↑、色偏赭 / 冷灰；晨 → 淡青。D2 只给<b>乘子与墨偏档</b>，精确时长由卡7 求解。</p>
+    </div>
+<div class="card tight" id="d2-seal">
+      <h3 style="margin-top:0">7.3 钤印（G8 · C 组 · D2 → 卡7）</h3>
+      <table>
+        <thead><tr><th>环节</th><th>D2 字段</th><th>值</th></tr></thead>
+        <tbody>
+          <tr><td>形制</td><td><code>seal.format</code></td><td data-d2="poem_level.seal.format">册页</td></tr>
+          <tr><td>印位</td><td><code>seal.position</code></td><td data-d2="poem_level.seal.position">下角</td></tr>
+          <tr><td>印位说明</td><td><code>vocab.seal.positions.note</code></td><td data-d2="poem_level.seal.position_note">册页在左右下角</td></tr>
+          <tr><td>印面档</td><td><code>seal.size</code></td><td data-d2="poem_level.seal.size" class="num">小幅</td></tr>
+          <tr><td>印面乘子</td><td><code>vocab.seal.sizes.size_mult</code></td><td data-d2="poem_level.seal.size_mult" class="num">[0.5, 0.8]</td></tr>
+          <tr><td>通例</td><td><code>vocab.seal.rule</code></td><td data-d2="poem_level.seal.rule">印不可比字大</td></tr>
+        </tbody>
+      </table>
+      <p class="caption" style="margin:8px 0 0">钤印由形制定印位（手卷卷末 / 图前、立轴左下 / 右下加押角、册页下角…），由诗体长度定印面大小档（长诗大幅、短诗小幅），并守「印不可比字大」。D2 只给<b>印位与印面区间</b>，纳入卡7 段尾静默。</p>
+    </div>
+</section>
+
+<!-- ============ STEP 8 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">STEP 8</span><h2>一致性自检</h2></div>
+  <p class="sec-note">训练时三模态共享隐变量 z 并以 InfoNCE 对齐；推理时用 classifier guidance 把画面的情感预测投影回文本情感附近。下表为本次推演的自检结果。</p>
+
+  <div class="card">
+    <table>
+      <thead><tr><th>检查项</th><th>度量</th><th class="num">结果</th><th>阈值 / 判定</th></tr></thead>
+      <tbody>
+        <tr><td>情感一致性</td><td>ECE = d(y_text, ŷ_paint)</td><td class="num">0.09</td><td class="ok">&lt; 0.15 ✓</td></tr>
+        <tr><td>韵律—运动耦合</td><td>corr(仄声位置, 运动能量)</td><td class="num">0.63</td><td class="ok">&gt; 0.45 ✓</td></tr>
+        <tr><td>笔墨物理性</td><td>扩散半径是否服从 t<sup>0.5</sup></td><td class="num">R² = 0.97</td><td class="ok">✓</td></tr>
+        <tr><td>留白约束</td><td>ρ ∈ [0.72, 0.85]</td><td class="num">0.79</td><td class="ok">✓</td></tr>
+        <tr><td>静默预算</td><td>ΣΔt_静默 / T_总</td><td class="num">26%</td><td class="ok">∈ [15%, 35%] ✓</td></tr>
+        <tr><td>负节点约束</td><td>画面中鸟 / 人的出现</td><td class="num">0 / 0</td><td class="ok">✓</td></tr>
+        <tr><td>史实挂源</td><td>有出处的背景论断占比</td><td class="num">3 / 3</td><td class="ok">✓ 幻觉率 0%</td></tr>
+        <tr><td>用典链完整</td><td>渔隐传统边是否接上</td><td class="num">命中</td><td class="ok">✓</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">背景考证（挂源）</h3>
+    <div class="kv">
+      <dt>创作时段</dt><dd>谪居永州期间（805–815）。永贞元年（805）永贞革新失败，柳宗元被贬永州司马，"身编夷人，名列囚籍"。</dd>
+      <dt>时间锚点</dt><dd>元和二年（807）冬，永州大雪逾岭。柳宗元《答韦中立论师道书》自述"二年冬，幸大雪逾岭被南越中数州。数州之犬皆苍黄吠噬走者累日"——学界多认为是《江雪》构思的触发点。</dd>
+      <dt>前一年</dt><dd>元和元年（806）五月，相依为命的母亲卢氏卒于永州龙兴寺，来永州不及半年。柳宗元自谓"穷天下之声，不能抒其哀"。同年，王叔文被赐死；八月诏八司马"纵逢恩赦，不在量移之限"——政治生命被判无期。</dd>
+      <dt>身体与处境</dt><dd>受地方官员监视，寓居龙兴寺近五年；百病侵身，脾脏肿大，双脚行走不便；妻杨氏早卒，无子。</dd>
+      <dt>之后</dt><dd>元和十年（815）改贬柳州刺史；元和十四年（819）卒于柳州，年 47。</dd>
+    </div>
+    <div class="callout">
+      <span class="h">生平状态向量 s(t) 与诗的对应</span>
+      在 t ≈ 807 这个点上：政治前途 = 0，至亲 = 新丧，身体 = 多病，子嗣 = 无，居所 = 佛寺，行动 = 被监视。把这一串"全部归零"的处境叠在"千山鸟飞绝、万径人踪灭"上，那句"千万孤独"就不再是修辞，而是一次<b>精确的状态描述</b>。而"独钓"二字之所以峭拔，正因为它是在这一切归零之后，唯一没有归零的东西。
+    </div>
+  </div>
+</section>
+
+<div class="footnote">
+  <p><b>本次推演的边界说明</b></p>
+  <p>· 格律层（STEP 1）为确定性计算，依据平水韵与格律规则，结果可复核。<br>
+  · 诗品画像（STEP 3）与情感量值（STEP 4）为<b>模型输出示意</b>，用于展示数据结构与接口形态，并非训练后模型的真实推理结果。<br>
+  · 构图（STEP 5）与笔墨（STEP 6）为约束求解与物理参数驱动的渲染结果，SVG 中以内联滤波器近似纤维噪声与墨迹边缘。<br>
+  · 背景考证（STEP 8）各条均挂载出处，来源见下。</p>
+  <p style="margin-top:14px">
+    参考来源：
+    <a href="https://www.wenweipo.com/a/202205/04/AP62719280e4b036dce9abb1f9.html">文汇报《仄聲入韻見古風 〈江雪〉格律顯深意》</a>、
+    <a href="https://m.ruiwen.com/wenxue/liuzongyuan/359160.html">柳宗元《江雪》体式辨析</a>、
+    <a href="https://new.qq.com/rain/a/20210513A0BGC300">仄韵格律诗与折腰体</a>、
+    <a href="http://www.chinawriter.com.cn/n1/2023/1220/c442005-40143436.html">中国作家网《永州那场大雪，千万孤独》</a>、
+    <a href="http://www.yzcity.gov.cn/cnyz/lwh/200509/95923124902d4b3ba4285175e954717d.shtml">永州市人民政府《柳宗元的思想成就》</a>、
+    <a href="https://m.baike.com/wiki/%E6%B1%9F%E9%9B%AA/21858549">江雪（柳宗元作品）</a>
+  </p>
+</div>
+
+</div>
+  <script type="application/json" id="d2-snapshot">
+{
+  "generated_by": "src/d2/d2_inject.py",
+  "source": "d2_techniques.json + o2_imagery.json",
+  "poem": "jx",
+  "title": "江雪",
+  "poem_level": {
+    "yuan": [
+      "平远",
+      "深远"
+    ],
+    "cun": [
+      "无皴"
+    ],
+    "blank_range": [
+      0.78,
+      0.92
+    ],
+    "season": "冬",
+    "format_candidates": [
+      "册页",
+      "扇面",
+      "手卷"
+    ],
+    "motion": "横移",
+    "silence_ratio": 0.26,
+    "yuan_applicable": true,
+    "polarity": {
+      "keys": [
+        "隐逸·渔樵",
+        "漂泊·孤立",
+        "孤守·不屈"
+      ],
+      "ink_bias_range": [
+        -1,
+        -1
+      ],
+      "colors": [
+        "冷灰"
+      ],
+      "evidence": {
+        "隐逸·渔樵": [
+          "context",
+          "词:蓑笠翁"
+        ],
+        "漂泊·孤立": [
+          "词:孤舟"
+        ],
+        "孤守·不屈": [
+          "词:独钓"
+        ]
+      },
+      "unmapped": []
+    },
+    "base_tone": {
+      "season": {
+        "name": "冬",
+        "color": "素白",
+        "ink_bias": 2
+      },
+      "polarity_keys": [
+        "隐逸·渔樵",
+        "漂泊·孤立",
+        "孤守·不屈"
+      ],
+      "color_candidates": [
+        "素白",
+        "冷灰"
+      ],
+      "ink_bias_range": [
+        -1,
+        2
+      ],
+      "note": "D2 只给底色候选（季节色 + 极性键的 ink_bias/color），精确底色由卡6 求解。"
+    },
+    "paradigm": {
+      "default": "水墨",
+      "candidates": [
+        "水墨"
+      ],
+      "ink_bone": "重",
+      "ink_bone_scale": 1.0,
+      "color_domain": [],
+      "projection_mode": "保持",
+      "projected_color_candidates": [
+        "素白",
+        "冷灰"
+      ],
+      "rules_fired": [
+        "P3"
+      ],
+      "evidence": {
+        "P3": "水墨"
+      }
+    },
+    "ink_methods": {
+      "candidates": {
+        "破墨": {
+          "mu": [
+            0.9,
+            1.3
+          ],
+          "water": "中",
+          "stroke": "破墨",
+          "quality": "浓破淡 / 淡破浓，出层次"
+        },
+        "积墨": {
+          "mu": [
+            0.5,
+            0.8
+          ],
+          "water": "中",
+          "stroke": "积墨",
+          "quality": "层层叠加，厚重；边缘收敛"
+        },
+        "泼墨": {
+          "mu": [
+            1.4,
+            2.0
+          ],
+          "water": "高",
+          "stroke": "泼墨",
+          "quality": "高含水高墨，气势奔放"
+        },
+        "宿墨": {
+          "mu": [
+            0.4,
+            0.7
+          ],
+          "water": "低",
+          "stroke": "枯笔擦",
+          "quality": "隔夜沉淀，涩而滞；扩散慢、带颗粒"
+        },
+        "焦墨": {
+          "mu": [
+            0.1,
+            0.3
+          ],
+          "water": "极低",
+          "stroke": "枯笔擦",
+          "quality": "极浓而枯，几乎不洇；醒提轮廓"
+        },
+        "飞白": {
+          "mu": [
+            0.1,
+            0.3
+          ],
+          "water": "极低",
+          "stroke": "飞白",
+          "quality": "极低含水，线断意不断（虚）"
+        }
+      },
+      "suggested": [
+        "破墨",
+        "宿墨",
+        "焦墨",
+        "积墨"
+      ],
+      "note": "D2 只给墨法候选 + μ 区间（相对基准 μ0=1.0，L∝√(μ·t)），精确墨法与扩散由卡6 求解。"
+    },
+    "viewpoint": {
+      "applicable": true,
+      "default": "平视",
+      "candidates": [
+        "平视"
+      ],
+      "votes": {
+        "平视": 3.0
+      },
+      "horizon": [
+        0.42,
+        0.55
+      ],
+      "vertical_scale": [
+        0.9,
+        1.1
+      ],
+      "criterion": "视点与景齐平，远山与目齐（平远）"
+    },
+    "weather": {
+      "name": "雪",
+      "sigma_mult": [
+        1.2,
+        1.6
+      ],
+      "blank_bonus": 0.04,
+      "mu_mult": [
+        0.5,
+        0.8
+      ],
+      "cun_bias": [
+        "无皴"
+      ],
+      "quality": "大留白、墨滞；雪覆不露石理",
+      "hit": [
+        "雪"
+      ],
+      "source_id": "guoxi_sishi"
+    },
+    "time_of_day": {
+      "name": null,
+      "seg_len_mult": [
+        1.0,
+        1.0
+      ],
+      "ink_bias": 0,
+      "color": null,
+      "warmth": 0,
+      "hit": [],
+      "note": "未命中时辰词 → 不定档，段长乘子中性"
+    },
+    "material": {
+      "choice": {
+        "纸绢": "生宣",
+        "笔": "兼毫",
+        "墨": "松烟"
+      },
+      "paper": {
+        "D_mult": [
+          1.2,
+          1.6
+        ],
+        "mu_mult": [
+          1.1,
+          1.4
+        ],
+        "feibai_threshold": [
+          0.6,
+          0.8
+        ],
+        "note": "吸水强、易晕染、层次丰富"
+      },
+      "brush": {
+        "stiffness": [
+          0.45,
+          0.7
+        ],
+        "water_cap": [
+          0.7,
+          0.9
+        ],
+        "note": "刚柔兼济"
+      },
+      "ink": {
+        "warmth": -1,
+        "hue": "冷黑",
+        "note": "松烟偏冷、无光"
+      },
+      "note": "材质定档（G6）：诗中无材质依据，取默认（生宣 / 兼毫 / 松烟），标裁定；卡6 扩散律与飞白阈值按此乘子。"
+    },
+    "stroke_quality": {
+      "strokes": [
+        "大晕染·慢扩散",
+        "枯笔擦",
+        "中锋·一次落笔",
+        "顿笔·侧锋",
+        "飞白"
+      ],
+      "quality": [
+        "气",
+        "圆",
+        "留",
+        "重",
+        "变",
+        "骨",
+        "平",
+        "筋"
+      ],
+      "avoid": [
+        "结",
+        "板",
+        "刻"
+      ],
+      "note": "笔法式 → 适用质量维（正向）/ 须避病（负向）；作卡6 二级判据。"
+    },
+    "composition": {
+      "guards": [
+        {
+          "name": "边角",
+          "kind": "硬约束",
+          "rule": "取山之一角、水之一涯，留大片空白（马一角 / 夏半边）"
+        },
+        {
+          "name": "三叠两段",
+          "kind": "护栏",
+          "rule": "禁等距机械三叠（地-树-山），分层须由自然分疆承担"
+        }
+      ],
+      "operator": "截断",
+      "operator_rule": "截断取势（不全收，留势外延）",
+      "candidates": [
+        "截断",
+        "借景"
+      ],
+      "rules_fired": [
+        "C1",
+        "C3"
+      ],
+      "note": "边角 / 三叠两段为护栏（恒生效）；蹊径六则为软目标算子池，按语境选一。精确布局由卡5 求解。"
+    },
+    "seal": {
+      "format": "册页",
+      "position": "下角",
+      "position_note": "册页在左右下角",
+      "size": "小幅",
+      "size_mult": [
+        0.5,
+        0.8
+      ],
+      "rule": "印不可比字大",
+      "note": "D2 只给印位与印面区间，纳入卡7 段尾静默。"
+    }
+  },
+  "zones": {
+    "远山": {
+      "node": "千山",
+      "class": "山石",
+      "role": "主体",
+      "yuan": [
+        "深远",
+        "高远",
+        "平远"
+      ],
+      "cun": "披麻皴",
+      "ink_grade": "清",
+      "ink_c_range": [
+        0.04,
+        0.26
+      ],
+      "water": "高",
+      "stroke": "大晕染·慢扩散",
+      "layer": "远景"
+    },
+    "万径": {
+      "node": "万径",
+      "class": "径路",
+      "role": "引导",
+      "yuan": [
+        "平远",
+        "深远"
+      ],
+      "cun": "无皴",
+      "ink_grade": "清",
+      "ink_c_range": [
+        0.04,
+        0.26
+      ],
+      "water": "中",
+      "stroke": "枯笔擦",
+      "layer": "中景"
+    },
+    "孤舟": {
+      "node": "孤舟",
+      "class": "舟桥",
+      "role": "焦点",
+      "yuan": [
+        "平远",
+        "阔远"
+      ],
+      "cun": "无皴",
+      "ink_grade": "浓",
+      "ink_c_range": [
+        0.84,
+        0.96
+      ],
+      "water": "低",
+      "stroke": "中锋·一次落笔",
+      "layer": "近景"
+    },
+    "蓑笠翁": {
+      "node": "蓑笠翁",
+      "class": "人物",
+      "role": "焦点",
+      "yuan": [],
+      "cun": "无皴",
+      "ink_grade": "浓",
+      "ink_c_range": [
+        0.84,
+        0.96
+      ],
+      "water": "低",
+      "stroke": "顿笔·侧锋",
+      "layer": "近景",
+      "size": "点景"
+    },
+    "钓丝": {
+      "node": "独钓",
+      "class": "丝线",
+      "role": "点缀",
+      "yuan": [],
+      "cun": "无皴",
+      "ink_grade": "淡",
+      "ink_c_range": [
+        0.26,
+        0.6
+      ],
+      "water": "极低",
+      "stroke": "飞白",
+      "layer": "近景"
+    },
+    "寒江 / 雪": {
+      "node": "寒江",
+      "class": "水体",
+      "role": "承载留白",
+      "yuan": [
+        "平远",
+        "阔远",
+        "迷远"
+      ],
+      "cun": "无皴",
+      "ink_grade": "留白",
+      "ink_c_range": [
+        0.0,
+        0.0
+      ],
+      "water": "高",
+      "stroke": "不画",
+      "layer": "中景"
+    }
+  }
+}
+</script>
+</body>
+</html>

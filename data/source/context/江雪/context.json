@@ -1,0 +1,187 @@
+{
+  "schema": "poem-context/v1",
+  "id": "jx",
+  "poem": "江雪",
+  "author": "柳宗元",
+  "author_lifespan": "773-819",
+  "genre": "五言绝句",
+  "fetched_at": "2026-10-03",
+  "evidence_grade_scale": {
+    "1": "诗内字词、格律",
+    "2": "同人同期作品",
+    "3": "史料编年",
+    "4": "历代权威注",
+    "5": "现代学术解读（仅限解读/韵味字段，须标注）",
+    "6": "大众网站（仅作线索，不得进 evidence）"
+  },
+  "text": {
+    "base": [
+      "千山鸟飞绝",
+      "万径人踪灭",
+      "孤舟蓑笠翁",
+      "独钓寒江雪"
+    ],
+    "version_chosen": "通行本（独钓寒江雪）",
+    "version_reason": "现代语文教材、香港教育局材料与《唐诗三百首》系统一致作「寒江雪」；「寒山雪」有版本线索，但未见校勘专书判定其系统演变",
+    "variants": [
+      {
+        "line": 4,
+        "chosen": "独钓寒江雪",
+        "alt": "独钓寒山雪",
+        "grade": 6,
+        "source_ids": ["S1"]
+      }
+    ]
+  },
+  "dating": {
+    "year": "约元和二年（807）前后",
+    "place": "永州",
+    "certainty": "contested",
+    "note": "部分学者系于元和三年；可定「永州期间·约807前后」，不写定论",
+    "grade": 5,
+    "source_ids": ["S5", "S2"]
+  },
+  "biography": [
+    {
+      "event": "永贞革新失败，贬永州司马",
+      "year": "805",
+      "grade": 3,
+      "source_ids": ["S5"]
+    },
+    {
+      "event": "携母卢氏、堂弟柳宗直、表弟卢遵至永州；母卢氏未及半载去世",
+      "grade": 5,
+      "source_ids": ["S7"]
+    },
+    {
+      "event": "在永州「百病所集」，含脚气病等",
+      "grade": 6,
+      "source_ids": ["S8"]
+    },
+    {
+      "event": "嗣续困难（「嗣续之重，不绝如缕」）",
+      "grade": 6,
+      "note": "不宜视为《江雪》必然背景，仅作旁证",
+      "source_ids": ["S7"]
+    }
+  ],
+  "glossary": [
+    { "term": "千山", "gloss": "泛指众多山", "grade": 6, "source_ids": ["S2"] },
+    { "term": "万径", "gloss": "泛指众多小路", "grade": 6, "source_ids": ["S2"] },
+    { "term": "孤舟", "gloss": "孤零零的小船", "grade": 6, "source_ids": ["S2"] },
+    { "term": "蓑笠翁", "gloss": "披蓑衣、戴斗笠的渔翁", "grade": 6, "source_ids": ["S2", "S3"] },
+    { "term": "独钓", "gloss": "独自垂钓", "grade": 6, "source_ids": ["S2"] },
+    { "term": "寒江雪", "gloss": "寒冷江面上的雪", "grade": 6, "source_ids": ["S2"] }
+  ],
+  "allusion_chains": [
+    {
+      "surface": "蓑笠·独钓",
+      "polarity": "孤傲·隐逸（非凄惨）",
+      "polarity_note": "把「孤舟/蓑笠/独钓」从「凄惨」翻转为「主动选择的孤傲/隐逸」；这是普通文生图拿不到的信息",
+      "chain": ["楚辞·渔父", "严子陵钓台", "张志和《渔歌子》"],
+      "grade": 4,
+      "source_ids": ["S2", "S6"]
+    }
+  ],
+  "sibling_works": {
+    "grade": 2,
+    "note": "同人同期作品，用于交叉验证「冷峭幽寂 + 自我持守」的心境判断",
+    "items": [
+      "永州八记（含《钴鉧潭记》《钴鉧潭西小丘记》《至小丘西小石潭记》）",
+      "《捕蛇者说》",
+      "《三戒》",
+      "《愚溪诗序》",
+      "《溪居》",
+      "《渔翁》"
+    ],
+    "source_ids": ["S8", "S2"]
+  },
+  "interpretations": [
+    {
+      "name": "自寓说",
+      "claim": "渔翁是柳宗元贬谪时的自我写照，抒发政治失意与苦闷",
+      "proponents": ["刘文蔚", "《从读者接受视角解读柳宗元的〈江雪〉》"],
+      "grade": 6,
+      "source_ids": ["S1"]
+    },
+    {
+      "name": "傲然独往/政治寄托说",
+      "claim": "以孤高对抗政治气候",
+      "proponents": ["明·唐汝询（岂子厚无聊之极，托此自高）", "清·王尧衢（世态寒凉，宦情孤冷）"],
+      "grade": 4,
+      "source_ids": ["S2"]
+    },
+    {
+      "name": "禅寂说",
+      "claim": "表现摆脱障碍的空灵自在，「不可言喻的禅说」",
+      "proponents": ["佛教导航《柳宗元诗歌中的禅宗美学意蕴》"],
+      "grade": 6,
+      "source_ids": ["S9"]
+    },
+    {
+      "name": "渔隐自适说",
+      "claim": "淡泊落拓，隐含严子陵式被起用的期待",
+      "proponents": ["永州市政府网站", "光明网《羊裘与蓑衣》"],
+      "grade": 5,
+      "source_ids": ["S2", "S6"]
+    },
+    {
+      "name": "知其不可为而为之说",
+      "claim": "不屈服于恶劣环境与政治气候的精神",
+      "proponents": ["永州市政府网站"],
+      "grade": 6,
+      "source_ids": ["S2"]
+    }
+  ],
+  "interpretation_consensus": {
+    "verdict": "五说并存，不宜强行归一",
+    "composite": "贬谪孤愤 + 渔隐意象 + 禅寂氛围 的复合结构",
+    "confidence_penalty": true,
+    "blank_ratio_uplift": true
+  },
+  "prosody": {
+    "form": "五言绝句",
+    "rhyme_group": "入声·屑韵",
+    "rhyme_feet": ["绝", "灭", "雪"],
+    "rusheng_chars": ["绝", "灭", "雪"],
+    "rusheng_ratio": 0.25,
+    "ze_ratio": 0.5,
+    "pingze": [
+      { "line": 1, "text": "千山鸟飞绝", "pattern": "平平仄平仄" },
+      { "line": 2, "text": "万径人踪灭", "pattern": "仄仄平平仄" },
+      { "line": 3, "text": "孤舟蓑笠翁", "pattern": "平平平仄平" },
+      { "line": 4, "text": "独钓寒江雪", "pattern": "仄仄平平仄" }
+    ],
+    "form_dispute": {
+      "status": "contested",
+      "candidates": ["律绝", "拗体律绝", "古绝"],
+      "note": "一二句、三四句失粘；项目 src/voice/voice_prosody_process.py 标注为「折腰体」，与失粘判断一致"
+    },
+    "constraints": ["禁舒缓长镜", "禁渐隐结尾", "句末须顿"]
+  },
+  "pipeline_implications": {
+    "card_1_prosody": "入声密度 25%、仄声 50% → 「促、顿、冷」基调；禁舒缓长镜、禁渐隐结尾",
+    "card_2_imagery": "孤舟/蓑笠/独钓 文化极性 = 孤傲·隐逸，不是凄惨",
+    "card_3_style": "五说并存 → 韵味画像应保留多品权重，不收敛到单一气质",
+    "card_4_emotion": "V 负区（孤冷，非绝灭级）；T 高且不释放",
+    "card_5_composition": "贬谪十年 + 丧母 + 病苦 → 支撑「一舟一翁 vs 千山万径」的极端体量比与高留白率；解读分歧 → 留白率上调",
+    "card_7_timeline": "入声基调促 → 禁舒缓长镜；仄仄仄收束 → 禁渐隐、须顿住",
+    "card_9_selfcheck": "本诗无地理/名物硬约束；史实挂源项以系年与境遇为准"
+  },
+  "sources": [
+    { "id": "S1", "title": "汉典诗词《江雪》", "type": "古籍类网站", "grade": 6, "url": "https://sc.zdic.net/tang/0702/20/e5462a62a4779982f257cb16ff4ac907.html" },
+    { "id": "S2", "title": "永州市人民政府《江雪》", "type": "政府网站", "grade": 6, "url": "http://www.yzcity.gov.cn/cnyz/lwh/200509/2c63fe31dd924fb9abdce14353d745d1.shtml" },
+    { "id": "S3", "title": "古文岛（原古诗文网）《江雪》", "type": "大众网站", "grade": 6, "url": "https://www.gushiwen.cn/gushiwen_3ad899caed.aspx" },
+    { "id": "S4", "title": "香港教育局《古今名家作品选读：从庄子到柳宗元》", "type": "教育机构", "grade": 5, "url": "https://www.edb.gov.hk/attachment/tc/curriculum-development/kla/chi-edu/resources/lit-teacher-training/20240113_Clit_1.pdf" },
+    { "id": "S5", "title": "中国作家网《独钓寒江雪》", "type": "学术转载", "grade": 5, "url": "http://www.chinawriter.com.cn/n1/2023/0221/c419926-32628344.html" },
+    { "id": "S6", "title": "光明网《羊裘与蓑衣》", "type": "学术转载", "grade": 5, "url": "https://news.gmw.cn/2018-09/28/content_31412887.htm" },
+    { "id": "S7", "title": "零陵区政府网《柳宗元小传》", "type": "政府网站", "grade": 6, "url": "http://www.cnll.gov.cn/cnll/slmb/201103/41324bf7cf7e4c2cb888f115440e7562.shtml" },
+    { "id": "S8", "title": "新湖南《永州司马柳宗元：十年南荒 八记流芳》", "type": "媒体", "grade": 5, "url": "https://m.voc.com.cn/xhn/news/201602/14454944.html" },
+    { "id": "S9", "title": "佛教导航《柳宗元诗歌中的禅宗美学意蕴》", "type": "网站文章", "grade": 6, "url": "https://www.fjdh.cn/wumin/2010/03/072517100150.html" },
+    { "id": "S10", "title": "瑞文《柳宗元〈江雪〉体式辨析》", "type": "大众网站", "grade": 6, "url": "https://m.ruiwen.com/wenxue/liuzongyuan/359160.html" }
+  ],
+  "gaps": [
+    "未找到可靠来源：直接判定「寒山雪」系统演变的校勘专书结论",
+    "未获取：中华书局《柳宗元集》或上海古籍整理本的具体页码（需接入中华经典古籍库）"
+  ]
+}

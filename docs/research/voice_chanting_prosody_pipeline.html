@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>配音第三阶段研究 · 真人吟诵可行性 · 韵律后处理链路</title>
+<style>
+  :root {
+    --paper: #F6F3EC;
+    --paper-2: #FFFFFF;
+    --ink: #1C1C1C;
+    --ink-2: #4A4640;
+    --ink-3: #8A8578;
+    --line: rgba(28, 28, 28, 0.14);
+    --line-2: rgba(28, 28, 28, 0.07);
+    --zhu: #A83A2C;
+    --zhu-soft: rgba(168, 58, 44, 0.10);
+    --qing: #3E5C76;
+    --qing-soft: rgba(62, 92, 118, 0.10);
+    --jin: #B08430;
+    --jin-soft: rgba(176, 132, 48, 0.10);
+    --serif: "Songti SC", "STSong", "SimSun", "Noto Serif SC", Georgia, serif;
+    --sans: "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--sans); font-size: 14px; line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1020px; margin: 0 auto; padding: 56px 32px 96px; }
+
+  header { border-bottom: 1px solid var(--line); padding-bottom: 32px; margin-bottom: 44px; }
+  .eyebrow { font-size: 12px; letter-spacing: .22em; color: var(--ink-3); text-transform: uppercase; margin-bottom: 18px; }
+  h1 { font-family: var(--serif); font-size: 31px; font-weight: 600; margin: 0 0 8px; letter-spacing: .03em; }
+  .sub { color: var(--ink-3); font-size: 13px; margin-bottom: 24px; }
+  .meta-line {
+    font-size: 12.5px; color: var(--ink-3); border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line); padding: 10px 0; letter-spacing: .03em;
+  }
+
+  section { margin-bottom: 50px; }
+  .sec-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 8px; }
+  .sec-no {
+    font-family: var(--mono); font-size: 12px; color: var(--zhu);
+    border: 1px solid rgba(168,58,44,.32); border-radius: 4px; padding: 1px 7px; flex: none;
+  }
+  h2 { font-family: var(--serif); font-size: 21px; font-weight: 600; margin: 0; letter-spacing: .02em; }
+  .sec-note { color: var(--ink-3); font-size: 12.5px; margin: 0 0 20px; }
+  h3 { font-size: 14px; font-weight: 600; margin: 24px 0 10px; }
+  h4 { font-size: 13px; font-weight: 600; margin: 18px 0 8px; color: var(--ink-2); }
+
+  .card {
+    background: var(--paper-2); border: 1px solid var(--line-2);
+    border-radius: 10px; padding: 20px 24px; margin-bottom: 14px;
+  }
+  .card.warn { border-left: 3px solid var(--jin); }
+  .card.hard { border-left: 3px solid var(--zhu); }
+  .card.good { border-left: 3px solid var(--qing); }
+
+  .verdict {
+    display: flex; gap: 12px; align-items: flex-start;
+    background: var(--paper-2); border: 1px solid var(--line-2);
+    border-left: 3px solid var(--qing); border-radius: 8px; padding: 14px 18px; margin: 14px 0;
+  }
+  .verdict .v-label { font-family: var(--mono); font-size: 11px; color: var(--qing); flex: none; padding-top: 3px; white-space: nowrap; }
+  .verdict p { margin: 0; font-size: 13.5px; }
+  .verdict.warn { border-left-color: var(--jin); }
+  .verdict.warn .v-label { color: var(--jin); }
+  .verdict.hard { border-left-color: var(--zhu); }
+  .verdict.hard .v-label { color: var(--zhu); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 10px 0 6px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line-2); vertical-align: top; }
+  th { font-weight: 600; font-size: 11.5px; color: var(--ink-3); letter-spacing: .05em; border-bottom: 1px solid var(--line); }
+  tbody tr:last-child td { border-bottom: none; }
+  td.num, th.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .ok { color: var(--qing); font-weight: 600; }
+  .bad { color: var(--zhu); font-weight: 600; }
+  .mid { color: var(--jin); font-weight: 600; }
+  .cite { color: var(--ink-3); font-size: 11px; font-family: var(--mono); }
+  code { font-family: var(--mono); font-size: 12px; background: rgba(28,28,28,.05); padding: 1px 5px; border-radius: 4px; }
+
+  ul { margin: 8px 0; padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  .pill {
+    display: inline-block; font-size: 11px; padding: 1px 8px; border-radius: 999px;
+    border: 1px solid var(--line); color: var(--ink-3); margin-right: 6px; vertical-align: 1px;
+  }
+  .pill.cn { color: var(--qing); border-color: rgba(62,92,118,.35); background: var(--qing-soft); }
+  .pill.ss { color: var(--jin); border-color: rgba(176,132,48,.40); background: var(--jin-soft); }
+  .pill.un { color: var(--ink-3); }
+
+  .gap-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 8px; }
+  @media (max-width: 820px) { .gap-grid { grid-template-columns: 1fr; } }
+  .gap { background: var(--paper-2); border: 1px solid var(--line-2); border-radius: 10px; padding: 16px 18px; }
+  .gap .g-title { font-family: var(--serif); font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .gap .g-status { font-family: var(--mono); font-size: 11px; margin-bottom: 8px; }
+  .gap p { font-size: 12.5px; color: var(--ink-2); margin: 0; line-height: 1.7; }
+  .gap .g-ok { color: var(--qing); }
+  .gap .g-mid { color: var(--jin); }
+  .gap .g-bad { color: var(--zhu); }
+
+  .layer { border: 1px solid var(--line-2); border-radius: 10px; padding: 16px 20px; margin-bottom: 12px; background: var(--paper-2); }
+  .layer-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+  .layer-tag { font-family: var(--mono); font-size: 12px; font-weight: 600; }
+  .layer-head h4 { margin: 0; font-size: 14px; }
+  .layer p { margin: 5px 0; font-size: 13px; }
+  .layer .pros { color: var(--qing); }
+  .layer .cons { color: var(--zhu); }
+
+  .src-list { font-size: 12px; color: var(--ink-2); }
+  .src-list li { margin-bottom: 5px; word-break: break-all; }
+  .src-list .n { font-family: var(--mono); color: var(--zhu); }
+
+  blockquote {
+    margin: 14px 0; padding: 12px 18px; border-left: 3px solid var(--line);
+    background: rgba(28,28,28,.03); font-family: var(--serif); font-size: 14px; color: var(--ink-2);
+  }
+  blockquote .src { display: block; margin-top: 6px; font-size: 12px; color: var(--ink-3); font-family: var(--sans); }
+
+  /* 韵律谱表 */
+  .score { width: 100%; border-collapse: collapse; font-size: 12px; margin: 12px 0; }
+  .score th { font-size: 11px; padding: 6px 6px; }
+  .score td { text-align: center; padding: 10px 4px; border-bottom: 1px solid var(--line-2); }
+  .score .zi { font-family: var(--serif); font-size: 20px; font-weight: 600; line-height: 1.2; }
+  .score .py { font-family: var(--mono); font-size: 10.5px; color: var(--ink-3); }
+  .score .tag { font-size: 11px; }
+  .score .dur { font-family: var(--mono); font-size: 11px; }
+  .score tr.r2 td { border-bottom: 1px solid var(--line); }
+  .ping { color: var(--qing); }
+  .ze { color: var(--zhu); }
+  .ru { color: var(--jin); font-weight: 700; }
+  .bar { display:inline-block; height: 6px; border-radius: 3px; vertical-align: middle; }
+  .bar.p { background: var(--qing); }
+  .bar.z { background: var(--zhu); }
+  .bar.r { background: var(--jin); }
+
+  .flow { display: flex; flex-direction: column; gap: 0; margin: 14px 0; }
+  .step { display: flex; gap: 14px; align-items: flex-start; }
+  .step .s-no {
+    font-family: var(--mono); font-size: 11px; color: var(--paper-2); background: var(--ink-2);
+    width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex: none;
+  }
+  .step .s-body { padding-bottom: 16px; border-left: 1px dashed var(--line); margin-left: -13px; padding-left: 27px; flex: 1; }
+  .step:last-child .s-body { border-left: none; }
+  .step .s-body h4 { margin: 3px 0 4px; }
+  .step .s-body p { margin: 0; font-size: 12.5px; color: var(--ink-2); }
+  .step .s-body code { font-size: 11.5px; }
+  .env-ok { color: var(--qing); font-family: var(--mono); font-size: 12px; }
+  .env-no { color: var(--zhu); font-family: var(--mono); font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Research · 配音第三阶段 · 2026-10-02</div>
+  <h1>真人吟诵可行性 · 韵律后处理链路</h1>
+  <p class="sub">承接「情感 / 抑扬顿挫 / 性别匹配」研究，探索唯一能还原真正「韵味」的两条路</p>
+  <div class="meta-line">方法：两条并行证据线（吟诵音像资源与版权审计 · 韵律后处理技术链路）→ 交叉验证 → 落地设计。置信标注：[CONFIRMED] 多源 / [SINGLE-SOURCE] 单源 / [unverified] 未核实。</div>
+</header>
+
+<!-- ============ 摘要 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">摘要</span><h2>两条路的诊断结论</h2></div>
+  <p class="sec-note">结论与上一阶段的直觉相反：<b>「找一段现成的真人吟诵来用」几乎走不通，但「自己按规则吟出来 / 用工具改出吟诵味」是可行的</b>。</p>
+  <div class="gap-grid">
+    <div class="gap">
+      <div class="g-title">现成真人吟诵</div>
+      <div class="g-status g-bad">● 不可直接用</div>
+      <p>国内两大吟诵音像库（中华吟诵学会田野档案、叶嘉莹教学录音）<b>均非开放授权</b>：一个以加密 U 盘商业出版，一个版权归属存在司法纠纷。开放语料里唯一的音频库 MCGA 是<b>朗读</b>而非吟诵。</p>
+    </div>
+    <div class="gap">
+      <div class="g-title">自录真人吟诵</div>
+      <div class="g-status g-ok">● 可行</div>
+      <p>吟诵规则已被系统化为「一本九法」，可写成确定性参数谱；不依赖天赋，按「平长仄短、入短韵长」即可产出有韵味的样本。门槛在录音环境与时间成本。</p>
+    </div>
+    <div class="gap">
+      <div class="g-title">韵律后处理</div>
+      <div class="g-status g-mid">● 技术可行，需自研</div>
+      <p>Praat/parselmouth 的 PSOLA 与 pyworld 的 WORLD 声码器都能改写 F0 与时长。学界已有<b>面向汉语声调的「声调叠加」标准流程</b>。风险是声调失真与机械伪影。</p>
+    </div>
+  </div>
+
+  <div class="verdict hard"><span class="v-label">关键判断</span><p><b>没有「开箱即用的真人吟诵音频」可合法取用。</b>中华吟诵学会的采录档案以「加密 U 盘 + 图录」形式商业出版，叶嘉莹的教学录音版权存在司法争议——两者都需授权，不能直接嵌入作品。<span class="cite">[cite:1][cite:2][cite:3]</span></p></div>
+  <div class="verdict"><span class="v-label">路径建议</span><p>把「韵味」拆成<b>可控的两件事</b>：<b>音高轮廓</b>与<b>时长结构</b>。音高靠「依字行腔」（保留每个字本来的声调，不破坏），时长靠「平长仄短、入短韵长」（这是吟诵最可辨识的特征，也最容易用后处理实现）。据此，<b>先做自录样音 + 后处理两条并行的最小验证</b>，用听测裁决。</p></div>
+</section>
+
+<!-- ============ 1 真人吟诵资源与版权 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">01</span><h2>真人吟诵音像资源与版权审计</h2></div>
+  <p class="sec-note">逐个来源核对「有没有、能不能合法用、是吟诵还是朗读」三件事。</p>
+
+  <div class="card">
+    <h3>主要音像资源清单</h3>
+    <table>
+      <thead><tr><th>来源</th><th>规模</th><th>性质</th><th>授权状态</th><th>可用性</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>中华吟诵学会</b><br><span class="cite">田野采录档案</span></td>
+          <td>600+ 人 · 近千小时 · 上万首</td>
+          <td>传统吟诵（含方言、私塾调）</td>
+          <td class="bad">未开放。2025 年以《中华吟诵田野调查研究（音像版）》出版，328 位传人 / 160G 影像，<b>加密 U 盘</b>形式</td>
+          <td class="bad">需商业授权</td>
+        </tr>
+        <tr>
+          <td><b>叶嘉莹</b><br><span class="cite">教学 / 吟诵录音</span></td>
+          <td>《古典诗歌的吟诵与教学》等课程</td>
+          <td>学者吟诵示范 + 讲解</td>
+          <td class="bad">2016 年起授权高教社使用；但视频原始素材著作权归超星，第三方授权<b>须经超星许可</b>（有生效判决）</td>
+          <td class="bad">版权缠结</td>
+        </tr>
+        <tr>
+          <td><b>MCGA</b><br><span class="cite">多任务古典文学音频语料</span></td>
+          <td>119 小时 · 22,000 条 · 4,497 篇</td>
+          <td class="mid"><b>标准普通话「朗读」</b>（非吟诵），带情感标注</td>
+          <td class="ok">CC BY-NC-SA 4.0；录制者已签版权转让</td>
+          <td class="mid">非商业可用，但<b>不是吟诵</b></td>
+        </tr>
+        <tr>
+          <td><b>喜马拉雅 / B 站</b><br><span class="cite">个人吟诵专辑</span></td>
+          <td>零散，逐条差异大</td>
+          <td>吟诵 / 朗诵混合</td>
+          <td class="bad">默认保留全部权利，无明确授权声明</td>
+          <td class="bad">不可直接取用</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="sec-note" style="margin-top:10px">MCGA 的录制规程要求「用与文本情感相符的语气、30 秒内读完」，即<b>朗读</b>而非依字行腔的吟诵。<span class="cite">[cite:4]</span></p>
+  </div>
+
+  <div class="card hard">
+    <h3>版权红线（《著作权法》2020 修正）</h3>
+    <ul>
+      <li><b>第三十八条</b>：使用他人作品演出，表演者应取得著作权人许可并支付报酬。</li>
+      <li><b>第四十二条</b>：录音制作者使用他人作品制作录音制品，应取得许可并付酬；使用已合法录制的<b>音乐作品</b>制作录音制品，可不经许可但须付酬，权利人声明不许使用的不得使用。</li>
+      <li><b>第四十三条</b>：制作录音录像制品，应与表演者订立合同并付酬。</li>
+    </ul>
+    <p class="sec-note" style="margin-top:8px">落到本项目：<b>「诗」本身已过版权期（公有领域），但「某人的吟诵录音」是独立的表演 + 录音制品权利</b>。因此不能因为诗是公版的就随意使用吟诵音频。<span class="pill cn">CONFIRMED</span></p>
+  </div>
+
+  <div class="card good">
+    <h3>可行的合规来源：自录</h3>
+    <p>既然现成音频不可取，自录就是唯一完全可控、无版权风险的真人吟诵来源。可行性依据：</p>
+    <ul>
+      <li><b>规则明确可学。</b>吟诵规则已系统化为「一本九法」：依字行腔、依义行调、入短韵长、平长仄短、平低仄高、文读语音、腔音唱法、模进对称、虚实重长。<span class="cite">[cite:5][cite:6]</span></li>
+      <li><b>规则可直接转成参数。</b>例如「平长仄短」的判据是：偶位字（二、四、六）为平声则读长音，句尾韵字读长音，入声字一律读短音，其余读中音——这是可编码的确定性规则。<span class="cite">[cite:7]</span></li>
+      <li><b>教学资源公开。</b>吟诵教学已进入 500+ 所中小学，MOOC、公开课与「吟诵堂」类材料可自学入门。<span class="cite">[cite:8]</span></li>
+    </ul>
+    <p class="sec-note" style="margin-top:8px">门槛：需要一段安静环境与一两个小时的试录；音准与气息可后期修。<b>风险最低、确定性最高</b>，且产物可版本化（与项目「可度量」原则一致）。</p>
+  </div>
+
+  <div class="verdict warn"><span class="v-label">小结</span><p>「现成真人吟诵」这条路<b>应放弃</b>——不是找不到，而是找到的都不能合法用。真人吟诵只能走<b>自录</b>；如果连自录也不做，就只剩<b>TTS + 韵律后处理</b>这一条技术路。</p></div>
+</section>
+
+<!-- ============ 2 吟诵规则 → 韵律谱 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">02</span><h2>把吟诵规则写成可执行韵律谱</h2></div>
+  <p class="sec-note">这是后处理链路的「谱」——后处理需要一个明确的目标曲线，而吟诵规则恰好提供了它。</p>
+
+  <div class="card">
+    <h3>「一本九法」中与韵律直接相关的六条</h3>
+    <table>
+      <thead><tr><th>法则</th><th>含义</th><th>可转成的参数</th></tr></thead>
+      <tbody>
+        <tr><td><b>平长仄短</b></td><td>平声字长、仄声字短</td><td>每字时长 duration</td></tr>
+        <tr><td><b>入短韵长</b></td><td>入声字最短、韵脚字最长</td><td>入声 = 最短档；韵脚 = 最长档（拖腔）</td></tr>
+        <tr><td><b>平低仄高</b></td><td>平声字音低、仄声字音高</td><td>每字音区 register</td></tr>
+        <tr><td><b>依字行腔</b></td><td>按字本来的声调走向行腔</td><td>每字 F0 轮廓<b>形状</b>（不可破坏声调）</td></tr>
+        <tr><td><b>依义行调</b></td><td>按句义决定整句音调走向</td><td>句级 F0 基线 + 情感弧</td></tr>
+        <tr><td><b>模进对称</b></td><td>相邻句用相似旋律型、对称呼应</td><td>句间 F0 轮廓的复用/镜像</td></tr>
+      </tbody>
+    </table>
+    <p class="sec-note" style="margin-top:10px">「文读语音」「腔音唱法」「虚实重长」属于发音与演唱技法，后处理阶段<b>不纳入</b>（前者需人工文读，后两者属演唱层）。<span class="cite">[cite:5][cite:6][cite:7]</span></p>
+  </div>
+
+  <div class="card">
+    <h3>《静夜思》韵律谱（示例）</h3>
+    <p class="sec-note" style="margin-bottom:4px">符号：<span class="ping">平</span> / <span class="ze">仄</span> / <span class="ru">入</span>。时长条越长表示音越长；平声与韵脚取长档，入声取最短档。</p>
+    <table class="score">
+      <thead><tr><th></th><th>床</th><th>前</th><th>明</th><th>月</th><th>光</th><th></th><th>疑</th><th>是</th><th>地</th><th>上</th><th>霜</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="tag">字</td>
+          <td class="zi">床</td><td class="zi">前</td><td class="zi">明</td><td class="zi">月</td><td class="zi">光</td>
+          <td class="tag">·</td>
+          <td class="zi">疑</td><td class="zi">是</td><td class="zi">地</td><td class="zi">上</td><td class="zi">霜</td>
+        </tr>
+        <tr>
+          <td class="tag">调</td>
+          <td class="py">chuáng</td><td class="py">qián</td><td class="py">míng</td><td class="py">yuè</td><td class="py">guāng</td>
+          <td class="tag">·</td>
+          <td class="py">yí</td><td class="py">shì</td><td class="py">dì</td><td class="py">shàng</td><td class="py">shuāng</td>
+        </tr>
+        <tr>
+          <td class="tag">平仄</td>
+          <td class="ping">平</td><td class="ping">平</td><td class="ping">平</td><td class="ru">入</td><td class="ping">平·韵</td>
+          <td class="tag">·</td>
+          <td class="ping">平</td><td class="ze">仄</td><td class="ze">仄</td><td class="ze">仄</td><td class="ping">平·韵</td>
+        </tr>
+        <tr class="r2">
+          <td class="tag">时长</td>
+          <td><span class="bar p" style="width:22px"></span></td>
+          <td><span class="bar p" style="width:34px"></span></td>
+          <td><span class="bar p" style="width:22px"></span></td>
+          <td><span class="bar r" style="width:6px"></span></td>
+          <td><span class="bar p" style="width:48px"></span></td>
+          <td class="tag">·</td>
+          <td><span class="bar p" style="width:22px"></span></td>
+          <td><span class="bar z" style="width:12px"></span></td>
+          <td><span class="bar z" style="width:12px"></span></td>
+          <td><span class="bar z" style="width:12px"></span></td>
+          <td><span class="bar p" style="width:48px"></span></td>
+        </tr>
+        <tr>
+          <td class="tag">音区</td>
+          <td class="ping">低</td><td class="ping">低</td><td class="ping">低</td><td class="ze">高</td><td class="ping">低</td>
+          <td class="tag">·</td>
+          <td class="ping">低</td><td class="ze">高</td><td class="ze">高</td><td class="ze">高</td><td class="ping">低</td>
+        </tr>
+        <tr>
+          <td class="tag">腔型</td>
+          <td colspan="5" style="font-size:11px;color:var(--ink-3)">依字行腔：床(升↗) 前(升↗) 明(升↗) 月(降↘短) 光(平→拖)</td>
+          <td class="tag">·</td>
+          <td colspan="5" style="font-size:11px;color:var(--ink-3)">疑(升↗) 是(降↘) 地(降↘) 上(降↘) 霜(平→拖)</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="sec-note">第三、四句同理：<b>举</b>(仄·上→降) <b>头</b>(平→低长) <b>望</b>(仄·去→降) <b>明</b>(平→低) <b>月</b>(入→最短)；<b>低</b>(平) <b>头</b>(平) <b>思</b>(平·动词) <b>故</b>(仄·去→降) <b>乡</b>(平·韵→最长拖腔)。</p>
+  </div>
+
+  <div class="verdict warn"><span class="v-label">注意</span><p>此谱是<b>设计性构造</b>，不是「《静夜思》的唯一正确吟法」——传统吟诵存在流派与方言差异，同一首诗可有多套腔调。本谱的作用是给后处理一个<b>可复现的目标</b>，与项目「可度量」原则一致。<span class="pill un">设计选择，非唯一解</span></p></div>
+</section>
+
+<!-- ============ 3 韵律后处理技术链路 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">03</span><h2>韵律后处理技术链路</h2></div>
+  <p class="sec-note">目标：输入一段「平读」音频，输出带「平长仄短 + 依字行腔」的目标音频。</p>
+
+  <div class="card">
+    <h3>工具对比</h3>
+    <table>
+      <thead><tr><th>工具</th><th>原理</th><th>能做什么</th><th>风险</th><th>本项目</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>Praat</b>（PSOLA）</td>
+          <td>基音同步叠加，逐基音周期改写 F0 与时长</td>
+          <td>F0 曲线任意重绘、时长拉伸/压缩；内置 <code>Stylize pitch</code> 可简化轮廓</td>
+          <td>过度改写会产生机械感；声调可能被改坏</td>
+          <td class="ok">首选（有标准流程）</td>
+        </tr>
+        <tr>
+          <td><b>parselmouth</b></td>
+          <td>Praat 的 Python 封装</td>
+          <td>脚本化调用 Praat：<code>Manipulation</code> → <code>Get resynthesis (overlap-add)</code></td>
+          <td>同 Praat；API 需熟悉</td>
+          <td class="ok">自动化首选</td>
+        </tr>
+        <tr>
+          <td><b>pyworld</b>（WORLD）</td>
+          <td>分解为 F0 / 谱包络 sp / 非周期 ap，再合成</td>
+          <td>音高缩放、变速、共振峰保持；<code>harvest</code>+<code>stonemask</code> 提 F0</td>
+          <td>共振峰与音高耦合，大改易出伪影</td>
+          <td class="mid">备选（先分解再定制）</td>
+        </tr>
+        <tr>
+          <td><b>librosa / soundfile / ffmpeg</b></td>
+          <td>I/O、重采样、格式转换、简易变速变调</td>
+          <td>读写、切分、拼接、批量处理</td>
+          <td>变速变调会同时改变音色</td>
+          <td class="ok">必备配套</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="sec-note" style="margin-top:10px">WORLD 把语音参数化为 F0 轮廓、谐波谱包络、非周期谱包络三部分并可再合成，是「先拆解再按谱重绘」的路线。<span class="cite">[cite:9]</span> Praat 的 PSOLA 可在每个基音脉冲处指定 F0，是「直接重绘」的路线。<span class="cite">[cite:10][cite:11]</span></p>
+  </div>
+
+  <div class="card good">
+    <h3>学界已有的汉语声调处理流程：「声调叠加」</h3>
+    <p>Frontiers in Education (2024) 的教程系统给出了一套可复现流程：把某个汉语声调的音高轮廓<b>叠加</b>到另一段音节上，并保持自然度。<span class="cite">[cite:10]</span> 其要点与对本项目的启示：</p>
+    <table>
+      <thead><tr><th>步骤</th><th>做法</th><th>对《静夜思》的意义</th></tr></thead>
+      <tbody>
+        <tr><td>1. 提取 F0</td><td>对源音节做基频分析</td><td>得到「平读」音频每个字的原始音高</td></tr>
+        <tr><td>2. 简化轮廓</td><td><code>Stylize pitch (2 ST)</code>，剔除小于 2 半音的小波动</td><td>去掉朗读的自然抖动，得到干净的字调骨架</td></tr>
+        <tr><td>3. 设定目标轮廓</td><td>按目标声调/腔型，在 Manipulation 上逐点设定 F0</td><td>注入「依字行腔 + 平低仄高」</td></tr>
+        <tr><td>4. 再合成</td><td><code>Get resynthesis (overlap-add)</code>（PSOLA）</td><td>输出改写后的音频</td></tr>
+      </tbody>
+    </table>
+    <blockquote>
+      「Manipulating the pitch contour in a spoken syllable can be complicated and change the perception of the spoken syllable in a significant way.」
+      <span class="src">— 该教程摘要（原话：改动音高轮廓可能显著改变音节的听感）<span class="cite">[cite:10]</span></span>
+    </blockquote>
+  </div>
+
+  <div class="card hard">
+    <h3>最大风险：声调保全（依字行腔的反面）</h3>
+    <p>汉语是声调语言，音高既负载<b>声调（字义）</b>又负载<b>语调（情感/句调）</b>。这与英语不同——英语里音高只表情感，随便改不会改字义。<span class="cite">[cite:10]</span></p>
+    <ul>
+      <li><b>红线：</b>不能把「明（阳平，升↗）」改成降调，否则听成别的字。</li>
+      <li><b>安全区：</b>改<b>时长</b>（平长仄短）几乎不损伤声调辨识；改<b>整体音区</b>（平低仄高，即整体平移）也相对安全。</li>
+      <li><b>危险区：</b>逐点重绘 F0 形状——必须在「保留本字声调走向」的约束下做，只能强化/微调，不能反转。</li>
+    </ul>
+    <p class="sec-note" style="margin-top:8px">因此后处理应<b>优先动时长、次动音区、慎动形状</b>。这也解释了为什么「平长仄短」应作为吟诵韵味的<b>主抓手</b>——它最有效且最安全。</p>
+  </div>
+
+  <div class="card warn">
+    <h3>已知限制</h3>
+    <ul>
+      <li>PSOLA 与 WORLD 都<b>不擅长大幅、长时的 F0 重绘</b>（如整句拖腔），拖腔越长越易出颤音/金属感伪影。</li>
+      <li>没有检索到「用 PSOLA 给五言诗逐字注入平仄」的现成开源工具或脚本——<b>需自研</b>，属研究性投入。<span class="pill un">工具缺口</span></li>
+      <li>「腔音唱法」（吟诵特有的腔化演唱）无法用后处理还原——那是演唱技法，只能靠真人。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 4 pipeline 设计 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">04</span><h2>《静夜思》韵律后处理 pipeline 设计</h2></div>
+  <p class="sec-note">两条并行输入（自录音 / TTS），汇入同一条按谱重绘的链路，最后人工听测裁决。</p>
+
+  <div class="flow">
+    <div class="step"><div class="s-no">1</div><div class="s-body">
+      <h4>取源音（两路并行）</h4>
+      <p><b>路 A · 自录：</b>按九法慢读《静夜思》，一句一录（便于逐句对齐），保留较长停顿。<br><b>路 B · TTS：</b>用男声（<code>Yunyi</code> poet / <code>Yunhan</code> lonely+whispering）逐句生成，作为后处理底料。</p>
+    </div></div>
+    <div class="step"><div class="s-no">2</div><div class="s-body">
+      <h4>切分与对齐</h4>
+      <p>用 <code>librosa</code> / <code>soundfile</code> 读入，按静音段切出 20 个字的边界（自录）或按 TTS 时间戳对齐（TTS）。输出「字 → 时间区间」表。</p>
+    </div></div>
+    <div class="step"><div class="s-no">3</div><div class="s-body">
+      <h4>F0 分析 + 轮廓简化</h4>
+      <p><code>parselmouth</code> 建 <code>Manipulation</code>；对每字用 <code>Stylize pitch (2 ST)</code> 去抖，得到干净的字调骨架。</p>
+    </div></div>
+    <div class="step"><div class="s-no">4</div><div class="s-body">
+      <h4>按谱重绘（核心）</h4>
+      <p>读入 §2 的韵律谱：<br>· <b>时长</b>：平声 ×1.6、韵脚 ×2.2（拖腔）、入声 ×0.55、上去声 ×0.8（安全区操作）；<br>· <b>音区</b>：平声整体 −2 半音、仄声 +1 半音（平低仄高，平移操作）；<br>· <b>形状</b>：保留本字声调走向，仅对韵脚做末端轻微下行的拖腔延长（危险区，最保守）。</p>
+    </div></div>
+    <div class="step"><div class="s-no">5</div><div class="s-body">
+      <h4>再合成与拼接</h4>
+      <p><code>Get resynthesis (overlap-add)</code> 输出逐字音频；按「起承转合」的停顿预算（0.3 / 0.6 / 0.4 / 0.8s 前停 + 句尾 1.0 / 1.5 / 1.3 / 2.0s）拼接成整首。</p>
+    </div></div>
+    <div class="step"><div class="s-no">6</div><div class="s-body">
+      <h4>听测裁决（可度量）</h4>
+      <p>同一段文本产出 4–6 个版本（自录原声 / 自录+后处理 / TTS / TTS+后处理），做小样本盲听，维度：声调可辨、时长对比是否自然、有无伪影、情感是否到位。<b>用结果决定是否值得继续投入。</b></p>
+    </div></div>
+  </div>
+
+  <div class="card">
+    <h3>与既有资产的衔接</h3>
+    <table>
+      <thead><tr><th>已有</th><th>本阶段如何用</th></tr></thead>
+      <tbody>
+        <tr><td>起承转合停顿预算（原型已定）</td><td>直接作为 pipeline 第 5 步的句间停顿参数</td></tr>
+        <tr><td>男声候选（Yunyi / Yunhan）</td><td>作为路 B 的 TTS 底料</td></tr>
+        <tr><td>《静夜思》水墨动画时间轴</td><td>后处理产物的时长需与动画节拍对齐（字幕/题诗同步）</td></tr>
+        <tr><td>O1 评估工具链</td><td>可为配音新增可度量项：时长档位是否落在谱内、声调辨识率</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 5 环境就绪度 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">05</span><h2>本地环境就绪度</h2></div>
+  <p class="sec-note">已实测本机 Python 与音频工具链——<b>全链路依赖已安装完毕，可立即开工</b>。</p>
+  <div class="card good">
+    <table>
+      <thead><tr><th>组件</th><th>状态</th><th>用途</th></tr></thead>
+      <tbody>
+        <tr><td>Python 3.10.11</td><td class="env-ok">✓ 已就绪</td><td>运行时</td></tr>
+        <tr><td>numpy 2.2.6</td><td class="env-ok">✓ 已就绪</td><td>数组运算</td></tr>
+        <tr><td>scipy 1.15.3</td><td class="env-ok">✓ 已就绪</td><td>信号处理（滤波、重采样）</td></tr>
+        <tr><td>ffmpeg 6.1.1</td><td class="env-ok">✓ 已就绪</td><td>音频解码 / 编码 / 拼接</td></tr>
+        <tr><td>parselmouth 0.4.7</td><td class="env-ok">✓ 已安装</td><td>PSOLA 核心（Python 调 Praat）</td></tr>
+        <tr><td>pyworld</td><td class="env-ok">✓ 已安装</td><td>WORLD 声码器备选路线</td></tr>
+        <tr><td>soundfile 0.14.0</td><td class="env-ok">✓ 已安装</td><td>音频读写</td></tr>
+        <tr><td>librosa 0.11.0</td><td class="env-ok">✓ 已安装</td><td>切分、特征、重采样</td></tr>
+      </tbody>
+    </table>
+    <p class="sec-note" style="margin-top:10px"><b>结论：后处理链路所需的全部依赖已在 Windows / Python 3.10 上验证可导入。</b>Praat PSOLA 与 WORLD 两条路线都可直接开工，无需再解决环境问题。<span class="pill cn">实测通过</span></p>
+  </div>
+</section>
+
+<!-- ============ 6 结论 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">06</span><h2>结论与建议</h2></div>
+  <div class="card">
+    <h3>三条结论</h3>
+    <ul>
+      <li><b>真人吟诵：</b>现成音频<b>不可合法取用</b>（吟诵学会加密出版、叶嘉莹版权缠结、MCGA 是朗读）。唯一合规的真人来源是<b>自录</b>，且规则明确、可自学。</li>
+      <li><b>韵律后处理：</b>技术可行（Praat PSOLA / pyworld WORLD），学界已有汉语「声调叠加」标准流程；但<b>无现成开源工具</b>给五言诗注入平仄，需自研。</li>
+      <li><b>抓手的优先级：</b>时长（平长仄短）＞音区（平低仄高）＞形状（依字行腔）。前两者安全且有效，后者是「韵味」的核心但也最容易翻车。</li>
+    </ul>
+  </div>
+  <div class="card good">
+    <h3>建议的下一步（最小验证，成本递增）</h3>
+    <div class="layer">
+      <div class="layer-head"><span class="layer-tag" style="color:var(--qing)">第 1 步</span><h4>自录一版《静夜思》样音</h4></div>
+      <p>按九法慢读，一句一录。先不做任何后处理，直接听——判断「真人吟诵」这条路是否值得走下去。</p>
+      <p class="pros">成本：约 1 小时。收益：立刻获得一个无版权风险、带真实韵味的基准。</p>
+    </div>
+    <div class="layer">
+      <div class="layer-head"><span class="layer-tag" style="color:var(--jin)">第 2 步</span><h4>搭一个「只动时长」的后处理最小脚本</h4></div>
+      <p>用 parselmouth / librosa 实现「平长仄短 + 入短韵长」的时长改写（<b>不碰音高</b>）。这是最安全的一档，能验证「时长是否就是韵味的主要来源」。</p>
+      <p class="pros">成本：半天。收益：可度量、可回归的时长谱，直接进项目评估链。</p>
+    </div>
+    <div class="layer">
+      <div class="layer-head"><span class="layer-tag" style="color:var(--zhu)">第 3 步</span><h4>（条件触发）加入音区与拖腔</h4></div>
+      <p>仅当第 2 步听测显示「时长不够、还差味道」时，才动音区与韵脚拖腔——进入危险区，需逐字核验声调未失真。</p>
+      <p class="cons">风险：伪影与声调失真，收益递减。</p>
+    </div>
+  </div>
+  <div class="verdict"><span class="v-label">一句话</span><p><b>先用一小时的真人自录证伪或证实「韵味可及」，再决定是否投入后处理工具链。</b>不要把研究性投入压在还没验证的需求上——这与项目「先可度量、再可规模」的顺序一致。</p></div>
+</section>
+
+<!-- ============ 来源 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">注</span><h2>来源</h2></div>
+  <ul class="src-list">
+    <li><span class="n">[cite:1]</span> 光明网·中华读书报《把生命献给了吟诵的健顺教授》（中华吟诵学会成立；2025 年《中华吟诵田野调查研究（音像版）》328 位传人 / 160G 加密 U 盘）：http://epaper.gmw.cn/zhdsb/html/content/202603/25/content_9855.html</li>
+    <li><span class="n">[cite:2]</span> 高等教育出版社《张丽诺出席叶嘉莹先生与中华诗教国际学术研讨会》（叶嘉莹 2016 年起将教学音像资源授权高教社）：https://www.hep.com.cn/news/show/zhang-li-nuo-chu-xi-ye-jia-ying-xian-sheng-yu-zhong-hua-shi-jiao-guo-ji-xue-shu-yan-tao-hui-PKJDER33SZJ</li>
+    <li><span class="n">[cite:3]</span> 知产法网·世纪超星与南京云库侵害著作财产权纠纷二审判决（视频原始素材著作权归超星，第三方授权须经许可）：https://www.chinaiprlaw.cn/index.php?id=1653</li>
+    <li><span class="n">[cite:4]</span> MCGA: A Multi-task Classical Chinese Literary Genre Audio Corpus（arXiv 2601.09270，CC BY-NC-SA 4.0，119 小时 / 22,000 条，录制规程为朗读）：https://arxiv.org/html/2601.09270v3</li>
+    <li><span class="n">[cite:5]</span> 三明日报《语文教师的"吟诵"探索之旅》（一本九法：入短韵长、虚实重长、依字行腔、依义行调、平长仄短、平低仄高、模进对称、文读语音、腔音唱法）：https://smrb.smnet.com.cn/pad/layout/content/202510/09/content_174115.html</li>
+    <li><span class="n">[cite:6]</span> 内江师范学院文学院《学习吟诵之法，品味诗文意韵》（一本＝声韵涵义；九法同上）：https://wx.njtc.edu.cn/info/1081/9221.htm</li>
+    <li><span class="n">[cite:7]</span> 中国孔子网《吟诵的规则：一本九法》（平长仄短的判据：偶位平声字长音、句尾韵字长音、入声字一律短音、其余中音）：http://www.chinakongzi.org/zt/ys/kecheng/201706/t20170609_136993.htm</li>
+    <li><span class="n">[cite:8]</span> 光明日报《知音如见赏，雅调为君传》（全国 500+ 所中小学开展吟诵教学）：https://epaper.gmw.cn/gmrb/html/2013-05/28/nw.D110000gmrb_20130528_1-15.htm</li>
+    <li><span class="n">[cite:9]</span> pyworld / WORLD 声码器（F0 轮廓、谐波谱包络、非周期谱包络三参数化与再合成）：https://pypi.org/project/pyworld-fixed/</li>
+    <li><span class="n">[cite:10]</span> Wang, Jheng &amp; McMurray (2024). Tone superimposition technique in Speech Sciences: a tutorial. Frontiers in Education 9:1439014（PSOLA 叠加汉语声调流程、Stylize pitch、声调与语调耦合风险）：https://www.frontiersin.org/journals/education/articles/10.3389/feduc.2024.1439014/full</li>
+    <li><span class="n">[cite:11]</span> Charles University Fonetika — PSOLA modification of speech（Praat 中 Stylize pitch (2 ST) 与旋律模式调整）：https://fonetika.ff.cuni.cz/en/research/from-our-research/psola-modification/</li>
+    <li><span class="n">[cite:12]</span> 国家版权局《中华人民共和国著作权法》（2020 修正，第三十八 / 四十二 / 四十三条）：https://www.ncac.gov.cn/xxfb/flfg/flfg_532/202103/t20210309_50530.html</li>
+    <li><span class="n">[cite:13]</span> Intoner: For Chinese Poetry Intoning Synthesis（IJCAI 2025，自建吟诵数据集，未开放）：https://www.ijcai.org/proceedings/2025/1139.pdf</li>
+  </ul>
+</section>
+
+</div>
+</body>
+</html>

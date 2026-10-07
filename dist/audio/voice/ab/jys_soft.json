@@ -1,0 +1,253 @@
+{
+  "poem": "静夜思 · 李白",
+  "poem_key": "jys",
+  "backend": "edge+prosody+emotion",
+  "voice": "jys_edge_zh-CN-YunjianNeural_quatrain.wav",
+  "sr": 24000,
+  "duration": 17.712,
+  "emotion": "悲伤·思念",
+  "line_texts": [
+    "床前明月光",
+    "疑是地上霜",
+    "举头望明月",
+    "低头思故乡"
+  ],
+  "rules": {
+    "平长仄短": {
+      "level": 1.35,
+      "oblique": 0.85,
+      "entering": 0.65,
+      "rhyme": 1.65
+    },
+    "时间规整": {
+      "方式": "smooth",
+      "倍率收敛": 0.5,
+      "平滑σ_ms": 45.0,
+      "对齐旧时长": true,
+      "客观指标": {
+        "逐帧最大跳变": 0.0255,
+        "逐帧平均跳变": 0.0013,
+        "音节间最大速度比": 1.507,
+        "音节间平均速度比": 1.195
+      }
+    },
+    "句调": [
+      {
+        "seg": "起",
+        "f0_mul": 1.0,
+        "f0_slope_pct_per_s": -0.8
+      },
+      {
+        "seg": "承",
+        "f0_mul": 0.94,
+        "f0_slope_pct_per_s": -1.6
+      },
+      {
+        "seg": "转",
+        "f0_mul": 1.06,
+        "f0_slope_pct_per_s": 0.6
+      },
+      {
+        "seg": "合",
+        "f0_mul": 0.9,
+        "f0_slope_pct_per_s": -1.2
+      }
+    ],
+    "句间衔接": {
+      "句末渐弱深度": [
+        0.0,
+        0.15,
+        0.0,
+        0.55
+      ],
+      "句首滑音_ms": 250.0,
+      "跳进上限_半音": 2.0,
+      "气口_ms": 170.0,
+      "实际停顿_秒": [
+        1.265,
+        1.063,
+        1.984
+      ],
+      "行时序_秒": [
+        [
+          0.25,
+          3.3
+        ],
+        [
+          4.565,
+          7.275
+        ],
+        [
+          8.338,
+          10.643
+        ],
+        [
+          12.627,
+          16.112
+        ]
+      ]
+    }
+  },
+  "syllables": [
+    {
+      "char": "床",
+      "tone": "level",
+      "role": "level",
+      "line": 1,
+      "pos": 1,
+      "frames": 99
+    },
+    {
+      "char": "前",
+      "tone": "level",
+      "role": "level",
+      "line": 1,
+      "pos": 2,
+      "frames": 69
+    },
+    {
+      "char": "明",
+      "tone": "level",
+      "role": "level",
+      "line": 1,
+      "pos": 3,
+      "frames": 89
+    },
+    {
+      "char": "月",
+      "tone": "entering",
+      "role": "entering",
+      "line": 1,
+      "pos": 4,
+      "frames": 87
+    },
+    {
+      "char": "光",
+      "tone": "rhyme",
+      "role": "rhyme",
+      "line": 1,
+      "pos": 5,
+      "frames": 101
+    },
+    {
+      "char": "疑",
+      "tone": "level",
+      "role": "level",
+      "line": 2,
+      "pos": 1,
+      "frames": 74
+    },
+    {
+      "char": "是",
+      "tone": "oblique",
+      "role": "oblique",
+      "line": 2,
+      "pos": 2,
+      "frames": 106
+    },
+    {
+      "char": "地",
+      "tone": "oblique",
+      "role": "oblique",
+      "line": 2,
+      "pos": 3,
+      "frames": 74
+    },
+    {
+      "char": "上",
+      "tone": "oblique",
+      "role": "oblique",
+      "line": 2,
+      "pos": 4,
+      "frames": 103
+    },
+    {
+      "char": "霜",
+      "tone": "rhyme",
+      "role": "rhyme",
+      "line": 2,
+      "pos": 5,
+      "frames": 74
+    },
+    {
+      "char": "举",
+      "tone": "oblique",
+      "role": "oblique",
+      "line": 3,
+      "pos": 1,
+      "frames": 86
+    },
+    {
+      "char": "头",
+      "tone": "level",
+      "role": "level",
+      "line": 3,
+      "pos": 2,
+      "frames": 74
+    },
+    {
+      "char": "望",
+      "tone": "oblique",
+      "role": "oblique",
+      "line": 3,
+      "pos": 3,
+      "frames": 65
+    },
+    {
+      "char": "明",
+      "tone": "level",
+      "role": "level",
+      "line": 3,
+      "pos": 4,
+      "frames": 88
+    },
+    {
+      "char": "月",
+      "tone": "entering",
+      "role": "entering",
+      "line": 3,
+      "pos": 5,
+      "frames": 63
+    },
+    {
+      "char": "低",
+      "tone": "level",
+      "role": "level",
+      "line": 4,
+      "pos": 1,
+      "frames": 112
+    },
+    {
+      "char": "头",
+      "tone": "level",
+      "role": "level",
+      "line": 4,
+      "pos": 2,
+      "frames": 83
+    },
+    {
+      "char": "思",
+      "tone": "level",
+      "role": "level",
+      "line": 4,
+      "pos": 3,
+      "frames": 99
+    },
+    {
+      "char": "故",
+      "tone": "oblique",
+      "role": "oblique",
+      "line": 4,
+      "pos": 4,
+      "frames": 126
+    },
+    {
+      "char": "乡",
+      "tone": "rhyme",
+      "role": "rhyme",
+      "line": 4,
+      "pos": 5,
+      "frames": 90
+    }
+  ]
+}

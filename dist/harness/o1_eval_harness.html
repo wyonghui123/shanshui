@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O1 · 水墨动画忠实度评估工装</title>
+<style>
+  :root{
+    --paper:#F6F3EC; --paper-2:#FFFFFF;
+    --ink:#1C1C1C; --ink-2:#4A4640; --ink-3:#8A8578;
+    --line:rgba(28,28,28,.14); --line-2:rgba(28,28,28,.07);
+    --zhu:#A83A2C; --zhu-soft:rgba(168,58,44,.10);
+    --qing:#3E5C76; --qing-soft:rgba(62,92,118,.10);
+    --jin:#B08430; --jin-soft:rgba(176,132,48,.12);
+    --lv:#4E6B4A; --lv-soft:rgba(78,107,74,.11);
+    --zi:#6B5B95; --zi-soft:rgba(107,91,149,.11);
+    --serif:"Songti SC","STSong","SimSun","Noto Serif SC",Georgia,serif;
+    --sans:"PingFang SC","Microsoft YaHei",system-ui,-apple-system,"Segoe UI",sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.75;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:52px 30px 100px}
+
+  header{border-bottom:1px solid var(--line);padding-bottom:28px;margin-bottom:34px}
+  .eyebrow{font-size:12px;letter-spacing:.22em;color:var(--ink-3);text-transform:uppercase;margin-bottom:16px}
+  h1{font-family:var(--serif);font-size:31px;font-weight:600;margin:0 0 8px;letter-spacing:.04em}
+  .sub{color:var(--ink-3);font-size:13px;margin-bottom:20px}
+  .meta{display:flex;flex-wrap:wrap;gap:8px}
+  .tag{font-size:12px;padding:3px 11px;border-radius:999px;border:1px solid var(--line);color:var(--ink-2);background:var(--paper-2)}
+  .tag.zhu{color:var(--zhu);border-color:rgba(168,58,44,.32);background:var(--zhu-soft)}
+  .tag.qing{color:var(--qing);border-color:rgba(62,92,118,.30);background:var(--qing-soft)}
+  .tag.jin{color:var(--jin);border-color:rgba(176,132,48,.34);background:var(--jin-soft)}
+
+  section{margin-bottom:52px}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px}
+  .sec-no{font-family:var(--mono);font-size:12px;color:var(--zhu);border:1px solid rgba(168,58,44,.32);border-radius:4px;padding:1px 7px;flex:none}
+  h2{font-family:var(--serif);font-size:20px;font-weight:600;margin:0;letter-spacing:.03em}
+  .sec-note{color:var(--ink-3);font-size:12.5px;margin:0 0 20px}
+  h3{font-size:13.5px;font-weight:600;margin:24px 0 10px;color:var(--ink)}
+
+  .card{background:var(--paper-2);border:1px solid var(--line-2);border-radius:10px;padding:20px 22px;margin-bottom:14px}
+  .card.tight{padding:15px 18px}
+  .pos{background:var(--paper-2);border:1px solid var(--line-2);border-left:3px solid var(--jin);border-radius:8px;padding:16px 20px;margin-bottom:16px}
+  .pos h4{font-family:var(--serif);font-size:15px;margin:0 0 4px}
+  .pos .r{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:9px}
+  .pos .prow{display:grid;grid-template-columns:92px 1fr;gap:5px 14px;font-size:12.8px;color:var(--ink-2);margin:0}
+  .pos .prow dt{color:var(--ink-3);font-size:12px}
+  .pos .prow dd{margin:0}
+
+  /* 记分卡 */
+  .score{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px}
+  .sc{background:var(--paper-2);border:1px solid var(--line-2);border-radius:10px;padding:16px 16px 14px}
+  .sc .n{font-family:var(--serif);font-size:30px;font-weight:600;line-height:1.1;letter-spacing:.02em}
+  .sc .l{font-size:12px;color:var(--ink-3);margin-top:4px}
+  .sc.ok .n{color:var(--qing)} .sc.def .n{color:var(--zhu)} .sc.miss .n{color:var(--jin)}
+
+  /* 表 */
+  table{width:100%;border-collapse:collapse;font-size:12.8px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line-2);vertical-align:top}
+  th{font-weight:600;font-size:11.5px;color:var(--ink-3);letter-spacing:.06em;border-bottom:1px solid var(--line);white-space:nowrap}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr.row-defect{background:rgba(168,58,44,.045)}
+  tbody tr.row-miss{background:rgba(176,132,48,.055)}
+  td.num,th.num{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .ev{color:var(--ink-3);font-size:11.8px;line-height:1.6}
+  .q{min-width:180px}
+
+  .chip{display:inline-block;font-size:10.5px;padding:1px 7px;border-radius:4px;font-family:var(--mono);white-space:nowrap}
+  .chip.EXIST{color:var(--qing);background:var(--qing-soft)}
+  .chip.ATTR{color:var(--jin);background:var(--jin-soft)}
+  .chip.SPATIAL{color:var(--lv);background:var(--lv-soft)}
+  .chip.TEMPORAL{color:var(--zi);background:var(--zi-soft)}
+  .chip.NEGATIVE{color:var(--zhu);background:var(--zhu-soft)}
+  .chip.b-poem{color:var(--ink-2);background:rgba(28,28,28,.06)}
+  .chip.b-design{color:var(--ink-3);background:rgba(28,28,28,.035)}
+  .res{font-weight:600;font-size:11.5px;white-space:nowrap}
+  .res.hit{color:var(--qing)} .res.def{color:var(--zhu)} .res.miss{color:var(--jin)}
+  .conf{font-size:10.5px;color:var(--ink-3);font-family:var(--mono)}
+
+  /* 条形 */
+  .bars{display:flex;flex-direction:column;gap:9px}
+  .bar-row{display:grid;grid-template-columns:110px 1fr 62px;align-items:center;gap:12px;font-size:12.5px}
+  .bar-track{height:9px;background:rgba(28,28,28,.07);border-radius:99px;overflow:hidden}
+  .bar-fill{height:100%;border-radius:99px;background:var(--qing)}
+  .bar-fill.partial{background:var(--jin)}
+  .bar-val{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);text-align:right}
+
+  /* 规则表 */
+  .rules{margin:0;padding-left:20px}
+  .rules li{margin-bottom:5px;font-size:12.8px;color:var(--ink-2)}
+
+  /* 缺陷卡 */
+  .def{background:var(--paper-2);border:1px solid var(--line-2);border-left:3px solid var(--zhu);border-radius:8px;padding:15px 18px;margin-bottom:11px}
+  .def .h{display:flex;align-items:baseline;gap:10px;margin-bottom:5px;flex-wrap:wrap}
+  .def .h b{font-size:13.5px}
+  .def .id{font-family:var(--mono);font-size:11px;color:var(--zhu);border:1px solid rgba(168,58,44,.3);border-radius:4px;padding:0 6px}
+  .def .where{font-size:11.5px;color:var(--ink-3);font-family:var(--mono)}
+  .def p{margin:0 0 7px;font-size:12.8px;color:var(--ink-2)}
+  .def .fix{font-size:12.5px;color:var(--lv);border-top:1px dashed var(--line);padding-top:7px}
+  .def .fix b{color:var(--ink-2)}
+  .def .ok{font-family:var(--mono);font-size:10.5px;color:var(--lv);border:1px solid rgba(78,107,74,.35);background:var(--lv-soft);border-radius:4px;padding:0 6px}
+
+  /* 发现卡 */
+  .fnd{background:var(--paper-2);border:1px solid var(--line-2);border-left:3px solid var(--jin);border-radius:8px;padding:15px 18px;margin-bottom:11px}
+  .fnd .h{display:flex;align-items:baseline;gap:10px;margin-bottom:5px;flex-wrap:wrap}
+  .fnd .h b{font-size:13.5px}
+  .fnd .id{font-family:var(--mono);font-size:11px;color:var(--jin);border:1px solid rgba(176,132,48,.35);border-radius:4px;padding:0 6px}
+  .fnd .where{font-size:11.5px;color:var(--ink-3);font-family:var(--mono)}
+  .fnd p{margin:0 0 6px;font-size:12.8px;color:var(--ink-2)}
+  .fnd .k{font-family:var(--mono);font-size:11px;color:var(--ink-3)}
+  .fnd .act{font-size:12.5px;color:var(--qing);border-top:1px dashed var(--line);padding-top:7px}
+  .fnd .act b{color:var(--ink-2)}
+
+  /* 图册 */
+  .gal{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .fr{background:var(--paper-2);border:1px solid var(--line-2);border-radius:9px;overflow:hidden}
+  .fr a{display:block;line-height:0}
+  .fr img{width:100%;display:block;transition:opacity .15s}
+  .fr a:hover img{opacity:.86}
+  .fr .cap{padding:9px 12px 11px;line-height:1.5}
+  .fr .cap b{font-family:var(--mono);font-size:11.5px;display:block;color:var(--ink-2)}
+  .fr .cap span{font-size:11.5px;color:var(--ink-3)}
+  .fr .cap .tp{font-family:var(--mono);font-size:10.5px;color:var(--zhu)}
+
+  /* 命令 */
+  pre{background:#FBFAF6;border:1px solid var(--line-2);border-radius:8px;padding:13px 15px;overflow:auto;font-family:var(--mono);font-size:11.8px;line-height:1.7;color:var(--ink-2);margin:0 0 10px}
+
+  .hl{background:rgba(176,132,48,.13);padding:1px 4px;border-radius:3px}
+  footer{border-top:1px solid var(--line);padding-top:20px;color:var(--ink-3);font-size:12px}
+  @media (max-width:860px){ .score{grid-template-columns:repeat(2,1fr)} .gal{grid-template-columns:repeat(2,1fr)} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Poetics Pipeline · Optimization O1</div>
+    <h1>水墨动画忠实度评估工装</h1>
+    <div class="sub">问题由「诗」生成，答案由「画面」给出 —— 把「像不像」变成「可不可数」。注意：这是<b>忠实度护栏</b>，不是意境／美感的评分。</div>
+    <div class="meta" id="meta"></div>
+  </header>
+
+  <section>
+    <div class="sec-head"><span class="sec-no">§0</span><h2>基线总览</h2></div>
+    <div class="pos" id="positioning"></div>
+    <p class="sec-note" id="headline"></p>
+    <div class="score" id="scores"></div>
+    <div class="card tight">
+      <div style="font-size:12.8px;color:var(--ink-2)" id="baseline-note"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-no">§1</span><h2>评估模板</h2></div>
+    <p class="sec-note">模板 = 轴 + 依据 + 作答类型 + 媒体类型 + 打分口径 + 生成规则 + 判读协议 + 留白口径。实例化时才填入具体问题与期望答案。</p>
+    <div class="card"><h3 style="margin-top:0">五个评估轴</h3><div id="axes"></div></div>
+    <div class="card"><h3 style="margin-top:0">依据（basis）</h3><div id="basis"></div></div>
+    <div class="card"><h3 style="margin-top:0">媒体类型（media，v1.2 新增）</h3><div id="media"></div></div>
+    <div class="card"><h3 style="margin-top:0">打分口径</h3><div id="scoring"></div></div>
+    <div class="card"><h3 style="margin-top:0">留白率口径（rho，v1.2 分列）</h3><div id="rho"></div></div>
+    <div class="card"><h3 style="margin-top:0">问题生成规则</h3><ul class="rules" id="rules"></ul></div>
+    <div class="card"><h3 style="margin-top:0">判读协议（v1.1 建立 · v1.2 补全）</h3><div id="protocol"></div></div>
+    <div class="card"><h3 style="margin-top:0">已知混淆源</h3><div id="confounds"></div></div>
+    <div class="card"><h3 style="margin-top:0">复跑命令</h3><pre id="cmds"></pre></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-no">§2</span><h2>问题集与基线作答</h2></div>
+    <p class="sec-note">判读帧（frame）与媒体类型（media）为逐题必填 —— 不绑定帧的构图题在镜头推近前后会给出两个答案（v1.3 已把《江雪》推近压平，但 12 秒内构图仍随帧变化）；过程性题（时序）单帧不可判。证据栏中的数值均来自像素级实测或 DOM 采样。</p>
+    <div id="poems"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-no">§3</span><h2>按轴 / 按依据拆解</h2></div>
+    <p class="sec-note">分母为权重和；「题面缺陷」与「无素材不可判」不计入分母。</p>
+    <div class="card"><h3 style="margin-top:0">按轴</h3><div class="bars" id="axis-bars"></div></div>
+    <div class="card"><h3 style="margin-top:0">按依据</h3><div class="bars" id="basis-bars"></div></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-no">§4</span><h2>仪器缺陷修复清单（<span id="def-range">D1–D8</span>）</h2></div>
+    <p class="sec-note">基线真正的产出不是「画面得了几分」，而是清单里的每一条 —— 尺子本身的问题。v1.2 修 D1–D7 并由 src/o1/o1_validate.mjs 加机器断言防复发；v1.3 的 D8 由探针自身的边界校验就地防复发。</p>
+    <div id="defects"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-no">§5</span><h2>资产口径发现（<span id="fnd-range">F1–F5</span>）</h2></div>
+    <p class="sec-note">修尺子的副产物：探针把「标签／设计序列」与「画面键值」对不上的地方翻了出来。F1–F4 属资产口径问题（不改画面即不影响观感，但会被后续版本继承）；F5 则是探针把「缩放过大破坏意境」量出来之后据以改画面的裁定记录。</p>
+    <div id="findings"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-no">§6</span><h2>区分度灵敏度分析</h2></div>
+    <p class="sec-note">D5 的诉求是「题目要能测出改进」。本轮画面已达标（全中），故不能靠分数证明区分度，改做灵敏度分析：逐题给出「最近的一个错误选项」与到该选项的余量，余量越小说明题目越敏感。</p>
+    <div class="card" style="padding:0;overflow:hidden" id="discrimination"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-no">§7</span><h2>客观实测</h2></div>
+    <p class="sec-note">属性类题若肉眼处于阈值附近，改由探针给硬数据；相机轨迹由 DOM 采样给出。纸色 #F6F3EC（lum≈243）。</p>
+    <div class="card"><h3 style="margin-top:0">关键测量</h3><div id="probe-keys"></div></div>
+    <div class="card"><h3 style="margin-top:0">留白率直方图（按亮度分档）</h3><div id="probe-blank"></div></div>
+    <div class="card"><h3 style="margin-top:0">相机轨迹（src/o1/o1_probe_cam.mjs 采样 scale）</h3><div id="probe-cam"></div></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-no">§8</span><h2>关键帧图册</h2></div>
+    <p class="sec-note">14 帧。基线一律关闭「画中物标注」；负节点题以「去题诗」帧复核。点图可看原图。</p>
+    <div class="gal" id="gallery"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-no">§9</span><h2>结论与下一步</h2></div>
+    <div class="card" id="next"></div>
+  </section>
+
+  <footer>O1 评估闭环 · 工装页由 src/o1/o1_build_harness.mjs 从 o1_qset.json / o1_baseline.json / o1_probe.json 生成 · 可复跑</footer>
+</div>
+
+<script>
+const QSET = {"meta":{"id":"o1-eval-v1","name":"水墨动画忠实度评估 · 问题集（模板 + 实例）","version":"1.3","date":"2026-10-02","principle":"问题由「诗」生成，答案由「画面」给出。期望答案写在数据里，评分 = 画面答案与期望答案的一致率。","positioning":{"role":"护栏（guardrail），不是目标（objective）","measures":"忠实度 —— 诗里的意思有没有丢、有没有画反。只回答「有没有画错」，不回答「画得好不好」。","not_measures":"意境 · 美感 —— 这是项目的真正目标，目前无尺子可量；本问题集的通过率不能替代它。","usage":"只用于回归：改动之后忠实度不得下降。不得以「要素全中」作为创作优化目标 —— 追求要素全匹配会把该留白处填满，反而流失意境。","related":"更接近意境的代理是留白／负节点，由 O3 双判据负责；诗中无据、设计所加的元素（如芦苇）以 basis=design、w=0.5 计入，不作为诗意要素要求。"},"revision":{"from":"1.2","to":"1.3","note":"本版同时改「判据」与「画面」：按「镜头缩放过大破坏意境」的裁定，把《江雪》13–16.5s 的急推压平为全程极缓推近，并同步修订受影响的判据（JX-T5 期望曲线、JX-T4 场景切换定义、JX-S2 判读帧理由）。","fixes":[{"id":"V3-1","where":"JX-T5","status":"fixed","how":"期望曲线由「前段近乎静止、13s 后急推加速、末段又归于近乎静止」改为「前段近乎静止，后段极缓推近（无急推）」。自动判据阈值：vmax ≤ 0.05/s（5%/s）即判「无急推」。"},{"id":"V3-2","where":"JX-T4","status":"fixed","how":"补「场景切换」定义（题内 protocol + meta.protocol.scene_switch）：仅指硬切／黑场／叠化转场；同一场景内的相机推拉、横移、缩放不算切换。消除原题面把连续推镜误读为切换的歧义。"},{"id":"V3-3","where":"ink_animations.html · JX.cam","status":"fixed","how":"JX 相机键值由 1.00→0.93→1.55→1.58（峰值 0.394/s）压平为 1.00→0.96→1.12（峰值 ≈0.04/s），横移与纵向平移同步减小；节拍标签「急推」改为「极缓推近」。"},{"id":"V3-4","where":"JX-S2","status":"verified","how":"压平后 jx_03(t=15.5) 孤舟仍在右下，判读帧绑定不变；why 内「终帧因急推落至正中」改为「终帧略向孤舟推近、较 jx_03 更居中」。"}]},"revision_history":[{"from":"1.1","to":"1.2","note":"本版只修「尺子」，不动画面。逐条对应基线暴露的 D1–D7。","fixes":[{"id":"D1","where":"JX-S4","status":"fixed","how":"地平线选项由 3 档改为 4 档，补入「中部偏上（0.40–0.50H）」；并新增 meta.protocol.option_coverage 作为通用规则（选项档位必须覆盖实测值，否则该题作废而非判错）。"},{"id":"D2","where":"全题集","status":"verified","how":"v1.1 已为每题补 frame 字段；v1.2 由 src/o1/o1_validate.mjs 机器校验「每题必有 frame」，不再靠人工自觉。"},{"id":"D3","where":"JX-N2 / BD-N2","status":"fixed","how":"负节点题由「抽检去诗帧」升级为「一律绑去诗帧」：JX-N2 由 jx_04 改绑 jx_04_nopoem，BD-N2 由 bd_04 改绑 bd_04_nopoem。校验器强制 NEGATIVE 题的 frame 必须含 nopoem。"},{"id":"D4","where":"JX-A3 / BD-A4","status":"fixed","how":"留白率拆为 ρ_layout（线稿口径，设计意图）与 ρ_render（渲染口径，探针实测）两个指标，见 meta.rho_definitions；相关题在 why 内注明所引口径。"},{"id":"D5","where":"全题集","status":"fixed","how":"补入 11 道高区分度题：墨色分档对比、笔触干湿、疏密势能、留白形状、相机速度曲线。期望值全部可回溯到源码参数或探针实测，天花板效应由「更细的量」而非「更多的题」突破。"},{"id":"D6","where":"JX-A5 / BD-E2","status":"fixed","how":"极淡元素题加 probe_assisted 标记与 reading_protocol（放大倍数、局部区域、对比度提升、探针先判）；协议规定「探针说有、肉眼不可见」不得判 miss。"},{"id":"D7","where":"全时序题","status":"fixed","how":"时序题加 media 字段（pair/video/probe），单帧判读被禁止；JX-E6「飘落的雪」拆为 JX-E6（存在，单帧）+ JX-T6（持续飘落，成对帧）；相机速度曲线类题（JX-T5/BD-T4/BD-T5）改用 media=probe，由 src/o1/o1_probe_cam.mjs 采样 DOM 的 scale 客观判定，不依赖视频素材。"}]}],"axes":{"EXIST":"意象存在性 —— 诗中该有的东西，画面里有没有","ATTR":"属性 —— 浓淡／虚实／疏密／数量是否符合该意象的身份","SPATIAL":"空间关系 —— 意象之间的相对位置、景深、贴合关系","TEMPORAL":"时序 —— 出场先后、镜头连续性是否与诗句顺序一致","NEGATIVE":"负节点 —— 诗中「本该有却没有」的意象，是否确实缺席（留白检验）"},"basis":{"poem":"期望答案直接来自诗句语义（画错了 = 不忠实于诗）","design":"期望答案来自本项目的构图／节拍设计（答错 = 画面没实现设计意图）"},"answer_types":["yes_no","choice"],"media_types":{"single":"单帧可判 —— 存在性、静态属性、静态空间关系","pair":"成对帧（起点+终点）—— 出场先后、渐次画出等过程量（D7）","video":"须短视频 —— 镜头连续性等纯过程量，单帧与成对帧均不可判（D7）","probe":"客观探针判定 —— 相机轨迹、速度曲线等连续量，由 src/o1/o1_probe_cam.mjs 从 DOM 采样，非目视（D7）"},"scoring":{"per_question":"s = 1 若作答与 expect 完全一致，否则 0","aggregate":"加权通过率 = Σ(w·s) / Σ(w)","axis_rollup":"同一 axis 内的加权通过率","failure_list":"s = 0 的题即「看不懂」的定位点；按 axis 与 basis 归类","exclude_defect":"判为「题面缺陷」的题不计入分母，单列清单 —— 否则会把工具的毛病记到画面头上","exclude_unreadable":"v1.2 新增：media=video 的题若无对应短视频素材，标记 unreadable 并剔除出分母，不得以单帧勉强作答。media=probe 的题改由 src/o1/o1_probe_cam.mjs 采样相机 scale 客观判定，无需素材"},"generation_rules":["STEP 2 每个「正节点」→ 1 道 EXIST（expect 是）+ 1 道 ATTR（该意象的浓淡／虚实身份）","STEP 2 每个「负节点」→ 1 道 NEGATIVE（expect 否），权重上调，因为它是本项目最独特的判据","STEP 2「虚／留白」意象 → 1 道 ATTR（用留白表现的检验），而非 EXIST，避免把「留白」误判成「缺失」","STEP 5 场景图每一条空间关系边 → 1 道 SPATIAL；构图约束（重心、地平线、留白率）各 → 1 道 SPATIAL／ATTR","STEP 7 节拍表每个出场先后关系 → 1 道 TEMPORAL；镜头结构（长镜头／定格）→ 1 道 TEMPORAL","跨通道节点（如「猿声」）→ 视觉通道记 1 道 NEGATIVE（expect 否），听觉通道不入画面题","设计额外添加、诗中无据的元素（如芦苇、船迹）→ 仍出题，但 basis=design 且权重减半","v1.2：属性题若相邻档位之间留有「空档」，即为缺陷题（D1）—— 选项必须覆盖实测值所在区间","v1.2：过程性谓语（飘落／拉长／渐次画出／加速）不得出成单帧题，必须 media=pair 或 video（D7）"],"protocol":{"note":"v1.1 建立「在哪一帧判读」；v1.2 补「选项怎么给、极淡怎么判、过程怎么看」。","frame_binding":"每题必须绑定判读帧（frame 字段）。构图类题默认绑在「设计意图最易读的那一帧」，而非终帧。","option_coverage":"（D1）选项档位必须覆盖实测值所在的区间。若实测值落在两档之间的空档，该题为题面缺陷，须改档位或改数值题，不得判画面错。","anno_off":"基线一律关闭「画中物标注」图层 —— 标注会直接写出意象名，使 EXIST／NEGATIVE 题失去意义。","negative_nopoem":"（D3 强化）凡 NEGATIVE 题，一律绑「去题诗」帧（frame 名含 nopoem）。v1.1 只对含意象词的题抽检，v1.2 改为全量强制 —— 题诗文字里的「鸟」「猿」「江陵」是稳定的假阳性源。","reading_protocol":"（D6）极淡元素题（probe_assisted=true）的判读协议：① 先看探针数值再做有无初筛；② 在题干给定的局部区域内判读，勿受全幅平均影响；③ 允许放大 200% 或把局部对比度提升 3× 复核；④ 探针说「有」而肉眼不可见时，记 mid/low 置信度，不得判 miss。","pairs_for_temporal":"（D7）时序题须用成对帧或视频判读，单帧不可判。media 字段取值见 meta.media_types。","unreadable":"（D7）media=video 的题若本轮未录短视频素材，判为 unreadable（剔除分母），不得用成对帧替代 —— 速度曲线是连续量，两帧之间的形状无法还原。","scene_switch":"（V3-2）「场景切换」仅指硬切（cut）／黑场／叠化等转场 —— 画布内容被整体替换。同一场景内的相机推拉、横移、缩放不构成切换；本片为单场景长镜头，靠相机推拉分段。"},"rho_definitions":{"note":"（D4）留白率有两套口径，v1.1 混用导致 bd 一侧差近 20 个百分点。v1.2 起分列，不可直接比较。","rho_layout":"在「构图线稿」口径下测得（不含滤镜墨晕）：jx 0.79 / bd 0.52。这是设计意图值。","rho_render":"在「渲染后含墨晕」的帧上由探针实测：jx_02 0.831 / jx_04 0.866 / bd_02 0.307 / bd_04(nopoem) 0.441。这是观感值。","rule":"凡涉及留白率的题，必须在 why 里注明所引口径；比较只能同口径比。"},"probe":{"note":"属性类题的答案若肉眼处于阈值附近，改由客观探针给出硬数据。","scripts":{"src/o1/o1_render.mjs":"按节拍抽帧（关自动播放、定位到指定秒、关标注、可选去题诗）","src/o1/o1_probe.mjs":"对指定区域做亮度直方图 + 12×6 亮度网格（留白率、墨色分布）","src/o1/o1_probe2.mjs":"60×24 细网格墨迹图 + 最暗点定位（判定极淡笔画是否真的画出来了）","src/o1/o1_thumbs.mjs":"生成 760px 缩略图供工装页使用","src/o1/o1_validate.mjs":"（v1.2 新增）校验问题集结构：frame 绑定、负节点去诗帧、选项覆盖、media 类型、探针协议"}},"known_confounds":["题诗（墨笔书法）与画面同框：诗句文字里含有意象词（如「千山」「鸟」「猿」），可能干扰 VQA 判断。v1.2 起负节点题一律以「去题诗」帧判读。","「标注」图层会直接写出意象名称，会使 EXIST／NEGATIVE 题失去意义。基线一律关闭标注。","留白率 ρ 有两套口径（ρ_layout 线稿 / ρ_render 渲染），见 meta.rho_definitions，不可直接比较。","「干笔／湿笔」的判据来自滤镜参数与填充方式（jxDry/bdDry 为干笔位移、无模糊；bdSoft 的高斯模糊为湿笔晕染，用于云／雾；大面积渐变填充＋无描边亦读作湿笔晕染，如 BD-A6 山壁），非主观风格判断；判读时可借助笔触边缘的毛涩／柔化特征。"]},"poems":[{"id":"jx","title":"江雪","author":"唐 · 柳宗元","form":"五言绝句 · 入声屑韵 · 折腰体","total_s":19.578,"segments":[{"t":0.35,"name":"起","line":"千山鸟飞绝","dur":3.4},{"t":5.224,"name":"承","line":"万径人踪灭","dur":3.1},{"t":9.768,"name":"转","line":"孤舟蓑笠翁","dur":3.3},{"t":14.183,"name":"合","line":"独钓寒江雪","dur":5.4}],"frames":[{"name":"jx_01","t":0.78,"label":"起 · 远山初现（孤舟未出）"},{"name":"jx_02","t":5.09,"label":"起末 · 雪与芦苇（孤舟未出）"},{"name":"jx_05","t":7.83,"label":"承 · 极远景全构图（万径区）"},{"name":"jx_05_nopoem","t":7.83,"label":"承 · 去题诗对照帧"},{"name":"jx_03","t":12.14,"label":"转 · 缓推，孤舟重放落笔"},{"name":"jx_04","t":19.03,"label":"合末 · 钓丝已成、钤印（浓淡同框）"},{"name":"jx_04_nopoem","t":19.03,"label":"合末 · 去题诗对照帧"},{"name":"jx_04_anno","t":19.03,"label":"合末 · 带标注（仅供核对图层，不入基线）"}],"questions":[{"id":"JX-E1","axis":"EXIST","basis":"poem","frame":"jx_02","media":"single","q":"画面中是否出现山（远山／群山）？","type":"yes_no","expect":"是","w":1,"why":"「千山」"},{"id":"JX-E2","axis":"EXIST","basis":"poem","frame":"jx_03","media":"single","q":"画面中是否出现一条小船？","type":"yes_no","expect":"是","w":1,"why":"「孤舟」"},{"id":"JX-E3","axis":"EXIST","basis":"poem","frame":"jx_04","media":"single","q":"画面中是否出现人物（渔翁）？","type":"yes_no","expect":"是","w":1,"why":"「蓑笠翁」"},{"id":"JX-E4","axis":"EXIST","basis":"design","frame":"jx_02","media":"single","q":"画面中是否出现芦苇／枯草？","type":"yes_no","expect":"是","w":0.5,"why":"构图为制造疏密对比所加，诗中无据，故权重减半"},{"id":"JX-E5","axis":"EXIST","basis":"poem","frame":"jx_04","media":"single","q":"画面中是否出现钓丝／钓线？","type":"yes_no","expect":"是","w":1,"why":"「独钓」"},{"id":"JX-E6","axis":"EXIST","basis":"poem","frame":"jx_02","media":"single","q":"画面中是否出现雪？","type":"yes_no","expect":"是","w":1,"why":"「雪」—— v1.2 由「飘落的雪」收窄为纯存在题；「飘落」的过程性改由 JX-T6 以成对帧判读（D7）"},{"id":"JX-N1","axis":"NEGATIVE","basis":"poem","frame":"jx_05_nopoem","media":"single","q":"画面中是否出现飞鸟？","type":"yes_no","expect":"否","w":1.5,"why":"「千山鸟飞绝」—— 负节点，必须缺席。去诗帧排除「鸟」字假阳性（D3）"},{"id":"JX-N2","axis":"NEGATIVE","basis":"poem","frame":"jx_04_nopoem","media":"single","q":"画面中是否出现除渔翁以外的第二个人？","type":"yes_no","expect":"否","w":1.5,"why":"「万径人踪灭」—— 负节点。v1.2 改绑去诗帧，排除题诗「人踪」二字（D3）"},{"id":"JX-N3","axis":"NEGATIVE","basis":"poem","frame":"jx_05_nopoem","media":"single","q":"画面中是否出现人的脚印／足迹？","type":"yes_no","expect":"否","w":1,"why":"「人踪灭」"},{"id":"JX-A1","axis":"ATTR","basis":"poem","frame":"jx_04","media":"single","q":"全画面墨色最浓的实体是？","type":"choice","options":["孤舟与蓑笠翁","远山","芦苇","雪"],"expect":"孤舟与蓑笠翁","w":1,"why":"「孤舟蓑笠翁」是唯一实写焦点，浓墨"},{"id":"JX-A2","axis":"ATTR","basis":"poem","frame":"jx_02","media":"single","q":"远山的墨色浓淡？","type":"choice","options":["很淡","中等","很浓"],"expect":"很淡","w":1,"why":"远景层，淡墨"},{"id":"JX-A3","axis":"ATTR","basis":"design","frame":"jx_02","media":"single","q":"画面整体是「大面留白」还是「画满」？","type":"choice","options":["大面积留白","大致均衡","画得很满"],"expect":"大面积留白","w":1,"why":"留白率：ρ_layout = 0.79（线稿口径）／ρ_render = 0.831（渲染口径，jx_02 探针实测）—— 两口径同向且都属「大面留白」（D4）"},{"id":"JX-A4","axis":"ATTR","basis":"poem","frame":"jx_05","media":"single","q":"江面（寒江）是否用水波／水纹描绘？","type":"choice","options":["几乎不画，以留白表现","画了少量水纹","画满水纹"],"expect":"几乎不画，以留白表现","w":1,"why":"「寒江」为虚写，由留白承载"},{"id":"JX-A5","axis":"ATTR","basis":"design","frame":"jx_05_nopoem","media":"single","probe_assisted":true,"q":"小路（万径）在画面中是否可辨认？","type":"choice","options":["清晰可见","极淡、几乎不可见","完全没有"],"expect":"极淡、几乎不可见","w":0.5,"why":"「万径」近乎虚写，仅极淡斜线暗示。#jx-path 三条斜线（x 0.03–0.27, y 0.43–0.51）group opacity 0.20 + jxSoft 柔化；探针实测把中景带由 lum 186 压到 166（对比度约 11%）—— 确实画出来了，但处在感知阈值附近。按 reading_protocol 判读（D6）"},{"id":"JX-A6","axis":"ATTR","basis":"design","frame":"jx_04","media":"single","q":"画面最浓实体（孤舟蓑笠翁）与最淡实体（远山）之间的墨色对比属于？","type":"choice","options":["强对比（浓淡悬殊）","中等对比","弱对比（几乎同色）"],"expect":"强对比（浓淡悬殊）","w":1,"why":"（v1.2 新增，D5）孤舟 #1C1C1C @0.88–0.92 → 合成 lum≈35；远山三层 opacity 0.13/0.17/0.15 → 合成 lum≈188。Δlum≈153，属强对比。这是原题集「很淡／中等／很浓」三档测不出的对比量"},{"id":"JX-A7","axis":"ATTR","basis":"design","frame":"jx_02","media":"single","q":"实写笔触（芦苇茎）的墨色边缘特征是？","type":"choice","options":["毛边干笔（边缘毛涩、无晕染）","湿笔晕染（边缘柔化、墨色外溢）","均匀实线（边缘光滑）"],"expect":"毛边干笔（边缘毛涩、无晕染）","w":1,"why":"（v1.2 新增，D5）芦苇 #jx-reed 挂 jxDry 滤镜：feTurbulence baseFrequency 0.09 + feDisplacementMap scale 6 —— 只做位移毛边，不做飞白。真正的「飞白」（噪点遮罩 feComposite）只在 jxInk 里，且仅用于题诗。故选项写「毛边干笔」而非「干笔飞白」"},{"id":"JX-A8","axis":"ATTR","basis":"design","frame":"jx_04","media":"single","q":"画面疏密的分布特征是？","type":"choice","options":["大面积疏（留白）中藏着极小的密（孤舟焦点）","疏密均匀分布","大面积密（画满）中留小空白"],"expect":"大面积疏（留白）中藏着极小的密（孤舟焦点）","w":1,"why":"（v1.2 新增，D5）留白 ρ_render = 0.866，浓墨像素仅 1.73% 且集中在孤舟 —— 疏密不是「比例」而是「势能」，原留白率题测不出"},{"id":"JX-A9","axis":"ATTR","basis":"design","frame":"jx_05","media":"single","q":"画面中最大的一块连续留白位于？","type":"choice","options":["中下部（远山以下的寒江江面）","上部（远山以上的天空）","四周边缘"],"expect":"中下部（远山以下的寒江江面）","w":0.5,"why":"（v1.2 新增，D5）留白不是均匀的：远山脊线 y 0.26–0.33，其下至画面底缘为江面，除一道岸线 #jx-waterline 与极淡万径外无笔画 —— 探针实测下半幅非纸面像素仅 1.04%。留白的「形状」比留白的「率」更能区分画面"},{"id":"JX-S1","axis":"SPATIAL","basis":"design","frame":"jx_02","media":"single","q":"远山位于画面的？","type":"choice","options":["上部","中部","下部"],"expect":"上部","w":1,"why":"远景层"},{"id":"JX-S2","axis":"SPATIAL","basis":"design","frame":"jx_03","media":"single","q":"孤舟与蓑笠翁位于画面的？","type":"choice","options":["左上","右上","左下","右下"],"expect":"右下","w":1,"why":"视觉重心 (0.65, 0.69)，三七停。注意：终帧相机略向孤舟推近、较 jx_03 更居中，故判读帧绑 jx_03"},{"id":"JX-S3","axis":"SPATIAL","basis":"design","frame":"jx_02","media":"single","q":"芦苇位于画面的？","type":"choice","options":["左下","右下","左上"],"expect":"左下","w":0.5,"why":"与右下焦点形成疏密对角"},{"id":"JX-S4","axis":"SPATIAL","basis":"design","frame":"jx_02","media":"single","measured":{"value":0.43,"unit":"H","source":"山带顶缘实测 0.42–0.44H／底缘 0.50H；设计值 0.42H"},"q":"地平线大致在画面高度的？","type":"choice","options":["上 1/3 附近（0.28–0.40H）","中部偏上（0.40–0.50H）","正中（0.48–0.52H）","下 1/3 附近（0.52–0.68H）"],"expect":"中部偏上（0.40–0.50H）","w":0.5,"why":"（v1.2 修 D1）原 3 档选项「上 1/3(0.33)／正中(0.50)」之间有空档，实测 0.43H 落空 → 无法作答。现补入「中部偏上（0.40–0.50H）」档，实测值被覆盖，本题恢复可判"},{"id":"JX-S5","axis":"SPATIAL","basis":"design","frame":"jx_03","media":"single","q":"远山与孤舟的前后关系？","type":"choice","options":["孤舟在前、远山在后","远山在前、孤舟在后","两者同一平面"],"expect":"孤舟在前、远山在后","w":1,"why":"近景焦点 vs 远景淡墨"},{"id":"JX-T1","axis":"TEMPORAL","basis":"design","frame":"jx_01+jx_03","media":"pair","q":"远山是否比孤舟更早出现在画面中？","type":"yes_no","expect":"是","w":1,"why":"远山 0.35–1.9s 淡入，孤舟 9.8s 后才实写"},{"id":"JX-T2","axis":"TEMPORAL","basis":"design","frame":"jx_03+jx_04","media":"pair","q":"钓丝是否在动画后段才被画出？","type":"yes_no","expect":"是","w":1,"why":"钓丝 14.3–15.7s 画出，属合段"},{"id":"JX-T3","axis":"TEMPORAL","basis":"design","frame":"jx_01+jx_02+jx_04","media":"pair","q":"雪是否在全片多个时段都可见？","type":"yes_no","expect":"是","w":0.5,"why":"雪贯穿全片，密度随情感起伏（snowKeys v = 0.45/1.00/0.30/0.85/0.85，最小值不为 0）"},{"id":"JX-T4","axis":"TEMPORAL","basis":"design","frame":"jx_01+jx_04","media":"pair","protocol":"「场景切换」仅指硬切／黑场／叠化等转场（画布内容被整体替换），见 meta.protocol.scene_switch；同一场景内的相机推拉、横移、缩放不算切换。","q":"全片是否只有一个场景（无场景切换）？","type":"yes_no","expect":"是","w":1,"why":"单场景长镜头，靠相机推拉分段；jx_01 与 jx_04 为同一场景的不同倍率（1.00× / 1.12×），仅相机变换，无硬切、无黑场、无叠化"},{"id":"JX-T5","axis":"TEMPORAL","basis":"design","frame":"jx_01+jx_03+jx_04","media":"probe","q":"全片相机运动的速度曲线形状是？","type":"choice","options":["前段近乎静止，后段极缓推近（无急推）","前段近乎静止、中段急推加速、末段又归于近乎静止","全程匀速推近（无速度变化）"],"expect":"前段近乎静止，后段极缓推近（无急推）","w":1,"why":"（v1.3 修订，原「13s 后急推加速」）src/o1/o1_probe_cam.mjs 实测 s：1.0000（0–7s 完全静止）→ 0.9600（13s 轻推远）→ 1.1200（25s 极缓推近），vmax ≈ 0.04/s（≈4%/s，低于 5% 阈值）→ 全片无急推。原 v1.2 的 13–16.5s 急推（s 0.93→1.55，vmax 0.394/s）已按「缩放过大破坏意境」的裁定压平"},{"id":"JX-T6","axis":"TEMPORAL","basis":"poem","frame":"jx_01+jx_04","media":"pair","q":"雪在片中是否持续飘落（而非静止悬停）？","type":"yes_no","expect":"是","w":1,"why":"（v1.2 由 JX-E6 拆出，D7）「飘落」是过程性谓语，单帧不可判。源码：每片雪 cy = (y0 + vy·t) % 660 持续下移，cx 叠 ±16px 正弦横摆 —— 确为飘落而非静止"}]},{"id":"bd","title":"早发白帝城","author":"唐 · 李白","form":"七言绝句 · 上平十五删（平韵） · 正格律绝","total_s":13.631,"segments":[{"t":0.2,"name":"起","line":"朝辞白帝彩云间","dur":2.53},{"t":3.62,"name":"承","line":"千里江陵一日还","dur":2.25},{"t":6.812,"name":"转","line":"两岸猿声啼不住","dur":1.945},{"t":9.776,"name":"合","line":"轻舟已过万重山","dur":3.855}],"frames":[{"name":"bd_01","t":0.57,"label":"起 · 白帝城初现（轻舟未出）"},{"name":"bd_02","t":2.56,"label":"起 · 云／城／两岸／万重山／江面／轻舟齐备"},{"name":"bd_03","t":8.26,"label":"转 · 侧掠两岸"},{"name":"bd_04","t":13.27,"label":"合末 · 万重山飞退、钤印"},{"name":"bd_04_nopoem","t":13.27,"label":"合末 · 去题诗对照帧"},{"name":"bd_04_anno","t":13.27,"label":"合末 · 带标注（仅供核对图层，不入基线）"}],"questions":[{"id":"BD-E1","axis":"EXIST","basis":"poem","frame":"bd_02","media":"single","q":"画面中是否出现一座城／城楼？","type":"yes_no","expect":"是","w":1,"why":"「白帝城」"},{"id":"BD-E2","axis":"EXIST","basis":"poem","frame":"bd_02","media":"single","probe_assisted":true,"q":"画面中是否出现云？","type":"yes_no","expect":"是","w":1,"why":"「彩云」。#bd-cloud 为三椭圆（cy 56/84/118），fill 渐变 + 0.06 灰，极淡 —— 存在但接近雾／霭的观感。按 reading_protocol 判读（D6）"},{"id":"BD-E3","axis":"EXIST","basis":"poem","frame":"bd_02","media":"single","q":"画面中是否出现一条小船？","type":"yes_no","expect":"是","w":1,"why":"「轻舟」"},{"id":"BD-E4","axis":"EXIST","basis":"poem","frame":"bd_02","media":"single","q":"画面中是否出现两侧夹峙的山壁／峡谷？","type":"yes_no","expect":"是","w":1,"why":"「两岸」"},{"id":"BD-E5","axis":"EXIST","basis":"poem","frame":"bd_02","media":"single","q":"画面中是否出现层层叠叠的远山？","type":"yes_no","expect":"是","w":1,"why":"「万重山」"},{"id":"BD-E6","axis":"EXIST","basis":"poem","frame":"bd_02","media":"single","q":"画面中是否出现江面／水面？","type":"yes_no","expect":"是","w":1,"why":"「江陵」「一日还」的水路"},{"id":"BD-E7","axis":"EXIST","basis":"design","frame":"bd_04","media":"single","q":"画面中是否出现船尾拖痕／尾迹？","type":"yes_no","expect":"是","w":0.5,"why":"速度线／船迹，设计所加，诗中无据"},{"id":"BD-N1","axis":"NEGATIVE","basis":"poem","frame":"bd_04_nopoem","media":"single","q":"画面中是否出现猿／猴子？","type":"yes_no","expect":"否","w":1.5,"why":"「两岸猿声」—— 跨通道节点：听觉正、视觉负。画出猿即错。去诗帧排除「猿」字假阳性（D3）"},{"id":"BD-N2","axis":"NEGATIVE","basis":"poem","frame":"bd_04_nopoem","media":"single","q":"画面中是否出现江陵城（终点）？","type":"yes_no","expect":"否","w":1,"why":"「江陵」为虚 · 不可见。v1.2 改绑去诗帧，排除题诗「江陵」二字（D3）"},{"id":"BD-A1","axis":"ATTR","basis":"poem","frame":"bd_02","media":"single","q":"全画面墨色最浓的实体是？","type":"choice","options":["轻舟","白帝城","彩云","两岸山壁"],"expect":"轻舟","w":1,"why":"「轻舟」是焦点，浓墨飞白。v1.2 改绑 bd_02 —— bd_04 推镜后白帝城与彩云已出画，四选一退化为「唯一在场者」，测不出浓淡谱；bd_02 四者齐备（轻舟 lum≈50 < 白帝城≈126 < 山壁≈190 < 彩云）"},{"id":"BD-A2","axis":"ATTR","basis":"poem","frame":"bd_02","media":"single","q":"云的墨色？","type":"choice","options":["淡墨浅灰","浓墨","彩色（红黄等）"],"expect":"淡墨浅灰","w":1,"why":"「彩云」为虚 · 淡染，水墨不宜设色"},{"id":"BD-A3","axis":"ATTR","basis":"design","frame":"bd_02","media":"single","q":"江面水纹的疏密？","type":"choice","options":["稀疏、仅数道","中等","密集布满"],"expect":"稀疏、仅数道","w":1,"why":"远水无波，近水仅五道，笔断意连"},{"id":"BD-A4","axis":"ATTR","basis":"design","frame":"bd_04","media":"single","q":"画面整体留白程度？","type":"choice","options":["大面积留白","约一半","几乎不留白"],"expect":"约一半","w":1,"why":"留白率：ρ_layout = 0.52（线稿口径）／ρ_render = 0.307（bd_02）–0.441（bd_04 去诗）—— 渲染口径明显低于线稿口径，故选「约一半」而非「大面积」。两口径分列见 meta.rho_definitions（D4）"},{"id":"BD-A5","axis":"ATTR","basis":"design","frame":"bd_02","media":"single","q":"按墨色由浓到淡排序，正确的是？","type":"choice","options":["轻舟 > 白帝城 > 两岸山壁 > 彩云","两岸山壁 > 轻舟 > 白帝城 > 彩云","彩云 > 白帝城 > 轻舟 > 两岸山壁"],"expect":"轻舟 > 白帝城 > 两岸山壁 > 彩云","w":1,"why":"（v1.2 新增，D5）轻舟 #1C1C1C @0.90 → lum≈50；白帝城 #2A2724 @0.58 → lum≈126；山壁渐变 ≈190；彩云 0.06 灰椭圆最淡。绑 bd_02（四者同框）；原「最浓是谁」只测极值，排序题测整条浓淡谱"},{"id":"BD-A6","axis":"ATTR","basis":"design","frame":"bd_02","media":"single","q":"两岸山壁主体的渲染方式是？","type":"choice","options":["湿笔晕染（边缘柔化、墨色向两侧渗开）","干笔飞白（边缘毛涩、有断白）","硬边实线（无晕染无飞白）"],"expect":"湿笔晕染（边缘柔化、墨色向两侧渗开）","w":1,"why":"（v1.2 新增，D5；O1.2 修正口径）湿笔模糊 bdSoft 实用于云与雾，山壁并非湿笔模糊；#bd-cliff 组滤镜为 bdEdge（干笔位移 scale 16，无高斯模糊），主体为 bdCliffL/R 横向渐变填充（外缘 opacity 0.13 → 内缘 0.46，无描边硬边），墨色向内侧渐浓且无断白 → 归入「湿笔晕染」档。对照：皴法 #bd-cun 与船迹用 bdDry（位移 scale 7）为干笔"},{"id":"BD-A7","axis":"ATTR","basis":"design","frame":"bd_02","media":"single","q":"画面疏密的分布特征是？","type":"choice","options":["两侧山壁密、中央峡口疏（留白）","疏密均匀分布","中央密、两侧疏"],"expect":"两侧山壁密、中央峡口疏（留白）","w":1,"why":"（v1.2 新增，D5）左右山壁各占约 1/4 且为全画最密区，中央峡口 x 0.44–0.62 露出远山并向下展开为江面留白 —— 疏密呈「两实夹一虚」的纵向结构，非均匀分布"},{"id":"BD-A8","axis":"ATTR","basis":"design","frame":"bd_02","media":"single","q":"画面中最大的一块连续留白位于？","type":"choice","options":["中央峡口并向下展开为江面，呈向纵深收束的透光带","上方天空","左右两侧"],"expect":"中央峡口并向下展开为江面，呈向纵深收束的透光带","w":0.5,"why":"（v1.2 新增，D5）楔形江面 #bdRiverClip 由峡口 (400,302)-(560,302) 向下展至底缘，留白沿消失点收束；探针实测 bd_02 留白 30.7%，集中在中央而非两侧"},{"id":"BD-S1","axis":"SPATIAL","basis":"design","frame":"bd_02","media":"single","q":"白帝城位于画面的？","type":"choice","options":["左上","右上","左下","右下","正中"],"expect":"左上","w":1,"why":"立于左崖顶，高远"},{"id":"BD-S2","axis":"SPATIAL","basis":"design","frame":"bd_02","media":"single","q":"轻舟位于画面的？","type":"choice","options":["左上","左下","右上","右下","正中"],"expect":"左下","w":1,"why":"视觉重心 (0.41, 0.69)"},{"id":"BD-S3","axis":"SPATIAL","basis":"design","frame":"bd_02","media":"single","q":"江水在画面中的走向？","type":"choice","options":["从画面中央向远处纵深延伸","横贯画面左右","沿画面右缘垂直而下"],"expect":"从画面中央向远处纵深延伸","w":1,"why":"楔形江面，收敛于消失点"},{"id":"BD-S4","axis":"SPATIAL","basis":"design","frame":"bd_02","media":"single","q":"万重山与两岸山壁的关系？","type":"choice","options":["万重山在两道山壁的缺口之间、层层后退","万重山在山壁之上、位于画面顶部","万重山覆盖在山壁之上"],"expect":"万重山在两道山壁的缺口之间、层层后退","w":1,"why":"用户曾反馈「远处的山在中间、又有两边的岸，空间很乱」——此项即该修复的检验点"},{"id":"BD-S5","axis":"SPATIAL","basis":"design","frame":"bd_02","media":"single","q":"两岸山壁与江面的关系？","type":"choice","options":["山壁内缘即江面左右边界、紧贴无缝","山壁与江面之间另有一条岸／滩","江面在画面一侧、山壁在另一侧"],"expect":"山壁内缘即江面左右边界、紧贴无缝","w":1,"why":"单点透视三层结构，中间不留缝"},{"id":"BD-S6","axis":"SPATIAL","basis":"design","frame":"bd_02","media":"single","q":"画面视觉重心位于？","type":"choice","options":["左下","右下","正中"],"expect":"左下","w":0.5,"why":"重心 (0.41, 0.69)"},{"id":"BD-T1","axis":"TEMPORAL","basis":"design","frame":"bd_01+bd_02","media":"pair","q":"白帝城是否比轻舟更早出现在画面中？","type":"yes_no","expect":"是","w":1,"why":"城 0.44–0.94s 淡入，舟 0.67–1.14s 淡入，城略先"},{"id":"BD-T2","axis":"TEMPORAL","basis":"design","frame":"bd_01+bd_03+bd_04","media":"pair","q":"全片是否为连续长镜头（无场景切换）？","type":"yes_no","expect":"是","w":1,"why":"平韵呼吸连贯，强制单一长镜头"},{"id":"BD-T3","axis":"TEMPORAL","basis":"design","frame":"bd_02+bd_04","media":"pair","q":"船尾拖痕是否在动画中后段才明显拉长？","type":"yes_no","expect":"是","w":0.5,"why":"船迹 3.6–11.5s 渐次拉出（#bd-trail dashoffset，easeIn）"},{"id":"BD-T4","axis":"TEMPORAL","basis":"design","frame":"bd_01+bd_04","media":"probe","q":"全片相机是否以持续推进为主、且结尾以加速冲刺收束（无定格收尾）？","type":"yes_no","expect":"是","w":1,"why":"src/o1/o1_probe_cam.mjs 实测 s：1.0000 → 1.8521，30 个采样步递增 / 14 个递减；仅 t=14.5–17 有一次 1.2000→1.1800 的侧掠回望小回退；末段速度升至全片最大 0.2554/s @ t=24，无定格（D7）"},{"id":"BD-T5","axis":"TEMPORAL","basis":"design","frame":"bd_01+bd_04","media":"probe","q":"全片相机速度曲线的形状是？","type":"choice","options":["总体渐快、中段有一次侧掠回望的小回退、结尾冲刺（无定格）","全程匀速","先快后慢、结尾放缓"],"expect":"总体渐快、中段有一次侧掠回望的小回退、结尾冲刺（无定格）","w":1,"why":"（v1.2 新增，D5/D7）src/o1/o1_probe_cam.mjs 实测 |v| 总体递增（0.0002 → 0.2554/s），唯 t=14.5–17 出现 1.2000→1.1800 的回退（转段「侧掠两岸 · 一瞬回望」）；结尾 t=24 达最大速度、无定格。原设计只给 speedKeys 的单调序列，探针补出了这段回退"}]}]};
+const BASE = {"meta":{"run_id":"o1-baseline-v1.3-2026-10-02","date":"2026-10-02","qset":"o1_qset.json @ v1.3","prev":"o1_baseline_v12.json（v1.2 基线，57 题 / 57 命中）","revision_note":"v1.3：按「镜头缩放过大破坏意境」的裁定，把《江雪》13–16.5s 的急推（s 0.93→1.55，vmax 0.394/s）压平为 13–25s 的极缓推近（s 0.96→1.12，vmax ≈0.04/s）；JX-T5 期望曲线随之修订，JX-T4 补「场景切换」定义。并修掉探针的定格边界假阳性（D8，末尾单采样被误报为「定格」）。全片 57 题仍全中，自动层覆盖 45/57。","source_anim":"ink_animations.html","judge":"多模态判读（逐帧目视：jx_02 / jx_04 / jx_05 / bd_02 / bd_04）+ 客观探针（像素级 o1_probe / o1_probe2 + 相机轨迹 o1_probe_cam）；v1.3 重跑后 JX-T5 由探针自动判定","protocol":{"anno":"关闭画中物标注层","poem_text":"基线帧保留题诗（还原真实观感）；负节点题一律以去题诗帧判读","frames":"dist/figures/ 共 14 帧（jx 8 + bd 6）","verdict_scale":"hit(命中) / miss(未命中) / defect(题面缺陷，不计入分母) / unreadable(无素材不可判，不计入分母)","conf":"high / mid / low —— 判读置信度，low 表示处于感知阈值附近","machine_check":"src/o1/o1_validate.mjs 结构断言全绿（frame 绑定 / 负节点去诗帧 / 选项覆盖 / media 类型 / 探针协议）"},"totals":{"questions":57,"hit":57,"miss":0,"defect":0,"unreadable":0,"weight_sum":53.5,"hit_weight":53.5,"rate_excl_defect":1,"prev_questions":46,"prev_defect":1,"headline":"v1.3 按「镜头缩放过大破坏意境」的裁定压平《江雪》推近（峰值速度 0.394/s → 0.037/s，全片无急推），判据同步修订后重跑：57 题全中、自动层覆盖 45/57。本轮还修掉一处探针边界缺陷（D8）—— 末尾单采样被误报为「定格」，使 JX-T5 的自动判据空转、悄悄回退到目视层；修复后它回到自动层，「全中」不再部分依赖人工作答。"}},"results":[{"poem":"jx","id":"JX-E1","axis":"EXIST","basis":"poem","frame":"jx_02","media":"single","expect":"是","answer":"是","s":1,"w":1,"conf":"high","evidence":"三重远山；脊线 y 0.26–0.33，山体填充至 y 0.50"},{"poem":"jx","id":"JX-E2","axis":"EXIST","basis":"poem","frame":"jx_03","media":"single","expect":"是","answer":"是","s":1,"w":1,"conf":"high","evidence":"#jx-boat，x 0.52–0.78；jx_01/jx_02 未出现，符合节拍"},{"poem":"jx","id":"JX-E3","axis":"EXIST","basis":"poem","frame":"jx_04","media":"single","expect":"是","answer":"是","s":1,"w":1,"conf":"high","evidence":"斗笠 + 躯干两笔，fill #1C1C1C opacity 0.88–0.92；jx_04 实看为画面正中偏上的深色剪影"},{"poem":"jx","id":"JX-E4","axis":"EXIST","basis":"design","frame":"jx_02","media":"single","expect":"是","answer":"是","s":1,"w":0.5,"conf":"high","evidence":"左下三茎（x 0.10–0.18, y 0.61–0.87）"},{"poem":"jx","id":"JX-E5","axis":"EXIST","basis":"poem","frame":"jx_04","media":"single","expect":"是","answer":"是","s":1,"w":1,"conf":"high","evidence":"#jx-line 自 (600,452) 垂至 (620,558)；jx_03(t=15.5) 尚无"},{"poem":"jx","id":"JX-E6","axis":"EXIST","basis":"poem","frame":"jx_02","media":"single","expect":"是","answer":"是","s":1,"w":1,"conf":"high","evidence":"snowCount=46；jx_02 实见散落雪点。v1.2 已收窄为纯存在题，过程性移出至 JX-T6"},{"poem":"jx","id":"JX-N1","axis":"NEGATIVE","basis":"poem","frame":"jx_05_nopoem","media":"single","expect":"否","answer":"否","s":1,"w":1.5,"conf":"high","evidence":"无鸟形几何；去诗帧（jx_05_nopoem）实看无任何鸟形，题诗「鸟」字已排除"},{"poem":"jx","id":"JX-N2","axis":"NEGATIVE","basis":"poem","frame":"jx_04_nopoem","media":"single","expect":"否","answer":"否","s":1,"w":1.5,"conf":"high","evidence":"全片仅 1 个人物；v1.2 改绑去诗帧后，题诗「人踪」二字不再构成假阳性"},{"poem":"jx","id":"JX-N3","axis":"NEGATIVE","basis":"poem","frame":"jx_05_nopoem","media":"single","expect":"否","answer":"否","s":1,"w":1,"conf":"high","evidence":"无足迹几何；探针显示下半幅除雪点外无笔画（非纸面 1.04%，最暗点 174 落在山带边缘）"},{"poem":"jx","id":"JX-A1","axis":"ATTR","basis":"poem","frame":"jx_04","media":"single","expect":"孤舟与蓑笠翁","answer":"孤舟与蓑笠翁","s":1,"w":1,"conf":"high","evidence":"#1C1C1C @0.88–0.92（lum≈30–45）vs 远山合成 lum≈188；实测浓墨像素 1.73%"},{"poem":"jx","id":"JX-A2","axis":"ATTR","basis":"poem","frame":"jx_02","media":"single","expect":"很淡","answer":"很淡","s":1,"w":1,"conf":"mid","evidence":"三层远山 opacity 0.13/0.17/0.15，合成 lum≈188（浅中灰）—— 相对焦点极淡，但绝对亮度并非「极淡」"},{"poem":"jx","id":"JX-A3","axis":"ATTR","basis":"design","frame":"jx_02","media":"single","expect":"大面积留白","answer":"大面积留白","s":1,"w":1,"conf":"high","evidence":"ρ_layout = 0.79（线稿口径）／ρ_render = 0.831（探针实测，jx_02）—— 两口径同向（D4 已分列）"},{"poem":"jx","id":"JX-A4","axis":"ATTR","basis":"poem","frame":"jx_05","media":"single","expect":"几乎不画，以留白表现","answer":"几乎不画，以留白表现","s":1,"w":1,"conf":"high","evidence":"源码中《江雪》无 #jx-water 组 → 水纹道数 = 0；仅 #jx-waterline 一道岸线。jx_05 实看江面为整片留白"},{"poem":"jx","id":"JX-A5","axis":"ATTR","basis":"design","frame":"jx_05_nopoem","media":"single","probe_assisted":true,"expect":"极淡、几乎不可见","answer":"极淡、几乎不可见","s":1,"w":0.5,"conf":"low","evidence":"#jx-path 三条斜线（x 0.03–0.27, y 0.43–0.51），group opacity 0.20 + jxSoft 柔化；探针实测把中景带由 lum 186 压到 166（对比度约 11%）。按 reading_protocol：探针说有 → 判「有」，记 low conf（D6）"},{"poem":"jx","id":"JX-A6","axis":"ATTR","basis":"design","frame":"jx_04","media":"single","expect":"强对比（浓淡悬殊）","answer":"强对比（浓淡悬殊）","s":1,"w":1,"conf":"high","evidence":"jx_04 实看：画面顶端残留远山带为浅灰（lum≈188），正中孤舟剪影近黑（lum≈35），Δlum≈153。新题，原三档浓淡题测不出对比量"},{"poem":"jx","id":"JX-A7","axis":"ATTR","basis":"design","frame":"jx_02","media":"single","expect":"毛边干笔（边缘毛涩、无晕染）","answer":"毛边干笔（边缘毛涩、无晕染）","s":1,"w":1,"conf":"mid","evidence":"#jx-reed 挂 jxDry（feDisplacementMap scale 6）→ 只做位移毛边、无飞白无晕染；jx_02 实看三茎为细、抖、毛涩的线，无湿墨外溢。对照 BD-A6 山壁的湿笔"},{"poem":"jx","id":"JX-A8","axis":"ATTR","basis":"design","frame":"jx_04","media":"single","expect":"大面积疏（留白）中藏着极小的密（孤舟焦点）","answer":"大面积疏（留白）中藏着极小的密（孤舟焦点）","s":1,"w":1,"conf":"high","evidence":"ρ_render = 0.866，浓墨像素仅 1.73% 且集中于孤舟；jx_04 实看为「一张白纸 + 一个黑点」。新题，测疏密势能而非比例"},{"poem":"jx","id":"JX-A9","axis":"ATTR","basis":"design","frame":"jx_05","media":"single","expect":"中下部（远山以下的寒江江面）","answer":"中下部（远山以下的寒江江面）","s":1,"w":0.5,"conf":"high","evidence":"远山脊线 y 0.26–0.33，其下至底缘为江面；jx_05 实看最大连续留白在中下部，上部天空次之。探针：下半幅非纸面像素仅 1.04%。新题，测留白形状"},{"poem":"jx","id":"JX-S1","axis":"SPATIAL","basis":"design","frame":"jx_02","media":"single","expect":"上部","answer":"上部","s":1,"w":1,"conf":"mid","evidence":"脊线 y 0.26–0.33 落在上 1/3；但山体延伸至 0.50，主体重心约 0.38，接近上/中分界"},{"poem":"jx","id":"JX-S2","axis":"SPATIAL","basis":"design","frame":"jx_03","media":"single","expect":"右下","answer":"右下","s":1,"w":1,"conf":"mid","evidence":"jx_03(t=15.5) 孤舟+翁落于 (0.60, 0.73) = 右下；终帧因相机推进落至正中，故判读帧绑 jx_03（D2）"},{"poem":"jx","id":"JX-S3","axis":"SPATIAL","basis":"design","frame":"jx_02","media":"single","expect":"左下","answer":"左下","s":1,"w":0.5,"conf":"high","evidence":"x 0.10–0.18, y 0.61–0.87"},{"poem":"jx","id":"JX-S4","axis":"SPATIAL","basis":"design","frame":"jx_02","media":"single","measured":{"value":0.43,"unit":"H"},"expect":"中部偏上（0.40–0.50H）","answer":"中部偏上（0.40–0.50H）","s":1,"w":0.5,"conf":"high","evidence":"实测地平线 0.42–0.44H（山带顶缘）／0.50H（底缘）；jx_02 实看山带下缘约在画面 0.44 处。v1.2 补入「中部偏上（0.40–0.50H）」档后本题恢复可判（v1.1 因此判为 defect）"},{"poem":"jx","id":"JX-S5","axis":"SPATIAL","basis":"design","frame":"jx_03","media":"single","expect":"孤舟在前、远山在后","answer":"孤舟在前、远山在后","s":1,"w":1,"conf":"high","evidence":"浓墨焦点（lum≈35）vs 淡墨远景（lum≈188），层序明确"},{"poem":"jx","id":"JX-T1","axis":"TEMPORAL","basis":"design","frame":"jx_01+jx_03","media":"pair","expect":"是","answer":"是","s":1,"w":1,"conf":"high","evidence":"jx_01(t=1) 只有远山；孤舟 13s 后才实写"},{"poem":"jx","id":"JX-T2","axis":"TEMPORAL","basis":"design","frame":"jx_03+jx_04","media":"pair","expect":"是","answer":"是","s":1,"w":1,"conf":"high","evidence":"jx_03 无钓丝，jx_04 有；#jx-line dashoffset 于 17.2–19.2s 拉出"},{"poem":"jx","id":"JX-T3","axis":"TEMPORAL","basis":"design","frame":"jx_01+jx_02+jx_04","media":"pair","expect":"是","answer":"是","s":1,"w":0.5,"conf":"mid","evidence":"snowKeys v = 0.45 / 1.00 / 0.30 / 0.85 / 0.85，最小值不为 0，三帧均见雪点"},{"poem":"jx","id":"JX-T4","axis":"TEMPORAL","basis":"design","frame":"jx_01+jx_04","media":"pair","expect":"是","answer":"是","s":1,"w":1,"conf":"high","evidence":"jx_01 与 jx_04 为同一场景的不同倍率（1.00× / 1.12×），仅相机推近变换，无硬切／黑场／叠化（场景切换定义见 qset meta.protocol.scene_switch）"},{"poem":"jx","id":"JX-T5","axis":"TEMPORAL","basis":"design","frame":"jx_01+jx_03+jx_04","media":"probe","expect":"前段近乎静止，后段极缓推近（无急推）","answer":"前段近乎静止，后段极缓推近（无急推）","s":1,"w":1,"conf":"high","evidence":"o1_probe_cam 实测 s：1.0000（0–7s 完全静止）→ 0.9600（13s 轻推远）→ 1.1200（25s 极缓推近），vmax ≈ 0.04/s（低于 5% 阈值）→ 全片无急推。v1.3 压平后的曲线；由探针判定，非目视（D5/D7）"},{"poem":"jx","id":"JX-T6","axis":"TEMPORAL","basis":"poem","frame":"jx_01+jx_04","media":"pair","expect":"是","answer":"是","s":1,"w":1,"conf":"high","evidence":"源码：每片雪 cy = (y0 + vy·t) % 660 持续下移、cx 叠 ±16px 正弦横摆；jx_01 与 jx_04 雪点位置不同 → 确为飘落。由 JX-E6 拆出的新题（D7）"},{"poem":"bd","id":"BD-E1","axis":"EXIST","basis":"poem","frame":"bd_02","media":"single","expect":"是","answer":"是","s":1,"w":1,"conf":"high","evidence":"#bd-city 立于左崖顶（x 0.22–0.28, y 0.10–0.18）；bd_02 实看左上角有塔形城楼"},{"poem":"bd","id":"BD-E2","axis":"EXIST","basis":"poem","frame":"bd_02","media":"single","probe_assisted":true,"expect":"是","answer":"是","s":1,"w":1,"conf":"low","evidence":"#bd-cloud 三椭圆（cy 56/84/118），fill 渐变 + 0.06 灰 —— 极淡，接近雾/霭观感；bd_02 实看上部有极淡柔光带。按 reading_protocol 判「有」，记 low conf（D6）"},{"poem":"bd","id":"BD-E3","axis":"EXIST","basis":"poem","frame":"bd_02","media":"single","expect":"是","answer":"是","s":1,"w":1,"conf":"high","evidence":"#bd-boat（x 0.33–0.46, y 0.78–0.85）；bd_01 未出，符合节拍"},{"poem":"bd","id":"BD-E4","axis":"EXIST","basis":"poem","frame":"bd_02","media":"single","expect":"是","answer":"是","s":1,"w":1,"conf":"high","evidence":"#bd-cliff 左右两片，占画面左右各约 1/4；bd_02 实看两侧灰色壁面"},{"poem":"bd","id":"BD-E5","axis":"EXIST","basis":"poem","frame":"bd_02","media":"single","expect":"是","answer":"是","s":1,"w":1,"conf":"high","evidence":"#bd-far 四层（opacity 0.09/0.12/0.14/0.15），层层后退；bd_02 实看峡口内多层浅灰山影"},{"poem":"bd","id":"BD-E6","axis":"EXIST","basis":"poem","frame":"bd_02","media":"single","expect":"是","answer":"是","s":1,"w":1,"conf":"high","evidence":"楔形江面 #FAF8F3 + 渐变，y 0.50→1.00；bd_02 实看中下部白色楔形江面"},{"poem":"bd","id":"BD-E7","axis":"EXIST","basis":"design","frame":"bd_04","media":"single","expect":"是","answer":"是","s":1,"w":0.5,"conf":"high","evidence":"#bd-trail 两笔（opacity 0.26/0.18），bd_04 中明显可见；实看轻舟左侧拖出长痕"},{"poem":"bd","id":"BD-N1","axis":"NEGATIVE","basis":"poem","frame":"bd_04_nopoem","media":"single","expect":"否","answer":"否","s":1,"w":1.5,"conf":"high","evidence":"无猿形几何；去诗帧实看无猿，题诗「猿」字已排除。跨通道节点（听觉正 / 视觉负）"},{"poem":"bd","id":"BD-N2","axis":"NEGATIVE","basis":"poem","frame":"bd_04_nopoem","media":"single","expect":"否","answer":"否","s":1,"w":1,"conf":"high","evidence":"全片仅白帝城一座城；v1.2 改绑去诗帧后，题诗「江陵」二字不再构成假阳性"},{"poem":"bd","id":"BD-A1","axis":"ATTR","basis":"poem","frame":"bd_02","media":"single","expect":"轻舟","answer":"轻舟","s":1,"w":1,"conf":"high","evidence":"#bd-boat #1C1C1C @0.90 → lum≈50；白帝城 #2A2724 @0.58 → lum≈126；山壁渐变 ≈190。v1.2 改绑 bd_02（四者同框），bd_04 时城与云已出画"},{"poem":"bd","id":"BD-A2","axis":"ATTR","basis":"poem","frame":"bd_02","media":"single","expect":"淡墨浅灰","answer":"淡墨浅灰","s":1,"w":1,"conf":"high","evidence":"云为渐变灰 + 0.06 灰椭圆，无任何设色"},{"poem":"bd","id":"BD-A3","axis":"ATTR","basis":"design","frame":"bd_02","media":"single","expect":"稀疏、仅数道","answer":"稀疏、仅数道","s":1,"w":1,"conf":"high","evidence":"ROWS 共 5 道（y 412/462/500/548/590），每道 3–4 短笔，opacity 0.13–0.27；bd_02 实看江面仅寥寥数道短纹"},{"poem":"bd","id":"BD-A4","axis":"ATTR","basis":"design","frame":"bd_04","media":"single","expect":"约一半","answer":"约一半","s":1,"w":1,"conf":"mid","evidence":"ρ_layout = 0.52（线稿口径）／ρ_render = 0.307（bd_02）–0.441（bd_04 去诗）；bd_04 实看山壁与留白大致相当。两口径分列（D4）"},{"poem":"bd","id":"BD-A5","axis":"ATTR","basis":"design","frame":"bd_02","media":"single","expect":"轻舟 > 白帝城 > 两岸山壁 > 彩云","answer":"轻舟 > 白帝城 > 两岸山壁 > 彩云","s":1,"w":1,"conf":"mid","evidence":"轻舟 lum≈50 < 白帝城≈126 < 山壁≈190 < 彩云（0.06 灰椭圆，最淡）。bd_02 四者同框，实看浓淡次序一致。新题，测整条浓淡谱而非极值"},{"poem":"bd","id":"BD-A6","axis":"ATTR","basis":"design","frame":"bd_02","media":"single","expect":"湿笔晕染（边缘柔化、墨色向两侧渗开）","answer":"湿笔晕染（边缘柔化、墨色向两侧渗开）","s":1,"w":1,"conf":"high","evidence":"（O1.2 修正口径）湿笔模糊 bdSoft 实用于云与雾，山壁并非湿笔模糊；#bd-cliff 组滤镜实为 bdEdge（干笔位移 scale 16，无高斯模糊），主体为 bdCliffL/R 横向渐变填充（外缘 0.13 → 内缘 0.46、无描边）→ 无硬边的柔化渐变、无断白，读作湿笔晕染；仅皴线 #bd-cun 用 bdDry 干笔。新题"},{"poem":"bd","id":"BD-A7","axis":"ATTR","basis":"design","frame":"bd_02","media":"single","expect":"两侧山壁密、中央峡口疏（留白）","answer":"两侧山壁密、中央峡口疏（留白）","s":1,"w":1,"conf":"high","evidence":"左右壁各占约 1/4 为最密区，中央峡口 x 0.44–0.62 露出远山并下展为江面留白；bd_02 实看「两实夹一虚」。新题，测疏密势能"},{"poem":"bd","id":"BD-A8","axis":"ATTR","basis":"design","frame":"bd_02","media":"single","expect":"中央峡口并向下展开为江面，呈向纵深收束的透光带","answer":"中央峡口并向下展开为江面，呈向纵深收束的透光带","s":1,"w":0.5,"conf":"mid","evidence":"楔形江面 #bdRiverClip 由峡口 (400,302)-(560,302) 下展至底缘，沿消失点收束；探针 bd_02 留白 30.7% 集中于中央。新题，测留白形状"},{"poem":"bd","id":"BD-S1","axis":"SPATIAL","basis":"design","frame":"bd_02","media":"single","expect":"左上","answer":"左上","s":1,"w":1,"conf":"high","evidence":"x 0.22–0.28, y 0.10–0.18"},{"poem":"bd","id":"BD-S2","axis":"SPATIAL","basis":"design","frame":"bd_02","media":"single","expect":"左下","answer":"左下","s":1,"w":1,"conf":"high","evidence":"x 0.33–0.46, y 0.78–0.85"},{"poem":"bd","id":"BD-S3","axis":"SPATIAL","basis":"design","frame":"bd_02","media":"single","expect":"从画面中央向远处纵深延伸","answer":"从画面中央向远处纵深延伸","s":1,"w":1,"conf":"high","evidence":"楔形江面收敛于消失点 (480, 290)，属单点透视"},{"poem":"bd","id":"BD-S4","axis":"SPATIAL","basis":"design","frame":"bd_02","media":"single","expect":"万重山在两道山壁的缺口之间、层层后退","answer":"万重山在两道山壁的缺口之间、层层后退","s":1,"w":1,"conf":"high","evidence":"#bd-far 跨 x 0.33–0.73，先画；#bd-cliff 后画并覆盖其外缘，最终只从峡口 x 0.44–0.62 露出 —— 用户反馈的空间混乱问题的修复检验点，已达标"},{"poem":"bd","id":"BD-S5","axis":"SPATIAL","basis":"design","frame":"bd_02","media":"single","expect":"山壁内缘即江面左右边界、紧贴无缝","answer":"山壁内缘即江面左右边界、紧贴无缝","s":1,"w":1,"conf":"high","evidence":"左壁内缘 (104,600)→(400,302) 与江面左缘 (104,600)→(400,302) 完全同点，中间无独立岸带；bd_02 实看山壁与江面紧贴"},{"poem":"bd","id":"BD-S6","axis":"SPATIAL","basis":"design","frame":"bd_02","media":"single","expect":"左下","answer":"左下","s":1,"w":0.5,"conf":"high","evidence":"轻舟中心 (0.40, 0.82)，白帝城在左上，合成重心落左下"},{"poem":"bd","id":"BD-T1","axis":"TEMPORAL","basis":"design","frame":"bd_01+bd_02","media":"pair","expect":"是","answer":"是","s":1,"w":1,"conf":"high","evidence":"bd_01(t=1) 只见城与峡，无舟；城 0.6–1.9s、舟 1.2–2.4s 淡入"},{"poem":"bd","id":"BD-T2","axis":"TEMPORAL","basis":"design","frame":"bd_01+bd_03+bd_04","media":"pair","expect":"是","answer":"是","s":1,"w":1,"conf":"high","evidence":"三帧同为一条峡谷，仅相机推进/侧掠，无场景切换"},{"poem":"bd","id":"BD-T3","axis":"TEMPORAL","basis":"design","frame":"bd_02+bd_04","media":"pair","expect":"是","answer":"是","s":1,"w":0.5,"conf":"high","evidence":"bd_02 拖痕极短，bd_04 明显拉长；#bd-trail dashoffset 于 6.5–20s 渐次拉出（easeIn）"},{"poem":"bd","id":"BD-T4","axis":"TEMPORAL","basis":"design","frame":"bd_01+bd_04","media":"probe","expect":"是","answer":"是","s":1,"w":1,"conf":"high","evidence":"o1_probe_cam 实测 s：1.0000 → 1.8521；30 步递增 / 14 步递减；仅 t=14.5–17 有一次 1.2000→1.1800 的侧掠回望小回退；末段速度升至全片最大 0.2554/s @ t=24，无定格（D7）"},{"poem":"bd","id":"BD-T5","axis":"TEMPORAL","basis":"design","frame":"bd_01+bd_04","media":"probe","expect":"总体渐快、中段有一次侧掠回望的小回退、结尾冲刺（无定格）","answer":"总体渐快、中段有一次侧掠回望的小回退、结尾冲刺（无定格）","s":1,"w":1,"conf":"high","evidence":"o1_probe_cam 实测 |v| 总体递增（0.0002 → 0.2554/s），唯 t=14.5–17 出现回退（转段「侧掠两岸 · 一瞬回望」）；结尾 t=24 达最大速度、无定格。新题，探针补出了设计 speedKeys 未体现的回退（D5/D7）"}],"rollup":{"overall":{"questions":57,"hit":57,"miss":0,"defect":0,"unreadable":0,"weight_sum":53.5,"hit_weight":53.5,"rate_excl_defect":1},"by_poem":{"jx":{"questions":29,"hit":29,"defect":0,"weight_sum":27,"hit_weight":27,"rate_excl_defect":1},"bd":{"questions":28,"hit":28,"defect":0,"weight_sum":26.5,"hit_weight":26.5,"rate_excl_defect":1}},"by_axis":{"EXIST":{"weight_sum":12,"hit_weight":12,"rate":1},"NEGATIVE":{"weight_sum":6.5,"hit_weight":6.5,"rate":1},"ATTR":{"weight_sum":15.5,"hit_weight":15.5,"rate":1},"SPATIAL":{"weight_sum":9.5,"hit_weight":9.5,"rate":1},"TEMPORAL":{"weight_sum":10,"hit_weight":10,"rate":1}},"by_basis":{"poem":{"weight_sum":23.5,"hit_weight":23.5,"rate":1},"design":{"weight_sum":30,"hit_weight":30,"rate":1}}},"defect_fixes":[{"id":"D1","title":"选项粒度缺口 —— JX-S4 地平线无对应档位","status":"fixed","verdict":"v1.2 补入「中部偏上（0.40–0.50H）」档，实测 0.43H 被覆盖，本题由 defect 转为 hit；校验器新增 E_OPTION_GAP 断言防复发"},{"id":"D2","title":"判读帧未绑定","status":"verified","verdict":"57 题全部带 frame 字段；校验器 E_FRAME_MISSING / E_FRAME_UNKNOWN 强制。另发现并修正 BD-A1/BD-A5 绑帧不当（bd_04 时城与云已出画）"},{"id":"D3","title":"题诗与负节点题同框 —— 文字假阳性","status":"fixed","verdict":"5 道负节点题全部绑去诗帧（含 v1.1 遗漏的 JX-N2 / BD-N2）；校验器 E_NEG_NOPOEM 强制 NEGATIVE 帧名含 nopoem"},{"id":"D4","title":"留白率 ρ 两套口径不可比","status":"fixed","verdict":"meta.rho_definitions 分列 ρ_layout / ρ_render，JX-A3 与 BD-A4 的 why 内注明所引口径"},{"id":"D5","title":"天花板效应 —— 问题集失去区分度","status":"fixed","verdict":"补入 11 道高区分度题（墨色分档对比、笔触干湿、疏密势能、留白形状、相机速度曲线）。v1.2 仍 57/57，但量程从「三档浓淡」细到「浓淡谱排序 + Δlum 对比 + 边缘毛涩/柔化 + 留白形状 + 速度曲线形状」；见 discrimination 一节的灵敏度分析"},{"id":"D6","title":"极淡元素处于感知阈值附近","status":"fixed","verdict":"JX-A5 / BD-E2 加 probe_assisted 与 reading_protocol（探针先判、局部判读、可提升对比度、探针说有不得判 miss），两题均记 low conf 判「有」"},{"id":"D7","title":"单帧无法判时序","status":"fixed","verdict":"时序题全部标 media；JX-E6 拆为存在题 + JX-T6 过程题；3 道相机题改用 media=probe，由 src/o1/o1_probe_cam.mjs 采样 DOM 判定，无需视频素材，unreadable = 0"},{"id":"D8","ver":"v1.3","title":"定格判定边界假阳性 —— 末尾单采样被误报为「末尾定格」","status":"fixed","verdict":"src/o1/o1_probe_cam.mjs 的定格判定只逐采样检查 |v|<1e-4 且 dpos<0.5，未校验持续时长；当相机在最后一帧恰好静止时 freeze_from 会等于 T（时长 0），被下游「freeze_from == null」判据当作「有定格」。v1.3 压平《江雪》后 JX-T5 因此空转、悄悄回退到目视层（自动层覆盖由 45 掉到 44），使「全中」部分依赖人工作答。修复：定格须连续 ≥1s（与脚本注释口径一致），仅末尾单采样满足时判为无定格；探针自身即为此处的防复发守卫。修复后 jx/bd 均为「无定格」，JX-T5 回到自动层（45/57）。"}],"findings":[{"id":"F1","title":"「完全定格」是标签口径，实测是极缓漂移","where":"JX-T5 / ink_animations.html 节拍标签","detail":"《江雪》合段（17–25s）的标签写「完全定格」，但相机键值给的是 1.55(16.5s) → 1.58(25s) linear，探针实测末段 v≈0.0035/s（峰值 0.9%），8.5s 内仍有 1.8% 缩放。","impact":"不影响观感（远低于感知阈值），但标签与实测不符，属口径问题。v1.2 的 JX-T5 选项因此取「近乎静止」而非「定格」。","action":"建议把节拍标签改为「近乎静止（极缓漂移）」，或在源码把末段两键改成同值以真正定格 —— 二选一，别让标签与键值继续打架。","resolved":"2026-10-02 已按「改标签」执行：ink_animations.html JX 节拍标签改为「近乎静止（极缓漂移）」，与相机键值及探针实测一致（O1.2）。v1.3 进一步压平推近后，合段标签重述为「极缓推近（续）」（键值 0.96→1.12 @ 13–25s），标签与实测仍一致 —— 见 F5。"},{"id":"F2","title":"速度曲线中段的「侧掠回望」回退，设计序列未体现","where":"BD-T5 / BD.speedKeys","detail":"BD.speedKeys 是单调序列 0.05→0.30→0.80→0.85→1.00，但相机键值在 t=14.5–17 有一次 1.2000→1.1800 的回退（转段「侧掠两岸 · 一瞬回望」）。探针实测 |v| 总体递增但非单调（30 步增 / 14 步减）。","impact":"v1.1 的「相机是否持续前推」题只看了 17s→24s，漏掉了这段回退。v1.2 的 BD-T4/BD-T5 已把它写成期望答案的一部分。","action":"若要「一瞬回望」被后续版本继承，应把回退写进 speedKeys，否则改速度曲线时会无意抹掉它。","resolved":"2026-10-02 已执行：BD.speedKeys 由单调序列改为补入 14.5s v=0.86 → 17s v=0.82 的小回退，与 cam 键值 s 1.20→1.18 同向（O1.2）。注意 speedKeys 实为水流速度表，此改动会让水流在回望段略缓。"},{"id":"F3","title":"干笔与飞白在滤镜层面是两回事","where":"JX-A7 / jxDry vs jxInk","detail":"jxDry（芦苇、钓丝）只做 feDisplacementMap 位移毛边，没有飞白的噪点遮罩；真正的飞白在 jxInk 里（feComposite + 噪点），且仅用于题诗。","impact":"v1.2 草稿曾把 JX-A7 期望写成「干笔飞白（有断白）」，核对滤镜后改为「毛边干笔（无晕染）」，避免把不存在的美术特征写进期望答案。","action":"无。已按滤镜实况定案。"},{"id":"F4","title":"山壁「湿笔」的成因是渐变填充，不是湿笔模糊","where":"BD-A6 / bdSoft vs bdEdge","detail":"#bd-cliff 组滤镜实为 bdEdge（干笔位移 scale 16，无高斯模糊），主体为 bdCliffL/R 横向渐变填充（外缘 0.13 → 内缘 0.46、无描边）；湿笔模糊 bdSoft 实际用于 bd-cloud/bd-mist。原 qset why 与 baseline evidence 误把 bdSoft 挂到山壁。","impact":"判读结论（湿笔晕染）不变 —— 渐变填充＋无描边确实呈无硬边柔化、无断白；但依据写错，且该题原述的「二值滤镜特征」区分度弱于实际（真正二值的是「有无断白」而非「有无模糊」）。","action":"已修正 qset why / baseline evidence / discrimination margin / key_measurements 四处口径（O1.2）；BD-A6 保持目视层定案，不改为自动判定。","resolved":"2026-10-02 src/o1/o1_lint.mjs 的 R1 规则首轮即报出此错，已按上述修正，重跑后 lint 归零。"},{"id":"F5","title":"镜头缩放过大对「孤」的意境有破坏 —— 压平推近","where":"JX-T5 / ink_animations.html JX.cam","detail":"v1.2 的《江雪》相机键值为 0.93(13s) → 1.55(16.5s) → 1.58(25s)，探针实测 13–16.5s 段峰值速度 0.394/s（≈39%/s），属急推；且终点倍率 1.58 把孤舟从右下推到画面正中，稀释了「孤」的偏心构图，并逼近「同场景内推镜被误读为场景切换」的边界。","impact":"与「意境优先、避免图解化」的项目原则冲突：寒江的空阔与孤舟的孤绝依赖大片留白与偏心构图，过猛的推近把观者的注意力从「空」拉到「物」。","action":"已按裁定压平：cam 键值改为 1.00(0–7s) → 0.96(13s 轻推远) → 1.12(25s)，13–25s 的 12 秒内缓推 0.16 倍，峰值速度 0.0368/s（≈3.7%/s，低于 5% 阈值）→ 全片无急推；节拍标签同步由「急推／完全定格」改为「极缓推近／极缓推近（续）」。","resolved":"2026-10-02（v1.3）已执行；src/o1/o1_probe_cam.mjs 复核 freeze_from=null、vmax=0.0368/s @t=19；JX-T5 期望曲线与自动判据随之修订，全片仍 57/57。"}],"discrimination":{"note":"D5 的诉求是「题目要能测出改进」。本轮画面已达标（57/57），故不能靠分数证明区分度，改做灵敏度分析：逐题给出「最近的一个错误选项」与「期望档位到该错误选项的余量」，余量越小说明题目越敏感。","items":[{"id":"JX-A6","expected":"强对比（Δlum≈153）","nearest_wrong":"中等对比","margin":"阈值约 Δlum 100；余量 53","sens":"mid"},{"id":"JX-A7","expected":"毛边干笔","nearest_wrong":"湿笔晕染","margin":"判据是「有无高斯模糊/渐变渗色」——二值特征，非阈值","sens":"high"},{"id":"JX-A8","expected":"大面疏中藏极小密","nearest_wrong":"疏密均匀分布","margin":"留白 0.866 vs 均匀需 ≈0.5；余量 0.37","sens":"high"},{"id":"JX-A9","expected":"中下部留白","nearest_wrong":"上部留白","margin":"中下部 0.56H vs 上部 0.26H；余量 0.30H","sens":"high"},{"id":"JX-S4","expected":"中部偏上（0.40–0.50H）","nearest_wrong":"上 1/3 附近（0.28–0.40H）","margin":"实测 0.43H，距下界 0.03H、距邻档上界 0.03H","sens":"high（档位已覆盖，余量 0.03H）"},{"id":"JX-T5","expected":"前段近乎静止，后段极缓推近（无急推）","nearest_wrong":"前段近乎静止、中段急推加速、末段又归于近乎静止","margin":"vmax 0.0368/s vs 急推阈值 0.05/s，余量仅 0.013/s（比 1.36:1）—— 压平后余量显著收窄，是本题最敏感处（对照 v1.2 急推 0.394/s 时余量比 7.9:1）","sens":"high（余量已贴近阈值）"},{"id":"BD-A5","expected":"轻舟>城>壁>云","nearest_wrong":"两岸山壁>轻舟>…","margin":"轻舟 lum 50 vs 山壁 190；余量 140","sens":"high"},{"id":"BD-A6","expected":"湿笔晕染","nearest_wrong":"干笔飞白","margin":"山壁为横向渐变填充（无描边硬边、无断白）vs 干笔飞白须见断白 —— 二值特征；湿笔感来自渐变而非模糊，组滤镜实为 bdEdge 干笔位移（O1.2 修正）","sens":"high"},{"id":"BD-A7","expected":"两侧密中央疏","nearest_wrong":"中央密两侧疏","margin":"两侧山壁占 ≈50% 画宽且为最密区；反号即可区分","sens":"high"},{"id":"BD-A8","expected":"中央透光带","nearest_wrong":"上方天空","margin":"中央楔形留白 0.31（bd_02 实测）vs 上方天空带更窄","sens":"mid"},{"id":"BD-T5","expected":"渐快+中段小回退+结尾冲刺","nearest_wrong":"全程匀速","margin":"vmax 0.2554/s vs 中段回退 -0.0143/s；符号相反","sens":"high"}]},"probe":{"note":"以下为客观实测值，用于给属性/时序类题提供硬数据（src/o1/o1_probe.mjs / src/o1/o1_probe2.mjs / src/o1/o1_probe_cam.mjs）","paper":"#F6F3EC（lum≈243）","blank_rate":{"jx_02_全幅":{"留白≥240":0.831,"极淡225-240":0.0147,"中灰150-225":0.1525,"浓墨<150":0.0014},"jx_04_全幅":{"留白≥240":0.866,"极淡225-240":0.0123,"中灰150-225":0.1042,"浓墨<150":0.0173},"bd_02_全幅":{"留白≥240":0.307,"极淡225-240":0.0717,"中灰150-225":0.6127,"浓墨<150":0.0082},"bd_04nopoem_全幅":{"留白≥240":0.441,"极淡225-240":0.0766,"中灰150-225":0.464,"浓墨<150":0.0182}},"cam_trace":{"script":"src/o1/o1_probe_cam.mjs → o1_cam_trace.json","jx":{"s_start":1,"s_end":1.12,"s_min":0.96,"vmax":{"t":19,"v":0.0368},"tail_v":0,"freeze_from":null,"shape":"静止(0–7) → 轻推远(7–13) → 极缓推近(13–25)，无定格（v1.3 压平后）"},"bd":{"s_start":1,"s_end":1.8521,"s_max":1.8521,"vmax":{"t":24,"v":0.2554},"dip":{"t":14.5,"from":1.2,"to":1.18,"at":17},"freeze_from":null,"shape":"缓起 → 渐快(含 14.5–17 侧掠回望小回退) → 结尾冲刺，无定格"}},"key_measurements":[{"item":"万径 #jx-path 渲染对比度","value":"中景带 lum 186 → 166（约 11%）","verdict":"确实画出，但处于感知阈值附近（D6，probe_assisted）"},{"item":"江雪下半幅（排除芦苇）非纸面像素","value":"1.04%，最暗点 lum 174 @ (0.200, 0.500)","verdict":"除雪点外无笔画，与「人踪灭」「无足迹」一致"},{"item":"江面水纹道数","value":"jx = 0 道（无 #jx-water 组）；bd = 5 道","verdict":"JX-A4 与 BD-A3 均由源码定案，非主观判断"},{"item":"墨色亮度排序（bd）","value":"轻舟 lum≈50 < 白帝城 lum≈126 < 山壁 lum≈190 < 彩云（0.06）","verdict":"BD-A1 / BD-A5 由参数直接推出"},{"item":"地平线位置","value":"0.42–0.44H（山带顶缘）／0.50H（底缘）","verdict":"落 v1.2 新增档「中部偏上（0.40–0.50H）」，JX-S4 恢复可判（D1）"},{"item":"笔触干湿","value":"芦苇/钓丝/皴线/船迹 = 位移毛边（jxDry/bdDry，无模糊）；山壁主体 = 横向渐变填充（bdCliffL/R，组滤镜 bdEdge 干笔位移）；湿笔模糊 bdSoft 仅用于 bd-cloud/bd-mist；飞白仅题诗（jxInk/bdInk）","verdict":"JX-A7 / BD-A6 的判据是二值特征（有无模糊／断白），非阈值；BD-A6 的湿笔感来自渐变而非模糊（O1.2 修正）"}]},"next":[{"id":"O1.2","status":"done","task":"把 VLM 逐题作答固化为脚本（判读帧 + 探针数值一并喂入），产出可复跑的评分报告","why":"已完成：o1_source_facts / o1_probe_vis / o1_judge / o1_lint / o1_score 五个脚本 + src/o1/o1_run.mjs 一键入口；自动层覆盖 45/57（78.9%），评分与 v1.2 基线逐题回归比对（有回退即 exit 1）。"},{"id":"F1/F2/F4","status":"done","task":"处理三条资产口径发现：改《江雪》合段标签；把「一瞬回望」回退写进 BD.speedKeys；修正 BD-A6 的 bdSoft 误挂","why":"已完成，见 findings 的 resolved 字段；src/o1/o1_lint.mjs 重跑归零。"},{"id":"O1.3","task":"接入真实 VLM 覆盖 o1_vlm_answers.json 的 12 道目视题","why":"当前 VLM 层由 v1.2 基线播种（replaceable=true）；脚本已就位，接入端点后按同一 schema 覆盖 answer/conf/evidence 即可，无需改代码。"},{"id":"O2","task":"意象抽取半自动化（格律先验分词 + NER + 依存消歧 + 可画性门控）","why":"问题集要从「诗」自动生成，目前是手工 57 题"},{"id":"O3","task":"负节点双判据（低度节点 + 未运输质量）","why":"负节点是本项目最独特的判据，目前只靠人工标注，需算法化"},{"id":"O4","task":"构图求解器","why":"D5 的期望值目前由源码参数与探针给出，长期应由构图求解器统一给出"}]};
+const PROBE = [{"name":"jx_02 全幅","img":"jx_02.png","W":1968,"H":1314,"region":[0,0,1,1],"px":{"w":1968,"h":1314,"n":2585952},"meanLum":233.7,"minLum":22,"paperFrac":0.8316,"faintFrac":0.0144,"inkFrac":0.1526,"darkFrac":0.0014,"faintPlusInkFrac":0.1684,"grid":[[241,241,241,241,241,241,241,241,241,241,240,240],[241,240,241,238,238,241,241,241,241,241,239,237],[194,191,201,193,188,195,197,200,206,203,205,219],[238,241,241,241,239,241,241,241,241,240,241,240],[239,238,241,241,241,241,241,241,241,241,241,241],[240,240,241,241,241,241,241,241,241,241,241,241]]},{"name":"jx_02 下半(排芦苇)","img":"jx_02.png","W":1968,"H":1314,"region":[0.22,0.52,1,0.99],"px":{"w":1535,"h":618,"n":948630},"meanLum":241.3,"minLum":194.8,"paperFrac":0.9852,"faintFrac":0.0127,"inkFrac":0.0021,"darkFrac":0,"faintPlusInkFrac":0.0148,"grid":[[241,241,241,241,241,241,241,241,241,241,241,241],[241,241,241,241,241,241,241,241,241,241,241,241],[241,241,241,241,241,241,241,241,241,241,241,241],[241,241,241,241,241,241,241,241,241,241,241,241],[241,241,241,241,241,241,241,241,241,241,241,241],[241,241,241,241,241,241,241,241,241,241,241,241]]},{"name":"jx_05去诗 下半(排芦苇)","img":"jx_05_nopoem.png","W":1968,"H":1314,"region":[0.22,0.52,1,0.99],"px":{"w":1535,"h":618,"n":948630},"meanLum":241.3,"minLum":194.1,"paperFrac":0.9849,"faintFrac":0.0133,"inkFrac":0.0018,"darkFrac":0,"faintPlusInkFrac":0.0151,"grid":[[241,241,241,241,241,241,241,241,241,241,241,241],[241,241,241,241,241,241,241,241,241,241,241,241],[241,241,241,241,241,241,241,241,241,241,241,241],[241,241,241,241,241,241,241,241,241,241,241,241],[241,241,241,241,241,241,241,241,241,241,241,241],[241,241,241,241,241,241,241,241,241,241,241,241]]},{"name":"jx_05去诗 江面(下半·左)","img":"jx_05_nopoem.png","W":1968,"H":1314,"region":[0.22,0.52,0.6,0.99],"px":{"w":748,"h":618,"n":462264},"meanLum":241.4,"minLum":194.1,"paperFrac":0.9869,"faintFrac":0.0126,"inkFrac":0.0005,"darkFrac":0,"faintPlusInkFrac":0.0131,"grid":[[241,241,241,241,241,241,241,241,241,241,241,241],[241,241,241,241,241,241,241,241,241,241,241,241],[241,241,241,241,241,241,241,241,241,241,241,241],[241,241,241,241,241,241,241,241,241,241,241,241],[241,241,241,241,241,241,241,241,241,241,241,241],[241,241,241,241,241,241,241,241,241,241,241,241]]},{"name":"jx_01 上半(山/天空)","img":"jx_01.png","W":1968,"H":1314,"region":[0,0,1,0.5],"px":{"w":1968,"h":657,"n":1292976},"meanLum":232.1,"minLum":22,"paperFrac":0.6877,"faintFrac":0.0751,"inkFrac":0.2372,"darkFrac":0.0001,"faintPlusInkFrac":0.3123,"grid":[[240,241,241,241,241,241,241,241,240,241,241,240],[241,241,241,241,241,241,241,241,241,241,241,240],[241,241,241,241,241,241,241,241,241,241,241,241],[241,239,241,240,235,241,241,241,241,241,241,241],[229,215,227,224,213,219,225,226,232,233,231,238],[203,203,203,203,203,202,203,204,204,204,202,204]]},{"name":"jx_04 全幅","img":"jx_04.png","W":1968,"H":1314,"region":[0,0,1,1],"px":{"w":1968,"h":1314,"n":2585952},"meanLum":231.1,"minLum":22,"paperFrac":0.8026,"faintFrac":0.0161,"inkFrac":0.1689,"darkFrac":0.0125,"faintPlusInkFrac":0.1974,"grid":[[240,241,238,238,241,241,241,241,241,238,235,240],[198,208,197,191,199,204,205,210,213,204,200,221],[228,229,229,226,228,230,230,228,230,228,228,231],[238,241,241,241,241,241,226,223,241,241,241,241],[239,241,241,241,241,234,228,226,236,241,241,241],[241,241,241,241,241,241,241,241,241,241,231,219]]},{"name":"bd_02 全幅","img":"bd_02.png","W":1968,"H":1314,"region":[0,0,1,1],"px":{"w":1968,"h":1314,"n":2585952},"meanLum":215,"minLum":22,"paperFrac":0.308,"faintFrac":0.0716,"inkFrac":0.6118,"darkFrac":0.0087,"faintPlusInkFrac":0.692,"grid":[[211,201,183,180,221,230,231,236,197,194,203,214],[211,202,193,185,212,237,221,230,188,195,204,214],[211,204,192,189,190,206,207,196,191,196,204,214],[211,203,195,201,234,241,241,238,198,196,203,214],[211,203,215,240,229,242,243,243,241,209,205,214],[216,229,243,242,244,241,244,243,242,243,220,218]]},{"name":"bd_04去诗 全幅","img":"bd_04_nopoem.png","W":1968,"H":1314,"region":[0,0,1,1],"px":{"w":1968,"h":1314,"n":2585952},"meanLum":215.8,"minLum":40,"paperFrac":0.4403,"faintFrac":0.0774,"inkFrac":0.4629,"darkFrac":0.0193,"faintPlusInkFrac":0.5597,"grid":[[196,191,180,222,226,235,216,208,234,204,188,195],[195,190,176,171,179,193,193,178,177,175,188,196],[196,198,205,222,236,240,240,239,230,204,195,196],[196,190,203,238,241,241,241,241,241,215,189,195],[199,224,242,222,241,243,242,243,242,243,226,196],[236,239,237,234,239,240,243,243,243,243,232,206]]},{"name":"bd_02 近水带(y0.62-1.0)","img":"bd_02.png","W":1968,"H":1314,"region":[0.1,0.62,0.9,1],"px":{"w":1574,"h":499,"n":785426},"meanLum":232.2,"minLum":45.9,"paperFrac":0.7434,"faintFrac":0.0038,"inkFrac":0.2489,"darkFrac":0.004,"faintPlusInkFrac":0.2566,"grid":[[201,197,201,241,242,242,242,242,242,203,197,202],[201,198,232,230,231,242,243,242,243,233,196,203],[202,220,242,235,228,242,243,244,243,242,207,204],[209,243,244,244,244,244,244,244,244,244,236,205],[233,245,243,245,244,243,245,243,243,243,245,219],[242,240,238,242,242,238,242,242,238,241,242,235]]},{"name":"bd_02 左壁(x0-0.30)","img":"bd_02.png","W":1968,"H":1314,"region":[0,0,0.3,1],"px":{"w":590,"h":1314,"n":775260},"meanLum":207.1,"minLum":22,"paperFrac":0.1479,"faintFrac":0.0012,"inkFrac":0.8429,"darkFrac":0.0079,"faintPlusInkFrac":0.8521,"grid":[[213,212,208,204,202,200,196,189,168,187,186,181],[213,212,209,207,202,200,198,198,195,184,191,187],[213,212,207,207,204,203,200,197,194,181,192,190],[213,212,209,204,203,203,200,198,195,188,194,198],[214,212,209,207,204,200,200,207,217,226,235,242],[218,217,214,215,224,233,242,244,242,242,241,242]]},{"name":"bd_02 中央峡口(x0.44-0.62)","img":"bd_02.png","W":1968,"H":1314,"region":[0.44,0,0.62,1],"px":{"w":354,"h":1314,"n":465156},"meanLum":231.9,"minLum":164.8,"paperFrac":0.5868,"faintFrac":0.217,"inkFrac":0.1962,"darkFrac":0,"faintPlusInkFrac":0.4132,"grid":[[230,230,229,230,230,230,230,231,232,233,236,236],[239,240,238,235,230,224,220,215,216,220,226,233],[202,206,213,214,214,212,207,203,201,199,197,197],[241,241,241,241,241,241,241,241,241,241,241,240],[242,242,243,243,243,243,243,243,243,243,243,243],[241,241,241,243,244,244,244,244,243,243,243,244]]},{"name":"bd_02 右壁(x0.70-1)","img":"bd_02.png","W":1968,"H":1314,"region":[0.7,0,1,1],"px":{"w":590,"h":1314,"n":775260},"meanLum":208.4,"minLum":144,"paperFrac":0.1349,"faintFrac":0.0036,"inkFrac":0.8605,"darkFrac":0.0011,"faintPlusInkFrac":0.8651,"grid":[[183,188,191,193,196,200,202,204,209,212,214,217],[183,190,193,195,197,197,203,206,209,212,214,217],[192,192,193,195,199,201,204,205,208,212,214,217],[191,190,193,195,198,200,201,205,209,212,215,217],[243,237,222,209,199,199,204,206,209,212,214,217],[241,244,244,244,243,235,223,213,214,217,218,220]]},{"name":"jx_02 山带(y0.24-0.52)","img":"jx_02.png","W":1968,"H":1314,"region":[0,0.24,1,0.52],"px":{"w":1968,"h":368,"n":724224},"meanLum":215.2,"minLum":26,"paperFrac":0.464,"faintFrac":0.0101,"inkFrac":0.525,"darkFrac":0.0009,"faintPlusInkFrac":0.536,"grid":[[241,241,241,239,241,241,241,241,241,241,240,238],[241,235,241,230,231,241,241,241,241,241,238,236],[224,218,238,211,205,230,227,230,240,230,235,241],[188,182,197,195,183,185,196,202,211,213,214,231],[179,179,179,179,179,179,179,179,179,179,179,195],[201,206,206,204,196,206,206,205,207,201,204,211]]}];
+
+const AXIS_ORDER = ['EXIST','ATTR','SPATIAL','TEMPORAL','NEGATIVE'];
+const $ = id => document.getElementById(id);
+const pct = v => (v * 100).toFixed(1) + '%';
+const esc = s => String(s == null ? '' : s);
+
+/* header meta */
+$('meta').innerHTML = [
+  ['tag qing', '问题集 v' + QSET.meta.version],
+  ['tag', '基线 ' + BASE.meta.run_id],
+  ['tag', BASE.meta.date],
+  ['tag jin', BASE.meta.judge],
+  ['tag', '判读帧 ' + QSET.poems.reduce((a,p)=>a+p.frames.length,0) + ' 帧']
+].map(([c,t]) => '<span class="'+c+'">'+t+'</span>').join('');
+
+/* positioning —— 护栏而非目标，防误用 */
+const POS = QSET.meta.positioning;
+$('positioning').innerHTML = POS ? (
+  '<h4>O1 的定位：护栏，不是目标</h4>'
+  + '<div class="r">' + esc(POS.role) + '</div>'
+  + '<dl class="prow">'
+  + '<dt>量什么</dt><dd>' + esc(POS.measures) + '</dd>'
+  + '<dt>不量什么</dt><dd>' + esc(POS.not_measures) + '</dd>'
+  + '<dt>怎么用</dt><dd>' + esc(POS.usage) + '</dd>'
+  + '<dt>相关</dt><dd>' + esc(POS.related) + '</dd>'
+  + '</dl>'
+) : '';
+
+$('headline').innerHTML = BASE.meta.totals.headline;
+
+/* scores */
+const T = BASE.meta.totals;
+$('scores').innerHTML = [
+  ['', T.questions, '总题数'],
+  ['ok', T.hit, '命中'],
+  ['miss', T.miss, '未命中（画面错）'],
+  ['def', T.defect, '题面缺陷（不计分）'],
+  ['ok', pct(T.rate_excl_defect), '有效题加权通过率']
+].map(([c,n,l]) => '<div class="sc '+c+'"><div class="n">'+n+'</div><div class="l">'+l+'</div></div>').join('');
+
+$('baseline-note').innerHTML =
+  '加权通过率 <span class="hl">' + pct(T.rate_excl_defect) + '</span>（' + T.hit_weight + ' / ' + T.weight_sum + '）'
+  + '　·　题面缺陷 <b>' + T.defect + '</b>　·　无素材不可判 <b>' + T.unreadable + '</b>'
+  + '　·　较 v1.1：' + T.prev_questions + ' 题 / 缺陷 ' + T.prev_defect + ' → ' + T.questions + ' 题 / 缺陷 ' + T.defect
+  + '<br>两处此前已知的问题 —— 《江雪》水纹观感、《早发白帝城》远山与两岸的空间关系 —— 在基线下均已达标（BD-S4 / BD-S5 即这两处的检验点）。'
+  + '<br><b>口径提醒</b>：以上通过率是「忠实度」口径（护栏），不等于意境／美感评分 —— 见上方定位说明。';
+
+/* axes */
+$('axes').innerHTML = AXIS_ORDER.map(a =>
+  '<div style="display:flex;gap:11px;padding:7px 0;border-bottom:1px solid var(--line-2)">'
+  + '<span class="chip '+a+'" style="flex:none;height:19px">'+a+'</span>'
+  + '<span style="font-size:12.8px;color:var(--ink-2)">'+QSET.meta.axes[a]+'</span></div>').join('');
+
+$('basis').innerHTML = Object.entries(QSET.meta.basis).map(([k,v]) =>
+  '<div style="display:flex;gap:11px;padding:6px 0"><span class="chip b-'+k+'" style="flex:none;height:19px">'+k+'</span>'
+  + '<span style="font-size:12.8px;color:var(--ink-2)">'+v+'</span></div>').join('');
+
+$('media').innerHTML = Object.entries(QSET.meta.media_types || {}).map(([k,v]) =>
+  '<div style="display:flex;gap:11px;padding:6px 0"><span class="chip b-poem" style="flex:none;height:19px">'+k+'</span>'
+  + '<span style="font-size:12.8px;color:var(--ink-2)">'+v+'</span></div>').join('');
+
+$('scoring').innerHTML = Object.entries(QSET.meta.scoring).map(([k,v]) =>
+  '<div style="font-size:12.8px;color:var(--ink-2);padding:4px 0"><span style="font-family:var(--mono);font-size:11.5px;color:var(--ink-3)">'+k+'</span>　'+v+'</div>').join('');
+
+const RHO = QSET.meta.rho_definitions || {};
+$('rho').innerHTML = Object.entries(RHO).map(([k,v]) =>
+  '<div style="font-size:12.8px;color:var(--ink-2);padding:4px 0"><span style="font-family:var(--mono);font-size:11.5px;color:var(--lv)">'+k+'</span>　'+v+'</div>').join('');
+
+$('rules').innerHTML = QSET.meta.generation_rules.map(r => '<li>'+r+'</li>').join('');
+
+$('protocol').innerHTML = Object.entries(QSET.meta.protocol).map(([k,v]) =>
+  '<div style="font-size:12.8px;color:var(--ink-2);padding:4px 0"><span style="font-family:var(--mono);font-size:11.5px;color:var(--qing)">'+k+'</span>　'+v+'</div>').join('');
+
+$('confounds').innerHTML = QSET.meta.known_confounds.map(c => '<div style="font-size:12.8px;color:var(--ink-2);padding:4px 0">· '+c+'</div>').join('');
+
+$('cmds').textContent = [
+  '# 1. 按节拍抽关键帧（关自动播放 / 关标注 / 可选去题诗）',
+  'node src/o1/o1_render.mjs',
+  '',
+  '# 2. 像素级探针：留白率、墨色分布、极淡笔画对比度',
+  'node src/o1/o1_probe.mjs',
+  'node src/o1/o1_probe2.mjs',
+  '',
+  '# 3. 相机轨迹探针（连续量，供 media=probe 的题判定）',
+  'node src/o1/o1_probe_cam.mjs',
+  '',
+  '# 4. 结构校验（frame 绑定 / 负节点去诗帧 / 选项覆盖 / media）',
+  'node src/o1/o1_validate.mjs',
+  '',
+  '# 5. 缩略图 + 重生成本工装页',
+  'node src/o1/o1_thumbs.mjs',
+  'node src/o1/o1_build_harness.mjs'
+].join('\n');
+
+/* poems tables */
+$('poems').innerHTML = QSET.poems.map(p => {
+  const res = BASE.results.filter(r => r.poem === p.id);
+  const roll = BASE.rollup.by_poem[p.id];
+  const qmap = {};
+  p.questions.forEach(q => qmap[q.id] = q);
+  const rows = res.map(r => {
+    const q = qmap[r.id] || {};
+    const isDef = r.verdict === 'defect' || r.s === null;
+    const isMiss = r.s === 0;
+    const resTxt = isDef ? '题面缺陷' : (isMiss ? '未命中' : '命中');
+    const resCls = isDef ? 'def' : (isMiss ? 'miss' : 'hit');
+    const flags = [];
+    if (q.probe_assisted) flags.push('探针辅助');
+    if (r.measured) flags.push('实测 ' + r.measured.value + (r.measured.unit || ''));
+    const conf = r.conf + (flags.length ? (' · ' + flags.join(' · ')) : '');
+    return '<tr class="'+(isDef?'row-defect':(isMiss?'row-miss':''))+'">'
+      + '<td class="num">'+r.id+'</td>'
+      + '<td><span class="chip '+r.axis+'">'+r.axis+'</span></td>'
+      + '<td><span class="chip b-'+r.basis+'">'+r.basis+'</span></td>'
+      + '<td class="num" style="font-size:11px">'+r.frame+'</td>'
+      + '<td class="num" style="font-size:11px">'+(r.media||'single')+'</td>'
+      + '<td class="q">'+(q.q||'')+'</td>'
+      + '<td>'+r.expect+'</td>'
+      + '<td>'+r.answer+'</td>'
+      + '<td class="num">'+r.w.toFixed(1)+'</td>'
+      + '<td><span class="res '+resCls+'">'+resTxt+'</span><br><span class="conf">'+conf+'</span></td>'
+      + '<td class="ev">'+r.evidence+'</td>'
+      + '</tr>';
+  }).join('');
+  return '<div class="card" style="padding:0;overflow:hidden">'
+    + '<div style="padding:16px 22px 12px;border-bottom:1px solid var(--line-2)">'
+    + '<div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">'
+    + '<h3 style="margin:0;font-family:var(--serif);font-size:18px">'+p.title+'</h3>'
+    + '<span style="font-size:12px;color:var(--ink-3)">'+p.author+'　'+p.form+'　'+p.total_s+'s</span></div>'
+    + '<div style="margin-top:8px;font-size:12.5px;color:var(--ink-2)">'
+    + p.segments.map(s => '<span style="margin-right:16px"><b style="font-family:var(--serif)">'+s.name+'</b> '+s.line+' <span class="conf">'+s.t+'–'+(s.t+s.dur)+'s</span></span>').join('')
+    + '</div>'
+    + '<div style="margin-top:9px;font-size:12.5px">加权通过率 <b style="color:var(--qing)">'+pct(roll.rate_excl_defect)+'</b>'
+    + '　·　'+roll.questions+' 题　命中 '+roll.hit+(roll.defect?('　题面缺陷 '+roll.defect):'')+'</div>'
+    + '</div>'
+    + '<div style="overflow-x:auto"><table><thead><tr>'
+    + '<th>ID</th><th>轴</th><th>依据</th><th>判读帧</th><th>媒体</th><th>问题</th><th>期望</th><th>基线作答</th><th class="num">w</th><th>结果</th><th>证据 / 实测</th>'
+    + '</tr></thead><tbody>'+rows+'</tbody></table></div></div>';
+}).join('');
+
+/* bars */
+function bars(el, entries){
+  el.innerHTML = entries.map(([label, d]) => {
+    const r = d.rate;
+    return '<div class="bar-row"><div>'+label+'</div>'
+      + '<div class="bar-track"><div class="bar-fill'+(r<1?' partial':'')+'" style="width:'+(r*100).toFixed(1)+'%"></div></div>'
+      + '<div class="bar-val">'+pct(r)+'</div></div>';
+  }).join('');
+}
+bars($('axis-bars'), AXIS_ORDER.filter(a => BASE.rollup.by_axis[a]).map(a => [a + '　<span class="conf">w=' + BASE.rollup.by_axis[a].weight_sum.toFixed(1) + '</span>', BASE.rollup.by_axis[a]]));
+bars($('basis-bars'), Object.entries(BASE.rollup.by_basis).map(([k,v]) => [k + '　<span class="conf">w=' + v.weight_sum.toFixed(1) + '</span>', v]));
+
+/* defect fixes */
+$('defects').innerHTML = (BASE.defect_fixes || []).map(d =>
+  '<div class="def"><div class="h"><span class="id">'+d.id+'</span><b>'+esc(d.title)+'</b>'
+  + '<span class="ok">'+(d.status === 'verified' ? '已核验' : '已修复')+'</span></div>'
+  + '<div class="fix"><b>'+esc(d.ver || 'v1.2')+'</b>　'+esc(d.verdict)+'</div></div>').join('');
+$('def-range').textContent = 'D1–D' + (BASE.defect_fixes || []).length;
+
+/* findings */
+$('findings').innerHTML = (BASE.findings || []).map(f =>
+  '<div class="fnd"><div class="h"><span class="id">'+f.id+'</span><b>'+esc(f.title)+'</b>'
+  + '<span class="where">'+esc(f.where)+'</span></div>'
+  + '<p>'+esc(f.detail)+'</p>'
+  + '<p class="k">影响：'+esc(f.impact)+'</p>'
+  + '<div class="act"><b>建议</b>　'+esc(f.action)+'</div></div>').join('');
+$('fnd-range').textContent = 'F1–F' + (BASE.findings || []).length;
+
+/* discrimination */
+const DIS = BASE.discrimination || { items: [] };
+$('discrimination').innerHTML =
+  '<div style="padding:14px 22px 10px;border-bottom:1px solid var(--line-2);font-size:12.5px;color:var(--ink-2)">'+esc(DIS.note)+'</div>'
+  + '<div style="overflow-x:auto"><table><thead><tr>'
+  + '<th>ID</th><th>期望档位</th><th>最近的错误选项</th><th>余量</th><th>敏感度</th>'
+  + '</tr></thead><tbody>'
+  + DIS.items.map(it =>
+      '<tr><td class="num">'+it.id+'</td><td>'+esc(it.expected)+'</td>'
+      + '<td style="color:var(--ink-3)">'+esc(it.nearest_wrong)+'</td>'
+      + '<td class="num">'+esc(it.margin)+'</td>'
+      + '<td><span class="res '+(/high/.test(it.sens)?'hit':'miss')+'">'+esc(it.sens)+'</span></td></tr>').join('')
+  + '</tbody></table></div>';
+
+/* probe */
+$('probe-keys').innerHTML = BASE.probe.key_measurements.map(m =>
+  '<div style="padding:7px 0;border-bottom:1px solid var(--line-2)">'
+  + '<div style="font-size:12.8px;color:var(--ink);font-weight:600">'+esc(m.item)+'</div>'
+  + '<div style="font-size:12.5px;color:var(--ink-2)"><span style="font-family:var(--mono)">'+esc(m.value)+'</span></div>'
+  + '<div style="font-size:12px;color:var(--lv)">'+esc(m.verdict)+'</div></div>').join('');
+
+const bk = Object.entries(BASE.probe.blank_rate);
+$('probe-blank').innerHTML = bk.map(([name, d]) =>
+  '<div style="padding:8px 0;border-bottom:1px solid var(--line-2)">'
+  + '<div style="font-size:12.5px;font-family:var(--mono);color:var(--ink-2);margin-bottom:4px">'+name+'</div>'
+  + '<div style="display:flex;height:12px;border-radius:3px;overflow:hidden">'
+  + '<div style="width:'+(d['留白≥240']*100)+'%;background:#EFECE3"></div>'
+  + '<div style="width:'+(d['极淡225-240']*100)+'%;background:#D8D3C6"></div>'
+  + '<div style="width:'+(d['中灰150-225']*100)+'%;background:#A8A296"></div>'
+  + '<div style="width:'+(d['浓墨<150']*100)+'%;background:#3A362F"></div>'
+  + '</div>'
+  + '<div style="font-size:11px;color:var(--ink-3);font-family:var(--mono);margin-top:4px">'
+  + '留白 '+(d['留白≥240']*100).toFixed(1)+'%　极淡 '+(d['极淡225-240']*100).toFixed(2)+'%　中灰 '+(d['中灰150-225']*100).toFixed(1)+'%　浓墨 '+(d['浓墨<150']*100).toFixed(2)+'%</div></div>').join('');
+
+/* camera trace */
+const CAM = (BASE.probe.cam_trace) || {};
+const CAM_LABEL = { jx: '《江雪》', bd: '《早发白帝城》' };
+$('probe-cam').innerHTML = Object.entries(CAM).filter(([k]) => k !== 'script').map(([k, c]) => {
+  const bits = [];
+  bits.push('s ' + c.s_start + ' → ' + c.s_end);
+  if (c.s_min != null) bits.push('s_min ' + c.s_min);
+  if (c.s_max != null) bits.push('s_max ' + c.s_max);
+  if (c.vmax) bits.push('vmax ' + c.vmax.v + '/s @ t=' + c.vmax.t);
+  if (c.tail_v != null) bits.push('末段 v ' + c.tail_v + '/s');
+  if (c.dip) bits.push('回退 ' + c.dip.from + '→' + c.dip.to + ' @ t=' + c.dip.t);
+  return '<div style="padding:9px 0;border-bottom:1px solid var(--line-2)">'
+    + '<div style="font-size:12.8px;color:var(--ink);font-weight:600">'+(CAM_LABEL[k]||k)+'</div>'
+    + '<div style="font-size:12.5px;color:var(--ink-2)">'+esc(c.shape)+'</div>'
+    + '<div style="font-size:11.5px;color:var(--ink-3);font-family:var(--mono);margin-top:3px">'+bits.join('　·　')+'</div></div>';
+}).join('') + (CAM.script ? '<div class="conf" style="margin-top:8px">数据源：'+CAM.script+'</div>' : '');
+
+/* gallery */
+const allFrames = [];
+QSET.poems.forEach(p => p.frames.forEach(f => allFrames.push({ poem: p.title, ...f })));
+$('gallery').innerHTML = allFrames.map(f =>
+  '<div class="fr"><a href="../figures/'+f.name+'.png" target="_blank">'
+  + '<img src="../figures/thumbs/'+f.name+'.jpg" alt="'+f.name+'" loading="lazy"></a>'
+  + '<div class="cap"><b>'+f.name+'</b><span>'+f.label+'</span> <span class="tp">t='+f.t+'s · '+f.poem+'</span></div></div>').join('');
+
+/* next */
+$('next').innerHTML = '<div style="font-size:13px;color:var(--ink-2);margin-bottom:10px">'
+  + 'O1 的目标是「先造尺子」。v1.2 修完 D1–D7、v1.3 修完 D8 并压平《江雪》推近后重跑基线，下一步按依赖关系推进：</div>'
+  + BASE.next.map(n => '<div style="display:flex;gap:12px;padding:7px 0;border-bottom:1px solid var(--line-2)">'
+    + '<span class="chip b-poem" style="flex:none;height:19px">'+n.id+'</span>'
+    + '<div><div style="font-size:12.8px;color:var(--ink)">'+n.task+'</div>'
+    + '<div style="font-size:12px;color:var(--ink-3)">'+n.why+'</div></div></div>').join('');
+</script>
+</body>
+</html>

@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>生成控制整体架构 —— 从诗与数据源到水墨成画的控制链</title>
+<style>
+:root{
+  --paper:#F6F3EC; --paper2:#FBF9F4; --ink:#1C1C1C; --ink2:#3A362F; --ink3:#6E6A60;
+  --line:rgba(28,28,28,.14); --line2:rgba(28,28,28,.08);
+  --zhu:#A83A2C; --jin:#B8860B; --qing:#2F5D62;
+  --serif:"Noto Serif SC","Songti SC","Source Han Serif SC",serif;
+  --sans:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:56px 28px 90px}
+h1{font-family:var(--serif);font-size:31px;font-weight:600;letter-spacing:.02em;margin:0 0 8px}
+.sub{font-family:var(--serif);font-size:15px;color:var(--ink3);margin:0 0 14px;letter-spacing:.03em}
+.lead{color:var(--ink2);font-size:14.5px;line-height:1.8;margin:0 0 8px;max-width:84ch}
+.lead b{color:var(--ink)}
+.meta-line{font-size:12.5px;color:var(--ink3);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0;margin:22px 0 34px;letter-spacing:.02em;line-height:1.85}
+section{margin:0 0 50px}
+.sec-head{display:flex;align-items:baseline;gap:12px;margin:0 0 14px;border-bottom:1px solid var(--line);padding-bottom:8px}
+.sec-no{font-family:var(--serif);font-size:13px;color:var(--zhu);letter-spacing:.12em;white-space:nowrap}
+.sec-head h2{font-family:var(--serif);font-size:20px;font-weight:600;margin:0}
+.sec-note{font-size:13.5px;color:var(--ink3);line-height:1.85;margin:0 0 16px;max-width:90ch}
+.sec-note b{color:var(--ink2)}
+h4{font-family:var(--serif);font-size:14px;font-weight:600;margin:18px 0 8px;color:var(--ink2)}
+.card{background:var(--paper2);border:1px solid var(--line2);border-radius:10px;padding:18px 20px;margin-bottom:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:820px){.grid3{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;font-size:12.8px;margin:4px 0 14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line2);vertical-align:top;line-height:1.65}
+th{font-family:var(--serif);font-weight:600;color:var(--ink3);font-size:12px;letter-spacing:.03em;background:rgba(28,28,28,.025)}
+td b{font-weight:600}
+td .q{font-family:var(--serif);color:var(--ink);font-size:12.5px;line-height:1.8}
+code{font-family:ui-monospace,Consolas,monospace;font-size:11.5px;background:rgba(28,28,28,.05);padding:1px 5px;border-radius:4px}
+.callout{background:var(--paper2);border:1px solid var(--line2);border-left:3px solid var(--jin);border-radius:8px;padding:14px 18px;font-size:13.5px;line-height:1.9;color:var(--ink2);margin:0 0 16px}
+.callout b{color:var(--ink)}
+.callout.z{border-left-color:var(--zhu)}
+.callout.q{border-left-color:var(--qing)}
+.badge{display:inline-block;font-size:10.5px;letter-spacing:.04em;padding:1px 7px;border-radius:6px;white-space:nowrap;font-weight:600;vertical-align:middle}
+.b-ok{background:rgba(47,93,98,.12);color:var(--qing)}
+.b-part{background:rgba(184,134,11,.14);color:#8a6608}
+.b-gap{background:rgba(168,58,44,.12);color:var(--zhu)}
+.l1{background:rgba(47,93,98,.12);color:var(--qing)}
+.l2{background:rgba(184,134,11,.14);color:#8a6608}
+.l3{background:rgba(168,58,44,.12);color:var(--zhu)}
+.l4{background:rgba(28,28,28,.10);color:var(--ink2)}
+/* 控制链图 */
+.chain-fig{background:var(--paper2);border:1px solid var(--line2);border-radius:10px;padding:10px;margin:8px 0 16px}
+.chain-fig svg{display:block;width:100%;height:auto;border-radius:6px;background:var(--paper)}
+.chain-fig figcaption{font-size:11.5px;color:var(--ink3);text-align:center;margin-top:8px;line-height:1.55}
+.chain-fig figcaption b{font-family:var(--serif);color:var(--ink2)}
+a{color:var(--zhu)}
+pre.schema{background:#22201C;color:#E8E4DA;border-radius:8px;padding:14px 16px;overflow-x:auto;font-family:ui-monospace,Consolas,monospace;font-size:11.5px;line-height:1.72;margin:6px 0 16px;white-space:pre}
+pre.schema .c{color:#9A948A}
+footer{font-size:12px;color:var(--ink3);border-top:1px solid var(--line);padding-top:16px;line-height:1.95}
+footer a{color:var(--zhu)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>生成控制整体架构</h1>
+<p class="sub">从诗与数据源到水墨成画的控制链 —— 输入源 · 抽取处理 · D2 控制引擎 · 求解器 · 落地验收　<span style="font-size:12px;color:var(--zhu)">v1.4 · 控制链与 L1–L4 分层的唯一真源</span></p>
+<p class="lead">总纲 <a href="landscape_ink_elements.html">《山水画 · 水墨画 表达要素总纲》</a>回答的是「<b>有哪些要素、能不能变成量</b>」（M0–M3 轴）；本文回答的是正交的另一问——「<b>这些要素被谁、按什么顺序、用什么方式控制</b>」。前者是要素的体系，后者是把要素接成一条可执行链路的<b>控制架构</b>。</p>
+<p class="lead">一句话：<b>总纲定「画什么、能不能读数」，本文定「谁来拧、怎么拧、拧完谁验收」。</b>凡本文所述的接口、产物与分层，均可回到 <code>src/d2/d2_resolve.py</code>、<code>data/derived/d2_techniques.json</code> 与三首 <code>dist/pipelines/*.html</code> 复核。</p>
+<div class="meta-line">
+依据（控制侧，均为工程内实证）：<code>src/d2/d2_resolve.py</code> · <code>data/derived/d2_techniques.json</code> · <code>data/source/d2_seed/d2_mapping_seed.json</code> · <code>data/derived/o2_imagery.json</code> · <code>data/derived/d1_rhyme.json</code> · <code>data/source/context/&lt;诗&gt;/context.json</code> · <code>build/scene_render.py</code> · <code>build/scene_assert.py</code> · <code>src/o1/</code> · <code>src/o3/</code><br>
+互链：<a href="landscape_ink_elements.html">表达要素总纲</a> · <a href="style_grade_measurability.html">立意与品格的可度量方法</a> · <a href="图声要素的数据可得性与模型映射.md">数据可得性与模型映射</a> · <a href="data_foundation_roadmap.html">数据底座路线图</a> · <a href="../design/model_cards.md">model_cards</a> · 日期 2026-10-04
+</div>
+
+<!-- ================= §0 ================= -->
+<section>
+  <div class="sec-head"><span class="sec-no">§0</span><h2>定位与真源边界</h2></div>
+  <p class="sec-note">在画控制链之前，先把「本文与总纲谁管什么」「同一条链上各文档的边界」定死。否则控制链会在总纲、model_cards 与数据可得性映射之间重复表述，一处改动引发三处漂移。</p>
+
+  <h4>0.1 与既有文档的关系</h4>
+  <table>
+    <thead><tr><th style="width:280px">文档</th><th>回答什么问题</th><th style="width:120px">层级</th></tr></thead>
+    <tbody>
+      <tr><td><a href="landscape_ink_elements.html">landscape_ink_elements.html</a></td><td>要素的体系纵深：八轴分类 + 定义 + 判据 + <b>可度量性（M0–M3）</b> + D2 覆盖</td><td>要素体系</td></tr>
+      <tr><td><b>本文</b></td><td>要素的<b>控制架构</b>：控制链五段 + 生成可控性（L1–L4）+ 输入源到参数的接线</td><td>控制架构</td></tr>
+      <tr><td><a href="../design/model_cards.md">model_cards.md</a></td><td>每个模型的卡片：问题 / 量纲 / 锚点 / schema / 反例（卡1–9）。<b>本文是卡片的编排层</b></td><td>模型</td></tr>
+      <tr><td><a href="图声要素的数据可得性与模型映射.md">数据可得性与模型映射.md</a></td><td>要素<b>能不能从诗里自动得到</b>（L0/L1/L2 可得性档）、缺哪 4 类数据</td><td>可得性</td></tr>
+      <tr><td><a href="style_grade_measurability.html">style_grade_measurability.html</a></td><td>轴1 品格的度量：二维平面 + 12 算子 + 三带分区；本文 §7 的「闭环反控」引用之</td><td>单轴深化</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout z"><b>0.2 真源边界（本节是全篇最硬的一条约定）。</b><b>控制链五段与生成可控性 L1–L4 分层，以本文为唯一真源。</b>总纲 §3.4 只保留摘要与指向本文的互链，不再重复四层定义与八轴旋钮清单；各文档凡引用「可控性」「L1–L4」「控制链」，一律指本文。<br>
+  边界另一侧：<b>要素定义、判据、M0–M3 分档归总纲</b>；<b>单模型的问题 / 量纲 / schema 归 model_cards</b>；<b>数据可得性归映射文档</b>。本文只做「把上述三者的产出接成链路」这一件事，不重复定义要素、不重复定义模型。</div>
+</section>
+
+<!-- ================= §1 ================= -->
+<section>
+  <div class="sec-head"><span class="sec-no">§1</span><h2>控制链总图</h2></div>
+  <p class="sec-note">从「一首诗 + 一批数据源」到「一幅水墨成画」，中间是一条<b>五段式控制链</b>。每段有明确的输入、输出与归属：抽取段把原料变成结构化节点，D2 段把节点翻译成技法档位与区间，求解段把区间收紧为精确值，落地段把数值渲染成画面，验收段只读校验、不回写参数。</p>
+
+  <figure class="chain-fig">
+    <svg viewBox="0 0 780 600" role="img" aria-label="生成控制链五段：输入源 → 抽取与处理 → D2 控制引擎 → 求解器 → 落地与验收">
+      <defs>
+        <marker id="cah" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto">
+          <path d="M0,0 L6.5,3 L0,6 z" fill="#6E6A60"></path>
+        </marker>
+      </defs>
+
+      <!-- ① 输入源 -->
+      <circle cx="40" cy="66" r="13" fill="rgba(28,28,28,.06)" stroke="#3A362F" stroke-width="1"></circle>
+      <text x="40" y="70" text-anchor="middle" font-family="'Noto Serif SC',serif" font-size="12" fill="#3A362F">1</text>
+      <rect x="64" y="28" width="684" height="76" rx="9" fill="#FBF9F4" stroke="rgba(28,28,28,.16)"></rect>
+      <text x="84" y="58" font-family="'Noto Serif SC',serif" font-size="14" font-weight="600" fill="#1C1C1C">输入源</text>
+      <text x="84" y="82" font-size="11.5" fill="#3A362F">诗文本 · 诗外背景 context.json · 平水韵 D1 · 画论种子 D2_seed · 诗级上下文（V/A/T）</text>
+
+      <path d="M406 104 L406 138" stroke="#6E6A60" stroke-width="1.2" marker-end="url(#cah)"></path>
+
+      <!-- ② 抽取与处理 -->
+      <circle cx="40" cy="176" r="13" fill="rgba(28,28,28,.06)" stroke="#3A362F" stroke-width="1"></circle>
+      <text x="40" y="180" text-anchor="middle" font-family="'Noto Serif SC',serif" font-size="12" fill="#3A362F">2</text>
+      <rect x="64" y="138" width="684" height="76" rx="9" fill="#FBF9F4" stroke="rgba(28,28,28,.16)"></rect>
+      <text x="84" y="168" font-family="'Noto Serif SC',serif" font-size="14" font-weight="600" fill="#1C1C1C">抽取与处理</text>
+      <text x="84" y="192" font-size="11.5" fill="#3A362F">O2 意象节点 · D1 格律 · context → 卡约束（pipeline_implications）</text>
+
+      <path d="M406 214 L406 248" stroke="#6E6A60" stroke-width="1.2" marker-end="url(#cah)"></path>
+
+      <!-- ③ D2 控制引擎 -->
+      <circle cx="40" cy="286" r="13" fill="rgba(168,58,44,.10)" stroke="#A83A2C" stroke-width="1"></circle>
+      <text x="40" y="290" text-anchor="middle" font-family="'Noto Serif SC',serif" font-size="12" fill="#A83A2C">3</text>
+      <rect x="64" y="248" width="684" height="84" rx="9" fill="rgba(168,58,44,.045)" stroke="rgba(168,58,44,.30)"></rect>
+      <text x="84" y="278" font-family="'Noto Serif SC',serif" font-size="14" font-weight="600" fill="#1C1C1C">D2 控制引擎</text>
+      <text x="84" y="302" font-size="11.5" fill="#3A362F">vocab · class_defaults · modulators · rules → 档位 / 候选 / 区间</text>
+      <text x="726" y="280" text-anchor="end" font-size="11" font-weight="600" fill="#8a6608">L1 · L2</text>
+
+      <path d="M406 332 L406 366" stroke="#6E6A60" stroke-width="1.2" marker-end="url(#cah)"></path>
+
+      <!-- ④ 求解器 -->
+      <circle cx="40" cy="404" r="13" fill="rgba(28,28,28,.06)" stroke="#3A362F" stroke-width="1"></circle>
+      <text x="40" y="408" text-anchor="middle" font-family="'Noto Serif SC',serif" font-size="12" fill="#3A362F">4</text>
+      <rect x="64" y="366" width="684" height="76" rx="9" fill="#FBF9F4" stroke="rgba(28,28,28,.16)"></rect>
+      <text x="84" y="396" font-family="'Noto Serif SC',serif" font-size="14" font-weight="600" fill="#1C1C1C">求解器</text>
+      <text x="84" y="420" font-size="11.5" fill="#3A362F">卡5 构图 ρ / g · 卡6 笔墨 c / D / eff · 卡7 时间轴 s(t) → 精确值</text>
+      <text x="726" y="398" text-anchor="end" font-size="11" font-weight="600" fill="#A83A2C">L3</text>
+
+      <path d="M406 442 L406 476" stroke="#6E6A60" stroke-width="1.2" marker-end="url(#cah)"></path>
+
+      <!-- ⑤ 落地与验收 -->
+      <circle cx="40" cy="514" r="13" fill="rgba(28,28,28,.06)" stroke="#3A362F" stroke-width="1"></circle>
+      <text x="40" y="518" text-anchor="middle" font-family="'Noto Serif SC',serif" font-size="12" fill="#3A362F">5</text>
+      <rect x="64" y="476" width="684" height="76" rx="9" fill="#FBF9F4" stroke="rgba(28,28,28,.16)"></rect>
+      <text x="84" y="506" font-family="'Noto Serif SC',serif" font-size="14" font-weight="600" fill="#1C1C1C">落地与验收</text>
+      <text x="84" y="530" font-size="11.5" fill="#3A362F">scene.json → SVG → 动画　｜　O1 / O3 只读校验，不回写参数</text>
+      <text x="726" y="508" text-anchor="end" font-size="11" font-weight="600" fill="#3A362F">L4</text>
+    </svg>
+    <figcaption><b>图 1　生成控制链五段。</b>右列标签为生成可控性层级：第 3 段是 <b>L1/L2</b>（直接旋钮 / 派生旋钮），第 4 段是 <b>L3</b>（求解器目标），第 5 段是 <b>L4</b>（只读验收）。数据自上游向下游单向流动，验收段不回写。</figcaption>
+  </figure>
+
+  <h4>1.1 逐段职责</h4>
+  <table>
+    <thead><tr><th style="width:120px">段</th><th style="width:250px">职责</th><th>输入</th><th>输出 / 产物</th><th style="width:120px">归属（真源）</th></tr></thead>
+    <tbody>
+      <tr><td><b>① 输入源</b></td><td>提供控制链的全部原料；分五类，见 §2</td><td>诗文本 · context · 韵书 · 画论种子 · 诗级上下文</td><td>五类原始输入</td><td><code>data/source/</code></td></tr>
+      <tr><td><b>② 抽取与处理</b></td><td>把原料结构化：意象抽取、格律标注、语境→卡约束</td><td>五类原始输入</td><td><code>o2_imagery.json</code> · <code>d1_rhyme.json</code> · 卡约束</td><td><code>src/o2</code> · <code>src/d1</code></td></tr>
+      <tr><td><b>③ D2 控制引擎</b></td><td>意象类别 / 情感 → 技法<b>档位 / 候选 / 区间</b>（不给精确值）</td><td>意象节点 · 诗级上下文 · 画论种子</td><td>三远候选 · 皴法 · 墨阶 · 含水 · 笔法 · 留白区间 ρ · 人物 size</td><td><code>src/d2/d2_resolve.py</code></td></tr>
+      <tr><td><b>④ 求解器</b></td><td>在 D2 给的区间内求精确值</td><td>D2 区间 / 候选 · κ（卡4）</td><td>ρ 精确值 · 构图坐标 · 墨浓度 c · 含水扩散 D · 相机 <code>s(t)</code> · 静默预算</td><td>卡5 · 卡6 · 卡7（<code>model_cards.md</code>）</td></tr>
+      <tr><td><b>⑤ 落地与验收</b></td><td>渲染成画面；只读校验处方是否兑现</td><td>精确值</td><td><code>scene.json</code> → SVG → 动画；O1 / O3 报告</td><td><code>build/</code> · <code>src/o1</code> · <code>src/o3</code></td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout q"><b>为什么是五段而不是三段。</b>把「D2」与「求解器」分成两段，是本链最关键的一刀。D2 只负责<b>把抽象意象翻译成有边界的技法空间</b>（候选 / 档 / 区间），精确数值（ρ、c）留给求解器——这条分工铁律（§4.4）保证「诗意」不被「数值」污染：D2 说的是「这里该留白」，求解器才算出「留白率 = 0.79」。</div>
+</section>
+
+<!-- ================= §2 ================= -->
+<section>
+  <div class="sec-head"><span class="sec-no">§2</span><h2>输入源（五类）</h2></div>
+  <p class="sec-note">控制链的原料有五个来源，性质不同、去向不同。把它们列清，才能回答「一个参数究竟是被哪条输入改动的」——这是可追溯性的起点。</p>
+
+  <table>
+    <thead><tr><th style="width:130px">输入源</th><th style="width:250px">载体</th><th>形态</th><th>进入控制链的方式</th><th style="width:90px">已接线</th></tr></thead>
+    <tbody>
+      <tr><td><b>① 诗文本</b></td><td><code>data/source/context/&lt;诗&gt;/context.json</code> 的 <code>text.base</code>（诗行）</td><td>四行诗句（分句）</td><td>O2 分词与意象抽取的输入；D2 的 <code>season_words</code> / <code>space</code> 词票直接在诗行上匹配</td><td><span class="badge b-ok">是</span></td></tr>
+      <tr><td><b>② 诗外背景</b></td><td><code>data/source/context/&lt;诗&gt;/context.json</code>（<code>biography</code> / <code>allusion_chains</code> / <code>pipeline_implications</code>）</td><td>系年 · 用典链 · 卡约束</td><td><code>pipeline_implications</code> 逐卡给出约束（如江雪：贬谪背景 → 支撑极端体量比与高留白率；解读分歧 → 留白率上调）</td><td><span class="badge b-part">部分</span></td></tr>
+      <tr><td><b>③ 平水韵 D1</b></td><td><code>data/source/rhyme/pingshui_rhyme_dict.json</code> → <code>data/derived/d1_rhyme.json</code></td><td>字 → 声 / 韵 / 平仄</td><td>主消费者是<b>语音链</b>（韵律后处理）；入画链经「入声密度 → 促 / 顿 / 冷基调」间接进入语气与镜长约束</td><td><span class="badge b-part">间接</span></td></tr>
+      <tr><td><b>④ 画论种子</b></td><td><code>data/source/d2_seed/d2_mapping_seed.json</code> · <code>painting_theory.json</code> → <code>data/derived/d2_techniques.json</code></td><td>vocab / class_defaults / modulators / rules</td><td>D2 控制引擎的<b>参数基底</b>：定义可选技法空间与调制规则（§4）</td><td><span class="badge b-ok">是</span></td></tr>
+      <tr><td><b>⑤ 诗级上下文</b></td><td><code>src/d2/d2_resolve.py</code> 的 <code>POEM_CTX</code>（<code>V</code> / <code>A</code> / <code>T</code> + <code>form</code>）</td><td>逐句情感三元组 + 诗体</td><td>喂给 <code>emotion</code> 调制器（V/A/T 档 → 留白区间 / 墨阶位移 / 静默 / 重心）与 <code>form</code> 调制器（诗体 → 形制）</td><td><span class="badge b-ok">是</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout"><b>两处需注意的接线边界。</b>① <b>平水韵的主战场是语音链</b>，它对画面链的贡献是间接的（经语气 / 镜长），不要把它当成 D2 的直接输入。② <b>诗外背景目前是「部分接线」</b>——<code>pipeline_implications</code> 已把系年与境遇写成卡约束，但约束到 D2 参数的映射仍部分靠人工裁量（如「留白率上调」的幅度未参数化），这是本链当前最薄的一环。</div>
+
+  <h4>2.1 向上推演：数据缺口清单（§5.5 工单的上游溯源）</h4>
+  <p class="sec-note">§5.5 列的是「求解器该接什么线」。把每条工单<b>向上再推一层</b>——问「它要的输入数据到底在不在」——缺口就分成三类：<b>接线缺口</b>（数据已存在，只缺消费，归 §5.5 即可）、<b>数据缺口</b>（资产本身不存在，须新建）、<b>口径缺口</b>（数据在，但未校准 / 未统一）。本节只列后两类——它们才是「换一首诗也能自动跑」的真正路障。所有「现状」栏均回到真实文件核对，非自洽复读。</p>
+
+  <div class="callout z"><b>一句话结论。</b>桥接表 <code>d2_mapping_seed.json</code> 已经建成，但它只覆盖了「<b>意象 → 技法</b>」这一半；另一半「<b>画论规则 → 约束</b>」（构图法、笔法质量维、设色范式、天候时辰、器与材）<b>从未进表</b>。所以新暴露的缺口，不在「映射表要不要建」，而在<b>画论侧的规则资产还没被整理成表</b>——这与映射文档「缺的不是模型，是数据」的判断一致，只是缺的位置从「桥接层」上移到了「画论整理层」。</div>
+
+  <table>
+    <thead><tr><th style="width:180px">缺口（→ 供 §5.5）</th><th style="width:235px">现状（实测）</th><th>缺什么</th><th style="width:175px">来源（古典依据）</th><th style="width:78px">量级</th></tr></thead>
+    <tbody>
+      <tr><td colspan="5" style="background:rgba(28,28,28,.03);font-weight:600;color:var(--ink2)">甲 · 画论侧规则资产（原未进 D2 表；G1–G8 已落地）</td></tr>
+      <tr><td><b>G1 构图规则</b><br>（边角 / 三叠两段 / 蹊径六则）→ C 组 <span class="badge b-ok">已落地</span></td><td><code>vocab.composition</code> 护栏 2（边角 / 三叠两段）+ 蹊径六则算子 6 + <code>modulators.composition</code> 规则 C1–C3；<b>卡5 消费端已接</b>（注入 STEP 5 · 5.3 构图规则）</td><td>边角开合规则、三叠两段分层、蹊径六则引导线 → 卡5 硬约束 / 软目标</td><td>马远「马一角」夏圭「夏半边」（补遗 §1.5）；石涛《画语录》三叠两段·蹊径六则；总纲轴2</td><td>规则表</td></tr>
+      <tr><td><b>G2 笔法质量维</b><br>（四势 / 五笔 / 二病）→ C 组 <span class="badge b-ok">已落地</span></td><td><code>vocab.stroke_quality</code> 9 维（荆浩四势 / 黄宾虹五笔）+ <code>stroke_disease</code> 5 病 + <code>by_stroke</code> 18 式映射；<b>卡6 消费端已接</b>（注入 STEP 6 · 6.7 笔法质量维）</td><td>四势（筋 / 骨 / 肉 / 气）、黄宾虹五笔（平 / 留 / 圆 / 重 / 变）、二病的判据与阈值</td><td>荆浩《笔法记》六要；黄宾虹五笔；郭若虚三病；总纲轴3</td><td>3 组枚举 + 判据</td></tr>
+      <tr><td><b>G3 设色范式档</b><br>（青绿 / 浅绛 / 水墨 / 没骨）→ B 组 <span class="badge b-ok">已落地</span></td><td><code>vocab.paradigm</code> 四范式（含 <code>ink_bone</code> / <code>color_domain</code>）+ <code>modulators.paradigm</code> 定档规则（P1/P2/P3）+ 色域投影；<code>d2_resolve.py</code> 输出范式候选与 <code>projected_color_candidates</code></td><td>范式档表 + 范式 → 底色 / 用色规则</td><td>董其昌南北宗（着色 / 渲淡）；元人浅绛；徐崇嗣没骨（补遗 §1.8）</td><td>4 范式</td></tr>
+      <tr><td><b>G4 天候调制器</b><br>（晴 / 雨 / 雪 / 雾）→ C 组 <span class="badge b-ok">已落地</span></td><td><code>vocab.weather</code> 四档 + σ / μ 乘子 + ρ 加成 + 皴法建议；<b>卡5 / 卡6 消费端已接</b>（注入 STEP 5 · 5.2 天候）</td><td>天候 → 技法（雾 → σ 上调、雪 → ρ 上调、雨 → 雨点皴 / 湿度）</td><td>郭熙四时 + 天候；总纲轴6</td><td>4 档 × 参数</td></tr>
+      <tr><td><b>G5 时辰调制器</b><br>（晨 / 昼 / 暮 / 夜）→ C 组 <span class="badge b-ok">已落地</span></td><td><code>vocab.time_of_day</code> 四档 + 段长乘子 / 墨偏 / 色偏；「月」由 <code>season_words</code>「月→秋」迁入 <code>time_words</code>「月→夜」；<b>卡7 消费端已接</b>（注入 STEP 7 · 7.2 时辰）</td><td>时辰词表 + 时辰 → 段长 / 墨阶</td><td>郭熙「朝暮」；总纲轴7</td><td>4 档</td></tr>
+      <tr><td><b>G6 材质系数</b><br>（笔 / 墨 / 纸绢）→ C 组 <span class="badge b-ok">已落地</span></td><td><code>vocab.material</code> 三类（纸绢 3 / 笔 3 / 墨 2）+ 默认档（生宣 / 兼毫 / 松烟，标裁定）；<b>卡6 消费端已接</b>（注入 STEP 6 · 6.6 材质系数）</td><td>材质 → 扩散系数（生宣 / 熟宣 / 绢）、墨色偏（松烟 / 油烟）、笔触（硬毫 / 软毫）</td><td>材料学 + 古法；总纲轴8（器与材）</td><td>3 类 × 值</td></tr>
+      <tr><td><b>G7 视点档</b><br>（俯视缺位）→ C 组 <span class="badge b-ok">已落地</span></td><td><code>vocab.viewpoint</code> 三档（平 / 俯 / 仰）+ 地平线 / 纵比区间；<b>卡5 消费端已接</b>（注入 STEP 5 · 5.1 视点档）</td><td>视点独立轴（平 / 俯 / 仰）+ 俯视的地平线区间与 yuan 归属</td><td>郭熙三远覆盖仰 / 平；俯视补沈括「以大观小」</td><td>1 轴 × 3 档</td></tr>
+      <tr><td><b>G8 钤印规则</b>→ A 组 <span class="badge b-ok">已落地</span></td><td><code>vocab.seal</code> 印位 5（随形制）+ 印面 2（随尺幅）+ <code>modulators.seal</code>；<b>卡7 消费端已接</b>（注入 STEP 7 · 7.3 钤印）</td><td>印位规则（题款末 / 角）、印面大小与形制关系</td><td>题跋与印章（补遗 §1.7）</td><td>规则</td></tr>
+      <tr><td><b>G9 品格判据实现</b><br>（12 算子）→ D 组</td><td><code>style_grade_measurability.html</code> 有研究（二维平面 + 12 算子 + 三带），但无数据表、无实现</td><td>12 算子的计算实现 + 三带阈值</td><td><code>style_grade_measurability.html</code></td><td>12 算子</td></tr>
+      <tr><td colspan="5" style="background:rgba(28,28,28,.03);font-weight:600;color:var(--ink2)">乙 · 词表完整性（表已建，值不全）</td></tr>
+      <tr><td><b>G10 皴法谱</b>→ C 组 <span class="badge b-ok">已落地</span></td><td><code>vocab.cun</code> 9 值（披麻 / 小斧劈 / 大斧劈 / 卷云 / 雨点 / 折带 / 米点 / 干擦 / 无皴）；山石 <code>cun_alt</code> 池 6 值</td><td>补雨点 / 折带 / 米点 等高频皴；补独立「干擦」值（否则山石干笔质感无处落）</td><td>总纲轴3（L504）；唐岱《绘事发微》「点染皴擦」；补遗 §1.3</td><td>+3~10 值</td></tr>
+      <tr><td><b>G11 墨法独立</b><br>（宿墨 / 焦墨）→ B 组 <span class="badge b-ok">已落地</span></td><td><code>vocab.ink_method</code> 6 式（破 / 积 / 泼 / 宿 / 焦 / 飞白），各带 <code>mu</code> 扩散区间；与 <code>ink</code> 浓度阶梯分轴</td><td>宿墨档（含 μ 参数）；焦墨是否独立于 <code>ink</code> 阶</td><td>补遗 §1.3（焦墨枯涩）；总纲轴4</td><td>1~2 值</td></tr>
+      <tr><td><b>G12 极性归一表</b>→ A 组 <span class="badge b-ok">已落地</span></td><td><code>polarity</code> 8 键 + 22 条归一已建；<code>d2_resolve.py</code> 输出 <code>polarity</code> / <code>base_tone</code>（<code>unmapped=[]</code>）</td><td>自由文本 → <code>polarity</code> 键的归一映射</td><td>——（工程约定）</td><td>映射表</td></tr>
+      <tr><td colspan="5" style="background:rgba(28,28,28,.03);font-weight:600;color:var(--ink2)">丙 · 口径缺口（数据在，未校准 / 未统一）</td></tr>
+      <tr><td><b>G13 虚实阈值</b> <span class="badge b-ok">已落地</span></td><td>阈值冻结于 <code>o2_gate.json</code>（real 0.575 / blank 0.275 = 相邻两类中点）；<code>o2_imagery.mjs</code> 读此文件，不写死</td><td>虚 / 实判定的阈值标定</td><td>——（标定）</td><td>阈值</td></tr>
+      <tr><td><b>G14 静默预算口径</b> <span class="badge b-ok">已落地</span></td><td>末句 T≥0.8 时 T 档升一阶；jx 输出 0.26，与卡7 落地同源</td><td>二者同源</td><td>——（口径统一）</td><td>1 值</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout"><b>建表顺序（按依赖，不按重要性）。</b>甲组 G1–G9 是「画论 → 表」的整理活，彼此独立、可并行；但其中 <b>G10 / G11 是 G2 / G3 的建表前置</b>（词表先齐，质量维与范式才有落点）——注意这是「建表」序；到 §5.5 的「接线」序里，G11（宿墨 / 焦墨）反而排在 G3（设色范式）之后，二者并不矛盾，详见 §5.5 末注。<b>G9 又依赖 G2 + G10</b>（品格闭环要读笔法质量维）。故顺序为：<b>① 词表完整性（G10 / G11 / G12）→ ② 画论规则（G1–G8）→ ③ 品格闭环（G9）</b>（其中 G10 / G11 / G12 已落地；甲组 G1–G8 已落地，<b>仅余 G9</b> 待建）。丙组 G13 / G14 为口径校准，已随 Wave 1 一并落地。全部落点仍在 <code>data/source/d2_seed/</code>（人工整理层）与 <code>src/d2/</code>（实现层）之内，不新增数据仓库。</div>
+
+  <div class="callout q"><b>与映射文档 D1–D4 的关系（不重复造轮子）。</b>映射文档（2026-10-03）列的 4 类缺口里，<b>D2「意象—画法映射表」已建成</b>（<code>d2_mapping_seed.json</code>），本次不再重复；<b>D1 音韵书 / D3 声法表 + 音源 / D4 情感锚定集</b>仍原样有效，且与本节互补——它们管「诗 → 意象 / 声音 / 情感」的<b>输入端</b>，本节管「画论 → 技法规则」的<b>规则端</b>。两侧合起来，才是「第 4 首、第 40 首也能跑」的完整数据底座。<b>本节（规则端 G1–G14）与映射文档（输入端 D1 / D3 / D4，路线图另补编 D5 / D6）已在 <a href="data_foundation_roadmap.html">《数据底座路线图》</a>合成一张总图</b>——那里给出五层底座、28 项资产清单、§2.1 接线缺口与四波建表顺序；本文只保留规则端缺口的逐条实测与古典来源。</div>
+</section>
+
+<!-- ================= §3 ================= -->
+<section>
+  <div class="sec-head"><span class="sec-no">§3</span><h2>抽取与处理段</h2></div>
+  <p class="sec-note">本段把五类原始输入转成下游可用的结构化中间件。三条支线并行：意象抽取（O2）、格律标注（D1）、语境→卡约束。</p>
+
+  <div class="grid3">
+    <div class="card"><b>O2 意象抽取</b><p style="font-size:12.8px;line-height:1.75;color:var(--ink2);margin:6px 0 0">分词 → 抽取 → 消歧 → 可画性门控。产出 <code>o2_imagery.json</code>：每个意象节点带 <code>channel</code>（v / x）· <code>conc</code>（确信度）· <code>gate.class</code>（实写 / 虚写 / 不可实写）· <code>layer_hint</code>（景深）。<b>这是 D2 的主要输入。</b></p></div>
+    <div class="card"><b>D1 格律标注</b><p style="font-size:12.8px;line-height:1.75;color:var(--ink2);margin:6px 0 0">查平水韵字典，标注逐字声 / 韵 / 平仄与韵脚。产出 <code>d1_rhyme.json</code>。<b>服务语音链为主</b>，其「入声密度 → 基调」结论供入画链的语气约束引用。</p></div>
+    <div class="card"><b>context → 卡约束</b><p style="font-size:12.8px;line-height:1.75;color:var(--ink2);margin:6px 0 0">把 <code>pipeline_implications</code> 逐条挂到卡1–卡9：如 <code>card_2_imagery</code>「孤舟 / 蓑笠 / 独钓 = 孤傲 · 隐逸，不是凄惨」直接改写意象极性，进而改 D2 的墨 / 底色偏置。</p></div>
+  </div>
+
+  <div class="callout q"><b>一条纪律：抽取段只做「结构化」，不做「裁定」。</b>意象是否可画、格律如何标注，都有明确判据；但「这首诗该是什么气质」这类判断不在此段，而交由轴1 的 12 算子判档（见 <a href="style_grade_measurability.html">《立意与品格的可度量方法》</a>）。抽取段越界裁定，会让下游失去可追溯的判据来源。</div>
+</section>
+
+<!-- ================= §4 ================= -->
+<section>
+  <div class="sec-head"><span class="sec-no">§4</span><h2>D2 控制引擎（核心段）</h2></div>
+  <p class="sec-note">本段是全链的枢纽：把「意象类别 + 情感 + 景深」翻译成「技法档位 + 候选 + 区间」。引擎由四张表构成，逐层收窄——<code>vocab</code> 定可选空间，<code>class_defaults</code> 给类别默认档，<code>modulators</code> 按上下文派生调整，<code>rules</code> 最后做护栏过滤。§4.3 逐一细化解剖十七器（十器 + C 组七器），并标出各自「已建模但未接线」的部分。</p>
+
+  <h4>4.1 引擎结构（四张表，逐层收窄）</h4>
+  <table>
+    <thead><tr><th style="width:170px">构件</th><th style="width:110px">作用</th><th>说明</th><th style="width:90px">可控性层</th></tr></thead>
+    <tbody>
+      <tr><td><code>vocab</code></td><td>可选空间</td><td>每个字段的合法取值：<code>yuan</code>(6) · <code>cun</code>(5) · <code>ink</code>(6 阶含留白) · <code>water</code>(5 档) · <code>stroke</code>(约 18 式) · <code>season</code>(4) · <code>format</code>(4) 等；每个值带 <code>params</code>（如高远的 <code>horizon</code> 区间、<code>layers</code> 区间）与古典 <code>criterion</code></td><td><span class="badge l1">L1</span></td></tr>
+      <tr><td><code>class_defaults</code></td><td>类别默认档</td><td>意象类别 → 默认技法束（三远候选 + 权重、皴法、墨阶、含水、笔法、景深、留白倾向、点苔、<code>role</code>、<code>weight</code>）</td><td><span class="badge l1">L1</span></td></tr>
+      <tr><td><code>modulators</code></td><td>派生调整</td><td>按景深 / 情感 / 类别派生，不直接设值；改上游则下游跟着变（清单见 4.2）</td><td><span class="badge l2">L2</span></td></tr>
+      <tr><td><code>rules</code></td><td>护栏过滤</td><td>负节点与硬约束（不画 / 承载留白 / 焦点唯一等），最后一道闸</td><td><span class="badge l2">L2</span></td></tr>
+    </tbody>
+  </table>
+
+  <h4>4.2 调制器清单（L2 派生旋钮）</h4>
+  <table>
+    <thead><tr><th style="width:190px">调制器</th><th>输入 → 输出</th><th style="width:104px">接线状态</th></tr></thead>
+    <tbody>
+      <tr><td><code>emotion</code> <span style="color:var(--ink3)">§4.3.1</span></td><td>V / A / T 档 → 留白区间 / 墨阶位移 / 静默 / 重心</td><td><span class="badge b-part">部分</span> A · gravity 未接</td></tr>
+      <tr><td><code>layer_atten_steps</code> <span style="color:var(--ink3)">§4.3.2</span></td><td>层 → 墨阶变淡步数（空气透视）</td><td><span class="badge b-ok">是</span></td></tr>
+      <tr><td><code>layer_technique</code> <span style="color:var(--ink3)">§4.3.3</span></td><td>类别 × 层 → 含水 / 笔法（远山细化的泛化规则；<b>词覆盖优先</b>）</td><td><span class="badge b-part">仅一组</span> 山石×远景</td></tr>
+      <tr><td><code>figure_layer</code> <span style="color:var(--ink3)">§4.3.4</span></td><td>景深 → 人物尺寸档 / 墨阶（郭熙「三远与人物」；词覆盖优先；中号仅 <code>role=主体</code> 可用）</td><td><span class="badge b-ok">是</span></td></tr>
+      <tr><td><code>space</code> <span style="color:var(--ink3)">§4.3.5</span></td><td>空间词 → 三远票</td><td><span class="badge b-ok">是</span></td></tr>
+      <tr><td><code>season_words</code> <span style="color:var(--ink3)">§4.3.6</span></td><td>物候词 → 四时</td><td><span class="badge b-part">部分</span> 仅 qi · R10</td></tr>
+      <tr><td><code>polarity</code> <span style="color:var(--ink3)">§4.3.7</span></td><td>文化极性 → 墨 / 底色偏置（自由文本先归一）</td><td><span class="badge b-ok">已接</span> D2 侧 + 卡6 消费端</td></tr>
+      <tr><td><code>paradigm</code> <span style="color:var(--ink3)">§4.3.10</span></td><td>季节 / 极性 / 情感档 → 设色范式候选（青绿 / 浅绛 / 水墨 / 没骨）+ 色域投影</td><td><span class="badge b-ok">已接</span> D2 侧 + 卡6 消费端</td></tr>
+      <tr><td><code>form</code> <span style="color:var(--ink3)">§4.3.8</span></td><td>诗体 → 装裱形制候选</td><td><span class="badge b-part">部分</span> len 未接</td></tr>
+      <tr><td><code>blank_rules</code> <span style="color:var(--ink3)">§4.3.9</span></td><td>留白率区间算法（给区间，不给精确值）</td><td><span class="badge b-ok">是</span></td></tr>
+      <tr><td colspan="3" style="background:rgba(28,28,28,.03);font-weight:600;color:var(--ink2)">C 组 · 新算子 / 新调制器（G1/G2/G4/G5/G6/G7/G8 · §4.3.11）</td></tr>
+      <tr><td><code>viewpoint</code> <span style="color:var(--ink3)">§4.3.11.1</span></td><td>空间词 / 三远 → 视点档（平 / 俯 / 仰）+ 地平线 / 垂直尺度区间</td><td><span class="badge b-ok">已接</span> D2 侧 + 卡5 消费端</td></tr>
+      <tr><td><code>weather</code> <span style="color:var(--ink3)">§4.3.11.2</span></td><td>天候词 → 天候档（晴 / 雨 / 雪 / 雾）+ ρ 加成 / σ·μ 乘子</td><td><span class="badge b-ok">已接</span> D2 侧 + 卡5 / 卡6 消费端</td></tr>
+      <tr><td><code>time_words</code> <span style="color:var(--ink3)">§4.3.11.3</span></td><td>时辰词 → 时辰档（晨 / 昼 / 暮 / 夜）+ 段长乘子 / 墨偏</td><td><span class="badge b-ok">已接</span> D2 侧 + 卡7 消费端</td></tr>
+      <tr><td><code>material</code> <span style="color:var(--ink3)">§4.3.11.4</span></td><td>默认档 → 纸绢 / 笔 / 墨系数（D · μ · 飞白 · 墨色）</td><td><span class="badge b-ok">已接</span> D2 侧 + 卡6 消费端</td></tr>
+      <tr><td><code>stroke_quality</code> <span style="color:var(--ink3)">§4.3.11.5</span></td><td>笔法式 → 适用质量维（四势 / 五笔）/ 须避病（二病）</td><td><span class="badge b-ok">已接</span> D2 侧 + 卡6 消费端</td></tr>
+      <tr><td><code>composition</code> <span style="color:var(--ink3)">§4.3.11.6</span></td><td>语境 → 蹊径六则软目标算子（边角 / 三叠两段护栏恒生效）</td><td><span class="badge b-ok">已接</span> D2 侧 + 卡5 消费端</td></tr>
+      <tr><td><code>seal</code> <span style="color:var(--ink3)">§4.3.11.7</span></td><td>形制 → 印位；诗体长度 → 印面大小档</td><td><span class="badge b-ok">已接</span> D2 侧 + 卡7 消费端</td></tr>
+    </tbody>
+  </table>
+
+  <h4>4.3 调制器逐一细化</h4>
+  <p class="sec-note">4.2 列出十七器之名（十器 + C 组七器），本节逐一解剖。§4.3.1–4.3.10 十器每器给出<b>六项</b>：定位、输入、触发、映射（含实测值）、输出、实证（三首对照）、边界（含「已建模未接线」）。十器合计覆盖六类派生——情感 → 留白/墨阶/静默、景深 → 墨阶/含水/笔法/人物尺寸、词 → 三远/四时、极性 → 底色、季节/极性 → 设色范式、诗体 → 形制。C 组七器（视点 / 天候 / 时辰 / 材质 / 笔法质量维 / 构图 / 钤印）合为 <b>§4.3.11</b>，逐器给出输入 / 输出 / 实证。所有取值均可在 <code>data/derived/d2_techniques.json</code> 的 <code>modulators</code> 段与 <code>src/d2/d2_resolve.py</code> 逐字复核。</p>
+
+  <!-- 4.3.1 emotion -->
+  <h4>4.3.1 <code>emotion</code> — 情感三元组 → 留白基区间 · 墨阶位移 · 静默 · 重心</h4>
+  <p class="sec-note">定位：<b>诗级</b>调制器，每首只跑一次。把逐句情感三元组归到档位，决定全诗留白基调、背景墨阶的整体升降、镜语与静默预算。</p>
+  <table>
+    <thead><tr><th style="width:78px">项</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>输入</td><td><code>POEM_CTX[pid]</code> 的 <code>V</code> / <code>A</code> / <code>T</code>（逐句数组）+ 节点 <code>role</code> / <code>ink_grade</code></td></tr>
+      <tr><td>触发</td><td>诗级；V、A、T 三轴<b>各自取全诗均值</b>定档（<code>pick_band</code>）</td></tr>
+      <tr><td>映射</td><td>见下表（三轴共 15 档）</td></tr>
+      <tr><td>输出</td><td><code>ink_steps</code>（入 ctx 供节点墨阶）· <code>blank_base</code>（交 <code>blank_rules</code>）· <code>gravity</code> · <code>motion</code> · <code>silence_ratio</code></td></tr>
+      <tr><td>护栏</td><td><code>ink_shift_roles</code> 只含 <b>主体 / 地标 / 承载留白 / 引导</b>；焦点（R4）与基阶=清（R8）不参与位移</td></tr>
+      <tr><td>实证</td><td>江雪 V̄=−0.45 → V2 孤冷（<code>ink_steps</code>=1，<code>blank_base</code> [0.62,0.82]）；白帝城 V̄=0.728 → V5 欣喜/豪迈（−1，[0.34,0.54]）；静夜思 V̄=0.0 → V3 客观（0，[0.48,0.70]）</td></tr>
+      <tr><td>边界</td><td><span class="badge b-gap">未接线</span> A 档 <code>motion</code>（实际镜语由 <code>yuan[0].motion</code> 给）、V 档 <code>gravity</code>、T5「悬置不释放」备注均未进求解器；「取全诗均值」为本项目裁定，非古典判据</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <thead><tr><th style="width:52px">轴</th><th style="width:120px">档</th><th style="width:120px">区间</th><th>派生</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="5">V</td><td>V1 绝灭</td><td>[−1.0, −0.6)</td><td><code>blank_base</code> [0.70,0.88] · <code>ink_steps</code> 2 · gravity 偏心(三七停)</td></tr>
+      <tr><td>V2 孤冷</td><td>[−0.6, −0.2)</td><td>[0.62,0.82] · 1 · 偏心(三七停)</td></tr>
+      <tr><td>V3 客观</td><td>[−0.2, 0.2)</td><td>[0.48,0.70] · 0 · 三分点</td></tr>
+      <tr><td>V4 明朗</td><td>[0.2, 0.6)</td><td>[0.42,0.60] · −1 · 三分点</td></tr>
+      <tr><td>V5 欣喜/豪迈</td><td>[0.6, 1.0]</td><td>[0.34,0.54] · −1 · 三分点</td></tr>
+      <tr><td>A</td><td>A1–A5</td><td>0 → 1</td><td><code>motion</code>：凝止 / 极缓 / 缓 / 缓推 / 快（A5 飞白拖尾）</td></tr>
+      <tr><td>T</td><td>T1–T5</td><td>0 → 1</td><td><code>silence_ratio</code>：0.10 / 0.15 / 0.20 / 0.26 / 0.32</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 4.3.2 layer_atten_steps -->
+  <h4>4.3.2 <code>layer_atten_steps</code> — 景深 → 墨阶变淡步数（空气透视）</h4>
+  <p class="sec-note">定位：空气透视算子。按节点景深把墨阶向下（变淡）推固定步数，是「远淡近浓」的统一来源。</p>
+  <table>
+    <thead><tr><th style="width:78px">项</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>输入</td><td>节点 <code>layer</code>（近景 / 中景 / 远景 / 极远 / 全域）</td></tr>
+      <tr><td>触发</td><td>每个<b>非焦点、非虚写</b>节点（虚写走 R2 直接留白，不参与）</td></tr>
+      <tr><td>映射</td><td>近景 0 · 中景 1 · 远景 2 · 极远 3 · 全域 2（步数越大越淡）</td></tr>
+      <tr><td>输出</td><td><code>steps</code>，与情感位移相加后经 <code>ink_shift(ladder, base, steps)</code> 得 <code>ink_grade</code></td></tr>
+      <tr><td>护栏</td><td>R4 焦点 <code>steps=0</code>；R8 基阶=清 不叠加情感位移；<b>人物节点改由 <code>figure_layer.ink_steps</code> 替换本器</b>（避免双重衰减）</td></tr>
+      <tr><td>实证</td><td>江雪 千山（山石·远景，base 淡）→ 2（层）+1（V2 情感）=3 → 淡→清；白帝城 白帝（建筑·远景，base 重）→ 2−1（V5）→ 重→淡；静夜思 明月（天象·远景，焦点）→ 0 → 保持淡</td></tr>
+      <tr><td>边界</td><td>全域固定取 2 为裁定；步数是「档」不是「浓度」，精确 c 交卡6</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 4.3.3 layer_technique -->
+  <h4>4.3.3 <code>layer_technique</code> — 类别 × 层 → 含水 / 笔法</h4>
+  <p class="sec-note">定位：「类别 × 层」的含水/笔法泛化规则，用于远山细化——让同类意象随景深改变用水与笔法，而不必逐词写 <code>override</code>。</p>
+  <table>
+    <thead><tr><th style="width:78px">项</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>输入</td><td><code>cls</code> × <code>layer</code></td></tr>
+      <tr><td>触发</td><td>命中 <code>layer_technique[cls][layer]</code></td></tr>
+      <tr><td>映射</td><td>现仅一组 —— <code>山石 × 远景</code> → <code>water=高</code>、<code>stroke=大晕染·慢扩散</code></td></tr>
+      <tr><td>输出</td><td>覆盖节点 <code>water</code> / <code>stroke</code></td></tr>
+      <tr><td>护栏</td><td><b>词覆盖优先</b>——若该键已被 <code>word_override</code> 显式指定，则调制器不改写（<code>if k not in ov</code>）</td></tr>
+      <tr><td>实证</td><td>江雪 千山（山石·远景）→ 含水 高、笔法 大晕染·慢扩散；白帝城 万重山（山石·远景）→ 含水 高 由本器给出，而笔法被词覆盖为「层叠淡墨·逐层递淡」——<b>词覆盖优先的实例</b></td></tr>
+      <tr><td>边界</td><td><span class="badge b-part">仅一组</span> 目前只支持「山石×远景」；山石 @中景/极远、以及其他类别的「类别×层」仍走 <code>class_defaults</code> 默认。扩展时只需在 <code>modulators.layer_technique</code> 加键，无需改代码</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 4.3.4 figure_layer -->
+  <h4>4.3.4 <code>figure_layer</code> — 景深 → 人物尺寸档 / 墨阶（郭熙「三远与人物」）</h4>
+  <p class="sec-note">定位：把郭熙「三远与人物」参数化。景深 → 人物尺寸档与墨阶，使人物随「高远明了 / 深远细碎 / 平远冲淡」自然缩放与淡化。</p>
+  <table>
+    <thead><tr><th style="width:78px">项</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>输入</td><td>人物节点的 <code>layer</code> + <code>role</code></td></tr>
+      <tr><td>触发</td><td><code>cls == "人物"</code></td></tr>
+      <tr><td>映射</td><td>见下表（尺寸四档 / 墨阶步数）</td></tr>
+      <tr><td>输出</td><td><code>size</code> + <b>替换</b> <code>layer_atten_steps</code> 的 <code>ink_steps</code></td></tr>
+      <tr><td>护栏</td><td>① 词覆盖优先；② <b>中号仅当 <code>role=主体</code></b>，否则退回点景；③ 不勾线、不画五官（人物造型语法护栏）</td></tr>
+      <tr><td>实证</td><td>江雪 蓑笠翁（近景·焦点）→ <b>点景</b>——近景虽备选中号，但 role=焦点≠主体，退回点景档；白帝城 / 静夜思无人物节点，本器不触发</td></tr>
+      <tr><td>边界</td><td><span class="badge b-part">口径提示</span> 四档是「静帧人高占比」口径；播放时相机 <code>s(t)</code> 推拉会使表观占比漂移（江雪末帧约 9.3%，略越点景档上限），度量断言以静帧为准</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <thead><tr><th style="width:80px">层</th><th style="width:120px">size</th><th style="width:90px">ink_steps</th><th>依据（郭熙《林泉高致》）</th></tr></thead>
+    <tbody>
+      <tr><td>近景</td><td>点景（备选中号）</td><td>0</td><td>高远者明了——明了者不短</td></tr>
+      <tr><td>中景</td><td>点景</td><td>1</td><td>深远者细碎——细碎者不长</td></tr>
+      <tr><td>远景</td><td>极小点景</td><td>2</td><td>平远者冲淡——冲淡者不大</td></tr>
+      <tr><td>极远</td><td>极写意</td><td>3</td><td>冲淡之极</td></tr>
+      <tr><td>全域</td><td>点景</td><td>2</td><td>天象覆盖下按中远档</td></tr>
+      <tr><td>默认</td><td>点景</td><td>—</td><td>—</td></tr>
+    </tbody>
+  </table>
+  <p class="sec-note" style="margin-top:-6px">尺寸四档区间（占画面高比）：极写意 ≤4% · 极小点景 4–6% · 点景 6–9% · 中号 9–30%。</p>
+
+  <!-- 4.3.5 space -->
+  <h4>4.3.5 <code>space</code> — 空间词 → 三远票</h4>
+  <p class="sec-note">定位：把诗行里的方位 / 空间词直接投成三远依据（L0 直取），与类别默认票合并。</p>
+  <table>
+    <thead><tr><th style="width:78px">项</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>输入</td><td>诗文本 <code>ctx0["text"]</code></td></tr>
+      <tr><td>触发</td><td>空间词作为<b>子串</b>出现在诗行中</td></tr>
+      <tr><td>映射</td><td>26 词分属六远，票值 = 词权重 × 1.5（见下表）</td></tr>
+      <tr><td>输出</td><td>并入三远得分（与 <code>class_defaults</code> 的 <code>yuan_w × weight</code> 相加），取前二为 <code>yuan</code></td></tr>
+      <tr><td>实证</td><td>江雪「绝」→ 幽远 +2.25，与雪（天象·幽远 1.0×1.5=1.5）合计 3.75；平远凭 9.3 居首。白帝城「云间」→ 高远 +3.0、「千里」→ 阔远 +2.25、「重」（万重山）→ 深远 +2.25；高远 17.0 居首</td></tr>
+      <tr><td>边界</td><td><span class="badge b-part">过触发风险</span> 子串匹配使单字词（高 / 深 / 远 / 上 / 后）可能被非空间语境误命中；这是 L0 直取的代价，靠 <code>word_override</code> 与 R5 复核</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <thead><tr><th style="width:80px">三远</th><th>空间词（权重）</th></tr></thead>
+    <tbody>
+      <tr><td>高远</td><td>仰 / 巅 / 云间 (2.0) · 上 / 高 (1.5)</td></tr>
+      <tr><td>深远</td><td>叠 / 深 (2.0) · 重 / 后 (1.5)</td></tr>
+      <tr><td>平远</td><td>遥 (2.0) · 远 / 望 (1.5)</td></tr>
+      <tr><td>阔远</td><td>广 / 阔 / 旷 (2.0) · 千里 (1.5)</td></tr>
+      <tr><td>迷远</td><td>迷 / 微茫 (2.0) · 烟 / 雾 (1.5)</td></tr>
+      <tr><td>幽远</td><td>幽 (2.0) · 绝 / 寂 (1.5)</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 4.3.6 season_words -->
+  <h4>4.3.6 <code>season_words</code> — 物候词 → 四时</h4>
+  <p class="sec-note">定位：给全诗定季节，进而定气韵、底色与皴法例外。</p>
+  <table>
+    <thead><tr><th style="width:78px">项</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>输入</td><td>诗文本</td></tr>
+      <tr><td>触发</td><td>物候词命中，取<b>首个</b>命中词</td></tr>
+      <tr><td>映射</td><td>雪 / 寒 / 冰 / 冻 → 冬 · 花 / 柳 / 燕 / 莺 / 桃 / 杏 → 春 · 荷 / 蝉 / 翠 → 夏 · 雁 / 叶 / 月 / 霜 → 秋</td></tr>
+      <tr><td>输出</td><td><code>season</code>。消费方三处：① <code>vocab.season[season].qi</code>（气韵短语）；② R10（冬 + 山石 → 皴法取无皴）；③ 底色 <code>season.color</code></td></tr>
+      <tr><td>实证</td><td>江雪「雪」→ 冬 → qi「冬山惨淡如睡」，并触发 R10 使千山取无皴；白帝城无物候词 → <code>season=null</code>；静夜思「霜」先于「月」命中 → 秋 → qi「秋山明净如妆」</td></tr>
+      <tr><td>边界</td><td><span class="badge b-part">部分消费</span> 仅 <code>qi</code> 与 R10 已接线；<code>season.color</code> / <code>ink_bias</code> / <code>tai</code> / <code>blank_bias</code> 已建模未接线。「取首个命中」是裁定，多季词（如「月」）需靠词序或 <code>word_override</code> 校正</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 4.3.7 polarity -->
+  <h4>4.3.7 <code>polarity</code> — 文化极性 → 墨 / 底色偏置</h4>
+  <p class="sec-note">定位：给「这首诗的骨相」一个直通底色的接口，把文化极性标签翻成墨偏置与底色。<b>自由文本标签先经 <code>normalize</code> 归一到 8 个规范键，再取值</b>（G12 已落地）。</p>
+  <table>
+    <thead><tr><th style="width:78px">项</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>输入</td><td>极性标签：<code>context</code> 用典级（如江雪「孤傲·隐逸（非凄惨）」）+ 焦点 / 动作承载词的 <code>polarity_hint</code>（词级，源自 <code>o2_lexicon</code>）</td></tr>
+      <tr><td>触发</td><td>极性标签命中；先查 <code>normalize</code>（自由文本 → 规范键），命中规范键者直接取值</td></tr>
+      <tr><td>映射</td><td>8 组规范键 → <code>ink_bias</code> + <code>color</code>：冷寂·静 {+1, 冷灰} · 壮阔·冷寂 {0, 素白} · 孤守·不屈 {−1, 冷灰} · 隐逸·渔樵 {−1, 冷灰} · 明丽·祥瑞 {−1, 赭石/花青淡彩} · 轻快·自由 {−2, 赭石/花青淡彩} · 高峻·起点 {0, 冷灰} · 漂泊·孤立 {−1, 冷灰}</td></tr>
+      <tr><td>输出</td><td><code>resolve_poem</code> 输出两节：<code>polarity</code>（<code>keys</code> + <code>ink_bias_range</code> + <code>colors</code> + <code>evidence</code> 出处 + <code>unmapped</code>）与 <code>base_tone</code>（季节色 + 极性色 → <code>color_candidates</code> + 合并 <code>ink_bias_range</code>）；精确底色由卡6 求解</td></tr>
+      <tr><td>实证</td><td><span class="badge b-ok">已接（D2 侧 + 卡6 消费端）</span> 三首实跑：江雪 {隐逸·渔樵 / 漂泊·孤立 / 孤守·不屈} → 底色候选 <code>[素白, 冷灰]</code>；早发白帝城 → <code>[冷灰, 赭石/花青淡彩]</code>；静夜思 → <code>[明净, 冷灰]</code>。<code>unmapped=[]</code> 三首全过（回归断言「极性归一无漏」）</td></tr>
+      <tr><td>边界</td><td>D2 侧接线完成（归一表 + <code>base_tone</code> 底色候选）；<b>卡6 消费端已接</b>——候选已注入 STEP 6 · <b>6.3 底色通路</b>（三首 pipeline，含 <code>data-d2</code> 溯源），精确底色由卡6 在候选内求解（分工铁律）。归一映射无古典原文可依，属<b>工程约定</b>（<code>grade=裁定</code>，与画论来源项区分）</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 4.3.8 form -->
+  <h4>4.3.8 <code>form</code> — 诗体 → 装裱形制候选</h4>
+  <p class="sec-note">定位：给画面一个「怎么看」的框——由诗体推出装裱形制的候选集。</p>
+  <table>
+    <thead><tr><th style="width:78px">项</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>输入</td><td><code>POEM_CTX[pid].form</code></td></tr>
+      <tr><td>触发</td><td>诗体命中</td></tr>
+      <tr><td>映射</td><td>见下表</td></tr>
+      <tr><td>输出</td><td><code>format_candidates</code>。运动语法由 <code>yuan[0].motion</code> 给出（手卷=横移、立轴=推近/仰）</td></tr>
+      <tr><td>实证</td><td>江雪、静夜思（五绝）→ [册页, 扇面, 手卷]；白帝城（七绝）→ [手卷, 册页]</td></tr>
+      <tr><td>边界</td><td><span class="badge b-ok">len 已接</span> <code>len</code>（字数）已由 C 组 <code>seal</code> 消费（<code>len ≥ len_ref</code> → 印面大小档，见 §4.3.11.7）。R7 言「形制候选 + 运动语法」，实际运动由 <code>yuan</code> 给、非 <code>form</code> 给，两处需分清</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <thead><tr><th style="width:130px">诗体</th><th>形制候选</th><th style="width:80px">len</th></tr></thead>
+    <tbody>
+      <tr><td>五言绝句</td><td>册页 · 扇面 · 手卷</td><td>20</td></tr>
+      <tr><td>七言绝句</td><td>手卷 · 册页</td><td>28</td></tr>
+      <tr><td>五言律诗</td><td>立轴 · 手卷</td><td>40</td></tr>
+      <tr><td>七言律诗</td><td>立轴 · 手卷</td><td>56</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 4.3.9 blank_rules -->
+  <h4>4.3.9 <code>blank_rules</code> — 留白率区间算法</h4>
+  <p class="sec-note">定位：把「情感基调 + 画面稀疏度」折算成 ρ 的目标区间，<b>只给区间、不给精确值</b>。这是十器中最能体现「D2 分工铁律」的一器。</p>
+  <table>
+    <thead><tr><th style="width:78px">项</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>输入</td><td>V 档 <code>blank_base</code> + 负节点数 + 全域意象 + 可画节点数 + 实体质量</td></tr>
+      <tr><td>触发</td><td>诗级</td></tr>
+      <tr><td>映射</td><td>在 V 档 <code>blank_base</code> 上累加，见下表</td></tr>
+      <tr><td>输出</td><td><code>blank_range</code>（交卡5 求精确 ρ）</td></tr>
+      <tr><td>实证</td><td>见下（三首逐项）</td></tr>
+      <tr><td>边界</td><td><span class="badge b-ok">全项已接线</span> <code>solid_mass</code> 只计 role∈{主体,地标}，与「画面实体质量」口径一致；精确 ρ 与视觉重心仍由卡5 求</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <thead><tr><th style="width:150px">项</th><th>条件</th><th style="width:150px">增量</th></tr></thead>
+    <tbody>
+      <tr><td>起点</td><td>V 档 <code>blank_base</code></td><td>—</td></tr>
+      <tr><td>负节点</td><td><code>n_neg ≥ 1</code></td><td>+0.04</td></tr>
+      <tr><td>全域意象</td><td>有天象 / 水体 @全域</td><td>+0.08</td></tr>
+      <tr><td>极简</td><td>可画节点 ≤ 6</td><td>+0.04</td></tr>
+      <tr><td>实体质量</td><td><code>solid_mass &lt; 2.0</code></td><td>+(2.0 − solid_mass) × 0.12</td></tr>
+      <tr><td>封顶</td><td>—</td><td>钳制到 [0.30, 0.92]</td></tr>
+    </tbody>
+  </table>
+  <div class="callout q"><b>三首逐项验算。</b><b>江雪</b>：V2 [0.62,0.82] + 负节点 0.04（鸟·人踪缺席）+ 全域 0.08（雪）= [0.74,0.94] → 封顶 [0.74,0.92]；实测 ρ=0.79 落入 ✓。<br>
+  <b>白帝城</b>：V5 [0.34,0.54] + 负节点 0.04（猿声跨通道）= [0.38,0.58]；实测 ρ=0.52 落入 ✓。<br>
+  <b>静夜思</b>：V3 [0.48,0.70] + 极简 0.04（可画 4 节点）+ 实体质量 0.24（<code>solid_mass</code>=0）= [0.76,0.98] → 封顶 [0.76,0.92]；实测 ρ=0.78 落入 ✓。</div>
+
+  <!-- 4.3.10 paradigm -->
+  <h4>4.3.10 <code>paradigm</code> — 季节 / 极性 / 情感档 → 设色范式候选 + 色域投影</h4>
+  <p class="sec-note">定位：给「这首诗该走哪一路设色」一个定档器，把季节 / 极性 / 情感档翻成<b>范式候选</b>与<b>色域投影</b>，改写 A 组的底色候选（G3 · B 组已接线）。四范式取自画史：青绿（北宗着色山水）、浅绛（元人淡彩）、水墨（南宗渲淡）、没骨（徐崇嗣纯色）。</p>
+  <table>
+    <thead><tr><th style="width:78px">项</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>输入</td><td>季节（<code>season_words</code> 输出）+ 极性键（<code>polarity.keys</code>）+ V 档（<code>emotion</code> 输出）+ 诗中重彩信号词</td></tr>
+      <tr><td>触发</td><td>诗级；P1 / P2 / P3 三条定档规则依序命中，未命中者落 <code>default=水墨</code></td></tr>
+      <tr><td>映射</td><td>见下表（P1 青绿 / P2 浅绛 / P3 水墨），并给出各范式的 <code>ink_bone</code>（墨骨强度）与 <code>color_domain</code>（色域）</td></tr>
+      <tr><td>输出</td><td><code>paradigm</code>：<code>default</code> + <code>candidates</code> + <code>ink_bone</code> / <code>ink_bone_scale</code> + <code>color_domain</code> + <code>projected_color_candidates</code> + <code>rules_fired</code> / <code>evidence</code>；精确用色由卡6 在色域内求解</td></tr>
+      <tr><td>实证</td><td><span class="badge b-ok">已接（D2 侧 + 卡6 消费端）</span> 三首实跑：江雪（冬）→ <code>水墨</code>（候选 <code>[水墨]</code> · 投影 <code>[素白, 冷灰]</code> · 墨骨 ×1.0）；早发白帝城（明丽·祥瑞）→ <code>浅绛</code>（候选 <code>[浅绛, 水墨]</code> · 投影 <code>[赭石, 花青, 汁绿]</code> · 墨骨 ×0.8）；静夜思（明丽·漂泊）→ <code>水墨</code>（候选 <code>[水墨]</code> · 投影 <code>[明净, 冷灰]</code> · 墨骨 ×1.0）。候选与色域投影已注入 STEP 6 · <b>6.4 设色范式</b>（三首，含 <code>data-d2</code> 溯源）</td></tr>
+      <tr><td>边界</td><td>定档规则 P1 / P2 / P3 无古典原文可依，属<b>工程裁定</b>（<code>grade=裁定</code>）；品格闭环 <code>style_grade</code>（D 组）未建，暂以季节 / 极性 / 情感档代偿。D2 只给候选与色域，精确用色由卡6 求解（分工铁律）</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <thead><tr><th style="width:100px">范式</th><th style="width:70px">墨骨</th><th style="width:150px">色域</th><th>依据 / 色域投影</th></tr></thead>
+    <tbody>
+      <tr><td>青绿</td><td>轻</td><td>石青 · 石绿 · 赭石</td><td>北宗着色山水（董其昌南北宗）；色域覆盖，墨骨 ×0.5</td></tr>
+      <tr><td>浅绛</td><td>中</td><td>赭石 · 花青 · 汁绿</td><td>元人淡彩（水墨骨 + 赭石为主）；淡彩叠加，墨骨 ×0.8</td></tr>
+      <tr><td>水墨</td><td>重</td><td>（无 · 无色）</td><td>南宗渲淡 · 墨分五色；保持 A 组底色候选，墨骨 ×1.0</td></tr>
+      <tr><td>没骨</td><td>无</td><td>五采</td><td>徐崇嗣纯色（不用勾勒）；纯色，墨骨 ×0.0</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <thead><tr><th style="width:64px">规则</th><th>条件</th><th style="width:88px">定档</th><th>依据</th></tr></thead>
+    <tbody>
+      <tr><td>P1</td><td>含重彩信号词 或 季节 ∈ {春, 夏}</td><td>青绿</td><td>北宗着色山水：石青石绿重彩；春夏苍翠如滴</td></tr>
+      <tr><td>P2</td><td>极性键含 明丽·祥瑞 / 轻快·自由</td><td>浅绛</td><td>暖调淡彩、冷暖互补（元人浅绛）</td></tr>
+      <tr><td>P3</td><td>V 档 ∈ {V1, V2} 或 季节 = 冬</td><td>水墨</td><td>南宗渲淡：冷寂 / 孤绝 / 冬景 → 纯水墨</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 4.3.11 C 组·新算子 -->
+  <h4>4.3.11 C 组·新算子（七器）— 视点 · 天候 · 时辰 · 材质 · 笔法质量维 · 构图 · 钤印</h4>
+  <p class="sec-note">定位：C 组七器把「画论侧规则资产」（§2.1 甲组 G1 / G2 / G4 / G5 / G6 / G7 / G8）整理进 D2，各补齐一条此前缺位的控制轴——<code>viewpoint</code> 视点（轴2）、<code>composition</code> 构图规则（轴2）、<code>stroke_quality</code> 笔法质量维（轴3）、<code>weather</code> 天候（轴6）、<code>time_words</code> 时辰（轴7）、<code>seal</code> 钤印（轴7）、<code>material</code> 材质（轴8）。七器均已「D2 侧 + 求解器消费端」接线：视点 / 天候 / 构图注入 <b>STEP 5 · 5.1–5.3</b>，材质 / 笔法质量维注入 <b>STEP 6 · 6.6–6.7</b>，时辰 / 钤印注入 <b>STEP 7 · 7.2–7.3</b>（三首，含 <code>data-d2</code> 溯源）。逐器给出输入 / 触发 / 映射 / 输出 / 实证 / 边界；全部取值可在 <code>data/derived/d2_techniques.json</code> 的 <code>vocab</code> 段与 <code>src/d2/d2_resolve.py</code> 逐字复核。</p>
+
+  <h4>4.3.11.1 <code>viewpoint</code> — 空间词 / 三远 → 视点档（平 / 俯 / 仰）+ 地平线 / 垂直尺度区间</h4>
+  <p class="sec-note">定位：把视点高度从三远里独立出来，补上三远未覆盖的<b>俯视</b>（G7）。三远覆盖仰视（高远）与平视（平远 / 阔远）；俯视无对应，补沈括「以大观小」——居高下瞰、重重悉见。</p>
+  <table>
+    <thead><tr><th style="width:78px">项</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>输入</td><td>诗句空间词（仰 / 俯 / 瞰 / 望 / 遥…）+ <code>space</code> 三远票 + 是否山水（<code>has_landscape</code>）</td></tr>
+      <tr><td>触发</td><td>诗级；空间词计 <code>word_w</code>=1.0、三远归属计 <code>yuan_w</code>=1.5，取票高者为档，平票按默认序</td></tr>
+      <tr><td>映射</td><td>见下表（三档）；<code>from_yuan</code>：高远 → 仰视，平远 / 阔远 / 深远 → 平视，迷远 / 幽远 → 俯视</td></tr>
+      <tr><td>输出</td><td><code>default</code> + <code>candidates</code> + <code>votes</code> + <code>horizon</code>（地平线纵比区间）+ <code>vertical_scale</code>（垂直尺度区间）→ 卡5 约束</td></tr>
+      <tr><td>实证</td><td>江雪 → <code>平视</code>（「万径」；<code>horizon</code> [0.42,0.55]）；早发白帝城 → <code>仰视</code>（「彩云间」高远；<code>horizon</code> [0.10,0.35]、<code>vertical_scale</code> [1.2,1.6]）；静夜思 → <b>不适用</b>（室内小景，三远不适用 → 视点亦不适用）</td></tr>
+      <tr><td>边界</td><td>三远不适用（室内小景）则视点亦不适用（返回 <code>applicable=false</code>）；<code>word_w</code> / <code>yuan_w</code> 为工程裁定；精确地平线与层数由卡5 求解</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <thead><tr><th style="width:70px">视点</th><th style="width:120px">地平线纵比</th><th style="width:110px">垂直尺度</th><th>三远归属 / 依据</th></tr></thead>
+    <tbody>
+      <tr><td>平视</td><td>[0.42, 0.55]</td><td>[0.9, 1.1]</td><td>平远 / 阔远；郭熙三远「自近山而望远山」</td></tr>
+      <tr><td>仰视</td><td>[0.10, 0.35]</td><td>[1.2, 1.6]</td><td>高远；郭熙「自山下而仰山颠」</td></tr>
+      <tr><td>俯视</td><td>[0.00, 0.25]</td><td>[0.6, 0.9]</td><td>迷远 / 幽远（层数 3–5）；沈括「以大观小，如人观假山」</td></tr>
+    </tbody>
+  </table>
+
+  <h4>4.3.11.2 <code>weather</code> — 天候词 → 天候档（晴 / 雨 / 雪 / 雾）+ ρ 加成 / σ·μ 乘子</h4>
+  <p class="sec-note">定位：把散落在 class 关键词里的天候（云 / 霞 / 雾 / 烟 / 风 / 雨 / 雪 / 霜）收敛成一条显式调制轴（G4）。</p>
+  <table>
+    <thead><tr><th style="width:78px">项</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>输入</td><td>诗句天候词</td></tr>
+      <tr><td>触发</td><td>诗级；命中首词定档，未命中 → <code>null</code>（系数中性）</td></tr>
+      <tr><td>映射</td><td>见下表（四档）</td></tr>
+      <tr><td>输出</td><td><code>name</code> + <code>sigma_mult</code>（卡6 σ）+ <code>mu_mult</code>（卡6 μ）+ <code>blank_bonus</code>（卡5 ρ）+ <code>cun_bias</code>（皴法建议）</td></tr>
+      <tr><td>实证</td><td>江雪 → <code>雪</code>（σ [1.2,1.6]、ρ +0.04、μ [0.5,0.8]、无皴）；早发白帝城 / 静夜思 → <b>未命中</b>（系数中性，σ / μ = [1.0,1.0]、ρ 0.0）</td></tr>
+      <tr><td>边界</td><td>「日」因「一日 / 一日还」歧义不收，晴只取无歧义的晴 / 霁；乘子属通例；精确 σ / μ / ρ 由卡6 / 卡5 求解</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <thead><tr><th style="width:56px">档</th><th style="width:100px">σ 乘子</th><th style="width:100px">μ 乘子</th><th style="width:88px">留白加成</th><th style="width:90px">皴法建议</th><th>依据</th></tr></thead>
+    <tbody>
+      <tr><td>晴</td><td>[0.8, 1.0]</td><td>[0.9, 1.1]</td><td>0.00</td><td>—</td><td>郭熙四时（明净通透、对比强）</td></tr>
+      <tr><td>雨</td><td>[1.0, 1.3]</td><td>[1.1, 1.4]</td><td>−0.02</td><td>雨点皴</td><td>郭熙四时（湿度高、墨易漫）</td></tr>
+      <tr><td>雪</td><td>[1.2, 1.6]</td><td>[0.5, 0.8]</td><td>+0.04</td><td>无皴</td><td>郭熙四时（墨滞、雪覆不露石理）</td></tr>
+      <tr><td>雾</td><td>[1.5, 2.2]</td><td>[0.8, 1.1]</td><td>+0.03</td><td>—</td><td>韩拙三远（空气透视强、中景隔断）</td></tr>
+    </tbody>
+  </table>
+
+  <h4>4.3.11.3 <code>time_words</code> — 时辰词 → 时辰档（晨 / 昼 / 暮 / 夜）+ 段长乘子 / 墨偏</h4>
+  <p class="sec-note">定位：补轴7 的时辰调制（G5）。同时修正一处口径误配——「月」原被 <code>season_words</code> 判为「秋」（月属天象 / 时辰，非季节），已迁入 <code>time_words</code> 映射为「夜」。</p>
+  <table>
+    <thead><tr><th style="width:78px">项</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>输入</td><td>诗句时辰词</td></tr>
+      <tr><td>触发</td><td>诗级；命中首词定档，未命中 → <code>null</code></td></tr>
+      <tr><td>映射</td><td>见下表（四档）；词表：朝 / 晨 / 晓 / 旦 → 晨，昼 / 午 → 昼，暮 / 夕 / 昏 / 晚 → 暮，夜 / 宵 / 月 → 夜</td></tr>
+      <tr><td>输出</td><td><code>name</code> + <code>seg_len_mult</code>（卡7 段长乘子）+ <code>ink_bias</code>（墨阶偏置档）+ <code>color</code> / <code>warmth</code>（色偏候选）</td></tr>
+      <tr><td>实证</td><td>江雪 → <b>未命中</b>（乘子中性）；早发白帝城 → <code>晨</code>（「朝辞」；段长 [1.0,1.1]、墨偏 0、淡青）；静夜思 → <code>夜</code>（「月」；段长 [1.2,1.5]、墨偏 +2、冷灰）</td></tr>
+      <tr><td>边界</td><td>诗级，不逐节点改墨阶（避免与 R3 / R4 冲突）；昼 / 夜为郭熙「朝暮」两极的裁定延伸；精确节拍由卡7 求解</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <thead><tr><th style="width:56px">档</th><th style="width:110px">段长乘子</th><th style="width:70px">墨偏</th><th style="width:70px">色</th><th style="width:64px">冷暖</th><th>依据</th></tr></thead>
+    <tbody>
+      <tr><td>晨</td><td>[1.0, 1.1]</td><td>0</td><td>淡青</td><td>冷</td><td>郭熙「朝看如此」（原文）</td></tr>
+      <tr><td>昼</td><td>[0.9, 1.0]</td><td>−1</td><td>明</td><td>中</td><td>朝暮之间的裁定延伸</td></tr>
+      <tr><td>暮</td><td>[1.1, 1.3]</td><td>+1</td><td>赭</td><td>暖</td><td>郭熙「暮看如此」（原文）</td></tr>
+      <tr><td>夜</td><td>[1.2, 1.5]</td><td>+2</td><td>冷灰</td><td>冷</td><td>朝暮变态之极的裁定延伸</td></tr>
+    </tbody>
+  </table>
+
+  <h4>4.3.11.4 <code>material</code> — 纸绢 / 笔 / 墨 → 卡6 扩散 · 飞白 · 墨色乘子</h4>
+  <p class="sec-note">定位：给卡6 的扩散律与飞白阈值一个物理边界（G6）。诗中无材质依据，取默认档（生宣 / 兼毫 / 松烟），标裁定。</p>
+  <table>
+    <thead><tr><th style="width:78px">项</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>输入</td><td>无诗内依据 → 取 <code>modulators.material.default</code></td></tr>
+      <tr><td>触发</td><td>诗级；默认档恒定</td></tr>
+      <tr><td>映射</td><td>见下表（三类）</td></tr>
+      <tr><td>输出</td><td><code>choice</code>（纸绢 / 笔 / 墨）+ <code>paper.D_mult</code> / <code>mu_mult</code> / <code>feibai_threshold</code> + <code>brush.stiffness</code> / <code>water_cap</code> + <code>ink.hue</code> / <code>warmth</code> → 卡6 乘子</td></tr>
+      <tr><td>实证</td><td>三首均取默认（生宣：D [1.2,1.6] / μ [1.1,1.4] / 飞白阈值 [0.6,0.8]；兼毫：刚度 [0.45,0.7] / 蓄水 [0.7,0.9]；松烟：冷黑 / <code>warmth</code> −1）</td></tr>
+      <tr><td>边界</td><td>属「器与材」物理层，无古典判据，整体标裁定；D2 只给乘子与区间，精确扩散由卡6 求解</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <thead><tr><th style="width:60px">类</th><th style="width:70px">档</th><th>关键系数</th><th style="width:190px">说明</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="3">纸绢</td><td>生宣</td><td>D 1.2–1.6 · μ 1.1–1.4 · 飞白 0.6–0.8</td><td>吸水强、易晕染、层次丰富（默认）</td></tr>
+      <tr><td>熟宣</td><td>D 0.4–0.7 · μ 0.5–0.8 · 飞白 0.3–0.5</td><td>吸水性弱、不洇墨</td></tr>
+      <tr><td>绢</td><td>D 0.7–1.0 · μ 0.8–1.0 · 飞白 0.4–0.6</td><td>细腻</td></tr>
+      <tr><td rowspan="3">笔</td><td>狼毫</td><td>刚度 0.7–1.0 · 蓄水 0.6–0.8</td><td>硬毫，弹性强、出锋利</td></tr>
+      <tr><td>羊毫</td><td>刚度 0.2–0.5 · 蓄水 0.8–1.0</td><td>软毫，蓄水多、易晕</td></tr>
+      <tr><td>兼毫</td><td>刚度 0.45–0.7 · 蓄水 0.7–0.9</td><td>刚柔兼济（默认）</td></tr>
+      <tr><td rowspan="2">墨</td><td>松烟</td><td>冷黑 · <code>warmth</code> −1</td><td>松烟偏冷、无光（默认）</td></tr>
+      <tr><td>油烟</td><td>暖黑 · <code>warmth</code> +1</td><td>油烟偏暖、有光</td></tr>
+    </tbody>
+  </table>
+
+  <h4>4.3.11.5 <code>stroke_quality</code> — 笔法式 → 适用质量维（四势 / 五笔）/ 须避病（二病）</h4>
+  <p class="sec-note">定位：把 <code>stroke</code> 的 18 式<b>形态名</b>升为<b>质量判据</b>（G2）。结构侧取荆浩四势（筋 / 肉 / 骨 / 气），手感侧取黄宾虹五笔（平 / 留 / 圆 / 重 / 变）；负向取郭若虚三病（板 / 刻 / 结）+ 荆浩二病（有形 / 无形）。</p>
+  <table>
+    <thead><tr><th style="width:78px">项</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>输入</td><td>诗用笔法式（节点 <code>stroke</code> 去重集合）</td></tr>
+      <tr><td>触发</td><td>诗级；逐式查 <code>by_stroke</code>，取并集</td></tr>
+      <tr><td>映射</td><td>见下表（正向 9 维 + 负向 5 病）；<code>by_stroke</code> 覆盖 18 式（飞白 / 枯笔擦 / 中锋 · 一次落笔 / 中锋 · 侧锋 / 顿笔 · 侧锋 / 大晕染 …）</td></tr>
+      <tr><td>输出</td><td><code>strokes</code> + <code>quality</code>（正向质量维）+ <code>avoid</code>（须避病）→ 卡6 二级判据，并入 o3 负节点</td></tr>
+      <tr><td>实证</td><td>江雪 → 8 维 [气, 圆, 留, 重, 变, 骨, 平, 筋]（飞白 + 枯笔擦等）；早发白帝城 → [骨, 平, 气, 变, 重]；静夜思 → [骨, 肉, 气, 圆, 变]</td></tr>
+      <tr><td>边界</td><td>质量维与病各挂一条可校验断言（如「骨」↔「轮廓刚正」、「刻」↔「藏锋」），双向校验；作卡6 二级判据而非独立词表</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <thead><tr><th style="width:56px">维</th><th style="width:70px">向</th><th style="width:120px">依据</th><th style="width:150px">判据</th><th>断言</th></tr></thead>
+    <tbody>
+      <tr><td>筋</td><td rowspan="4">正向·结构</td><td rowspan="4">荆浩《笔法记》四势</td><td>笔绝而不断</td><td>线断意连</td></tr>
+      <tr><td>肉</td><td>起伏成实</td><td>面有起伏</td></tr>
+      <tr><td>骨</td><td>生死刚正</td><td>轮廓刚正</td></tr>
+      <tr><td>气</td><td>迹画不败</td><td>气脉不断</td></tr>
+      <tr><td>平</td><td rowspan="5">正向·手感</td><td rowspan="5">黄宾虹五笔</td><td>如锥画沙</td><td>力透纸背 · 匀</td></tr>
+      <tr><td>留</td><td>如屋漏痕</td><td>留得住 · 涩</td></tr>
+      <tr><td>圆</td><td>如折钗股</td><td>转折圆浑</td></tr>
+      <tr><td>重</td><td>如高山坠石</td><td>落笔沉实</td></tr>
+      <tr><td>变</td><td>—（不拘一格）</td><td>不雷同</td></tr>
+      <tr><td>板</td><td rowspan="5">负向·须避</td><td rowspan="3">郭若虚三病</td><td>腕弱笔痴，物状平褊不能圆混</td><td>石看三面</td></tr>
+      <tr><td>刻</td><td>运笔中疑，妄生圭角</td><td>藏锋</td></tr>
+      <tr><td>结</td><td>欲行不行，似物凝碍</td><td>气脉不断</td></tr>
+      <tr><td>有形病</td><td rowspan="2">荆浩二病</td><td>花木不时、屋小人大、树高于山</td><td>比例 / 时序合法</td></tr>
+      <tr><td>无形病</td><td>气韵俱泯、类同死物</td><td>气韵</td></tr>
+    </tbody>
+  </table>
+  <p class="sec-note" style="margin-top:-6px">代表性 <code>by_stroke</code> 映射（共 18 式）：飞白 → 筋 · 气 · 变（避 结）；枯笔擦 → 留 · 重 · 变（避 板）；中锋 · 一次落笔 → 骨 · 平 · 重（避 刻）；中锋 · 侧锋 → 骨 · 圆 · 变（避 板 · 刻）；顿笔 · 侧锋 → 骨 · 重（避 刻）；大晕染 · 慢扩散 → 气（避 板）。</p>
+
+  <h4>4.3.11.6 <code>composition</code> — 边角 / 三叠两段护栏 + 蹊径六则软目标算子</h4>
+  <p class="sec-note">定位：给卡5 补构图规则（G1）。边角（马远「马一角」/ 夏圭「夏半边」）与三叠两段（石涛，禁等距机械分层）为<b>护栏</b>（恒生效）；蹊径六则（石涛《画语录》）为<b>软目标算子池</b>，按语境选一。</p>
+  <table>
+    <thead><tr><th style="width:78px">项</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>输入</td><td>季节 + V 档 + 三远 + 意象 bundle（是否含山石 / 天象、是否全域）</td></tr>
+      <tr><td>触发</td><td>诗级；C1 / C2 / C3 依序命中，未命中者落默认算子 <code>借景</code></td></tr>
+      <tr><td>映射</td><td>见下表（护栏 2 + 算子 6）</td></tr>
+      <tr><td>输出</td><td><code>guards</code>（边角 / 三叠两段）+ <code>operator</code> + <code>operator_rule</code> + <code>candidates</code> + <code>rules_fired</code> → 卡5 硬约束 / 软目标</td></tr>
+      <tr><td>实证</td><td>江雪 → <code>截断</code>（C1：冬 / V2）；早发白帝城 → <code>险峻</code>（C2：山石 + 高远）；静夜思 → <code>借景</code>（C3：天象 + 全域留白）</td></tr>
+      <tr><td>边界</td><td>边角 / 三叠两段为护栏恒生效，不参与选取；算子池取值属工程裁定（<code>grade=裁定</code>）；精确布局由卡5 求解</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <thead><tr><th style="width:120px">规则 / 算子</th><th style="width:80px">性质</th><th>内容</th><th style="width:150px">依据</th></tr></thead>
+    <tbody>
+      <tr><td>边角</td><td>硬约束</td><td>取山之一角、水之一涯，留大片空白（主体偏置）</td><td>马远「马一角」/ 夏圭「夏半边」</td></tr>
+      <tr><td>三叠两段</td><td>护栏</td><td>禁等距机械三叠（地-树-山），分层须由自然分疆承担</td><td>石涛《画语录》</td></tr>
+      <tr><td>对景不对山 / 对山不对景 / 倒景 / 借景 / 截断 / 险峻</td><td>软目标</td><td>蹊径六则：季节错位 / 元素倒置 / 借物衬境 / 截断取势 / 险峻立奇</td><td>石涛《画语录》蹊径六则</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <thead><tr><th style="width:64px">规则</th><th>条件</th><th style="width:88px">定算子</th><th>依据</th></tr></thead>
+    <tbody>
+      <tr><td>C1</td><td>季节 = 冬 或 V ∈ {V1, V2}</td><td>截断</td><td>冷寂 / 孤绝 → 截断取势，留势外延</td></tr>
+      <tr><td>C2</td><td>含山石 且 三远含高远</td><td>险峻</td><td>高远突兀 → 险峻立奇</td></tr>
+      <tr><td>C3</td><td>含天象 且 全域留白</td><td>借景</td><td>大留白 → 借物衬境</td></tr>
+    </tbody>
+  </table>
+
+  <h4>4.3.11.7 <code>seal</code> — 形制 → 印位；诗体长度 → 印面大小档</h4>
+  <p class="sec-note">定位：把 <code>scene.json</code> 里硬编码的 <code>seal</code> 改为按形制与尺幅定档（G8），纳入卡7 段尾静默。</p>
+  <table>
+    <thead><tr><th style="width:78px">项</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>输入</td><td><code>form</code> 形制候选 + 诗体长度 <code>len</code></td></tr>
+      <tr><td>触发</td><td>诗级；形制取候选首项，长度与 <code>len_ref</code>=28 比较</td></tr>
+      <tr><td>映射</td><td>见下表（印位 5 + 印面 2）</td></tr>
+      <tr><td>输出</td><td><code>format</code> + <code>position</code> + <code>position_note</code> + <code>size</code> + <code>size_mult</code> → 卡7 段尾静默</td></tr>
+      <tr><td>实证</td><td>江雪 → 册页 / 下角 · 小幅（五绝 <code>len</code> 20 &lt; 28；乘子 [0.5,0.8]）；早发白帝城 → 手卷 / 卷末 · 图前 · 大幅（七绝 <code>len</code> 28 ≥ 28；乘子 [1.0,1.4]）；静夜思 → 册页 / 下角 · 小幅</td></tr>
+      <tr><td>边界</td><td>守「印不可比字大」通例；D2 只给印位与印面区间，精确大小由卡7 落地</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <thead><tr><th style="width:100px">形制 / 长度</th><th style="width:150px">印位 / 印面档</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>手卷</td><td>卷末 / 图前</td><td>无款手卷钤图前、图末</td></tr>
+      <tr><td>立轴</td><td>左下角 / 右下角</td><td>挂轴加钤「押角」印</td></tr>
+      <tr><td>册页 / 扇面</td><td>下角</td><td>册页在左右下角；小景把玩，钤于下角</td></tr>
+      <tr><td>题款末</td><td>题款下</td><td>有款题者钤在款题下</td></tr>
+      <tr><td>长诗（<code>len</code> ≥ 28）</td><td>大幅 · 乘子 [1.0,1.4]</td><td>大幅盖大印</td></tr>
+      <tr><td>短诗（<code>len</code> &lt; 28）</td><td>小幅 · 乘子 [0.5,0.8]</td><td>小幅盖小印</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout z"><b>4.4 分工铁律（不可越界）。</b>D2 只输出 <b>候选集 + 类别档 + 区间约束</b>；<b>精确数值（ρ、c）一律交卡5 / 卡6 求解</b>。这是本项目「D2 分工铁律」在控制链上的表述，也解释了 §1 为何把「D2」与「求解器」拆成两段。4.3 十七器中，<code>blank_rules</code> 给区间、<code>layer_atten_steps</code> 给档、<code>figure_layer</code> 给尺寸档，皆是此铁律的落点；C 组七器亦然——<code>viewpoint</code> 给视点候选 + 区间、<code>weather</code> 给乘子、<code>material</code> 给系数、<code>composition</code> 给算子池、<code>seal</code> 给印面区间，精确值一律交卡5 / 卡6 / 卡7。<br>
+  与之配套的三条护栏（均由 §4.1 的 <code>rules</code> 与既有约定承担）：<b>① 词覆盖优先于派生</b>（已显式指定的键不被调制器改写）；<b>② 焦点不随层衰减</b>（明月等焦点在远景不被层衰减压档）；<b>③ 注入参数须带出处</b>（pipeline 单元格带 <code>data-d2="&lt;路径&gt;"</code> 溯源）。</div>
+</section>
+
+<!-- ================= §5 ================= -->
+<section>
+  <div class="sec-head"><span class="sec-no">§5</span><h2>求解器段</h2></div>
+  <p class="sec-note">D2 给区间，本段给精确值。求解器段沿三条轴分设三器：<b>卡5 构图</b>（空间轴 · 位置与比例）、<b>卡6 笔墨</b>（物理轴 · 墨的物理量）、<b>卡7 时间轴</b>（时间轴 · 运动与静默）。三者的共同点——都<b>接受区间与目标、不许自由发挥</b>——正是它们属 L3 而非 L1/L2 的原因。</p>
+  <table>
+    <thead><tr><th style="width:112px">求解器</th><th style="width:84px">轴</th><th>输入（区间 / 目标，来自 D2 与上游）</th><th>输出（精确值）</th></tr></thead>
+    <tbody>
+      <tr><td><b>卡5 构图</b></td><td>空间轴</td><td>三远候选 + 权重 · 留白区间 ρ · 层数区间 · 空间词票</td><td>留白率 ρ · 视觉重心 g · 地平线位置 · 各元素坐标</td></tr>
+      <tr><td><b>卡6 笔墨</b></td><td>物理轴</td><td>墨阶 · 含水档 · 笔法 · <code>ink_c_range</code></td><td>墨浓度 c · 含水扩散 D · 有效墨浓度 eff · 柔度 σ</td></tr>
+      <tr><td><b>卡7 时间轴</b></td><td>时间轴</td><td>κ 曲率峰（卡4）· 静默预算区间 · 相机护栏 ≤5%/s</td><td>段时长 · 相机 <code>s(t)</code> · 尾部静默 · 静默预算占比</td></tr>
+    </tbody>
+  </table>
+  <div class="callout"><b>为什么精确值必须独立求解。</b>ρ = 0.79 这类数值同时受「三远候选」「情感留白区间」「语境上调」三方拉扯，只有放进带目标函数的求解器才能得到一致解；若让 D2 直接给数，等于把「诗意」写成硬编码。求解器是 L3——它接受的是<b>区间与目标</b>，不是自由发挥。</div>
+
+  <h4>5.1 卡5 构图求解器 — 空间轴：东西摆在哪</h4>
+  <p class="sec-note">定位：在 D2 给的「三远候选 / 留白区间 / 层数区间 / 空间词票」内，求一组自洽的构图数值。这是「诗意」与「几何」交界处唯一带目标函数的环节。</p>
+  <table>
+    <thead><tr><th style="width:88px">项</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>目标函数</td><td><code>min E = E_relation + λ₁·E_blank + λ₂·E_density + λ₃·E_balance</code>：关系项（意象间关系边）+ 留白项（拉向 D2 的 ρ 区间）+ 疏密势能（相邻元素斥力）+ 平衡项（重心推向偏心位）</td></tr>
+      <tr><td>决策变量</td><td>各元素坐标 (x, y) · 层归属 · 地平线高度 · 留白率 ρ · 视觉重心 g</td></tr>
+      <tr><td>硬约束</td><td>负节点 = 0（鸟 / 人踪不得出现）；留白须<b>连通成大块</b>（H_blank 低，碎白不算）</td></tr>
+      <tr><td>输入（D2）</td><td><code>yuan</code> 候选 + 权重 · <code>blank_range</code> · 层数区间 · <code>space</code> 词票</td></tr>
+      <tr><td>输出</td><td>ρ · g · 地平线 · 各元素坐标 → 写进 <code>scene.json</code> 冻结（§6.1）</td></tr>
+      <tr><td>子模型</td><td>山水用 <code>min E</code>；<b>室内小景</b>（静夜思）不设地平线、不用三远，改在 ρ 硬约束下求「焦点 / 留白面积比」最优</td></tr>
+      <tr><td>边界</td><td><span class="badge b-part">口径</span> 本器 ρ 是<b>构图期留白率</b>（画布二维占比），与卡片3「韵味反差度 ρ」同名不同义，勿混；时间与相机不归本器，归卡7</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <thead><tr><th style="width:150px">约束</th><th style="width:130px">低</th><th style="width:120px">中</th><th style="width:150px">高</th><th>江雪实跑</th></tr></thead>
+    <tbody>
+      <tr><td>留白率 ρ</td><td>&lt;0.4（密）</td><td>0.4–0.6</td><td>0.72–0.85（雪景寒江）</td><td><b>0.79</b> ∈ [0.74,0.92] ✓</td></tr>
+      <tr><td>空白连通熵 H_blank</td><td>低 = 大块留白（好）</td><td>—</td><td>高 = 均匀撒开（碎白，差）</td><td><b>0.41</b> ✓ 大块</td></tr>
+      <tr><td>疏密势能 E_density</td><td>—</td><td>—</td><td>势能极小</td><td><b>−2.14</b> ✓ 收敛</td></tr>
+      <tr><td>视觉重心 g</td><td>居中（呆）</td><td>—</td><td>三七停 ≈ (0.66,0.68)</td><td><b>(0.65,0.69)</b> 偏 0.014 ✓</td></tr>
+      <tr><td>地平线</td><td>平远 0.42H</td><td>—</td><td>高远 &gt;0.6H</td><td><b>0.42H</b> ✓</td></tr>
+      <tr><td>负节点</td><td colspan="3">硬约束（鸟 / 人 = 0）</td><td><b>0 / 0</b> ✓</td></tr>
+    </tbody>
+  </table>
+  <p class="sec-note" style="margin-top:-6px">三首构图解对照（实测，取自 <code>dist/pipelines/*.html</code> STEP 5）：</p>
+  <table>
+    <thead><tr><th style="width:104px">诗</th><th style="width:150px">三远</th><th style="width:160px">ρ（区间 → 解）</th><th style="width:90px">H_blank</th><th style="width:96px">E_density</th><th>g</th></tr></thead>
+    <tbody>
+      <tr><td>江雪</td><td>平远 + 深远</td><td>[0.74,0.92] → <b>0.79</b></td><td>0.41</td><td>−2.14</td><td>(0.65,0.69) 右下</td></tr>
+      <tr><td>早发白帝城</td><td>高远 + 深远</td><td>[0.38,0.58] → <b>0.52</b></td><td>0.55</td><td>−1.42</td><td>(0.41,0.69) 左下</td></tr>
+      <tr><td>静夜思</td><td>不适用（室内小景）</td><td>[0.76,0.92] → <b>0.78</b></td><td>—</td><td>—</td><td>(0.65,0.69)</td></tr>
+    </tbody>
+  </table>
+
+  <h4>5.2 卡6 笔墨求解器 — 物理轴：每块区域怎么下笔</h4>
+  <p class="sec-note">定位：把 D2 的「墨阶 / 含水档 / 笔法」翻译成纸上真实的墨物理量——墨多黑、水多湿、晕多快、边多柔。</p>
+  <table>
+    <thead><tr><th style="width:88px">项</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>扩散律</td><td><code>L(t) = √(γ r cosθ / 2μ · t) ∝ t^0.5</code>——<b>平方根律，不是线性</b>；用线性会让晕染「匀速张开」，像水彩不像水墨</td></tr>
+      <tr><td>纤维掩码</td><td><code>M(x) = Σ P(x, 2ⁱ) / 2^{iH}</code>：含墨低于阈值时纤维噪声透出，形成断续枯笔（飞白）——<b>物理结果，不是画一排短横线</b></td></tr>
+      <tr><td>输入（D2）</td><td>墨阶 <code>ink_grade</code> · 含水 <code>water</code> · 笔法 <code>stroke</code> · <code>ink_c_range</code></td></tr>
+      <tr><td>输出</td><td>墨浓度 c · 含水扩散 D · 有效墨浓度 <code>eff</code> · 柔度 σ → SVG 滤镜与不透明度</td></tr>
+      <tr><td>边界</td><td><span class="badge b-ok">已接线</span> <code>eff</code> / σ 由 <code>build/scene_assert.py</code> 从冻结场景实测，与 D2 处方对账（见 §5.4）</td></tr>
+    </tbody>
+  </table>
+  <table>
+    <thead><tr><th style="width:70px">含水</th><th style="width:110px">墨浓度</th><th style="width:150px">笔法</th><th>例（江雪）</th></tr></thead>
+    <tbody>
+      <tr><td>高</td><td>低（0.12）</td><td>大晕染 · 慢扩散</td><td>远山</td></tr>
+      <tr><td>中</td><td>极低（0.06）</td><td>枯笔擦 · 近乎不可见</td><td>万径</td></tr>
+      <tr><td>低</td><td>高（0.92）</td><td>中锋 · 一次落笔</td><td>孤舟</td></tr>
+      <tr><td>低</td><td>极高（0.95）</td><td>顿笔 · 侧锋</td><td>蓑笠翁</td></tr>
+      <tr><td>极低</td><td>中（0.40）</td><td>飞白 · 细若游丝</td><td>钓丝</td></tr>
+      <tr><td>—</td><td>0</td><td>不画（留白）</td><td>寒江 / 雪</td></tr>
+    </tbody>
+  </table>
+  <p class="sec-note" style="margin-top:-6px">三首含水处方兑现（实测，<code>build/scene_assert.py</code>；eff = 层不透明度 × max(色深 × 基元不透明度)）：</p>
+  <table>
+    <thead><tr><th style="width:150px">节点</th><th style="width:74px">含水档</th><th style="width:90px">eff</th><th style="width:130px">σ / 位移</th><th>判据</th></tr></thead>
+    <tbody>
+      <tr><td>江雪 · 千山</td><td>高</td><td>0.154</td><td>σ=0 · disp=18</td><td>eff≤0.30 且 soft ✓</td></tr>
+      <tr><td>江雪 · 孤舟</td><td>低</td><td>0.909</td><td>σ=0</td><td>eff≥0.40 且 σ=0 ✓</td></tr>
+      <tr><td>白帝城 · 彩云</td><td>极高</td><td>0.188</td><td>σ=4.2 · disp=12</td><td>eff≤0.30 且 soft ✓</td></tr>
+      <tr><td>白帝城 · 轻舟</td><td>极低</td><td>0.909</td><td>σ=0</td><td>eff≥0.40 且 σ=0 ✓</td></tr>
+      <tr><td>静夜思 · 霜</td><td>极高</td><td>0.094</td><td>σ=6.0 · disp=16</td><td>eff≤0.30 且 soft ✓</td></tr>
+    </tbody>
+  </table>
+
+  <h4>5.3 卡7 时间轴求解器 — 时间轴：何时动、何时静</h4>
+  <p class="sec-note">定位：把卡4 的 κ（何时推）与意境护栏（推多猛）解成段时长、相机 <code>s(t)</code> 与静默预算。相机与静默在此归属，<b>不属卡5</b>——这是本段相对早前表述的一处更正。</p>
+  <table>
+    <thead><tr><th style="width:88px">项</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>输入</td><td>κ 曲率峰（卡4，定「何时推」）· 静默预算区间 [15%,35%] · 相机护栏（单段峰值 ≤5%/s）</td></tr>
+      <tr><td>决策变量</td><td>各段时长 · 相机缩放 <code>s(t)</code> · 尾部静默</td></tr>
+      <tr><td>护栏</td><td>禁急推（&gt;5%/s 会推没「孤」的偏心构图）· 禁渐隐结尾（仄仄仄须顿住）· 禁舒缓长镜（入声基调促）</td></tr>
+      <tr><td>输出</td><td>段时长 · <code>s(t)</code> · 静默预算占比</td></tr>
+      <tr><td>实证</td><td>江雪设计值：T=25.0 s · 静默 6.5/25.0=<b>26%</b> ✓ · 相机 13–25 s 缓推 0.96→1.12×，峰值 <b>3.7%/s</b>（&lt;5%）✓</td></tr>
+      <tr><td>边界</td><td><span class="badge b-part">落地口径</span> 上为<b>推演设计值</b>；实际动画以配音实测行时序为准重排（§6.1），三首配音时长 江雪 19.578 s · 白帝城 13.631 s · 静夜思 18.187 s。κ 只说「何时推」，幅度须另受护栏压制，<b>不可由 κ 直接换算</b></td></tr>
+    </tbody>
+  </table>
+
+  <h4>5.4 三器共同接口与分工铁律的落点</h4>
+  <p class="sec-note">本表是<b>职责级</b>接口（谁给什么、谁收什么）；其<b>字段级</b>契约与三方映射见 §5.6，未接线部分的工单见 §5.5。</p>
+  <table>
+    <thead><tr><th style="width:130px">环节</th><th>上游给什么</th><th>求解器做什么</th><th>下游收什么</th></tr></thead>
+    <tbody>
+      <tr><td>D2 → 卡5</td><td><code>blank_range</code> / <code>yuan</code> 候选 / 词票</td><td>带目标函数求一致解</td><td>ρ · g · 坐标 → <code>scene.json</code></td></tr>
+      <tr><td>D2 → 卡6</td><td>墨阶 / 含水档 / 笔法 / <code>ink_c_range</code></td><td>按扩散律算物理量</td><td>c · D · eff · σ → SVG 滤镜</td></tr>
+      <tr><td>卡4 → 卡7</td><td>κ + 静默区间 + 相机护栏</td><td>在护栏内解时长与 <code>s(t)</code></td><td>段时长 · <code>s(t)</code> → 动画</td></tr>
+    </tbody>
+  </table>
+  <div class="callout q"><b>求解器 ↔ 验收的闭环（eff / σ / 人高）。</b>求解器给出的 <code>eff</code>、σ 不是「说过就算」——<code>build/scene_assert.py</code> 会从冻结场景<b>反测</b>同一批属性，与 D2 现算处方对账（含水 高/极高 → eff≤0.30 且 soft；低/极低 → eff≥0.40 且 σ=0；焦点须全场最深，或最亮差 ≥0.30；人物人高须落 D2 <code>size</code> 档区间）。这条「解 → 画 → 反测」回路，正是把 §6 的 L4 只读校验焊到 L3 求解器上的地方——它保证「模型算了」必等于「画面照做了」。</div>
+
+  <h4>5.5 求解器接线工单（§5 × §7.2 合并）</h4>
+  <p class="sec-note">§5 讲清了三器「该做什么」，§7.2 列出八轴「尚未接线」的清单。本节把两者合并成一张<b>可执行工单</b>：每条写明「目标求解器 / 现状 / 接线动作（D2 侧 → 求解器侧）/ 接线前置」，并按<b>依赖关系</b>而非单纯优先级分组排序——先打通被多处依赖的底色通路，再做范式与材质，再补新算子，最后才谈品格闭环。</p>
+  <table>
+    <thead><tr><th style="width:250px">工单（→ 目标）</th><th style="width:230px">现状</th><th>接线动作（D2 侧 → 求解器侧）</th><th style="width:150px">接线前置</th></tr></thead>
+    <tbody>
+      <tr><td colspan="4" style="background:rgba(28,28,28,.03);font-weight:600;color:var(--ink2)">A 组 · 无前置（纯消费已建模数据，先做）</td></tr>
+      <tr><td><code>polarity</code> 底色偏置 → 卡6 <span class="badge b-ok">已接线</span></td><td>D2 侧完成：<code>polarity</code> 归一表（8 键 + 22 归一）+ <code>base_tone</code> 底色候选已输出；<b>卡6 消费端已接</b>——候选注入 STEP 6 · 6.3 底色通路（三首已注入，含 <code>data-d2</code> 溯源）（§4.3.7）</td><td><code>context</code> 极性标签 → <code>modulators.polarity</code> 的 <code>ink_bias</code> / <code>color</code>；卡6 底色求解读之</td><td>无</td></tr>
+      <tr><td><code>season.color</code> 接线 → 卡6</td><td><code>vocab.season</code> 已有 <code>color</code> / <code>ink_bias</code> / <code>tai</code> / <code>blank_bias</code>，现仅 <code>qi</code> 与 R10 被消费（§4.3.6）</td><td>卡6 底色求解读 <code>season.color</code> 与 <code>ink_bias</code>，与上一条的极性偏置合并</td><td>无</td></tr>
+      <tr><td>静默预算口径统一 → 卡7 <span class="badge b-ok">已接线</span></td><td>已同源（G14）：D2 末句 T≥0.8 时 T 档升一阶，jx <code>T_band=T4</code> / <code>silence_ratio=0.26</code>，与卡7 落地 26% 一致（§5.3）</td><td>D2 定档已含 T4「悬置不释放」；卡7 直取 D2 值，二者同源</td><td>无</td></tr>
+      <tr><td>钤印 <code>seal</code> → 卡7 <span class="badge b-ok">已接线</span></td><td>D2 侧完成：<code>vocab.seal</code> 印位 5 + 印面 2 + <code>modulators.seal</code>；<b>卡7 消费端已接</b>——注入 STEP 7 · 7.3 钤印（三首，含 <code>data-d2</code> 溯源）（§4.3.11.7）</td><td><code>format</code> → 印位 / 印面大小，纳入卡7 段尾静默</td><td>无</td></tr>
+      <tr><td colspan="4" style="background:rgba(28,28,28,.03);font-weight:600;color:var(--ink2)">B 组 · 依赖 A 组的底色通路 <span class="badge b-ok">已接线</span></td></tr>
+      <tr><td>设色范式档 → 卡6 <span class="badge b-ok">已接线</span></td><td><code>vocab.paradigm</code> 四范式（青绿 / 浅绛 / 水墨 / 没骨）+ <code>modulators.paradigm</code> 定档规则（P1 / P2 / P3）；<b>卡6 消费端已接</b>——候选与色域投影注入 STEP 6 · 6.4 设色范式（三首已注入，含 <code>data-d2</code> 溯源）（§4.3.10）</td><td><code>season</code> / <code>polarity</code> / V 档 → 范式候选 + <code>projected_color_candidates</code>（改写 A 组底色候选）；卡6 在色域内求解精确用色</td><td>A 组</td></tr>
+      <tr><td>宿墨 / 焦墨独立 → 卡6 <span class="badge b-ok">已接线</span></td><td><code>vocab.ink_method</code> 6 式（破 / 积 / 泼 / 宿 / 焦 / 飞白）各带 <code>mu</code> 扩散区间，与 <code>ink</code> 浓度阶梯分轴（G11 已落地）；<b>卡6 消费端已接</b>——候选与 μ 区间注入 STEP 6 · 6.5 墨法轴（三首已注入，含 <code>data-d2</code> 溯源）</td><td>语境建议 → <code>ink_methods.suggested</code>；卡6 扩散律按 μ 区间定精确 μ（宿墨更慢更滞、焦墨 / 飞白几乎不洇）</td><td>设色范式档</td></tr>
+      <tr><td colspan="4" style="background:rgba(28,28,28,.03);font-weight:600;color:var(--ink2)">C 组 · 新算子 / 新调制器 <span class="badge b-ok">已接线</span></td></tr>
+      <tr><td>视点档 <code>viewpoint</code> → 卡5 <span class="badge b-ok">已接线</span></td><td>D2 侧完成：<code>vocab.viewpoint</code> 三档（平 / 俯 / 仰）+ <code>modulators.viewpoint</code> 定档；<b>卡5 消费端已接</b>——注入 STEP 5 · 5.1 视点档（三首，含 <code>data-d2</code> 溯源）（§4.3.11.1）</td><td>空间词 / 三远 → 视点票，约束地平线纵比与垂直尺度（室内小景不适用）</td><td>无</td></tr>
+      <tr><td>天候 <code>weather</code> → 卡5 / 卡6 <span class="badge b-ok">已接线</span></td><td>D2 侧完成：<code>vocab.weather</code> 四档 + 乘子；<b>卡5 / 卡6 消费端已接</b>——注入 STEP 5 · 5.2 天候（三首）（§4.3.11.2）</td><td>天候词 → 档：雾 → 卡6 σ 上调；雪 → 卡5 ρ 上调；雨 → 雨点皴</td><td>无</td></tr>
+      <tr><td>边角 · 三叠两段 · 蹊径六则 <code>composition</code> → 卡5 <span class="badge b-ok">已接线</span></td><td>D2 侧完成：<code>vocab.composition</code> 护栏 2 + 算子 6 + <code>modulators.composition</code> 规则 C1–C3；<b>卡5 消费端已接</b>——注入 STEP 5 · 5.3 构图规则（三首）（§4.3.11.6）</td><td>作卡5 硬约束（边角开合）/ 软目标（三叠两段分层、蹊径引导线）</td><td>无</td></tr>
+      <tr><td>四势 · 五笔质量维 · 二病 <code>stroke_quality</code> → 卡6 <span class="badge b-ok">已接线</span></td><td>D2 侧完成：<code>vocab.stroke_quality</code> 9 维 + <code>stroke_disease</code> 5 病 + <code>by_stroke</code> 18 式映射；<b>卡6 消费端已接</b>——注入 STEP 6 · 6.7 笔法质量维（三首）（§4.3.11.5）</td><td>笔法增二级判据（筋 / 骨 / 肉 / 气 + 平 / 圆 / 留 / 重 / 变 + 二病过滤），并入 o3 负节点</td><td>无</td></tr>
+      <tr><td>皴法谱补齐 → 卡6 <span class="badge b-ok">已落地</span></td><td>G10 已落地（Wave 1）：<code>vocab.cun</code> 9 值（补雨点 / 折带 / 米点 + 独立「干擦」），山石 <code>cun_alt</code> 池 6 值（§2.1 G10）</td><td>山石池已含三高频皴，「干擦」供山石干笔质感落点</td><td>无</td></tr>
+      <tr><td>晨昏 <code>time_words</code> → 卡7 <span class="badge b-ok">已接线</span></td><td>D2 侧完成：<code>vocab.time_of_day</code> 四档 + <code>modulators.time_words</code>（「月」由季节词迁来）；<b>卡7 消费端已接</b>——注入 STEP 7 · 7.2 时辰（三首）（§4.3.11.3）</td><td>时辰词 → 档：夜 → 段长↑、墨偏↑；晨 → 淡青</td><td>无</td></tr>
+      <tr><td>材质系数 <code>material</code>（笔 / 墨 / 纸绢）→ 卡6 <span class="badge b-ok">已接线</span></td><td>D2 侧完成：<code>vocab.material</code> 三类（纸绢 3 / 笔 3 / 墨 2）+ 默认档；<b>卡6 消费端已接</b>——注入 STEP 6 · 6.6 材质系数（三首）（§4.3.11.4）</td><td>材质系数改卡6 扩散律 D / μ 与飞白阈值（当前取默认档）</td><td>无</td></tr>
+      <tr><td colspan="4" style="background:rgba(28,28,28,.03);font-weight:600;color:var(--ink2)">D 组 · 闭环（依赖验收算子）</td></tr>
+      <tr><td>品格闭环 <code>style_grade</code> → 反控卡5 / 6 / 7</td><td>轴1；依赖 12 算子可读</td><td>先扩 <code>scene_assert</code> 输出 12 算子，再由 <code>style_grade</code> 反推该调哪些轴档（总纲 §3.2 边界二）</td><td>四势 · 五笔质量维 · 皴法谱补齐 + <code>scene_assert</code> 扩展</td></tr>
+    </tbody>
+  </table>
+  <div class="callout"><b>为何按「组」而非按「优先级」排。</b>A 组的底色通路被 B 组依赖，若先做 B 必返工；D 组的品格闭环必须等 12 算子可读（C 组的质量维补齐 + <code>scene_assert</code> 扩展）才有输入。这正是「先解决依赖关系、再谈优先级」的落点：<b>A → B → C（并行）→ D</b>。全部工单的落点都在 <code>src/d2/</code>（D2 侧）与 <code>build/scene_assert.py</code> / <code>src/d2/d2_resolve.py</code>（求解器侧）之内，不新增文档层。<br><b>这些工单要的输入数据在不在？</b>逐条向上溯源见 <b>§2.1 数据缺口清单（G1–G14）</b>——那里按依赖给出了建表顺序。与《<a href="data_foundation_roadmap.html">数据底座路线图</a>》的对应关系：<b>A 组→Wave 1，B 组→Wave 2 前半，C 组→Wave 2 后半，D 组→Wave 3</b>（Wave 0 输入端 D1 / D5 / D6 已落地，不在本表；A 组 <code>polarity</code> 归一 D2 侧已落地，卡6 消费端已接；B 组设色范式 / 宿墨焦墨已接线；C 组新算子七器已接线）。<br><b>「接线前置」≠「建表前置」。</b>本表的「接线前置」管「建好的表能不能接进求解器」，路线图 §3 的「建表前置」管「这张表能不能建出来」——同一对 G3 / G11，建表时 G11 先于 G3，接线时 G3 先于 G11，二者并不矛盾。</div>
+
+  <h4>5.6 求解器输入 / 输出 schema（D2 → 求解器 → scene.json）</h4>
+  <p class="sec-note">三器之间有明确的数据契约：D2 的输出、三器的解、落地冻结的场景，字段一一对应。本节把契约写成 schema，作为 D2 ↔ 求解器 ↔ <code>scene.json</code> 三方对齐的基准；字段改名或增删，须同步本文与 <code>data/source/scene/*.json</code>。</p>
+
+  <p class="sec-note" style="margin-bottom:4px"><b>（a）D2 → 求解器</b>（<code>d2_resolve.py:resolve_poem</code> 输出节选，江雪实跑）</p>
+  <pre class="schema">{
+  "poem": "jx", "form": "五言绝句",
+  "V_band": "V2", "T_band": "T3",
+  "yuan": ["平远", "深远"],        <span class="c">// → 卡5 三远候选</span>
+  "blank_range": [0.74, 0.92],     <span class="c">// → 卡5 ρ 区间</span>
+  "motion": "横移",                 <span class="c">// → 卡7 运动语法</span>
+  "silence_ratio": 0.20,           <span class="c">// → 卡7 静默预算</span>
+  "cun": ["无皴"], "season": "冬",
+  "polarity": {                     <span class="c">// → 卡6 底色（G12 归一表）</span>
+    "keys": ["隐逸·渔樵", "漂泊·孤立", "孤守·不屈"],
+    "ink_bias_range": [-1, -1], "colors": ["冷灰"], "unmapped": [] },
+  "base_tone": {                    <span class="c">// → 卡6 底色候选（季节色 + 极性色）</span>
+    "season": { "name": "冬", "color": "素白", "ink_bias": 2 },
+    "color_candidates": ["素白", "冷灰"], "ink_bias_range": [-1, 2] },
+  "nodes": [
+    { "surface": "千山", "class": "山石", "role": "主体", "layer": "远景",
+      "ink_grade": "清", "ink_c_range": [0.04, 0.26],   <span class="c">// → 卡6 墨浓度区间</span>
+      "water": "高", "stroke": "大晕染·慢扩散" },
+    { "surface": "蓑笠翁", "class": "人物", "role": "焦点", "layer": "近景",
+      "ink_grade": "浓", "ink_c_range": [0.84, 0.96],
+      "water": "低", "stroke": "顿笔·侧锋",
+      "size": "点景" }                                   <span class="c">// → 卡5 尺寸档</span>
+  ]
+}</pre>
+
+  <p class="sec-note" style="margin-bottom:4px"><b>（b）求解器 → 场景</b>（三器解）</p>
+  <pre class="schema"><span class="c">// 卡5 构图解（空间轴）</span>
+{ "layout": { "blank_ratio": 0.79, "blank_entropy": 0.41,
+              "density_potential": -2.14, "gravity": [0.65, 0.69],
+              "horizon": 0.42, "negative_constraints": { "鸟": 0, "人踪": 0 } } }
+<span class="c">// 卡6 笔墨解（物理轴；eff / σ / disp 由 scene_assert.py 反测）</span>
+{ "regions": [ { "id": "jx-far", "water": "高", "ink": 0.154,
+                 "sigma": 0, "disp": 18, "diffusion_exp": 0.5 } ] }
+<span class="c">// 卡7 时间轴解（时间轴；不入 scene.json，入动画）</span>
+{ "T": 19.578,                    <span class="c">// 落地取配音实测总时长（设计推演值 25.0）</span>
+  "silence_budget": 0.20,
+  "cam": { "seg": "转", "s0": 0.96, "s1": 1.12, "peak": 0.037 },
+  "forbidden": ["渐隐结尾", "舒缓长镜", "急推"] }</pre>
+
+  <p class="sec-note" style="margin-bottom:4px"><b>（c）<code>scene.json</code> 冻结</b>（落地格式节选，<code>data/source/scene/jx.json</code>）</p>
+  <pre class="schema">{
+  "meta": { "poem": "江雪", "pid": "jx",
+            "rest_state": "相机 identity；各层显隐取终态；JS 变换取基础位…" },
+  "viewBox": [0, 0, 900, 600],
+  "paper": "#F6F3EC",
+  "defs": "&lt;filter id=\"jxEdge\"…&gt;",     <span class="c">// 卡6 扩散 / 位移 / 飞白滤镜</span>
+  "layers": [
+    { "id": "jx-far", "label": "远山", "filter": "jxEdge",
+      "shapes": [ { "tag": "path",
+        "attrs": { "d": "M0 252 L120 176…", "fill": "#6E6A60", "opacity": "0.13" } } ] },
+    { "id": "jx-boat", "label": "孤舟", "filter": "jxBoatInk",
+      "shapes": [ { "tag": "path", "attrs": { "fill": "#1C1C1C", "opacity": "0.88" } } ] }
+  ],
+  "seal": { "attrs": { "id": "jx-seal" }, "shapes": [ … ] }
+}</pre>
+
+  <h4>5.6.1 三方字段映射</h4>
+  <table>
+    <thead><tr><th style="width:250px">D2 字段（来源）</th><th style="width:90px">求解器</th><th>scene.json 落点</th></tr></thead>
+    <tbody>
+      <tr><td><code>yuan</code> · <code>blank_range</code></td><td>卡5</td><td><code>layers[*].shapes[*].attrs.d</code>（坐标）；ρ 记入 <code>meta</code></td></tr>
+      <tr><td>node <code>size</code>（人物）</td><td>卡5</td><td>人物层 <code>shapes</code> 包围盒高（人高占比）</td></tr>
+      <tr><td>node <code>ink_grade</code> / <code>ink_c_range</code> / <code>water</code> / <code>stroke</code></td><td>卡6</td><td><code>layers[*].filter</code>（扩散 / 位移 / 飞白）；<code>shapes[*].attrs.opacity</code> / <code>fill</code></td></tr>
+      <tr><td><code>motion</code> · <code>silence_ratio</code> · 卡4 κ</td><td>卡7</td><td><b>不入 scene.json</b>（静止态）；入 <code>dist/animation/*.html</code> 的段时序与 <code>s(t)</code></td></tr>
+      <tr><td><code>polarity</code> · <code>base_tone</code></td><td>卡6</td><td>底色候选（<code>color_candidates</code>）与墨偏区间；<b>已消费</b>（STEP 6 · 6.3 底色通路，三首已注入），精确底色由卡6 在候选内求解</td></tr>
+      <tr><td><code>format_candidates</code></td><td>卡5（选一）</td><td><code>viewBox</code> 长宽比 + <code>seal</code> 位置</td></tr>
+    </tbody>
+  </table>
+  <div class="callout q"><b>一条边界：scene.json 是「静止态」。</b>它只承载空间与物理量（卡5 / 卡6 的解）；时间轴（卡7 的 <code>s(t)</code> 与静默）不进 <code>scene.json</code>，进动画。故 §6.2 的几何三方断言（动画 ↔ <code>scene.json</code> ↔ STEP5/6）只覆盖空间 / 物理；时间轴由 §5.4 的度量断言与「声画同步以配音实测行时序为准」另管。</div>
+</section>
+
+<!-- ================= §6 ================= -->
+<section>
+  <div class="sec-head"><span class="sec-no">§6</span><h2>落地与验收段</h2></div>
+  <p class="sec-note">精确值渲染成画面，再由只读校验确认「处方是否兑现」。本段有三条落地通道与两套只读校验，<b>均不回写参数</b>。</p>
+
+  <h4>6.1 三条落地通道（同一真源，三种呈现）</h4>
+  <table>
+    <thead><tr><th style="width:200px">通道</th><th>产物</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>几何冻结</td><td><code>data/source/scene/&lt;pid&gt;.json</code></td><td>场景几何（云 / 山 / 舟 / 人物等命名元素）的<b>单一真源</b>；由 <code>build/scene_render.py --extract</code> 从动画冻结</td></tr>
+      <tr><td>全链路分析页</td><td><code>dist/pipelines/*.html</code>（STEP 5/6）</td><td>由 <code>--write</code> 从冻结几何重渲，含 D2 注入与溯源标记</td></tr>
+      <tr><td>动画</td><td><code>dist/animation/*.html</code></td><td>以音频时钟驱动，声画同步以配音实测行时序为准</td></tr>
+    </tbody>
+  </table>
+
+  <h4>6.2 两套只读校验（L4，只判读 / 断言）</h4>
+  <table>
+    <thead><tr><th style="width:200px">校验</th><th>判什么</th><th>载体</th></tr></thead>
+    <tbody>
+      <tr><td><b>O1 忠实度评估</b></td><td>画面是否忠实于处方（判读帧 + 探针 + 评分）；<b>定位为护栏，非目标</b></td><td><code>src/o1/</code> · <code>data/runs/</code></td></tr>
+      <tr><td><b>O3 负节点</b></td><td>不该画的是否被画了（负向清单）</td><td><code>src/o3/</code> · <code>data/derived/o3_negatives.json</code></td></tr>
+      <tr><td><b>度量断言</b></td><td>画面属性 ↔ D2 处方对账（焦点 / 含水档 / 人物 size）；几何一致 ≠ 处方兑现</td><td><code>build/scene_assert.py</code></td></tr>
+      <tr><td><b>几何三方断言</b></td><td>动画 ↔ 场景数据 ↔ 全链路 STEP5/6 逐值一致</td><td><code>build/scene_render.py --check</code></td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout q"><b>为什么验收不回写。</b>O1 是「护栏」而非「目标」——它的职责是防止改坏，不是驱动改好。若让验收结果反向调参，等于用「像不像」倒逼「画什么」，会把项目拖向追 SOTA 的图解化路线。验收段只输出结论，调参由上游（D2 / 求解器）按判据决定。</div>
+</section>
+
+<!-- ================= §7 ================= -->
+<section>
+  <div class="sec-head"><span class="sec-no">§7</span><h2>生成可控性分层（L1–L4）</h2></div>
+  <p class="sec-note">控制链回答「谁在哪一段动手」，本层回答「一个要素到底能不能被拧」。这与总纲的 M0–M3（能不能读数）<b>正交</b>：同一个 M1 里，既有可设的旋钮，也有只能读的仪表。把两者分开，才知道哪些要素真能当生成参数、哪些只能作验收。本节即总纲 §3.4 的展开，且为 L1–L4 的<b>唯一真源</b>。</p>
+
+  <h4>7.1 四层定义</h4>
+  <table>
+    <thead><tr><th style="width:130px">层</th><th style="width:300px">定义</th><th>判据</th><th style="width:230px">项目落点</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge l1">L1 直接旋钮</span></td><td>每节点 / 每诗可显式设值</td><td>有 <code>vocab</code> 枚举或区间</td><td><code>class_defaults</code> · <code>word_override</code></td></tr>
+      <tr><td><span class="badge l2">L2 派生旋钮</span></td><td>由景深 / 情感 / 类别推出，不直接设</td><td>改上游 → 下游跟着变</td><td><code>layer_technique</code> · <code>figure_layer</code> · <code>emotion</code> · <code>blank_rules</code> · <code>rules</code></td></tr>
+      <tr><td><span class="badge l3">L3 求解器目标</span></td><td>只给区间 / 候选，精确值交卡5 / 6 / 7</td><td>有目标函数、可解</td><td>ρ 区间 · <code>ink_c_range</code> · 构图位置 · 相机 <code>s(t)</code></td></tr>
+      <tr><td><span class="badge l4">L4 只验收</span></td><td>是结果量，不可作生成参数</td><td>只能判读 / 断言</td><td>12 算子（eff / σ / Δ / H / Sym / P / C）· 气韵</td></tr>
+    </tbody>
+  </table>
+
+  <h4>7.2 八轴旋钮清单（现有 vs 尚未接线）</h4>
+  <table>
+    <thead><tr><th style="width:70px">轴</th><th>现有可控旋钮（实测）</th><th style="width:96px">层</th><th>尚未接线</th></tr></thead>
+    <tbody>
+      <tr><td>轴0</td><td>—（气韵 = 验收，正确）</td><td>L4</td><td>无（不该有）</td></tr>
+      <tr><td>轴1</td><td>—（待 <code>style_grade</code>）</td><td>—</td><td><code>style_grade</code> 调制器 · 品格双向表</td></tr>
+      <tr><td>轴2</td><td><code>yuan</code>(6) · <code>layer</code>(5) · <code>blank_range</code>(ρ 区间) · <code>space</code> 词票 · <code>blank_rules</code> · <code>viewpoint</code>(3 档) · <code>composition</code>(护栏 2 + 算子 6)</td><td>L1+L2+L3</td><td>—（C 组已接线）</td></tr>
+      <tr><td>轴3</td><td><code>stroke</code>(18 式) · <code>cun</code>(9) · <code>water</code>(5 档) · <code>layer_technique</code>（仅山石） · <code>stroke_quality</code>(9 维 + 5 病)</td><td>L1+L2</td><td>—（C 组已接线）</td></tr>
+      <tr><td>轴4</td><td><code>ink</code>(6 阶含留白) · <code>ink_c_range</code> · <code>layer_atten_steps</code> · <code>emotion.ink_steps</code> · <code>ink_method</code>(6 式含 μ)</td><td>L1+L2</td><td>—（B 组已接线）</td></tr>
+      <tr><td>轴5</td><td><code>polarity.color</code>(8) · <code>season.color</code>(4) · <code>paradigm</code>(4 范式) · <code>projected_color_candidates</code></td><td>L1+L2</td><td>—（B 组已接线）</td></tr>
+      <tr><td>轴6</td><td><code>class</code>(15) · <code>class_defaults</code> · <code>word_override</code> · <code>season</code>(4) · <code>diantai</code> · <code>figure_layer.size</code> · <code>weather</code>(4 档)</td><td>L1+L2</td><td>常形常理元规则</td></tr>
+      <tr><td>轴7</td><td><code>format</code>(4) · <code>yuan.motion</code> · <code>silence_ratio</code> · <code>time_words</code>(4 档) · <code>seal</code>(印位 5 + 印面 2)</td><td>L1</td><td>—（C 组已接线）</td></tr>
+      <tr><td>轴8</td><td><code>water.D</code>（含水深度） · <code>material</code>(纸绢 3 / 笔 3 / 墨 2)</td><td>L1</td><td>—（C 组已接线）</td></tr>
+    </tbody>
+  </table>
+  <p class="sec-note" style="margin-top:-6px">上表「尚未接线」一列的可执行工单见 <b>§5.5</b>——按依赖分 A 底色通路 → B 范式 / 材质 → C 新算子 → D 品格闭环四组，逐条给出接线动作与接线前置。</p>
+
+  <div class="callout"><b>两条推论。</b>① <b>真正「直接可控」的是轴2–轴8 的 M0 枚举与 M1 输入量</b>——它们都有现成旋钮，改一个键就变；而轴0 气韵、M1 的输出量（eff / σ / 实测人高占比等）与 12 算子不可控，也不该可控，只作验收。② <b>轴1 品格是「闭环反控」而非直出</b>——12 算子先读出当前落档，<code>style_grade</code> 再反推该调哪些轴档位。故总纲 §3.2 边界二区分「相对量 / 绝对量」，本节再区分「<b>输入量 / 输出量</b>」：前者是旋钮，后者是仪表。</div>
+</section>
+
+<!-- ================= §8 ================= -->
+<section>
+  <div class="sec-head"><span class="sec-no">§8</span><h2>变更记录</h2></div>
+  <table>
+    <thead><tr><th style="width:90px">版本</th><th style="width:110px">日期</th><th>变更</th></tr></thead>
+    <tbody>
+      <tr><td>v1.0</td><td>2026-10-04</td><td>首次成篇。自总纲 §3.4 抽出「生成可控性」并补入控制链五段、五类输入源、D2 引擎四表、求解器与验收段；声明本文为控制链与 L1–L4 分层的唯一真源。总纲 §3.4 改为摘要 + 互链。</td></tr>
+      <tr><td>v1.1</td><td>2026-10-04</td><td>细化 D2 控制引擎的九个调制器：§4.2 增「接线状态」列；新增 §4.3 逐器解剖（每器给出定位 / 输入 / 触发 / 映射含实测值 / 输出 / 护栏 / 实证 / 边界），含 <code>emotion</code> 三轴 15 档表、<code>figure_layer</code> 尺寸四档表、<code>space</code> 26 词表、<code>form</code> 形制表、<code>blank_rules</code> 累加算法与三首逐项验算；原「分工铁律」顺延为 §4.4。所有实测值经 <code>d2_resolve.py</code> 三首复跑核对。</td></tr>
+      <tr><td>v1.2</td><td>2026-10-04</td><td>细化 §5 求解器段：由「两个求解器」扩为三器——卡5 构图（空间轴）/ 卡6 笔墨（物理轴）/ 卡7 时间轴（时间轴），并<b>更正相机 <code>s(t)</code> 与静默预算的归属</b>（由卡5 移归卡7）。新增 §5.1–§5.4：目标函数 / 决策变量 / 硬约束 / 输入输出 / 子模型 / 边界，配三首构图解对照（ρ 0.79 / 0.52 / 0.78）与含水处方兑现实测（eff / σ）；新增「求解器 ↔ 验收」闭环说明。§1 控制链图与逐段职责表同步补入卡7；修正 §1「分工铁律」交叉引用 §4.3→§4.4、§7.1 L3「卡5/6」→「卡5/6/7」。</td></tr>
+      <tr><td>v1.3</td><td>2026-10-04</td><td>把 §5 求解器段与 §7.2「尚未接线」清单合并为可执行工单：新增 <b>§5.5 求解器接线工单</b>（按依赖分 A 底色通路 / B 范式·材质 / C 新算子 / D 品格闭环四组，共 14 条，逐条给现状 / 接线动作 / 前置）；新增 <b>§5.6 求解器输入 / 输出 schema</b>（D2 → 求解器 → <code>scene.json</code> 三方契约，含 §5.6.1 三方字段映射与「scene.json 是静止态」边界）。§7.2 补入指向 §5.5 的互链。全部 D2 字段与实跑值取自 <code>d2_resolve.py --poem jx</code>。</td></tr>
+      <tr><td>v1.4</td><td>2026-10-04</td><td>向上推演 §5.5 工单的<b>上游数据</b>：新增 <b>§2.1 数据缺口清单（G1–G14）</b>——按「甲 画论侧规则资产 / 乙 词表完整性 / 丙 口径缺口」三类，逐条给出实测现状、缺什么、古典来源与量级，并给建表顺序（词表 → 画论规则 → 品格闭环）。同步修正 §5.5「皴法谱补齐」的「16 皴」口径错误（总纲实为「谱系十余种，先补雨点 / 折带 / 米点」，且 <code>cun</code> 缺「擦」）。§5.5 补入指向 §2.1 的互链。全部现状栏回到 <code>d2_mapping_seed.json</code> / <code>d2_supplement.json</code> / <code>context.json</code> / <code>scene.json</code> 实测核对。</td></tr>
+      <tr><td>v1.5</td><td>2026-10-04</td><td>与《数据底座路线图》通盘复核后消歧：§5.5 表头「前置」更名为「<b>接线前置</b>」，与路线图 §3「<b>建表前置</b>」区分——同一对 G3 / G11，建表时 G11 先于 G3、接线时 G3 先于 G11，二者不矛盾（§2.1 与 §5.5 末注均已点明）。§5.5 末注补入与路线图四波的对应关系（A→Wave 1 / B→Wave 2 前半 / C→Wave 2 后半 / D→Wave 3；Wave 0 为输入端 D1 / D5 / D6）。§5.5 说明行与 §7.2 互链同步改用「接线前置」。</td></tr>
+      <tr><td>v1.6</td><td>2026-10-04</td><td><b>Wave 0 状态同步。</b>输入端 D1 / D5 / D6 已落地（<code>src/d1/d1_resolve.py</code> · <code>src/tools/context_schema_check.py</code> · <code>src/tools/emotion_lexicon_check.py</code>，并纳入 <code>build/verify.py</code> 输入端护栏）；§5.5 末注相应由「Wave 0 为输入端…」改为「已落地」。本文规则端 G1–G14 不受影响。</td></tr>
+      <tr><td>v1.7</td><td>2026-10-04</td><td><b>Wave 1 · A 组 G12（极性归一）D2 侧落地。</b>① §2.1 G12 加「已落地」徽标并更新现状（8 键 + 22 归一，输出 <code>polarity</code> / <code>base_tone</code>）；② §4.2 接线状态由「未接线」改「<b>部分 · D2 侧已接</b>」；③ §4.3.7 逐项重写（输入加 <code>normalize</code>、输出加 <code>polarity</code> / <code>base_tone</code>、实证改三首实跑、边界改为「D2 侧完成 · 卡6 待建」）；④ §5.5 A 组首条加「D2 侧已接」徽标与现状；⑤ §5.6(a) schema 补 <code>polarity</code> / <code>base_tone</code> 两节（江雪实跑），§5.6.1 映射表加对应行；⑥ §2.1 建表顺序注与 §5.5 末注同步。</td></tr>
+      <tr><td>v1.8</td><td>2026-10-04</td><td><b>Wave 1 收口（G10 / G11 / G13 / G14）。</b>① §2.1 乙组 G10（<code>cun</code> 9 值 / 山石池 6 值）、G11（<code>ink_method</code> 6 式含 μ）加「已落地」徽标并更新现状；② §2.1 丙组 G13（阈值冻结于 <code>o2_gate.json</code>）、G14（末句 T≥0.8 升档 → jx 0.26）加「已落地」徽标；③ §2.1 建表顺序注补「G10 / G11 / G12 已落地，G13 / G14 随 Wave 1 落地」。规则端甲组 G1–G9 仍待建（Wave 2）。</td></tr>
+      <tr><td>v1.9</td><td>2026-10-04</td><td><b>Wave 2 · A 组底色通路接线。</b>① §5.5 A 组首条 <code>polarity</code> 底色偏置由「D2 侧已接」改「<b>已接线</b>」，现状补「卡6 消费端已接——候选注入 STEP 6 · 6.3 底色通路（三首，含 <code>data-d2</code> 溯源）」；② §4.2 接线状态 <code>polarity</code> 由「部分 · D2 侧已接 · 卡6 待建」改「<b>已接</b> D2 侧 + 卡6 消费端」；③ §4.3.7 实证改「已接（D2 侧 + 卡6 消费端）」、边界改「卡6 消费端已接」；④ §5.6.1 映射表 <code>polarity</code> · <code>base_tone</code> 行由「当前未消费」改「<b>已消费</b>」；⑤ §5.5 A 组「静默预算口径统一」随 G14 改「<b>已接线</b>」（jx <code>T4</code> / <code>0.26</code> 与卡7 同源）；⑥ §5.5 末注与路线图对应关系同步。B 组（设色范式 / 宿墨焦墨）前置已解锁。</td></tr>
+      <tr><td>v2.0</td><td>2026-10-04</td><td><b>Wave 2 · B 组（设色范式 + 宿墨焦墨）接线。</b>① §4.2 调制器清单增第十器 <code>paradigm</code>（季节 / 极性 / 情感档 → 设色范式候选 + 色域投影），接线状态「已接 D2 侧 + 卡6 消费端」；② 新增 <b>§4.3.10 <code>paradigm</code></b> 逐器解剖（四范式青绿 / 浅绛 / 水墨 / 没骨 + <code>ink_bone</code> 墨骨强度 + 色域投影 + 定档规则 P1/P2/P3，附三首实跑）；③ §4.3 由「九器」改「十器」、派生由「五类」改「六类」，§4.3.9 与 §4.4 计数同步；④ §5.5 B 组两条（设色范式档 / 宿墨焦墨独立）由「未接线」改「<b>已接线</b>」，现状补「卡6 消费端已接——注入 STEP 6 · 6.4 设色范式 / 6.5 墨法轴（三首，含 <code>data-d2</code> 溯源）」；⑤ §7.2 轴5 现有旋钮增 <code>paradigm</code>(4 范式) 与 <code>projected_color_candidates</code>、轴4 增 <code>ink_method</code>(6 式含 μ)，二者「尚未接线」改「—（B 组已接线）」，轴1「尚未接线」删去已落地的 <code>paradigm</code> 范式档；⑥ §5.5 末注同步。四范式古典依据（董其昌南北宗 / 元人浅绛 / 徐崇嗣没骨）已入 <code>painting_theory.json</code>；定档规则 P1/P2/P3 属工程裁定（<code>grade=裁定</code>）。回归 55/55、注入快照一致、全链路体检全通过。</td></tr>
+      <tr><td>v2.1</td><td>2026-10-04</td><td><b>Wave 2 · C 组（新算子 / 新调制器七器）接线。</b>① §4.2 调制器清单 C 组七器（<code>viewpoint</code> / <code>weather</code> / <code>time_words</code> / <code>material</code> / <code>stroke_quality</code> / <code>composition</code> / <code>seal</code>）补 §4.3.11.x 锚点，接线状态「已接 D2 侧 + 求解器消费端」；② 新增 <b>§4.3.11 C 组·新算子（七器）</b>逐器解剖（视点三档 + 地平线 / 垂直尺度；天候四档 σ·μ 乘子；时辰四档段长 / 墨偏；材质三类系数；笔法质量维 9 维 + 5 病；构图护栏 2 + 蹊径六则算子 6；钤印印位 5 + 印面 2），附三首实跑；③ §4.3 由「十器」改「十七器」、§4.4 分工铁律同步；④ §5.5 C 组七条 + 钤印条由「未接线」改「<b>已接线</b>」，现状补「注入 STEP 5 · 5.1–5.3 / STEP 6 · 6.6–6.7 / STEP 7 · 7.2–7.3（三首，含 <code>data-d2</code> 溯源）」；⑤ §7.2 轴2 增 <code>viewpoint</code> / <code>composition</code>、轴3 增 <code>stroke_quality</code> 并把 <code>cun</code>(5)→(9)、轴6 增 <code>weather</code>、轴7 增 <code>time_words</code> / <code>seal</code>、轴8 增 <code>material</code>，对应「尚未接线」改「—（C 组已接线）」；⑥ 口径修正：<code>season_words</code> 的「月→秋」误配改为 <code>time_words</code>「月→夜」，<code>weather</code>「日」因歧义不收（晴只取晴 / 霁）。C 组七器古典依据（郭熙三远 / 沈括以大观小 / 郭熙四时·朝暮 / 韩拙三远 / 荆浩四势·二病 / 郭若虚三病 / 黄宾虹五笔 / 马远夏圭边角 / 石涛三叠两段·蹊径六则 / 钤印通例）已入 <code>painting_theory.json</code>；定档权重与材质默认档属工程裁定（<code>grade=裁定</code>）。回归 81/81、注入快照一致、全链路体检全通过。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer>
+生成控制整体架构 ｜ 控制链五段（输入源 → 抽取处理 → D2 控制引擎 → 求解器 → 落地验收）｜ v2.1 · 控制链与 L1–L4 分层的唯一真源 ｜ 2026-10-04<br>
+配套：<a href="landscape_ink_elements.html">表达要素总纲</a> · <a href="style_grade_measurability.html">立意与品格的可度量方法</a> · <a href="data_foundation_roadmap.html">数据底座路线图</a> · <a href="图声要素的数据可得性与模型映射.md">数据可得性与模型映射</a> · <a href="../design/model_cards.md">model_cards</a> · <a href="../design/ink_figure_grammar.html">人物造型语法</a><br>
+一句话：<b>总纲定「画什么、能不能读数」，本文定「谁来拧、怎么拧、拧完谁验收」。</b>
+</footer>
+
+</div>
+</body>
+</html>

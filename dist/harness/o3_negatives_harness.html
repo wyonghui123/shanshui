@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O3 负节点双判据 · 复核工装页</title>
+<style>
+:root{--paper:#F6F3EC;--paper2:#fff;--ink:#1C1C1C;--ink2:#4A4640;--ink3:#8A8578;--line:rgba(28,28,28,.14);--line2:rgba(28,28,28,.07);--zhu:#A83A2C;--qing:#3E5C76;--jin:#B08430;--serif:"Songti SC","STSong",SimSun,"Noto Serif SC",Georgia,serif;--sans:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,Consolas,monospace}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.75;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:52px 28px 88px}
+header{border-bottom:1px solid var(--line);padding-bottom:24px;margin-bottom:36px}
+.eyebrow{font-size:12px;letter-spacing:.22em;color:var(--ink3);text-transform:uppercase;margin-bottom:14px}
+h1{font-family:var(--serif);font-size:29px;font-weight:600;margin:0 0 8px;letter-spacing:.04em}
+.sub{color:var(--ink3);font-size:13px}.sub code{font-family:var(--mono);font-size:12px;background:var(--paper2);border:1px solid var(--line2);border-radius:4px;padding:0 4px}
+h2{font-family:var(--serif);font-size:22px;font-weight:600;margin:0;letter-spacing:.03em}
+h3{font-family:var(--serif);font-size:16px;font-weight:600;margin:30px 0 10px;letter-spacing:.02em;color:var(--ink2)}
+section.poem{border-top:1px solid var(--line);padding-top:26px;margin-top:40px}
+.ph{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.form{font-size:12.5px;color:var(--ink3)}.seg{font-family:var(--mono);font-size:11.5px;color:var(--qing)}
+.poembox{background:var(--paper2);border:1px solid var(--line);border-radius:10px;padding:16px 20px;box-shadow:0 1px 2px rgba(28,28,28,.04)}
+.pline{font-family:var(--serif);font-size:22px;letter-spacing:.08em;line-height:1.85;white-space:nowrap}
+.lno{font-family:var(--mono);font-size:11px;color:var(--ink3);margin-right:14px;vertical-align:middle}
+.note{font-size:12.5px;color:var(--ink3);background:var(--paper2);border:1px solid var(--line2);border-left:3px solid var(--qing);border-radius:8px;padding:10px 14px;margin-bottom:12px}
+table{width:100%;border-collapse:collapse;background:var(--paper2);border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:13px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line2);text-align:left;vertical-align:middle}
+thead th{background:rgba(28,28,28,.03);font-weight:600;font-size:12px;color:var(--ink2);letter-spacing:.02em;white-space:nowrap}
+tbody tr:last-child td{border-bottom:0}.num{font-family:var(--mono);font-size:12px;white-space:nowrap}
+.em{font-family:var(--serif);font-size:15px;font-weight:600}.dim{color:var(--ink3);font-size:12.5px}
+.c{text-align:center}.k{margin-left:6px;font-size:11px}
+.y{color:var(--qing)}.n{color:rgba(28,28,28,.22)}
+.hot{color:var(--zhu);font-weight:600}.minc{background:rgba(62,92,118,.10);font-weight:600}
+.bad{color:var(--zhu);font-weight:600}
+tr.disagree{background:rgba(176,132,48,.06)}
+.pill{display:inline-block;font-size:11.5px;padding:1px 9px;border-radius:999px;border:1px solid var(--line);white-space:nowrap}
+.pill.pos{color:var(--ink);background:rgba(28,28,28,.05)}
+.pill.void{color:var(--ink3);background:rgba(138,133,120,.10)}
+.pill.neg{color:var(--zhu);background:rgba(168,58,44,.10);border-color:rgba(168,58,44,.30)}
+.pill.act{color:var(--qing);background:rgba(62,92,118,.10);border-color:rgba(62,92,118,.30)}
+.pill.review{color:var(--jin);background:rgba(176,132,48,.12);border-color:rgba(176,132,48,.32)}
+.tag{font-size:10.5px;padding:0 7px;border-radius:999px;border:1px solid var(--line);margin-left:6px;white-space:nowrap}
+.tag.goldneg{color:var(--zhu);border-color:rgba(168,58,44,.35);background:rgba(168,58,44,.08)}
+.tag.ok{color:var(--qing);border-color:rgba(62,92,118,.30);background:rgba(62,92,118,.08)}
+.tag.neg{color:var(--zhu);border-color:rgba(168,58,44,.35);background:rgba(168,58,44,.10)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin:12px 2px 0;font-size:12px;color:var(--ink3)}
+.lg{display:inline-flex;align-items:center;gap:6px}.sw{width:16px;height:0;border-bottom:3px solid transparent;display:inline-block}
+.sw.pos{border-bottom-color:var(--ink)}.sw.void{border-bottom:2px dotted rgba(28,28,28,.28)}.sw.neg{border-bottom:2px dashed var(--zhu)}.sw.act{border-bottom:2px solid var(--qing)}
+.rates{display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;color:var(--ink3);margin:8px 0 10px}.rates b{font-family:var(--mono);color:var(--ink);font-size:13px}
+ul.rq{margin:0;padding-left:0;list-style:none}ul.rq li{background:var(--paper2);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin-bottom:8px;font-size:13px}
+.poemtag{font-family:var(--serif);font-weight:600;margin-right:4px}
+ul.rq code{font-family:var(--mono);font-size:12px;background:var(--paper);border:1px solid var(--line2);border-radius:4px;padding:0 4px}
+.why{color:var(--ink3);font-size:12.5px;margin-top:4px}
+footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);color:var(--ink3);font-size:12px}
+</style></head><body><div class="wrap">
+<header>
+  <div class="eyebrow">O3 · 负节点双判据 · 复核工装页</div>
+  <h1>把「留白」从手感变成判据</h1>
+  <div class="sub">两条独立判据交叉验证，<b>一致才判负节点</b>：① 视觉共现网络低度　② 构图 OT 未运输质量。判据一取「视觉共现度」（共现边两端皆为视觉意象，channel=v）；跨通道意象在视觉网络中度=0。deg_all 为含跨通道边的原始度，仅作对照。判据二为无容量解析解（槽位容量充足的极限）；带容量 Sinkhorn 作为交叉核对列在每行 sinkhorn_frac。带容量求解归 O4。不可实写（空间/时间量）先行裁定为留白节点。<br>输入 <code>o2_imagery.json</code> / <code>o2_gold.json</code>　生成 2026-10-02T07:02:47</div>
+</header>
+<section class="poem">
+  <div class="ph"><h2>《江雪》柳宗元</h2>
+    <span class="form">五言绝句 · 9 节点（负 2 / 留白 0 / 待复核 0）</span>
+    <span class="seg">Sinkhorn 行和误差 0.00%</span></div>
+  <div class="poembox"><div class="pline"><span class="lno">1</span>千山鸟飞绝</div><div class="pline"><span class="lno">2</span>万径人踪灭</div><div class="pline"><span class="lno">3</span>孤舟蓑笠翁</div><div class="pline"><span class="lno">4</span>独钓寒江雪</div></div>
+
+  <h3>双判据总表</h3>
+  <table><thead><tr>
+    <th>意象</th><th>句</th><th>通道</th><th>裁定</th>
+    <th title="视觉共现度（括号内为含跨通道边的原始度）">视觉度</th><th title="该意象映射到的画面元素数">画面连接</th><th title="按门控档 + 焦点加成的基础质量">质量</th>
+    <th title="判据二：熵正则部分 OT 的未运输质量占比">未运输占比</th><th title="带容量 Sinkhorn 交叉核对">Sinkhorn</th>
+    <th>判据一</th><th>判据二</th><th>一致</th>
+  </tr></thead><tbody><tr class="">
+      <td class="em">千山</td>
+      <td class="num">1</td>
+      <td class="num">v</td>
+      <td><span class="pill pos">正节点</span></td>
+      <td class="num">1<span class="dim"> (1)</span></td>
+      <td class="num">1</td>
+      <td class="num">0.8</td>
+      <td class="num ">0.0%</td>
+      <td class="num dim">0.1%</td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">不一致</span></td>
+    </tr><tr class="">
+      <td class="em">鸟<span class="tag goldneg">gold 负</span></td>
+      <td class="num">1</td>
+      <td class="num">v</td>
+      <td><span class="pill neg">负节点</span><span class="dim k">缺席</span></td>
+      <td class="num">1<span class="dim"> (1)</span></td>
+      <td class="num">0</td>
+      <td class="num">0.7</td>
+      <td class="num hot">100.0%</td>
+      <td class="num dim">100.0%</td>
+      <td class="c"><b class="y">✓</b></td>
+      <td class="c"><b class="y">✓</b></td>
+      <td class="c"><b class="y">一致</b></td>
+    </tr><tr class="">
+      <td class="em">万径</td>
+      <td class="num">2</td>
+      <td class="num">v</td>
+      <td><span class="pill pos">正节点</span></td>
+      <td class="num">1<span class="dim"> (1)</span></td>
+      <td class="num">1</td>
+      <td class="num">0.8</td>
+      <td class="num ">0.0%</td>
+      <td class="num dim">0.1%</td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">不一致</span></td>
+    </tr><tr class="">
+      <td class="em">人踪<span class="tag goldneg">gold 负</span></td>
+      <td class="num">2</td>
+      <td class="num">v</td>
+      <td><span class="pill neg">负节点</span><span class="dim k">缺席</span></td>
+      <td class="num">1<span class="dim"> (1)</span></td>
+      <td class="num">0</td>
+      <td class="num">0.7</td>
+      <td class="num hot">100.0%</td>
+      <td class="num dim">100.0%</td>
+      <td class="c"><b class="y">✓</b></td>
+      <td class="c"><b class="y">✓</b></td>
+      <td class="c"><b class="y">一致</b></td>
+    </tr><tr class="">
+      <td class="em">孤舟</td>
+      <td class="num">3</td>
+      <td class="num">v</td>
+      <td><span class="pill pos">正节点</span></td>
+      <td class="num">1<span class="dim"> (1)</span></td>
+      <td class="num">1</td>
+      <td class="num">1</td>
+      <td class="num ">0.0%</td>
+      <td class="num dim">0.1%</td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">不一致</span></td>
+    </tr><tr class="">
+      <td class="em">蓑笠翁</td>
+      <td class="num">3</td>
+      <td class="num">v</td>
+      <td><span class="pill pos">正节点</span></td>
+      <td class="num">1<span class="dim"> (1)</span></td>
+      <td class="num">1</td>
+      <td class="num">1</td>
+      <td class="num ">0.0%</td>
+      <td class="num dim">0.1%</td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">不一致</span></td>
+    </tr><tr class="">
+      <td class="em">独钓</td>
+      <td class="num">4</td>
+      <td class="num">v</td>
+      <td><span class="pill act">动作节点</span></td>
+      <td class="num">0<span class="dim"> (0)</span></td>
+      <td class="num">1</td>
+      <td class="num">0.6</td>
+      <td class="num ">0.0%</td>
+      <td class="num dim">0.1%</td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">不一致</span></td>
+    </tr><tr class="">
+      <td class="em">寒江</td>
+      <td class="num">4</td>
+      <td class="num">v</td>
+      <td><span class="pill pos">正节点</span></td>
+      <td class="num">1<span class="dim"> (1)</span></td>
+      <td class="num">1</td>
+      <td class="num">0.5</td>
+      <td class="num ">0.0%</td>
+      <td class="num dim">0.1%</td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">不一致</span></td>
+    </tr><tr class="">
+      <td class="em">雪</td>
+      <td class="num">4</td>
+      <td class="num">v</td>
+      <td><span class="pill pos">正节点</span></td>
+      <td class="num">1<span class="dim"> (1)</span></td>
+      <td class="num">1</td>
+      <td class="num">0.5</td>
+      <td class="num ">0.1%</td>
+      <td class="num dim">0.4%</td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">不一致</span></td>
+    </tr></tbody></table>
+  <div class="legend">
+    <span class="lg"><i class="sw neg"></i>负节点</span><span class="lg"><i class="sw void"></i>留白节点</span>
+    <span class="lg"><i class="sw act"></i>动作节点</span><span class="lg"><i class="sw pos"></i>正节点</span>
+    <span class="lg dim">判据一：视觉共现度 ≤ 1 且 画面连接 = 0</span>
+    <span class="lg dim">判据二：未运输占比 &gt; 0.5</span>
+  </div>
+
+  <h3>判据二 · 代价行（可审计）</h3>
+  <div class="note">每个意象对 4 个槽位与「弃置槽 τ」的代价 C = 0.5·语义 + 0.3·景深 + 1·负节点 + 0.6·跨通道。最小值落在弃置槽之上（即 min &gt; τ = 0.5）→ 该意象宁可不画 → 判据二成立。</div>
+  <table><thead><tr>
+    <th>意象</th><th title="景深 0.7 · 容量 2">近景</th><th title="景深 0.5 · 容量 2.5">中景</th><th title="景深 0.3 · 容量 2.5">远景</th><th title="景深 0 · 容量 3">留白</th><th title="弃置槽成本">弃置 τ</th><th>取向</th><th>代价明细</th>
+  </tr></thead><tbody><tr>
+      <td class="em">千山</td><td class="num ">0.17</td><td class="num ">0.11</td><td class="num minc">0.05</td><td class="num ">0.49</td>
+      <td class="num ">0.50</td>
+      <td class="c"><span class="tag ok">入槽</span></td>
+      <td class="dim">近景 0.17　中景 0.11　远景 0.05　留白 0.49</td>
+    </tr><tr>
+      <td class="em">鸟</td><td class="num ">1.17</td><td class="num ">1.11</td><td class="num minc">1.05</td><td class="num ">1.49</td>
+      <td class="num hot">0.50</td>
+      <td class="c"><span class="tag neg">弃置</span></td>
+      <td class="dim">近景 1.17　中景 1.11　远景 1.05　留白 1.49</td>
+    </tr><tr>
+      <td class="em">万径</td><td class="num ">0.11</td><td class="num minc">0.05</td><td class="num ">0.11</td><td class="num ">0.55</td>
+      <td class="num ">0.50</td>
+      <td class="c"><span class="tag ok">入槽</span></td>
+      <td class="dim">近景 0.11　中景 0.05　远景 0.11　留白 0.55</td>
+    </tr><tr>
+      <td class="em">人踪</td><td class="num ">1.11</td><td class="num minc">1.05</td><td class="num ">1.11</td><td class="num ">1.55</td>
+      <td class="num hot">0.50</td>
+      <td class="c"><span class="tag neg">弃置</span></td>
+      <td class="dim">近景 1.11　中景 1.05　远景 1.11　留白 1.55</td>
+    </tr><tr>
+      <td class="em">孤舟</td><td class="num minc">0.05</td><td class="num ">0.11</td><td class="num ">0.17</td><td class="num ">0.61</td>
+      <td class="num ">0.50</td>
+      <td class="c"><span class="tag ok">入槽</span></td>
+      <td class="dim">近景 0.05　中景 0.11　远景 0.17　留白 0.61</td>
+    </tr><tr>
+      <td class="em">蓑笠翁</td><td class="num minc">0.05</td><td class="num ">0.11</td><td class="num ">0.17</td><td class="num ">0.61</td>
+      <td class="num ">0.50</td>
+      <td class="c"><span class="tag ok">入槽</span></td>
+      <td class="dim">近景 0.05　中景 0.11　远景 0.17　留白 0.61</td>
+    </tr><tr>
+      <td class="em">独钓</td><td class="num minc">0.05</td><td class="num ">0.11</td><td class="num ">0.17</td><td class="num ">0.61</td>
+      <td class="num ">0.50</td>
+      <td class="c"><span class="tag ok">入槽</span></td>
+      <td class="dim">近景 0.05　中景 0.11　远景 0.17　留白 0.61</td>
+    </tr><tr>
+      <td class="em">寒江</td><td class="num ">0.11</td><td class="num minc">0.05</td><td class="num ">0.11</td><td class="num ">0.55</td>
+      <td class="num ">0.50</td>
+      <td class="c"><span class="tag ok">入槽</span></td>
+      <td class="dim">近景 0.11　中景 0.05　远景 0.11　留白 0.55</td>
+    </tr><tr>
+      <td class="em">雪</td><td class="num ">0.26</td><td class="num ">0.20</td><td class="num minc">0.14</td><td class="num ">0.40</td>
+      <td class="num ">0.50</td>
+      <td class="c"><span class="tag ok">入槽</span></td>
+      <td class="dim">近景 0.26　中景 0.20　远景 0.14　留白 0.40</td>
+    </tr></tbody></table>
+
+  <h3>验证 vs 人工 gold</h3>
+  <div class="rates">
+    <span>精确 <b>100.0%</b></span><span>召回 <b>100.0%</b></span>
+    <span>gold 负 <b>鸟、人踪</b></span><span>自动负 <b>鸟、人踪</b></span>
+    
+    
+  </div>
+</section><section class="poem">
+  <div class="ph"><h2>《早发白帝城》李白</h2>
+    <span class="form">七言绝句 · 9 节点（负 1 / 留白 3 / 待复核 0）</span>
+    <span class="seg">Sinkhorn 行和误差 0.00%</span></div>
+  <div class="poembox"><div class="pline"><span class="lno">1</span>朝辞白帝彩云间</div><div class="pline"><span class="lno">2</span>千里江陵一日还</div><div class="pline"><span class="lno">3</span>两岸猿声啼不住</div><div class="pline"><span class="lno">4</span>轻舟已过万重山</div></div>
+
+  <h3>双判据总表</h3>
+  <table><thead><tr>
+    <th>意象</th><th>句</th><th>通道</th><th>裁定</th>
+    <th title="视觉共现度（括号内为含跨通道边的原始度）">视觉度</th><th title="该意象映射到的画面元素数">画面连接</th><th title="按门控档 + 焦点加成的基础质量">质量</th>
+    <th title="判据二：熵正则部分 OT 的未运输质量占比">未运输占比</th><th title="带容量 Sinkhorn 交叉核对">Sinkhorn</th>
+    <th>判据一</th><th>判据二</th><th>一致</th>
+  </tr></thead><tbody><tr class="">
+      <td class="em">白帝城</td>
+      <td class="num">1</td>
+      <td class="num">v</td>
+      <td><span class="pill pos">正节点</span></td>
+      <td class="num">1<span class="dim"> (1)</span></td>
+      <td class="num">1</td>
+      <td class="num">0.8</td>
+      <td class="num ">0.0%</td>
+      <td class="num dim">0.1%</td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">不一致</span></td>
+    </tr><tr class="">
+      <td class="em">彩云</td>
+      <td class="num">1</td>
+      <td class="num">v</td>
+      <td><span class="pill pos">正节点</span></td>
+      <td class="num">1<span class="dim"> (1)</span></td>
+      <td class="num">1</td>
+      <td class="num">0.5</td>
+      <td class="num ">0.0%</td>
+      <td class="num dim">0.1%</td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">不一致</span></td>
+    </tr><tr class="">
+      <td class="em">千里</td>
+      <td class="num">2</td>
+      <td class="num">v</td>
+      <td><span class="pill void">留白节点</span></td>
+      <td class="num">1<span class="dim"> (1)</span></td>
+      <td class="num">0</td>
+      <td class="num">0.35</td>
+      <td class="num ">0.0%</td>
+      <td class="num dim">0.0%</td>
+      <td class="c"><b class="y">✓</b></td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">不一致</span></td>
+    </tr><tr class="">
+      <td class="em">江陵</td>
+      <td class="num">2</td>
+      <td class="num">v</td>
+      <td><span class="pill void">留白节点</span></td>
+      <td class="num">2<span class="dim"> (2)</span></td>
+      <td class="num">0</td>
+      <td class="num">0.35</td>
+      <td class="num ">0.0%</td>
+      <td class="num dim">0.0%</td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">不一致</span></td>
+    </tr><tr class="">
+      <td class="em">一日</td>
+      <td class="num">2</td>
+      <td class="num">v</td>
+      <td><span class="pill void">留白节点</span></td>
+      <td class="num">1<span class="dim"> (1)</span></td>
+      <td class="num">0</td>
+      <td class="num">0.35</td>
+      <td class="num ">0.0%</td>
+      <td class="num dim">0.0%</td>
+      <td class="c"><b class="y">✓</b></td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">不一致</span></td>
+    </tr><tr class="">
+      <td class="em">两岸</td>
+      <td class="num">3</td>
+      <td class="num">v</td>
+      <td><span class="pill pos">正节点</span></td>
+      <td class="num">0<span class="dim"> (2)</span></td>
+      <td class="num">1</td>
+      <td class="num">0.8</td>
+      <td class="num ">0.0%</td>
+      <td class="num dim">0.0%</td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">不一致</span></td>
+    </tr><tr class="">
+      <td class="em">猿声<span class="tag goldneg">gold 负</span></td>
+      <td class="num">3</td>
+      <td class="num">a</td>
+      <td><span class="pill neg">负节点</span><span class="dim k">跨通道</span></td>
+      <td class="num">0<span class="dim"> (2)</span></td>
+      <td class="num">0</td>
+      <td class="num">0.7</td>
+      <td class="num hot">100.0%</td>
+      <td class="num dim">100.0%</td>
+      <td class="c"><b class="y">✓</b></td>
+      <td class="c"><b class="y">✓</b></td>
+      <td class="c"><b class="y">一致</b></td>
+    </tr><tr class="">
+      <td class="em">轻舟</td>
+      <td class="num">4</td>
+      <td class="num">v</td>
+      <td><span class="pill pos">正节点</span></td>
+      <td class="num">0<span class="dim"> (0)</span></td>
+      <td class="num">1</td>
+      <td class="num">1</td>
+      <td class="num ">0.0%</td>
+      <td class="num dim">0.0%</td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">不一致</span></td>
+    </tr><tr class="">
+      <td class="em">万重山</td>
+      <td class="num">4</td>
+      <td class="num">v</td>
+      <td><span class="pill pos">正节点</span></td>
+      <td class="num">0<span class="dim"> (0)</span></td>
+      <td class="num">1</td>
+      <td class="num">0.8</td>
+      <td class="num ">0.0%</td>
+      <td class="num dim">0.1%</td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">·</span></td>
+      <td class="c"><span class="n">不一致</span></td>
+    </tr></tbody></table>
+  <div class="legend">
+    <span class="lg"><i class="sw neg"></i>负节点</span><span class="lg"><i class="sw void"></i>留白节点</span>
+    <span class="lg"><i class="sw act"></i>动作节点</span><span class="lg"><i class="sw pos"></i>正节点</span>
+    <span class="lg dim">判据一：视觉共现度 ≤ 1 且 画面连接 = 0</span>
+    <span class="lg dim">判据二：未运输占比 &gt; 0.5</span>
+  </div>
+
+  <h3>判据二 · 代价行（可审计）</h3>
+  <div class="note">每个意象对 4 个槽位与「弃置槽 τ」的代价 C = 0.5·语义 + 0.3·景深 + 1·负节点 + 0.6·跨通道。最小值落在弃置槽之上（即 min &gt; τ = 0.5）→ 该意象宁可不画 → 判据二成立。</div>
+  <table><thead><tr>
+    <th>意象</th><th title="景深 0.7 · 容量 2">近景</th><th title="景深 0.5 · 容量 2.5">中景</th><th title="景深 0.3 · 容量 2.5">远景</th><th title="景深 0 · 容量 3">留白</th><th title="弃置槽成本">弃置 τ</th><th>取向</th><th>代价明细</th>
+  </tr></thead><tbody><tr>
+      <td class="em">白帝城</td><td class="num ">0.17</td><td class="num ">0.11</td><td class="num minc">0.05</td><td class="num ">0.49</td>
+      <td class="num ">0.50</td>
+      <td class="c"><span class="tag ok">入槽</span></td>
+      <td class="dim">近景 0.17　中景 0.11　远景 0.05　留白 0.49</td>
+    </tr><tr>
+      <td class="em">彩云</td><td class="num ">0.17</td><td class="num ">0.11</td><td class="num minc">0.05</td><td class="num ">0.49</td>
+      <td class="num ">0.50</td>
+      <td class="c"><span class="tag ok">入槽</span></td>
+      <td class="dim">近景 0.17　中景 0.11　远景 0.05　留白 0.49</td>
+    </tr><tr>
+      <td class="em">千里</td><td class="num ">0.66</td><td class="num ">0.60</td><td class="num ">0.54</td><td class="num minc">0.05</td>
+      <td class="num ">0.50</td>
+      <td class="c"><span class="tag ok">入槽</span></td>
+      <td class="dim">近景 0.66　中景 0.60　远景 0.54　留白 0.05</td>
+    </tr><tr>
+      <td class="em">江陵</td><td class="num ">0.65</td><td class="num ">0.58</td><td class="num ">0.53</td><td class="num minc">0.07</td>
+      <td class="num ">0.50</td>
+      <td class="c"><span class="tag ok">入槽</span></td>
+      <td class="dim">近景 0.65　中景 0.58　远景 0.53　留白 0.07</td>
+    </tr><tr>
+      <td class="em">一日</td><td class="num ">0.66</td><td class="num ">0.60</td><td class="num ">0.54</td><td class="num minc">0.05</td>
+      <td class="num ">0.50</td>
+      <td class="c"><span class="tag ok">入槽</span></td>
+      <td class="dim">近景 0.66　中景 0.60　远景 0.54　留白 0.05</td>
+    </tr><tr>
+      <td class="em">两岸</td><td class="num ">0.11</td><td class="num minc">0.05</td><td class="num ">0.11</td><td class="num ">0.55</td>
+      <td class="num ">0.50</td>
+      <td class="c"><span class="tag ok">入槽</span></td>
+      <td class="dim">近景 0.11　中景 0.05　远景 0.11　留白 0.55</td>
+    </tr><tr>
+      <td class="em">猿声</td><td class="num ">1.16</td><td class="num minc">1.10</td><td class="num ">1.16</td><td class="num ">1.25</td>
+      <td class="num hot">0.50</td>
+      <td class="c"><span class="tag neg">弃置</span></td>
+      <td class="dim">近景 1.16　中景 1.10　远景 1.16　留白 1.25</td>
+    </tr><tr>
+      <td class="em">轻舟</td><td class="num minc">0.05</td><td class="num ">0.11</td><td class="num ">0.17</td><td class="num ">0.61</td>
+      <td class="num ">0.50</td>
+      <td class="c"><span class="tag ok">入槽</span></td>
+      <td class="dim">近景 0.05　中景 0.11　远景 0.17　留白 0.61</td>
+    </tr><tr>
+      <td class="em">万重山</td><td class="num ">0.17</td><td class="num ">0.11</td><td class="num minc">0.05</td><td class="num ">0.49</td>
+      <td class="num ">0.50</td>
+      <td class="c"><span class="tag ok">入槽</span></td>
+      <td class="dim">近景 0.17　中景 0.11　远景 0.05　留白 0.49</td>
+    </tr></tbody></table>
+
+  <h3>验证 vs 人工 gold</h3>
+  <div class="rates">
+    <span>精确 <b>100.0%</b></span><span>召回 <b>100.0%</b></span>
+    <span>gold 负 <b>猿声</b></span><span>自动负 <b>猿声</b></span>
+    
+    
+  </div>
+</section>
+<section class="poem"><h2>复核队列（判据不一致项）</h2><div class="dim">无（两条判据完全一致）。</div></section>
+<footer>o3_negatives_harness.html · 由 src/o3/o3_build_harness.mjs 生成 · 数据源 o3_negatives.json</footer>
+</div></body></html>

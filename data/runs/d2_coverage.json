@@ -1,0 +1,56 @@
+{
+  "meta": {
+    "name": "d2_coverage",
+    "role": "D2 覆盖率护栏：词典词 / 中心字 / 实跑节点 三层落类检查",
+    "lexicon": "o2_lexicon",
+    "lexicon_version": "1.0"
+  },
+  "words": {
+    "total": 88,
+    "covered": 88,
+    "rate": 1.0,
+    "unresolved": []
+  },
+  "heads": {
+    "total": 15,
+    "in_head_class": 11,
+    "missing": [
+      {
+        "head": "住",
+        "words": [
+          "不住"
+        ],
+        "needed_by": []
+      },
+      {
+        "head": "绝",
+        "words": [
+          "飞绝"
+        ],
+        "needed_by": []
+      },
+      {
+        "head": "里",
+        "words": [
+          "千里"
+        ],
+        "needed_by": []
+      },
+      {
+        "head": "钓",
+        "words": [
+          "独钓"
+        ],
+        "needed_by": []
+      }
+    ],
+    "critical_missing": []
+  },
+  "nodes": {
+    "total": 22,
+    "covered": 22,
+    "rate": 1.0,
+    "unresolved": []
+  },
+  "ok": true
+}

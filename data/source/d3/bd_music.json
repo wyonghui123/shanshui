@@ -1,0 +1,655 @@
+{
+  "meta": {
+    "name": "d3_music_bd",
+    "version": "0.1",
+    "generated": "2026-10-05",
+    "status": "demo",
+    "role": "D3 声法表（示范 · 早发白帝城）。音乐层的单一真源：调式 / 配器 / 板式 / 结构 / 静默 + 逐字音事件。渲染器 src/music/music_render.py 只读本表，不自行编曲。",
+    "basis": "docs/research/music_expression_elements.html §3（情感→音乐映射：V5 欣喜·豪迈 → 徵 + 笛主奏 + 快板/流水板）· §6（D3）",
+    "boundary": "本表只提供「与画面同调」的音乐参数；依嵇康《声无哀乐论》「和声无象」，不宣称音乐直出情感。",
+    "voice_note": "主奏为笛（真实竹笛干声，Hypnotriod / Freesound pack 21613, CC0 1.0，见 sampler.DiziBank，按 rules.legato 连奏成乐句）；支持层为扬琴（真实扬琴干声，pattingthestar / NeoSoundFonts pattingthestar-instruments 的 Khim.sf2，CC0 1.0，见 sampler.KhimBank 与 src/music/build_khim.py）——扬琴是中国乐器，不再用古琴代琵琶。events[] 逐字带 voice=dizi，起音取自配音实测逐字帧（voice_json），故 平长仄短 由起音疏密与音长自然兑现。"
+  },
+  "poem": {
+    "pid": "bd",
+    "title": "早发白帝城",
+    "author": "李白",
+    "lines": [
+      "朝辞白帝彩云间",
+      "千里江陵一日还",
+      "两岸猿声啼不住",
+      "轻舟已过万重山"
+    ]
+  },
+  "anchor": {
+    "timing_authority": "dist/animation/ink_animations.html 的 BD 配置（画面与配音共用的实测行时序）",
+    "voice_json": "dist/audio/voice/bd_emotion_joy_zh-CN-YunjianNeural.json",
+    "voice_asset": "dist/audio/voice/bd_emotion_joy_zh-CN-YunjianNeural.wav",
+    "T": 13.631,
+    "line_windows": [
+      [
+        0.2,
+        2.73
+      ],
+      [
+        3.62,
+        5.87
+      ],
+      [
+        6.812,
+        8.757
+      ],
+      [
+        9.776,
+        12.431
+      ]
+    ],
+    "breath_windows": [
+      [
+        2.73,
+        3.62
+      ],
+      [
+        5.87,
+        6.812
+      ],
+      [
+        8.757,
+        9.776
+      ],
+      [
+        12.431,
+        13.631
+      ]
+    ],
+    "breath_note": "配音的行间气口。音乐不随之留白——由前音余响与低散音贯入（见 rules.ring_max_s / note_overlap_s / breath_events）。",
+    "char_onset_source": "voice_json syllables[].frames 作权重，线性分配到各行窗口",
+    "drift_tolerance_ms": 15
+  },
+  "mode": {
+    "name": "徵调式",
+    "tonic": "G",
+    "tonic_hz": 392.0,
+    "tonic_note": "本曲记谱音区：徵 = G4（oct 0）",
+    "degrees": {
+      "徵": 0,
+      "羽": 2,
+      "宫": 5,
+      "商": 7,
+      "角": 9
+    },
+    "scale_semitones": [
+      0,
+      2,
+      5,
+      7,
+      9
+    ],
+    "tuning_pattern": "五声徵调式（C 宫系统）：徵 羽 宫 商 角 = G A C D E",
+    "classical_basis": "《素问·阴阳应象大论》徵→火/南/夏→心→志为喜（在声为笑）；《礼记·月令》孟夏之月律中中吕。",
+    "V_A_T": {
+      "V": "V5 欣喜 · 豪迈",
+      "A": "A4–A5 快",
+      "T": "T2 低 · 释放"
+    }
+  },
+  "instrument": {
+    "lead": "dizi",
+    "timbre": [
+      "笛（真实竹笛干声：谐波滚降 -13.6 dB/oct、质心约 5004 Hz、气声 -16.5 dB、含 ±0–11 音分自然音高漂移）"
+    ],
+    "guest": [
+      {
+        "name": "guqin",
+        "count": 6,
+        "note": "支持层 + 点缀（代琵琶）：各句首与「轻舟」处拨弦，句末「山」落泛音顿；响度已提至可听（实测笛/古琴 RMS 比 +26.9 dB 时笛压满混响，比例须落到 ~14 dB）"
+      }
+    ],
+    "dizi_source": {
+      "dataset": "Flute Dizi C all notes + pitched semitones",
+      "author": "Hypnotriod",
+      "source": "Freesound pack 21613",
+      "url": "https://freesound.org/people/Hypnotriod/packs/21613/",
+      "license": "CC0 1.0",
+      "range": "实测 f0 395.2–1553.8 Hz（G4–G6），25 条；本曲主奏 G4–G5 全部落在原始音高，就近取源变调 +0.10～+0.22 半音"
+    },
+    "substitution_note": "本项目古琴与笛均为真实干声（古琴 GuqinSonGest, CC BY 4.0；笛 Hypnotriod, CC0 1.0），箫为加性合成（未找到可再分发的免费箫实录）；「琵琶」以古琴按/泛音代奏，只作点缀。"
+  },
+  "meter": {
+    "name": "快板 / 流水板",
+    "rule": "有板有眼、节拍匀密（流水板）；句间连贯——音随下一次起音收，行间气口由余响与低散音贯入，不设长静默"
+  },
+  "structure": [
+    {
+      "seg": "散起",
+      "t": [
+        0.0,
+        0.2
+      ],
+      "note": "空镜起兴：一声低散音（徵 · G3），余响贯入第 1 句"
+    },
+    {
+      "seg": "入调",
+      "t": [
+        0.2,
+        8.757
+      ],
+      "note": "第 1–3 句（急）"
+    },
+    {
+      "seg": "入慢",
+      "t": [
+        8.757,
+        9.776
+      ],
+      "note": "句 3 后气口：前音余响贯入（不静默）"
+    },
+    {
+      "seg": "复起",
+      "t": [
+        9.776,
+        12.431
+      ],
+      "note": "第 4 句（冲刺前推）"
+    },
+    {
+      "seg": "尾声",
+      "t": [
+        12.431,
+        13.631
+      ],
+      "note": "末句韵脚（徵 · G5）长泛音余响贯至曲末；终止落主音徵 → T2 释放"
+    }
+  ],
+  "rules": {
+    "ring_max_s": 3.0,
+    "ring_min_s": 0.35,
+    "note_overlap_s": 0.22,
+    "note_release_ms": 120,
+    "legato": {
+      "enabled": true,
+      "max_notes": 4,
+      "break_gap_s": 0.62,
+      "glide_ms": 42,
+      "tau": 3.1,
+      "phrase_release_ms": 105,
+      "accent_role": [
+        "entering"
+      ],
+      "accent_gain": 0.24,
+      "tail_hold_s": 0.18,
+      "gain": 0.65,
+      "note": "笛主奏按乐句连奏：每 3–4 字换一次气，句内只换指不重新起音（真实竹笛换指约 30–50ms），字头留轻微吐字起伏、入声处加重做出「顿」。逐字平长仄短仍由起音疏密与音长兑现。逐字独立起音会让一句变成 7 声风琴，故不用。",
+      "tilt_db": 2.0,
+      "gain_note": "连奏后 phrase() 内部已峰值归一，此处为相对增益。实测笛乐句 RMS 应高于全曲 10–20 dB：主奏要突出，但不能压满混响（压满时实录笛的膜鸣与气声糊成一层，听感发闷）。原逐字 gain 为 0.60–0.66，连奏后取其中位 0.65。"
+    },
+    "ring_note": "每个音「响到下一次起音 + overlap」，末音贯至曲末；行间气口由余响与低散音填满，全曲无长静默。",
+    "melody_note": "主奏笛声的 平长仄短 / 入声短顿 由起音疏密与音长兑现（起音来自 voice_json 逐字帧），不再逐音标注音色档。"
+  },
+  "events": [
+    {
+      "line": 1,
+      "pos": 1,
+      "char": "朝",
+      "role": "level",
+      "deg": 2,
+      "oct": 0,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.62
+    },
+    {
+      "line": 1,
+      "pos": 2,
+      "char": "辞",
+      "role": "level",
+      "deg": 3,
+      "oct": 0,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.62
+    },
+    {
+      "line": 1,
+      "pos": 3,
+      "char": "白",
+      "role": "entering",
+      "deg": 3,
+      "oct": 0,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.6
+    },
+    {
+      "line": 1,
+      "pos": 4,
+      "char": "帝",
+      "role": "oblique",
+      "deg": 2,
+      "oct": 0,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.6
+    },
+    {
+      "line": 1,
+      "pos": 5,
+      "char": "彩",
+      "role": "oblique",
+      "deg": 4,
+      "oct": 0,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.64
+    },
+    {
+      "line": 1,
+      "pos": 6,
+      "char": "云",
+      "role": "level",
+      "deg": 3,
+      "oct": 0,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.62
+    },
+    {
+      "line": 1,
+      "pos": 7,
+      "char": "间",
+      "role": "rhyme",
+      "deg": 2,
+      "oct": 0,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.64,
+      "rhyme": true
+    },
+    {
+      "line": 2,
+      "pos": 1,
+      "char": "千",
+      "role": "level",
+      "deg": 2,
+      "oct": 0,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.62
+    },
+    {
+      "line": 2,
+      "pos": 2,
+      "char": "里",
+      "role": "oblique",
+      "deg": 3,
+      "oct": 0,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.6
+    },
+    {
+      "line": 2,
+      "pos": 3,
+      "char": "江",
+      "role": "level",
+      "deg": 4,
+      "oct": 0,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.64
+    },
+    {
+      "line": 2,
+      "pos": 4,
+      "char": "陵",
+      "role": "level",
+      "deg": 4,
+      "oct": 0,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.64
+    },
+    {
+      "line": 2,
+      "pos": 5,
+      "char": "一",
+      "role": "entering",
+      "deg": 3,
+      "oct": 0,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.6
+    },
+    {
+      "line": 2,
+      "pos": 6,
+      "char": "日",
+      "role": "entering",
+      "deg": 4,
+      "oct": 0,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.64
+    },
+    {
+      "line": 2,
+      "pos": 7,
+      "char": "还",
+      "role": "rhyme",
+      "deg": 3,
+      "oct": 0,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.64,
+      "rhyme": true
+    },
+    {
+      "line": 3,
+      "pos": 1,
+      "char": "两",
+      "role": "oblique",
+      "deg": 3,
+      "oct": 0,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.6
+    },
+    {
+      "line": 3,
+      "pos": 2,
+      "char": "岸",
+      "role": "oblique",
+      "deg": 4,
+      "oct": 0,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.64
+    },
+    {
+      "line": 3,
+      "pos": 3,
+      "char": "猿",
+      "role": "level",
+      "deg": 3,
+      "oct": 0,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.62
+    },
+    {
+      "line": 3,
+      "pos": 4,
+      "char": "声",
+      "role": "level",
+      "deg": 2,
+      "oct": 0,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.6
+    },
+    {
+      "line": 3,
+      "pos": 5,
+      "char": "啼",
+      "role": "level",
+      "deg": 4,
+      "oct": 0,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.64
+    },
+    {
+      "line": 3,
+      "pos": 6,
+      "char": "不",
+      "role": "entering",
+      "deg": 4,
+      "oct": 0,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.62
+    },
+    {
+      "line": 3,
+      "pos": 7,
+      "char": "住",
+      "role": "oblique",
+      "deg": 3,
+      "oct": 0,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.6
+    },
+    {
+      "line": 4,
+      "pos": 1,
+      "char": "轻",
+      "role": "level",
+      "deg": 2,
+      "oct": 0,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.62
+    },
+    {
+      "line": 4,
+      "pos": 2,
+      "char": "舟",
+      "role": "level",
+      "deg": 3,
+      "oct": 0,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.64
+    },
+    {
+      "line": 4,
+      "pos": 3,
+      "char": "已",
+      "role": "oblique",
+      "deg": 4,
+      "oct": 0,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.64
+    },
+    {
+      "line": 4,
+      "pos": 4,
+      "char": "过",
+      "role": "oblique",
+      "deg": 4,
+      "oct": 0,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.64
+    },
+    {
+      "line": 4,
+      "pos": 5,
+      "char": "万",
+      "role": "oblique",
+      "deg": 3,
+      "oct": 0,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.62
+    },
+    {
+      "line": 4,
+      "pos": 6,
+      "char": "重",
+      "role": "level",
+      "deg": 4,
+      "oct": 0,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.64
+    },
+    {
+      "line": 4,
+      "pos": 7,
+      "char": "山",
+      "role": "rhyme",
+      "deg": 0,
+      "oct": 1,
+      "voice": "dizi",
+      "expr": "none",
+      "gain": 0.66,
+      "rhyme": true,
+      "note": "终止音＝徵（G5，高八度）→ 开放结尾，T2 释放"
+    }
+  ],
+  "散起": {
+    "char": "散起",
+    "at": 0.06,
+    "deg": 0,
+    "oct": -1,
+    "color": "san",
+    "expr": "none",
+    "gain": 0.48,
+    "note": "空镜起兴的低散音（徵 · G3）"
+  },
+  "breath_events": [
+    {
+      "at": 2.8,
+      "deg": 0,
+      "oct": -1,
+      "gain": 0.3,
+      "ring": 0.9,
+      "note": "句 1→2 气口：低散音贯入"
+    },
+    {
+      "at": 5.95,
+      "deg": 1,
+      "oct": -1,
+      "gain": 0.28,
+      "ring": 0.9,
+      "note": "句 2→3 气口（羽 · A3）"
+    },
+    {
+      "at": 8.85,
+      "deg": 0,
+      "oct": -1,
+      "gain": 0.3,
+      "ring": 0.9,
+      "note": "句 3→4 气口"
+    },
+    {
+      "at": 12.6,
+      "deg": 0,
+      "oct": -1,
+      "gain": 0.26,
+      "ring": 1.1,
+      "note": "尾声：低徵贯入，与末句韵脚（G5）同收于曲末"
+    }
+  ],
+  "guest_events": [
+    {
+      "at_line": 1,
+      "at_pos": 1,
+      "instrument": "khim",
+      "color": "pluck",
+      "expr": "none",
+      "deg": 2,
+      "oct": 0,
+      "gain": 0.663,
+      "dur": 0.8,
+      "note": "句首扬琴拨弦（中国乐器，不再用古琴代琵琶）"
+    },
+    {
+      "at_line": 2,
+      "at_pos": 1,
+      "instrument": "khim",
+      "color": "pluck",
+      "expr": "none",
+      "deg": 2,
+      "oct": 0,
+      "gain": 0.624,
+      "dur": 0.8,
+      "note": "句首拨弦"
+    },
+    {
+      "at_line": 3,
+      "at_pos": 1,
+      "instrument": "khim",
+      "color": "pluck",
+      "expr": "none",
+      "deg": 3,
+      "oct": 0,
+      "gain": 0.624,
+      "dur": 0.8,
+      "note": "句首拨弦"
+    },
+    {
+      "at_line": 4,
+      "at_pos": 1,
+      "instrument": "khim",
+      "color": "pluck",
+      "expr": "none",
+      "deg": 2,
+      "oct": 0,
+      "gain": 0.702,
+      "dur": 0.9,
+      "note": "「轻舟」点缀"
+    },
+    {
+      "at_line": 4,
+      "at_pos": 2,
+      "instrument": "khim",
+      "color": "pluck",
+      "expr": "none",
+      "deg": 3,
+      "oct": 0,
+      "gain": 0.702,
+      "dur": 0.9,
+      "note": "「轻舟」点缀"
+    },
+    {
+      "at_line": 4,
+      "at_pos": 7,
+      "instrument": "khim",
+      "color": "pluck",
+      "expr": "dun",
+      "deg": 0,
+      "oct": 1,
+      "gain": 0.663,
+      "dur": 1.4,
+      "note": "句末扬琴顿（与笛同落徵）"
+    }
+  ],
+  "mix": {
+    "sr": 44100,
+    "reverb_tiers": [
+      {
+        "rt60": 0.7,
+        "predelay_ms": 12,
+        "wet": 0.12,
+        "lp_hz": 6000,
+        "note": "近场：短混响（快板宜干、宜清晰）"
+      },
+      {
+        "rt60": 1.8,
+        "predelay_ms": 35,
+        "wet": 0.05,
+        "lp_hz": 3000,
+        "note": "远场：低电平，给「开阔」"
+      }
+    ],
+    "wet_damp_after_line_ms": 0,
+    "tail_fade_ms": 250,
+    "target_peak_dbfs": -3.0,
+    "soft_clip": 0.4,
+    "dynamic_narrow": "宽动态：笛声 gain 0.58–0.66，琴点缀 0.32–0.38；soft_clip 0.4（轻压，保留快板的开阔动态）"
+  },
+  "checks": {
+    "duration_tolerance_samples": 2,
+    "gap_floor_dbfs": -40.0,
+    "max_gap_s": 0.3,
+    "peak_dbfs_range": [
+      -6.0,
+      -1.0
+    ],
+    "crest_factor_db_max": 22.0,
+    "check_note": "连续性口径：短时 RMS（100ms 窗）低于 −40 dBFS 视为静默，最长静默须 ≤0.30s（全曲连贯）。"
+  }
+}

@@ -1,0 +1,169 @@
+{
+  "meta": {
+    "run_id": "o1-baseline-2026-10-02",
+    "date": "2026-10-02",
+    "qset": "o1_qset.json @ v1.1",
+    "source_anim": "ink_animations.html",
+    "judge": "多模态判读（逐帧目视）+ 客观探针（像素级实测）",
+    "protocol": {
+      "anno": "关闭画中物标注层",
+      "poem_text": "基线帧保留题诗（还原真实观感）；负节点题以去题诗帧复核",
+      "frames": "dist/figures/ 共 14 帧（jx 8 + bd 6）",
+      "verdict_scale": "hit(命中) / miss(未命中) / defect(题面缺陷，不计入分母)",
+      "conf": "high / mid / low —— 判读置信度，low 表示处于感知阈值附近"
+    },
+    "totals": {
+      "questions": 46,
+      "hit": 45,
+      "miss": 0,
+      "defect": 1,
+      "weight_sum": 43.5,
+      "hit_weight": 43.0,
+      "rate_incl_defect": 0.9885,
+      "rate_excl_defect": 1.0,
+      "headline": "两幅画对诗句与设计意图的忠实度已经达标（45/46 命中，唯一的 1 道是题面缺陷而非画面缺陷）。基线暴露的真正问题在「度量工具」一侧 —— 见 defects。"
+    }
+  },
+  "results": [
+    { "poem": "jx", "id": "JX-E1", "axis": "EXIST", "basis": "poem", "frame": "jx_02", "expect": "是", "answer": "是", "s": 1, "w": 1.0, "conf": "high", "evidence": "三重远山；脊线 y 0.26–0.33，山体填充至 y 0.50" },
+    { "poem": "jx", "id": "JX-E2", "axis": "EXIST", "basis": "poem", "frame": "jx_03", "expect": "是", "answer": "是", "s": 1, "w": 1.0, "conf": "high", "evidence": "#jx-boat，x 0.52–0.78；jx_01/jx_02 未出现，符合节拍" },
+    { "poem": "jx", "id": "JX-E3", "axis": "EXIST", "basis": "poem", "frame": "jx_04", "expect": "是", "answer": "是", "s": 1, "w": 1.0, "conf": "high", "evidence": "斗笠 + 躯干两笔，fill #1C1C1C opacity 0.88–0.92" },
+    { "poem": "jx", "id": "JX-E4", "axis": "EXIST", "basis": "design", "frame": "jx_02", "expect": "是", "answer": "是", "s": 1, "w": 0.5, "conf": "high", "evidence": "左下三茎（x 0.10–0.18, y 0.61–0.87）" },
+    { "poem": "jx", "id": "JX-E5", "axis": "EXIST", "basis": "poem", "frame": "jx_04", "expect": "是", "answer": "是", "s": 1, "w": 1.0, "conf": "high", "evidence": "#jx-line 自 (600,452) 垂至 (620,558)；jx_03(t=15.5) 尚无" },
+    { "poem": "jx", "id": "JX-E6", "axis": "EXIST", "basis": "poem", "frame": "jx_02", "expect": "是", "answer": "是", "s": 1, "w": 1.0, "conf": "mid", "evidence": "snowCount=46；单帧只能证「有」，「飘落」需时序判读（D7）" },
+    { "poem": "jx", "id": "JX-N1", "axis": "NEGATIVE", "basis": "poem", "frame": "jx_05_nopoem", "expect": "否", "answer": "否", "s": 1, "w": 1.5, "conf": "high", "evidence": "无鸟形几何；场景图标注「鸟 · 飞绝 = 负节点 · 不可绘制」。带诗帧含「鸟」字，为混淆源，已用去诗帧复核" },
+    { "poem": "jx", "id": "JX-N2", "axis": "NEGATIVE", "basis": "poem", "frame": "jx_04", "expect": "否", "answer": "否", "s": 1, "w": 1.5, "conf": "high", "evidence": "全片仅 1 个人物" },
+    { "poem": "jx", "id": "JX-N3", "axis": "NEGATIVE", "basis": "poem", "frame": "jx_05_nopoem", "expect": "否", "answer": "否", "s": 1, "w": 1.0, "conf": "high", "evidence": "无足迹几何；探针显示下半幅除雪点外无笔画（非纸面 1.04%，最暗点 174 落在山带边缘）" },
+    { "poem": "jx", "id": "JX-A1", "axis": "ATTR", "basis": "poem", "frame": "jx_04", "expect": "孤舟与蓑笠翁", "answer": "孤舟与蓑笠翁", "s": 1, "w": 1.0, "conf": "high", "evidence": "#1C1C1C @0.88–0.92（lum≈30–45）vs 远山合成 lum≈188；实测浓墨像素 1.73%" },
+    { "poem": "jx", "id": "JX-A2", "axis": "ATTR", "basis": "poem", "frame": "jx_02", "expect": "很淡", "answer": "很淡", "s": 1, "w": 1.0, "conf": "mid", "evidence": "三层远山 opacity 0.13/0.17/0.15，合成 lum≈188（浅中灰）—— 相对焦点极淡，但绝对亮度并非「极淡」" },
+    { "poem": "jx", "id": "JX-A3", "axis": "ATTR", "basis": "design", "frame": "jx_02", "expect": "大面积留白", "answer": "大面积留白", "s": 1, "w": 1.0, "conf": "high", "evidence": "探针实测留白(≥240) 83.1%（设计 ρ=0.79，口径差异见 D4）" },
+    { "poem": "jx", "id": "JX-A4", "axis": "ATTR", "basis": "poem", "frame": "jx_05", "expect": "几乎不画，以留白表现", "answer": "几乎不画，以留白表现", "s": 1, "w": 1.0, "conf": "high", "evidence": "源码中《江雪》无 #jx-water 组 → 水纹道数 = 0；仅 #jx-waterline 一道岸线" },
+    { "poem": "jx", "id": "JX-A5", "axis": "ATTR", "basis": "design", "frame": "jx_05_nopoem", "expect": "极淡、几乎不可见", "answer": "极淡、几乎不可见", "s": 1, "w": 0.5, "conf": "low", "evidence": "#jx-path 三条斜线（x 0.03–0.27, y 0.43–0.51），group opacity 0.20 + 柔化；探针实测把中景带由 lum 186 压到 166（对比度约 11%）—— 确实画出来了，但处在感知阈值附近（D6）" },
+    { "poem": "jx", "id": "JX-S1", "axis": "SPATIAL", "basis": "design", "frame": "jx_02", "expect": "上部", "answer": "上部", "s": 1, "w": 1.0, "conf": "mid", "evidence": "脊线 y 0.26–0.33 落在上 1/3；但山体延伸至 0.50，主体重心约 0.38，接近上/中分界" },
+    { "poem": "jx", "id": "JX-S2", "axis": "SPATIAL", "basis": "design", "frame": "jx_03", "expect": "右下", "answer": "右下", "s": 1, "w": 1.0, "conf": "mid", "evidence": "jx_03(t=15.5) 孤舟+翁落于 (0.60, 0.73) = 右下；但相机 t=16.5→25 由 s1.55 推到 1.58、中心移到 (587,454)，终帧 jx_04 主体落到正中 (0.50, 0.50) —— 同一道题在急推前后答案不同，故必须绑判读帧（D2）" },
+    { "poem": "jx", "id": "JX-S3", "axis": "SPATIAL", "basis": "design", "frame": "jx_02", "expect": "左下", "answer": "左下", "s": 1, "w": 0.5, "conf": "high", "evidence": "x 0.10–0.18, y 0.61–0.87" },
+    { "poem": "jx", "id": "JX-S4", "axis": "SPATIAL", "basis": "design", "frame": "jx_02", "expect": "上 1/3 附近", "answer": "（不可判定）", "s": 0, "w": 0.5, "conf": "high", "verdict": "defect", "evidence": "实测地平线 0.42–0.44H（山带顶缘）／0.50H（山带底缘），落在「上 1/3(0.33)」与「正中(0.50)」之间的空档 —— 选项集无对应档位，无法作答（D1）" },
+    { "poem": "jx", "id": "JX-S5", "axis": "SPATIAL", "basis": "design", "frame": "jx_03", "expect": "孤舟在前、远山在后", "answer": "孤舟在前、远山在后", "s": 1, "w": 1.0, "conf": "high", "evidence": "浓墨焦点（lum≈35）vs 淡墨远景（lum≈188），层序明确" },
+    { "poem": "jx", "id": "JX-T1", "axis": "TEMPORAL", "basis": "design", "frame": "jx_01+jx_03", "expect": "是", "answer": "是", "s": 1, "w": 1.0, "conf": "high", "evidence": "jx_01(t=1) 只有远山；孤舟 13s 后才实写" },
+    { "poem": "jx", "id": "JX-T2", "axis": "TEMPORAL", "basis": "design", "frame": "jx_03+jx_04", "expect": "是", "answer": "是", "s": 1, "w": 1.0, "conf": "high", "evidence": "jx_03 无钓丝，jx_04 有；#jx-line dashoffset 于 17.2–19.2s 拉出" },
+    { "poem": "jx", "id": "JX-T3", "axis": "TEMPORAL", "basis": "design", "frame": "jx_01+jx_02+jx_04", "expect": "是", "answer": "是", "s": 1, "w": 0.5, "conf": "mid", "evidence": "snowKeys v = 0.45 / 1.00 / 0.30 / 0.85 / 0.85，最小值不为 0，三帧均见雪点" },
+    { "poem": "jx", "id": "JX-T4", "axis": "TEMPORAL", "basis": "design", "frame": "jx_01+jx_04", "expect": "是", "answer": "是", "s": 1, "w": 1.0, "conf": "high", "evidence": "jx_01 与 jx_04 为同一场景的不同倍率，仅相机变换，无场景切换" },
+
+    { "poem": "bd", "id": "BD-E1", "axis": "EXIST", "basis": "poem", "frame": "bd_02", "expect": "是", "answer": "是", "s": 1, "w": 1.0, "conf": "high", "evidence": "#bd-city 立于左崖顶（x 0.22–0.28, y 0.10–0.18）" },
+    { "poem": "bd", "id": "BD-E2", "axis": "EXIST", "basis": "poem", "frame": "bd_02", "expect": "是", "answer": "是", "s": 1, "w": 1.0, "conf": "mid", "evidence": "#bd-cloud 三椭圆（cy 56/84/118），fill 渐变 + 0.06 灰，极淡 —— 存在但接近雾/霭的观感" },
+    { "poem": "bd", "id": "BD-E3", "axis": "EXIST", "basis": "poem", "frame": "bd_02", "expect": "是", "answer": "是", "s": 1, "w": 1.0, "conf": "high", "evidence": "#bd-boat（x 0.33–0.46, y 0.78–0.85）；bd_01 未出，符合节拍" },
+    { "poem": "bd", "id": "BD-E4", "axis": "EXIST", "basis": "poem", "frame": "bd_02", "expect": "是", "answer": "是", "s": 1, "w": 1.0, "conf": "high", "evidence": "#bd-cliff 左右两片，占画面左右各约 1/4" },
+    { "poem": "bd", "id": "BD-E5", "axis": "EXIST", "basis": "poem", "frame": "bd_02", "expect": "是", "answer": "是", "s": 1, "w": 1.0, "conf": "high", "evidence": "#bd-far 四层（opacity 0.09/0.12/0.14/0.15），层层后退" },
+    { "poem": "bd", "id": "BD-E6", "axis": "EXIST", "basis": "poem", "frame": "bd_02", "expect": "是", "answer": "是", "s": 1, "w": 1.0, "conf": "high", "evidence": "楔形江面 #FAF8F3 + 渐变，y 0.50→1.00" },
+    { "poem": "bd", "id": "BD-E7", "axis": "EXIST", "basis": "design", "frame": "bd_04", "expect": "是", "answer": "是", "s": 1, "w": 0.5, "conf": "high", "evidence": "#bd-trail 两笔（opacity 0.26/0.18），bd_04 中明显可见" },
+    { "poem": "bd", "id": "BD-N1", "axis": "NEGATIVE", "basis": "poem", "frame": "bd_04_nopoem", "expect": "否", "answer": "否", "s": 1, "w": 1.5, "conf": "high", "evidence": "无猿形几何；跨通道节点（听觉正 / 视觉负）。带诗帧含「猿」字，已用去诗帧复核" },
+    { "poem": "bd", "id": "BD-N2", "axis": "NEGATIVE", "basis": "poem", "frame": "bd_04", "expect": "否", "answer": "否", "s": 1, "w": 1.0, "conf": "high", "evidence": "全片仅白帝城一座城，终点江陵未画（虚写）" },
+    { "poem": "bd", "id": "BD-A1", "axis": "ATTR", "basis": "poem", "frame": "bd_04", "expect": "轻舟", "answer": "轻舟", "s": 1, "w": 1.0, "conf": "high", "evidence": "#bd-boat #1C1C1C @0.90 → 合成 lum≈50；白帝城 #2A2724 @0.58 → lum≈126；山壁渐变 ≈190" },
+    { "poem": "bd", "id": "BD-A2", "axis": "ATTR", "basis": "poem", "frame": "bd_02", "expect": "淡墨浅灰", "answer": "淡墨浅灰", "s": 1, "w": 1.0, "conf": "high", "evidence": "云为渐变灰 + 0.06 灰椭圆，无任何设色" },
+    { "poem": "bd", "id": "BD-A3", "axis": "ATTR", "basis": "design", "frame": "bd_02", "expect": "稀疏、仅数道", "answer": "稀疏、仅数道", "s": 1, "w": 1.0, "conf": "high", "evidence": "ROWS 共 5 道（y 412/462/500/548/590），每道 3–4 短笔，opacity 0.13–0.27；探针实测近水带极淡像素仅 0.38%" },
+    { "poem": "bd", "id": "BD-A4", "axis": "ATTR", "basis": "design", "frame": "bd_04", "expect": "约一半", "answer": "约一半", "s": 1, "w": 1.0, "conf": "mid", "evidence": "探针实测留白(≥240)：bd_02 30.7% / bd_04 去诗 44.1%；设计 ρ=0.52（口径差异见 D4）" },
+    { "poem": "bd", "id": "BD-S1", "axis": "SPATIAL", "basis": "design", "frame": "bd_02", "expect": "左上", "answer": "左上", "s": 1, "w": 1.0, "conf": "high", "evidence": "x 0.22–0.28, y 0.10–0.18" },
+    { "poem": "bd", "id": "BD-S2", "axis": "SPATIAL", "basis": "design", "frame": "bd_02", "expect": "左下", "answer": "左下", "s": 1, "w": 1.0, "conf": "high", "evidence": "x 0.33–0.46, y 0.78–0.85" },
+    { "poem": "bd", "id": "BD-S3", "axis": "SPATIAL", "basis": "design", "frame": "bd_02", "expect": "从画面中央向远处纵深延伸", "answer": "从画面中央向远处纵深延伸", "s": 1, "w": 1.0, "conf": "high", "evidence": "楔形江面收敛于消失点 (480, 290)，属单点透视" },
+    { "poem": "bd", "id": "BD-S4", "axis": "SPATIAL", "basis": "design", "frame": "bd_02", "expect": "万重山在两道山壁的缺口之间、层层后退", "answer": "万重山在两道山壁的缺口之间、层层后退", "s": 1, "w": 1.0, "conf": "high", "evidence": "#bd-far 跨 x 0.33–0.73，先画；#bd-cliff 后画并覆盖其外缘，最终只从峡口 x 0.44–0.62 露出 —— 即用户反馈的空间混乱问题的修复检验点，已达标" },
+    { "poem": "bd", "id": "BD-S5", "axis": "SPATIAL", "basis": "design", "frame": "bd_02", "expect": "山壁内缘即江面左右边界、紧贴无缝", "answer": "山壁内缘即江面左右边界、紧贴无缝", "s": 1, "w": 1.0, "conf": "high", "evidence": "左壁内缘 (104,600)→(400,302) 与江面左缘 (104,600)→(400,302) 完全同点，中间无独立岸带" },
+    { "poem": "bd", "id": "BD-S6", "axis": "SPATIAL", "basis": "design", "frame": "bd_02", "expect": "左下", "answer": "左下", "s": 1, "w": 0.5, "conf": "high", "evidence": "轻舟中心 (0.40, 0.82)，白帝城在左上，合成重心落左下" },
+    { "poem": "bd", "id": "BD-T1", "axis": "TEMPORAL", "basis": "design", "frame": "bd_01+bd_02", "expect": "是", "answer": "是", "s": 1, "w": 1.0, "conf": "high", "evidence": "bd_01(t=1) 只见城与峡，无舟；城 0.6–1.9s、舟 1.2–2.4s 淡入" },
+    { "poem": "bd", "id": "BD-T2", "axis": "TEMPORAL", "basis": "design", "frame": "bd_01+bd_03+bd_04", "expect": "是", "answer": "是", "s": 1, "w": 1.0, "conf": "high", "evidence": "三帧同为一条峡谷，仅相机推进/侧掠，无场景切换" },
+    { "poem": "bd", "id": "BD-T3", "axis": "TEMPORAL", "basis": "design", "frame": "bd_02+bd_04", "expect": "是", "answer": "是", "s": 1, "w": 0.5, "conf": "high", "evidence": "bd_02 拖痕极短，bd_04 明显拉长；#bd-trail dashoffset 于 6.5–20s 渐次拉出" },
+    { "poem": "bd", "id": "BD-T4", "axis": "TEMPORAL", "basis": "design", "frame": "bd_04", "expect": "是", "answer": "是", "s": 1, "w": 1.0, "conf": "high", "evidence": "相机 s 由 1.18(t=17) 推至 1.86(t=24)，easeIn，末帧万重山近逼，无定格" }
+  ],
+  "rollup": {
+    "overall": { "weight_sum": 43.5, "hit_weight": 43.0, "rate_incl_defect": 0.9885, "rate_excl_defect": 1.0 },
+    "by_poem": {
+      "jx": { "questions": 23, "hit": 22, "defect": 1, "weight_sum": 21.5, "hit_weight": 21.0, "rate_incl_defect": 0.9767, "rate_excl_defect": 1.0 },
+      "bd": { "questions": 23, "hit": 23, "defect": 0, "weight_sum": 22.0, "hit_weight": 22.0, "rate_incl_defect": 1.0, "rate_excl_defect": 1.0 }
+    },
+    "by_axis": {
+      "EXIST": { "weight_sum": 12.0, "hit_weight": 12.0, "rate": 1.0 },
+      "NEGATIVE": { "weight_sum": 6.5, "hit_weight": 6.5, "rate": 1.0 },
+      "ATTR": { "weight_sum": 8.5, "hit_weight": 8.5, "rate": 1.0 },
+      "SPATIAL": { "weight_sum": 9.5, "hit_weight": 9.0, "rate": 0.9474 },
+      "TEMPORAL": { "weight_sum": 7.0, "hit_weight": 7.0, "rate": 1.0 }
+    },
+    "by_basis": {
+      "poem": { "weight_sum": 24.0, "hit_weight": 24.0, "rate": 1.0 },
+      "design": { "weight_sum": 19.5, "hit_weight": 19.0, "rate": 0.9744 }
+    }
+  },
+  "defects": [
+    {
+      "id": "D1",
+      "title": "选项粒度缺口 —— JX-S4 地平线无对应档位",
+      "where": "JX-S4",
+      "detail": "选项为「上 1/3 附近(0.33) / 正中(0.50) / 下 1/3 附近(0.67)」，而实测地平线 0.42–0.44H，正好落在两个档位之间的空档。这不是画面错，是题面错。",
+      "fix": "选项改为「上 1/3 附近(0.28–0.40) / 中部偏上(0.40–0.50) / 正中(0.48–0.52) / 下 1/3 附近」，或直接改为数值题（给百分比）。"
+    },
+    {
+      "id": "D2",
+      "title": "判读帧未绑定 —— 急推镜头使同一道题有两个答案",
+      "where": "JX-S2 及全部构图类题",
+      "detail": "JX-S2「孤舟位于？」在 jx_03(t=15.5) 答「右下」，在终帧 jx_04(t=24.3) 因相机把中心推到 (587,454)，主体落到正中 —— 而选项里根本没有「正中」。v1.0 未规定在哪一帧判读。",
+      "fix": "已在 v1.1 为每题补 frame 字段，构图题默认绑「设计意图最易读的帧」而非终帧。后续所有新题必须带 frame。"
+    },
+    {
+      "id": "D3",
+      "title": "题诗与负节点题同框 —— 文字假阳性",
+      "where": "JX-N1（鸟）、BD-N1（猿）",
+      "detail": "题诗竖排写在画面里，「千山鸟飞绝」的「鸟」、「两岸猿声」的「猿」与负节点题同框。若判读者把文字当图形，负节点题会被误判为「出现了」。",
+      "fix": "负节点题一律以「去题诗」帧复核（已采 jx_05_nopoem / jx_04_nopoem / bd_04_nopoem）。这是本项目的独有判据，宁可多一道对照帧。"
+    },
+    {
+      "id": "D4",
+      "title": "留白率 ρ 存在两套口径，设计值与实测值不可比",
+      "where": "JX-A3、BD-A4",
+      "detail": "设计文档的 ρ 算在「构图线稿」上（jx 0.79 / bd 0.52）；探针测的是「渲染后含墨晕」的帧（jx 83.1% / bd 30.7–44.1%）。bd 一侧差了近 20 个百分点。",
+      "fix": "统一口径：明确 ρ 是「线稿口径」还是「渲染口径」，并在 pipeline 文档里注明；若两者都要，就分成 ρ_layout 与 ρ_render 两个指标分别记录。"
+    },
+    {
+      "id": "D5",
+      "title": "天花板效应 —— 45/46 命中，问题集已失去区分度",
+      "where": "全题集",
+      "detail": "两处已知问题（江雪水纹、白帝城空间结构）修复后，画面忠实度整体达标，现有题目几乎全部命中。继续用同一套题测不出改进。",
+      "fix": "下一版补入更细的属性/关系题：墨色分档（把「很淡」拆成 5 档并给亮度区间）、笔触干湿（枯笔/湿笔比例）、疏密势能、镜头速度曲线形状、留白形状（而非只留白率）。"
+    },
+    {
+      "id": "D6",
+      "title": "可判读性边界 —— 极淡元素处于感知阈值附近",
+      "where": "JX-A5（万径）、BD-E2（云）",
+      "detail": "万径实测只把中景带由 lum 186 压到 166（对比度约 11%），云是 0.06 透明度的灰椭圆。这两类题肉眼作答不稳定，不同判读者可能给出相反答案。",
+      "fix": "对「极淡元素」类题给出判读协议（放大倍数、局部区域、是否允许调对比度），或直接改用客观探针给数值，VLM 只做「有无」的初筛。"
+    },
+    {
+      "id": "D7",
+      "title": "单帧无法判时序 —— 静态帧对过程性谓语失效",
+      "where": "JX-E6（飘落的雪）、BD-T3（拖痕拉长）、JX-T2",
+      "detail": "「飘落」「拉长」「渐次画出」是过程，单张关键帧只能证明「结果在」，不能证明「过程如何」。",
+      "fix": "时序类题必须给成对帧（起点+终点）或短视频；本基线中此类题均以成对帧判读（frame 字段用「+」连接两帧）。"
+    }
+  ],
+  "probe": {
+    "note": "以下为像素级实测值，用于给属性类题提供硬数据（src/o1/o1_probe.mjs / src/o1/o1_probe2.mjs）",
+    "paper": "#F6F3EC（lum≈243）",
+    "blank_rate": {
+      "jx_02_全幅": { "留白≥240": 0.831, "极淡225-240": 0.0147, "中灰150-225": 0.1525, "浓墨<150": 0.0014 },
+      "jx_04_全幅": { "留白≥240": 0.866, "极淡225-240": 0.0123, "中灰150-225": 0.1042, "浓墨<150": 0.0173 },
+      "bd_02_全幅": { "留白≥240": 0.307, "极淡225-240": 0.0717, "中灰150-225": 0.6127, "浓墨<150": 0.0082 },
+      "bd_04nopoem_全幅": { "留白≥240": 0.441, "极淡225-240": 0.0766, "中灰150-225": 0.464, "浓墨<150": 0.0182 }
+    },
+    "key_measurements": [
+      { "item": "万径 #jx-path 渲染对比度", "value": "中景带 lum 186 → 166（约 11%）", "verdict": "确实画出，但处于感知阈值附近（D6）" },
+      { "item": "江雪下半幅（排除芦苇）非纸面像素", "value": "1.04%，最暗点 lum 174 @ (0.200, 0.500)", "verdict": "除雪点外无笔画，与「人踪灭」「无足迹」一致" },
+      { "item": "江面水纹道数", "value": "jx = 0 道（无 #jx-water 组）；bd = 5 道", "verdict": "JX-A4 与 BD-A3 均由源码定案，非主观判断" },
+      { "item": "墨色亮度排序（bd）", "value": "轻舟 lum≈50 < 白帝城 lum≈126 < 山壁 lum≈190", "verdict": "BD-A1「最浓墨 = 轻舟」由参数直接推出" },
+      { "item": "地平线位置", "value": "0.42–0.44H（中景带顶缘）／0.50H（中景带底缘）", "verdict": "设计值 0.42H 属实，但选项集无对应档位（D1）" }
+    ]
+  },
+  "next": [
+    { "id": "O1.1", "task": "按 D1–D7 修订问题集至 v1.2（补选项档位、补 frame、补判读协议），再跑一次基线确认题目可判读性", "why": "先把尺子做准，再谈量" },
+    { "id": "O1.2", "task": "把 VLM 逐题作答固化为脚本（判读帧 + 探针数值一并喂入），产出可复跑的评分报告", "why": "基线要能回归，不能只跑一次" },
+    { "id": "O2", "task": "意象抽取半自动化（格律先验分词 + NER + 依存消歧 + 可画性门控）", "why": "问题集要从「诗」自动生成，目前是手工 46 题" },
+    { "id": "O3", "task": "负节点双判据（低度节点 + 未运输质量）", "why": "负节点是本项目最独特的判据，目前只靠人工标注，需算法化" },
+    { "id": "O4", "task": "构图求解器", "why": "D5 的天花板要靠更细的属性题突破，而属性题的期望值应由构图求解器给出" }
+  ]
+}

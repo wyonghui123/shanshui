@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>配音方案研究 · 声音如何承载古诗的情绪与韵律</title>
+<style>
+  :root {
+    --paper: #F6F3EC;
+    --paper-2: #FFFFFF;
+    --ink: #1C1C1C;
+    --ink-2: #4A4640;
+    --ink-3: #8A8578;
+    --line: rgba(28, 28, 28, 0.14);
+    --line-2: rgba(28, 28, 28, 0.07);
+    --zhu: #A83A2C;
+    --zhu-soft: rgba(168, 58, 44, 0.10);
+    --qing: #3E5C76;
+    --qing-soft: rgba(62, 92, 118, 0.10);
+    --jin: #B08430;
+    --jin-soft: rgba(176, 132, 48, 0.10);
+    --serif: "Songti SC", "STSong", "SimSun", "Noto Serif SC", Georgia, serif;
+    --sans: "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--sans); font-size: 14px; line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 56px 32px 96px; }
+
+  header { border-bottom: 1px solid var(--line); padding-bottom: 32px; margin-bottom: 44px; }
+  .eyebrow { font-size: 12px; letter-spacing: .22em; color: var(--ink-3); text-transform: uppercase; margin-bottom: 18px; }
+  h1 { font-family: var(--serif); font-size: 32px; font-weight: 600; margin: 0 0 8px; letter-spacing: .03em; }
+  .sub { color: var(--ink-3); font-size: 13px; margin-bottom: 26px; }
+  .meta-line {
+    font-size: 12.5px; color: var(--ink-3); border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line); padding: 10px 0; letter-spacing: .03em;
+  }
+
+  section { margin-bottom: 52px; }
+  .sec-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 8px; }
+  .sec-no {
+    font-family: var(--mono); font-size: 12px; color: var(--zhu);
+    border: 1px solid rgba(168,58,44,.32); border-radius: 4px; padding: 1px 7px; flex: none;
+  }
+  h2 { font-family: var(--serif); font-size: 21px; font-weight: 600; margin: 0; letter-spacing: .02em; }
+  .sec-note { color: var(--ink-3); font-size: 12.5px; margin: 0 0 20px; }
+  h3 { font-size: 14px; font-weight: 600; margin: 24px 0 10px; }
+  h4 { font-size: 13px; font-weight: 600; margin: 18px 0 8px; color: var(--ink-2); }
+
+  .card {
+    background: var(--paper-2); border: 1px solid var(--line-2);
+    border-radius: 10px; padding: 20px 24px; margin-bottom: 14px;
+  }
+  .card.tight { padding: 16px 20px; }
+  .card.warn { border-left: 3px solid var(--jin); }
+
+  .verdict {
+    display: flex; gap: 12px; align-items: flex-start;
+    background: var(--paper-2); border: 1px solid var(--line-2);
+    border-left: 3px solid var(--qing); border-radius: 8px; padding: 14px 18px; margin: 14px 0;
+  }
+  .verdict .v-label { font-family: var(--mono); font-size: 11px; color: var(--qing); flex: none; padding-top: 3px; }
+  .verdict p { margin: 0; font-size: 13.5px; }
+  .verdict.warn { border-left-color: var(--jin); }
+  .verdict.warn .v-label { color: var(--jin); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 10px 0 6px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line-2); vertical-align: top; }
+  th { font-weight: 600; font-size: 11.5px; color: var(--ink-3); letter-spacing: .05em; border-bottom: 1px solid var(--line); }
+  tbody tr:last-child td { border-bottom: none; }
+  td.num, th.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .ok { color: var(--qing); font-weight: 600; }
+  .bad { color: var(--zhu); font-weight: 600; }
+  .mid { color: var(--jin); font-weight: 600; }
+  .cite { color: var(--ink-3); font-size: 11px; font-family: var(--mono); }
+
+  blockquote {
+    margin: 14px 0; padding: 12px 18px; border-left: 3px solid var(--line);
+    background: rgba(28,28,28,.03); font-family: var(--serif); font-size: 14.5px; color: var(--ink-2);
+  }
+  blockquote .src { display: block; margin-top: 6px; font-size: 12px; color: var(--ink-3); font-family: var(--sans); }
+
+  ul { margin: 8px 0; padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  .pill {
+    display: inline-block; font-size: 11px; padding: 1px 8px; border-radius: 999px;
+    border: 1px solid var(--line); color: var(--ink-3); margin-right: 6px; vertical-align: 1px;
+  }
+  .pill.cn { color: var(--qing); border-color: rgba(62,92,118,.35); background: var(--qing-soft); }
+  .pill.md { color: var(--jin); border-color: rgba(176,132,48,.40); background: var(--jin-soft); }
+  .pill.un { color: var(--ink-3); }
+
+  .route { border: 1px solid var(--line-2); border-radius: 10px; padding: 16px 20px; margin-bottom: 12px; background: var(--paper-2); }
+  .route-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; }
+  .route-tag { font-family: var(--mono); font-size: 12px; font-weight: 600; }
+  .route-head h4 { margin: 0; }
+  .route p { margin: 4px 0; font-size: 13px; }
+  .route .pros { color: var(--qing); }
+  .route .cons { color: var(--zhu); }
+
+  .src-list { font-size: 12px; color: var(--ink-2); }
+  .src-list li { margin-bottom: 5px; word-break: break-all; }
+  .src-list .n { font-family: var(--mono); color: var(--zhu); }
+
+  .fig { font-family: var(--serif); font-size: 22px; letter-spacing: .12em; margin: 18px 0 6px; color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Research · 声音通道 · 2026-10-02</div>
+  <h1>配音方案研究：声音如何承载古诗的情绪与韵律</h1>
+  <p class="sub">对「诗文 → 意境隐变量 → 水墨动画」项目的配音通道成熟度评估 · 理论 / 传统 / 技术三层证据</p>
+  <div class="meta-line">研究方法：三个并行证据线（吟诵传统与水墨声音美学 · 情感/表现力 TTS 技术现状 · 语音韵律-情绪映射学术基础）→ 交叉验证 → 项目落地评估。置信标注：[CONFIRMED] 多源证实 / [SINGLE-SOURCE] 单源 / [unverified] 未核实。</div>
+</header>
+
+<!-- ============ 摘要 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">摘要</span><h2>核心结论</h2></div>
+  <p class="sec-note">用户判断「声音可以表达情绪和韵律、承载很多信息」——三层证据表明：理论成立、传统成熟、技术部分成熟。</p>
+  <div class="verdict"><span class="v-label">CONFIRMED</span><p><b>理论层</b>：语音韵律与情绪的声学映射是成熟学术领域（Banse &amp; Scherer 1996：14 种情绪 × 29 项声学特征）。音高、语速、停顿、强度、谐波性均可编码情绪，这是「声音表达情绪」的科学基础。<span class="cite">[cite:1][cite:2]</span></p></div>
+  <div class="verdict"><span class="v-label">CONFIRMED</span><p><b>传统层</b>：古诗吟诵（平长仄短、依字行腔、入声短促、韵脚延长、五言「2+3」节奏）是成熟的声音形态——叶嘉莹称之为「文字、音声和情意的综合表达」。水墨动画则确立了「无对白 + 民族乐器 + 留白」的声音美学范式（《牧笛》《山水情》）。<span class="cite">[cite:3][cite:4][cite:5]</span></p></div>
+  <div class="verdict warn"><span class="v-label">部分成熟</span><p><b>技术层</b>：TTS 表达<b>情绪</b>已成熟（商业 API 均有情感能力）；表达<b>基础韵律</b>部分成熟（仅 Azure SSML 具备 pitch/rate/break/emphasis/contour 完整参数）；表达<b>吟诵腔</b>不成熟——当前无任何商业 TTS 支持真正的吟诵，古音/平仄/入声的系统性建模仍是空白。<span class="cite">[cite:6][cite:7]</span></p></div>
+  <div class="card">
+    <p><b>对本项目的落地判断</b>：声音通道可作为与视觉通道平行的「第二信息通道」，与项目已有的静默预算、情感轨迹、时间轴合成直接协同。推荐<b>分阶段</b>：先走「朗诵腔 TTS + 严格静默」（可度量、可自动化、符合项目先可度量后可规模的原则），再实验「吟诵采样」作为意境增量，严守「留白当空间、不当噪声」的硬约束。</p>
+  </div>
+</section>
+
+<!-- ============ 1 理论 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">01</span><h2>「声音表达情绪」的学术基础</h2></div>
+  <p class="sec-note">语音韵律（prosody）承载情绪不是经验直觉，而是有系统实证的成熟领域。</p>
+  <div class="card">
+    <h3>核心研究</h3>
+    <ul>
+      <li><b>Banse &amp; Scherer (1996)</b>：跨情感声学特征研究，分析 14 种情绪状态与 29 项声学特征（音高、频谱、时间维度），证明不同情绪可通过声学参数组合区分，是情绪语音学的奠基性工作。<span class="cite">[cite:1]</span></li>
+      <li><b>Scherer 协变模型</b>：情绪引发自主神经系统变化，影响呼吸、发声、构音三层，进而改变语音特征——提供了「情绪 → 声学」的因果解释。<span class="cite">[cite:2]</span></li>
+      <li><b>valence-arousal 维度</b>（Goudbeek &amp; Scherer 2010）：语音情绪不只反映唤醒度，还涉及效价与力量/控制维度，为「如何编码情绪」提供了设计坐标。<span class="cite">[cite:8]</span></li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>声学参数 × 情绪的成熟映射</h3>
+    <table>
+      <thead><tr><th>声学参数</th><th>高唤醒情绪（怒、喜）</th><th>低唤醒情绪（悲、静）</th></tr></thead>
+      <tbody>
+        <tr><td>基频 F0</td><td>升高、范围更宽</td><td>降低、范围更窄</td></tr>
+        <tr><td>强度 Intensity</td><td>更强</td><td>较弱</td></tr>
+        <tr><td>语速 Rate</td><td>更快</td><td>更慢</td></tr>
+        <tr><td>停顿 Pause</td><td>较短</td><td>较长（悲伤时停顿可占时长约 31%）</td></tr>
+        <tr><td>谐波性 Harmonicity</td><td>较高</td><td>较低</td></tr>
+      </tbody>
+    </table>
+    <p class="sec-note" style="margin-top:8px">这张表直接映射到《静夜思》等诗的配音设计：思乡的低唤醒情绪 → 低基频、慢语速、长停顿、弱强度，与动画的「凝止」镜头天然同构。<span class="cite">[cite:1][cite:2]</span></p>
+  </div>
+  <div class="card warn">
+    <h3>反向提醒：声与心的边界</h3>
+    <p>嵇康《声无哀乐论》：「声之与心，殊途异轨，不相经纬」——声学特征可以<b>暗示</b>情绪，但「情感意义」依赖语境、文化经验与观众解读。这提示配音设计应把声音当作与画面<b>协同</b>的通道，而非自足的语义系统。<span class="cite">[cite:9]</span></p>
+  </div>
+</section>
+
+<!-- ============ 2 吟诵传统 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">02</span><h2>古诗吟诵：成熟的声音形态</h2></div>
+  <p class="sec-note">吟诵是介乎「诵」与「唱」之间的读诗方式，其声律规则直接来自诗文的平仄音韵——这正是古诗「韵味」的声音载体。</p>
+  <div class="card">
+    <h3>吟诵 vs 朗诵 vs 唱</h3>
+    <table>
+      <thead><tr><th>形态</th><th>原则</th><th>信息定位</th></tr></thead>
+      <tbody>
+        <tr><td><b>朗诵/播音</b></td><td>依赖朗读者主观理解，重字音清晰、节奏规整</td><td>信息传递</td></tr>
+        <tr><td><b>唱</b></td><td>受旋律/乐谱束缚，字音为曲调服务</td><td>音乐性</td></tr>
+        <tr><td><b>吟诵</b></td><td>以字定音、以义定调，遵循「平长仄短、依字行腔」</td><td>声律 + 情意（韵味）</td></tr>
+      </tbody>
+    </table>
+    <p class="sec-note" style="margin-top:8px">赵敏俐（首师大中国诗歌研究中心）：「吟诵是中国古典诗歌意义表达的有机组成部分」；传统吟诵「本质上不是表演艺术，而是一种学习方式」，更注重诗文内在的节奏与语言发声规律。<span class="cite">[cite:10]</span></p>
+  </div>
+  <div class="card">
+    <h3>吟诵的声学特征（有实验语音学支撑）</h3>
+    <ul>
+      <li><b>平长仄短</b>：平声字拖长、仄声字短促——「平声平道莫低昂，上声高呼猛烈强，去声分明哀远道，入声短促急收藏」。<span class="cite">[cite:10][cite:11]</span></li>
+      <li><b>拖腔显著</b>：句末两字存在较长拖腔，是传统吟诵的标志（蔡鼎一 2025 对叶嘉莹五绝吟诵的实验语音学分析）。<span class="cite">[cite:11]</span></li>
+      <li><b>入声字短促/加字拖腔</b>：入声字原则上「马上把声音停止封闭，不能拖长」，但声以外有腔——声短而腔可拖长（叶嘉莹）。<span class="cite">[cite:3][cite:11]</span></li>
+      <li><b>节奏单元</b>：五言以「2+3」为主，存在「2+2+1」等变体——节奏结构本身来自格律。<span class="cite">[cite:11][cite:12]</span></li>
+      <li><b>韵脚回环</b>：韵脚字的延长营造「韵味」与回环感。</li>
+    </ul>
+  </div>
+  <div class="verdict"><span class="v-label">CONFIRMED</span><p>吟诵作为「承载情绪与韵律的成熟方案」<b>成立</b>：有叶嘉莹等学者的理论沉淀、中华吟诵学会的组织基础（2010 年成立、申报非遗）、以及现代实验语音学的初步证实。短板：传承依赖师承（「家传或师承」的口耳相传），声腔自由度极高，AI 难以复制。<span class="cite">[cite:3][cite:10]</span></p></div>
+</section>
+
+<!-- ============ 3 水墨动画声音美学 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">03</span><h2>水墨动画的声音美学传统</h2></div>
+  <p class="sec-note">中国水墨动画确立的范式不是「配音」，而是「无对白 + 民族乐器 + 留白」——声音参与意境的塑造，而非信息交代。</p>
+  <div class="card">
+    <table>
+      <thead><tr><th>作品</th><th>声音处理</th><th>美学要点</th></tr></thead>
+      <tbody>
+        <tr><td><b>《小蝌蚪找妈妈》</b>（1961）</td><td>古琴 + 琵琶配乐</td><td>配合齐白石写意风格，营造超然物外之意境</td></tr>
+        <tr><td><b>《牧笛》</b>（1963）</td><td>全片无对白，一切声音由音乐替代；笛声由笛子宗师陆春龄演奏</td><td>笛声是「起承转合最重要、核心的道具和戏剧推动」</td></tr>
+        <tr><td><b>《山水情》</b>（1988）</td><td>全片无台词；古琴（吟、猱、绰、注）+ 笙（头尾「寥寥数音」）</td><td>融入道家「和、静、清、远」，以留白传达意境</td></tr>
+      </tbody>
+    </table>
+    <p class="sec-note" style="margin-top:8px">「从《小蝌蚪找妈妈》到《牧笛》，将旁白的叙事补充全部取消，是水墨动画创作上的重大转变」——水墨动画的声音核心是<b>留白</b>：「恰是未曾着墨处，烟波浩渺满目前」。<span class="cite">[cite:4][cite:5]</span></p>
+  </div>
+  <div class="card">
+    <h3>对本项目的含义</h3>
+    <p>项目已有的「静默预算」（静默占比 15–35% 硬约束）与水墨动画的「留白」美学同源。引入人声时，应把<b>声音也当作留白的对象</b>——人声的出现时机、句间停顿、尾句之后的静默，都应当与视觉的静默段协同，而不是「铺满」声轨。<span class="cite">[cite:4]</span></p>
+  </div>
+</section>
+
+<!-- ============ 4 TTS 技术现状 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">04</span><h2>技术现状：情感/表现力 TTS 与韵律控制（2025–2026）</h2></div>
+  <p class="sec-note">结论先行：表达情绪已成熟；细粒度韵律控制仅 Azure SSML 完整；吟诵腔无商业实现。</p>
+  <div class="card">
+    <h3>韵律控制能力对比</h3>
+    <table>
+      <thead><tr><th>产品</th><th class="num">音高 pitch</th><th class="num">语速 rate</th><th class="num">停顿 break</th><th class="num">重音 emphasis</th><th class="num">情绪</th><th>控制粒度</th></tr></thead>
+      <tbody>
+        <tr><td>Azure Neural TTS (HD)</td><td class="num ok">✓ 绝对/相对 Hz、st</td><td class="num ok">✓ 0.5×–2×</td><td class="num ok">✓</td><td class="num ok">✓</td><td class="num ok">✓ 多风格（含 poetry-reading）</td><td>SSML 完整（另有 contour 旋律曲线）</td></tr>
+        <tr><td>火山引擎豆包 TTS</td><td class="num ok">✓</td><td class="num ok">✓ −50~+100</td><td class="num ok">✓ 句间 0–3000ms</td><td class="num mid">—</td><td class="num mid">—</td><td>参数级（pitch/rate/pause/volume）</td></tr>
+        <tr><td>MiniMax Speech</td><td class="num ok">✓</td><td class="num ok">✓</td><td class="num mid">部分</td><td class="num mid">—</td><td class="num ok">✓ 7 种情绪</td><td>中等（情绪标签 + 语调/语速/音量）</td></tr>
+        <tr><td>CosyVoice2（阿里）</td><td class="num ok">✓ 指令级</td><td class="num ok">✓ 指令级</td><td class="num ok">✓ 指令级</td><td class="num mid">部分</td><td class="num ok">✓ 情感指令</td><td>模型层细粒度（instruct）</td></tr>
+        <tr><td>Spark-TTS（开源）</td><td class="num ok">✓ 精确 pitch</td><td class="num ok">✓ rate</td><td class="num bad">✗</td><td class="num bad">✗</td><td class="num mid">部分</td><td>粗 + 细两级</td></tr>
+        <tr><td>GPT-SoVITS（开源）</td><td class="num ok">✓ 界面</td><td class="num ok">✓</td><td class="num mid">部分</td><td class="num mid">部分</td><td class="num mid">部分</td><td>界面级调节</td></tr>
+        <tr><td>ChatTTS（开源）</td><td class="num bad">✗</td><td class="num bad">✗</td><td class="num ok">✓ 标签</td><td class="num bad">✗</td><td class="num mid">部分</td><td>标签级（[break_0-7] 等）</td></tr>
+        <tr><td>ElevenLabs v3</td><td class="num bad">✗</td><td class="num ok">✓ 0.7×–1.2×</td><td class="num mid">定性标签</td><td class="num bad">✗</td><td class="num ok">✓ audio tags</td><td>粗粒度（定性提示）</td></tr>
+        <tr><td>OpenAI TTS</td><td class="num bad">✗</td><td class="num mid">播放速率≠说话节奏</td><td class="num bad">✗</td><td class="num bad">✗</td><td class="num ok">✓ 情绪标签</td><td>粗粒度（style tags）</td></tr>
+      </tbody>
+    </table>
+    <p class="sec-note" style="margin-top:8px">仅 Azure SSML 明确支持 pitch/rate/break/emphasis/contour 的完整组合；contour 参数理论上最接近「抑扬顿挫」的旋律曲线，但实际效果依赖具体 voice 与中文支持。<span class="cite">[cite:6][cite:13]</span></p>
+  </div>
+  <div class="card">
+    <h3>中文古诗朗读的专项能力</h3>
+    <ul>
+      <li><b>Azure</b>：中文 HD voice（如 zh-CN-Xiaoyou / Xiaoxiao2）支持 <code>poetry-reading</code> 风格；但有社区报告称中文 voice 下 styles 与副语言标签可能存在输出不变的问题——<b>需实测验证</b>。<span class="cite">[cite:6][cite:14]</span></li>
+      <li><b>学术模型 Intoner</b>：面向五言/七言的字符级 pitch 与 duration 控制，匹配古汉语四声与韵脚特征——仍是研究模型，非商业 API。<span class="cite">[cite:15]</span></li>
+      <li><b>GLM-TTS</b>：社区评测显示已具备初步平仄感（如「生」字收尾轻而绵长、语速缓急）——早期探索，未达传统吟诵的声腔自由度。<span class="cite">[cite:16]</span></li>
+    </ul>
+  </div>
+  <div class="card warn">
+    <h3>卡点清单</h3>
+    <ul>
+      <li><b>无商业「吟诵腔」</b>：poetry-reading 更像朗读风格，不是真正的吟诵；<span class="cite">[cite:6]</span></li>
+      <li><b>古音/入声/平仄建模缺失</b>：现代 TTS 按普通话读音生成，难以还原入声、古音与诗词读音规则；<span class="cite">[cite:15]</span></li>
+      <li><b>多情感连贯性</b>：古诗常在一句中切换情绪（旷达 → 苍凉），多数产品只能整段/整句粗粒度控制；<span class="cite">[cite:6]</span></li>
+      <li><b>韵律后处理是补偿路径</b>：可先生成基础音频，再用音高/时长后处理逼近吟诵特征（拖腔、平长仄短）。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 5 落地评估 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">05</span><h2>本项目落地评估：四条路线</h2></div>
+  <p class="sec-note">以项目硬约束（意境优先、留白当空间、静默预算 15–35%、先可度量）为筛选标准。</p>
+
+  <div class="route">
+    <div class="route-head"><span class="route-tag" style="color:var(--qing)">路线 A</span><h4>纯视觉 + 环境音/单音色氛围</h4></div>
+    <p>遵循《山水情》范式：不加人声，仅以极淡的风声、琴音或箫声烘托。</p>
+    <p class="pros">优点：与水墨动画「无对白」传统完全一致；零风险；静默预算天然满足。</p>
+    <p class="cons">缺点：放弃了「声音表达情绪与韵律」的全部信息增益——用户的直觉在这里不落地。</p>
+  </div>
+
+  <div class="route">
+    <div class="route-head"><span class="route-tag" style="color:var(--jin)">路线 B</span><h4>朗诵腔 TTS + 严格静默</h4></div>
+    <p>Azure SSML（poetry-reading + 慢速 + 长停顿）或 CosyVoice2 指令，人声按句进入，句间/尾段静默与视觉静默协同。</p>
+    <p class="pros">优点：成熟可用、可批量、可度量（停顿/语速/时长都是参数，能进 O1 判读链）；情绪与基础韵律可表达（低唤醒 → 低基频慢语速长停顿）。</p>
+    <p class="cons">缺点：缺「韵味」——无拖腔、无入声、无吟诵腔；播音腔可能削弱古意。</p>
+  </div>
+
+  <div class="route">
+    <div class="route-head"><span class="route-tag" style="color:var(--jin)">路线 C</span><h4>真人吟诵（叶嘉莹式）</h4></div>
+    <p>邀请/采录传统吟诵，或使用现有吟诵音频资源（中华吟诵学会采录、叶嘉莹吟诵录音）。</p>
+    <p class="pros">优点：声律与诗文内在规律一致，情绪与韵味承载最完整；与「水墨动画 + 琴箫」传统同源。</p>
+    <p class="cons">缺点：不可规模化（每诗需专门吟诵）；版权/授权成本；与动画节奏的对齐需人工精修。</p>
+  </div>
+
+  <div class="route">
+    <div class="route-head"><span class="route-tag" style="color:var(--zhu)">路线 D</span><h4>合成吟诵：TTS 生成 + 韵律后处理</h4></div>
+    <p>用 CosyVoice2/Azure 生成基础朗读，再按吟诵声学规则做后处理（句末拖腔延长、平声拉长、入声短促、韵脚回环），逼近吟诵特征。</p>
+    <p class="pros">优点：可编程、可度量、可批量；在 B 与 C 之间取得折中。</p>
+    <p class="cons">缺点：技术不成熟（无现成工具链，需自研声学后处理）；风险是「四不像」——既非朗诵也非吟诵。</p>
+  </div>
+
+  <div class="card">
+    <h3>推荐：分阶段推进</h3>
+    <ul>
+      <li><b>阶段 1（先可度量）</b>：路线 B 落地《静夜思》——以 Azure SSML 或 CosyVoice2 生成朗诵，参数显式记录（语速、停顿、情绪标签），把「声音参数」纳入评估工装（与 O1 判读链同构，可回归复跑）。</li>
+      <li><b>阶段 2（意境增量）</b>：对照路线 C 的真人吟诵采样（如有授权资源），做 A/B 评估「韵味增益是否值得成本」——用评估闭环验证，而非凭感觉。</li>
+      <li><b>阶段 3（可选研究）</b>：路线 D 的合成吟诵作为研究性课题，与「留白」原则直接冲突的风险最高，优先级最低。</li>
+      <li><b>贯穿约束</b>：人声进入时机严格对齐现有时间轴；静默预算不因配音而放宽；声音的「留白」与视觉的「留白」同构。</li>
+    </ul>
+  </div>
+
+  <div class="card warn">
+    <h3>声音-视觉的跨通道关系：可纳入现有框架</h3>
+    <p>项目已有「双通道意象视觉共现度」「负节点双判据」——若引入声音意象（风声、水声、琴音、人声拖腔），可扩展为<b>声-视跨通道共现</b>分析：哪些声音意象与视觉意象互证（月 + 琴声），哪些是声音专属的「留白节点」（静默本身）。这与 O2/O3 框架天然衔接，保持「可解释性」的项目差异化。</p>
+  </div>
+</section>
+
+<!-- ============ 6 结论 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">06</span><h2>结论</h2></div>
+  <div class="card">
+    <ul>
+      <li>用户的理解<b>成立</b>：声音表达情绪与韵律既有学术基础（语音韵律-情绪映射），又有成熟传统（吟诵的平长仄短与拖腔），可承载语气、停顿、拖腔、节奏分组、韵脚回环等视觉难以直接表达的信息。<span class="cite">[cite:1][cite:11]</span></li>
+      <li>配音方案的成熟度是<b>分层</b>的：情绪（成熟）→ 基础韵律（部分成熟）→ 吟诵韵味（不成熟）。<span class="cite">[cite:6]</span></li>
+      <li>水墨动画自身的声音传统是「无对白 + 乐器 + 留白」，与项目「静默预算」同源——人声引入应是<b>克制</b>的增量，而非铺满的声轨。<span class="cite">[cite:4]</span></li>
+      <li>落地建议：先路线 B（朗诵 TTS，可度量、可回归），再评估路线 C（真人吟诵）的意境增益，路线 D（合成吟诵）作为低优先研究项；所有声音参数进入评估闭环，保持可解释性。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 来源 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">注</span><h2>来源</h2></div>
+  <ul class="src-list">
+    <li><span class="n">[cite:1]</span> Banse &amp; Scherer (1996) 跨情感声学特征研究（14 情绪 × 29 声学特征）：https://pmc.ncbi.nlm.nih.gov/articles/PMC12231869/</li>
+    <li><span class="n">[cite:2]</span> Xu (2023) Oxford Research Encyclopedia 语音情绪条目：http://www.homepages.ucl.ac.uk/~uclyyix/yispapers/Xu_OxfordResearchEncyclopedias2023.pdf</li>
+    <li><span class="n">[cite:3]</span> 叶嘉莹《吟诵，惜之念之的文化遗产》（人民日报转载）：https://m.thepaper.cn/newsDetail_forward_1781069</li>
+    <li><span class="n">[cite:4]</span> 20 世纪中国动画电影音乐评述（中国文艺评论网）：https://www.zgwypl.com/content/details15_28599.html</li>
+    <li><span class="n">[cite:5]</span> 中国水墨动画的发展与创新（B站）：https://www.bilibili.com/opus/857054448976920594</li>
+    <li><span class="n">[cite:6]</span> Microsoft Learn — Azure HD voices 与 SSML（pitch/rate/break/emphasis/contour）：https://learn.microsoft.com/zh-hk/Azure/ai-services/speech-service/high-definition-voices 与 https://learn.microsoft.com/en-us/Azure/ai-services/speech-service/speech-synthesis-markup-voice</li>
+    <li><span class="n">[cite:7]</span> CosyVoice2 官方（情感指令、韵律提升）：https://fun-audio-llm.github.io/cosyvoice2/</li>
+    <li><span class="n">[cite:8]</span> Goudbeek &amp; Scherer (2010) 效价/唤醒度/力量在语音情绪中的作用：https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2011.00180/full</li>
+    <li><span class="n">[cite:9]</span> 嵇康《声无哀乐论》（美学反向论据，传统文本）</li>
+    <li><span class="n">[cite:10]</span> 赵敏俐访谈《长吟短咏故纸新》（光明日报）：https://news.gmw.cn/2017-03/20/content_24006931.htm</li>
+    <li><span class="n">[cite:11]</span> 蔡鼎一 (2025) 叶嘉莹五绝吟诵韵律声学初探：https://pdf.hanspub.org/ml_2915682.pdf</li>
+    <li><span class="n">[cite:12]</span> Zhang, Zhu &amp; Xu (2026) 古典诗歌吟诵的动态韵律分组：https://www.homepages.ucl.ac.uk/~uclyyix/yispapers/Zhang_Zhu_Xu_SP2026_accepted.pdf</li>
+    <li><span class="n">[cite:13]</span> MiniMax Speech 文档 / 火山引擎豆包语音 V3 文档：https://platform.minimaxi.com/document/T2A%20V2 与 https://www.volcengine.com/docs/6561/1598757</li>
+    <li><span class="n">[cite:14]</span> Microsoft Q&amp;A — 中文 voice styles/副语言标签可能不生效的社区报告：https://learn.microsoft.com/en-us/answers/questions/5881537/zh-cn-voices-mstts-express-as-styles-and-paralingu</li>
+    <li><span class="n">[cite:15]</span> Intoner — Chinese Poetry Intoning Synthesis（IJCAI 2025）：https://www.ijcai.org/proceedings/2025/1139.pdf</li>
+    <li><span class="n">[cite:16]</span> GLM-TTS 古诗朗读平仄控制社区评测（CSDN）：https://blog.csdn.net/weixin_35753431/article/details/157593810</li>
+  </ul>
+</section>
+
+</div>
+</body>
+</html>

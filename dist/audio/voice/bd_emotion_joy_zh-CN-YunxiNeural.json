@@ -1,0 +1,305 @@
+{
+  "poem": "早发白帝城 · 李白",
+  "poem_key": "bd",
+  "backend": "edge+prosody+emotion",
+  "voice": "bd_edge_zh-CN-YunxiNeural_quatrain.wav",
+  "sr": 24000,
+  "duration": 13.526,
+  "emotion": "轻快·畅意",
+  "line_texts": [
+    "朝辞白帝彩云间",
+    "千里江陵一日还",
+    "两岸猿声啼不住",
+    "轻舟已过万重山"
+  ],
+  "rules": {
+    "平长仄短": {
+      "level": 1.35,
+      "oblique": 0.85,
+      "entering": 0.65,
+      "rhyme": 1.65
+    },
+    "句调": [
+      {
+        "seg": "起",
+        "f0_mul": 1.02,
+        "f0_slope_pct_per_s": 0.2
+      },
+      {
+        "seg": "承",
+        "f0_mul": 1.04,
+        "f0_slope_pct_per_s": 0.4
+      },
+      {
+        "seg": "转",
+        "f0_mul": 1.06,
+        "f0_slope_pct_per_s": 0.8
+      },
+      {
+        "seg": "合",
+        "f0_mul": 1.08,
+        "f0_slope_pct_per_s": 0.5
+      }
+    ],
+    "句间衔接": {
+      "句末渐弱深度": [
+        0.0,
+        0.0,
+        0.0,
+        0.12
+      ],
+      "句首滑音_ms": 250.0,
+      "跳进上限_半音": 2.0,
+      "气口_ms": 170.0,
+      "实际停顿_秒": [
+        0.918,
+        0.947,
+        1.012
+      ],
+      "行时序_秒": [
+        [
+          0.2,
+          2.7
+        ],
+        [
+          3.618,
+          5.823
+        ],
+        [
+          6.769,
+          8.779
+        ],
+        [
+          9.791,
+          12.326
+        ]
+      ]
+    }
+  },
+  "syllables": [
+    {
+      "char": "朝",
+      "tone": "level",
+      "role": "level",
+      "line": 1,
+      "pos": 1,
+      "frames": 55
+    },
+    {
+      "char": "辞",
+      "tone": "level",
+      "role": "level",
+      "line": 1,
+      "pos": 2,
+      "frames": 75
+    },
+    {
+      "char": "白",
+      "tone": "entering",
+      "role": "entering",
+      "line": 1,
+      "pos": 3,
+      "frames": 65
+    },
+    {
+      "char": "帝",
+      "tone": "oblique",
+      "role": "oblique",
+      "line": 1,
+      "pos": 4,
+      "frames": 61
+    },
+    {
+      "char": "彩",
+      "tone": "oblique",
+      "role": "oblique",
+      "line": 1,
+      "pos": 5,
+      "frames": 52
+    },
+    {
+      "char": "云",
+      "tone": "level",
+      "role": "level",
+      "line": 1,
+      "pos": 6,
+      "frames": 61
+    },
+    {
+      "char": "间",
+      "tone": "rhyme",
+      "role": "rhyme",
+      "line": 1,
+      "pos": 7,
+      "frames": 65
+    },
+    {
+      "char": "千",
+      "tone": "level",
+      "role": "level",
+      "line": 2,
+      "pos": 1,
+      "frames": 56
+    },
+    {
+      "char": "里",
+      "tone": "oblique",
+      "role": "oblique",
+      "line": 2,
+      "pos": 2,
+      "frames": 74
+    },
+    {
+      "char": "江",
+      "tone": "level",
+      "role": "level",
+      "line": 2,
+      "pos": 3,
+      "frames": 59
+    },
+    {
+      "char": "陵",
+      "tone": "level",
+      "role": "level",
+      "line": 2,
+      "pos": 4,
+      "frames": 37
+    },
+    {
+      "char": "一",
+      "tone": "entering",
+      "role": "entering",
+      "line": 2,
+      "pos": 5,
+      "frames": 82
+    },
+    {
+      "char": "日",
+      "tone": "entering",
+      "role": "entering",
+      "line": 2,
+      "pos": 6,
+      "frames": 59
+    },
+    {
+      "char": "还",
+      "tone": "rhyme",
+      "role": "rhyme",
+      "line": 2,
+      "pos": 7,
+      "frames": 48
+    },
+    {
+      "char": "两",
+      "tone": "oblique",
+      "role": "oblique",
+      "line": 3,
+      "pos": 1,
+      "frames": 60
+    },
+    {
+      "char": "岸",
+      "tone": "oblique",
+      "role": "oblique",
+      "line": 3,
+      "pos": 2,
+      "frames": 43
+    },
+    {
+      "char": "猿",
+      "tone": "level",
+      "role": "level",
+      "line": 3,
+      "pos": 3,
+      "frames": 71
+    },
+    {
+      "char": "声",
+      "tone": "level",
+      "role": "level",
+      "line": 3,
+      "pos": 4,
+      "frames": 38
+    },
+    {
+      "char": "啼",
+      "tone": "level",
+      "role": "level",
+      "line": 3,
+      "pos": 5,
+      "frames": 55
+    },
+    {
+      "char": "不",
+      "tone": "entering",
+      "role": "entering",
+      "line": 3,
+      "pos": 6,
+      "frames": 72
+    },
+    {
+      "char": "住",
+      "tone": "oblique",
+      "role": "oblique",
+      "line": 3,
+      "pos": 7,
+      "frames": 45
+    },
+    {
+      "char": "轻",
+      "tone": "level",
+      "role": "level",
+      "line": 4,
+      "pos": 1,
+      "frames": 52
+    },
+    {
+      "char": "舟",
+      "tone": "level",
+      "role": "level",
+      "line": 4,
+      "pos": 2,
+      "frames": 82
+    },
+    {
+      "char": "已",
+      "tone": "oblique",
+      "role": "oblique",
+      "line": 4,
+      "pos": 3,
+      "frames": 59
+    },
+    {
+      "char": "过",
+      "tone": "oblique",
+      "role": "oblique",
+      "line": 4,
+      "pos": 4,
+      "frames": 63
+    },
+    {
+      "char": "万",
+      "tone": "oblique",
+      "role": "oblique",
+      "line": 4,
+      "pos": 5,
+      "frames": 48
+    },
+    {
+      "char": "重",
+      "tone": "level",
+      "role": "level",
+      "line": 4,
+      "pos": 6,
+      "frames": 75
+    },
+    {
+      "char": "山",
+      "tone": "rhyme",
+      "role": "rhyme",
+      "line": 4,
+      "pos": 7,
+      "frames": 49
+    }
+  ]
+}

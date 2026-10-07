@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>语音生成方案深化研究 · 2026-10-02</title>
+<style>
+  :root {
+    --paper: #F6F3EC;
+    --paper-2: #FFFFFF;
+    --ink: #1C1C1C;
+    --ink-2: #4A4640;
+    --ink-3: #8A8578;
+    --line: rgba(28, 28, 28, 0.14);
+    --line-2: rgba(28, 28, 28, 0.07);
+    --zhu: #A83A2C;
+    --zhu-soft: rgba(168, 58, 44, 0.10);
+    --qing: #3E5C76;
+    --qing-soft: rgba(62, 92, 118, 0.10);
+    --jin: #B08430;
+    --jin-soft: rgba(176, 132, 48, 0.10);
+    --serif: "Songti SC", "STSong", "SimSun", "Noto Serif SC", Georgia, serif;
+    --sans: "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--sans); font-size: 14px; line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1020px; margin: 0 auto; padding: 56px 32px 96px; }
+
+  header { border-bottom: 1px solid var(--line); padding-bottom: 32px; margin-bottom: 44px; }
+  .eyebrow { font-size: 12px; letter-spacing: .22em; color: var(--ink-3); text-transform: uppercase; margin-bottom: 18px; }
+  h1 { font-family: var(--serif); font-size: 31px; font-weight: 600; margin: 0 0 8px; letter-spacing: .03em; }
+  .sub { color: var(--ink-3); font-size: 13px; margin-bottom: 24px; }
+  .meta-line {
+    font-size: 12.5px; color: var(--ink-3); border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line); padding: 10px 0; letter-spacing: .03em;
+  }
+
+  section { margin-bottom: 50px; }
+  .sec-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 8px; }
+  .sec-no {
+    font-family: var(--mono); font-size: 12px; color: var(--zhu);
+    border: 1px solid rgba(168,58,44,.32); border-radius: 4px; padding: 1px 7px; flex: none;
+  }
+  h2 { font-family: var(--serif); font-size: 21px; font-weight: 600; margin: 0; letter-spacing: .02em; }
+  .sec-note { color: var(--ink-3); font-size: 12.5px; margin: 0 0 20px; }
+  h3 { font-size: 14px; font-weight: 600; margin: 24px 0 10px; }
+  h4 { font-size: 13px; font-weight: 600; margin: 18px 0 8px; color: var(--ink-2); }
+
+  .card {
+    background: var(--paper-2); border: 1px solid var(--line-2);
+    border-radius: 10px; padding: 20px 24px; margin-bottom: 14px;
+  }
+  .card.warn { border-left: 3px solid var(--jin); }
+  .card.hard { border-left: 3px solid var(--zhu); }
+  .card.good { border-left: 3px solid var(--qing); }
+
+  .verdict {
+    display: flex; gap: 12px; align-items: flex-start;
+    background: var(--paper-2); border: 1px solid var(--line-2);
+    border-left: 3px solid var(--qing); border-radius: 8px; padding: 14px 18px; margin: 14px 0;
+  }
+  .verdict .v-label { font-family: var(--mono); font-size: 11px; color: var(--qing); flex: none; padding-top: 3px; white-space: nowrap; }
+  .verdict p { margin: 0; font-size: 13.5px; }
+  .verdict.warn { border-left-color: var(--jin); }
+  .verdict.warn .v-label { color: var(--jin); }
+  .verdict.hard { border-left-color: var(--zhu); }
+  .verdict.hard .v-label { color: var(--zhu); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 10px 0 6px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line-2); vertical-align: top; }
+  th { font-weight: 600; font-size: 11.5px; color: var(--ink-3); letter-spacing: .05em; border-bottom: 1px solid var(--line); }
+  tbody tr:last-child td { border-bottom: none; }
+  td.num, th.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .ok { color: var(--qing); font-weight: 600; }
+  .bad { color: var(--zhu); font-weight: 600; }
+  .mid { color: var(--jin); font-weight: 600; }
+  .cite { color: var(--ink-3); font-size: 11px; font-family: var(--mono); }
+  code { font-family: var(--mono); font-size: 12px; background: rgba(28,28,28,.05); padding: 1px 5px; border-radius: 4px; }
+
+  ul { margin: 8px 0; padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  .pill {
+    display: inline-block; font-size: 11px; padding: 1px 8px; border-radius: 999px;
+    border: 1px solid var(--line); color: var(--ink-3); margin-right: 6px; vertical-align: 1px;
+  }
+  .pill.cn { color: var(--qing); border-color: rgba(62,92,118,.35); background: var(--qing-soft); }
+  .pill.ss { color: var(--jin); border-color: rgba(176,132,48,.40); background: var(--jin-soft); }
+  .pill.un { color: var(--ink-3); }
+
+  .gap-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 8px; }
+  @media (max-width: 820px) { .gap-grid { grid-template-columns: 1fr; } }
+  .gap { background: var(--paper-2); border: 1px solid var(--line-2); border-radius: 10px; padding: 16px 18px; }
+  .gap .g-title { font-family: var(--serif); font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .gap .g-status { font-family: var(--mono); font-size: 11px; margin-bottom: 8px; }
+  .gap p { font-size: 12.5px; color: var(--ink-2); margin: 0; line-height: 1.7; }
+  .gap .g-ok { color: var(--qing); }
+  .gap .g-mid { color: var(--jin); }
+  .gap .g-bad { color: var(--zhu); }
+
+  .layer { border: 1px solid var(--line-2); border-radius: 10px; padding: 16px 20px; margin-bottom: 12px; background: var(--paper-2); }
+  .layer-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+  .layer-tag { font-family: var(--mono); font-size: 12px; font-weight: 600; }
+  .layer-head h4 { margin: 0; font-size: 14px; }
+  .layer p { margin: 5px 0; font-size: 13px; }
+  .layer .pros { color: var(--qing); }
+  .layer .cons { color: var(--zhu); }
+
+  .src-list { font-size: 12px; color: var(--ink-2); }
+  .src-list li { margin-bottom: 5px; word-break: break-all; }
+  .src-list .n { font-family: var(--mono); color: var(--zhu); }
+
+  blockquote {
+    margin: 14px 0; padding: 12px 18px; border-left: 3px solid var(--line);
+    background: rgba(28,28,28,.03); font-family: var(--serif); font-size: 14px; color: var(--ink-2);
+  }
+  blockquote .src { display: block; margin-top: 6px; font-size: 12px; color: var(--ink-3); font-family: var(--sans); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Research · 语音生成方案 · 2026-10-02</div>
+  <h1>语音生成方案深化研究</h1>
+  <p class="sub">《静夜思》配音：商用云 API · 开源本地模型 · 诗歌专用合成，三线并行的最新全景与落地建议</p>
+  <div class="meta-line">方法：三条并行证据线（商用云 API · 开源本地模型 · 诗歌专用合成与实战工作流）→ 关键事实二次核验 → 与前期「情感 / 抑扬顿挫 / 性别匹配」及「吟诵 / 韵律后处理」研究衔接。置信标注：[CONFIRMED] 多源 / [SINGLE-SOURCE] 单源 / [unverified] 未核实。</div>
+</header>
+
+<!-- ============ 摘要 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">摘要</span><h2>三条线的诊断结论</h2></div>
+  <p class="sec-note">结论：<b>商用 API 已足够满足「情感 + 男声 + 句级抑扬顿挫」；开源本地出现 2025-12 新强者；诗歌专用合成仍是空白，但有一个意外发现。</b></p>
+  <div class="gap-grid">
+    <div class="gap">
+      <div class="g-title">商用云 API</div>
+      <div class="g-status g-ok">● 成熟可用</div>
+      <p>男声 + 情感 + 句级韵律全部现成。火山擎苍 2.0 原生支持 <b>悲伤 + 旁白-沉浸</b>；Azure 有 <b>poet / lonely / whispering</b> 风格；阿里 CosyVoice v3.5 支持<b>指令式</b>控制。</p>
+    </div>
+    <div class="gap">
+      <div class="g-title">开源本地模型</div>
+      <div class="g-status g-ok">● 新强者出现</div>
+      <p>Qwen3-TTS（2025-12，Apache-2.0）支持<b>描述式音色设计 + 3 秒克隆 + 指令控制</b>，可商用；CosyVoice 3 的 instruct 可控制情感 / 语速 / 音量。本地路线首次具备与商用 API 相近的灵活性。</p>
+    </div>
+    <div class="gap">
+      <div class="g-title">诗歌专用合成</div>
+      <div class="g-status g-mid">● 空白，但有新线索</div>
+      <p>Intoner（IJCAI 2025）仍未开源；但阿里云 CosyVoice 系统音色列表中出现了<b>「诗词朗诵」类别、含「李白（古代诗仙男）」预设</b>——需要实测验证效果。</p>
+    </div>
+  </div>
+
+  <div class="verdict hard"><span class="v-label">关键红线</span><p><b>克隆真人声音（叶嘉莹 / 蒙曼 / 康震等）用于公开传播属高风险。</b>《民法典》第 1023 条：对自然人声音的保护，参照适用肖像权保护的有关规定——未经同意克隆、使用特定自然人声音可能构成侵权。<span class="cite">[cite:11][cite:12]</span></p></div>
+  <div class="verdict"><span class="v-label">总体判断</span><p>「模型不是稀缺资源，接入链路的能力才是瓶颈」这条项目经验在此完全成立：<b>语音生成的原料（模型/API）已经过剩，缺的是把「情感 → 男声 → 句级抑扬顿挫 → 逐字平仄」串起来的链路。</b>逐字平仄依然是任何生成模型的天花板，韵律后处理链路（前期研究）的必要性不减。</p></div>
+</section>
+
+<!-- ============ 1 商用云 API ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">01</span><h2>商用云 API 横向对比（截至 2026 末）</h2></div>
+  <p class="sec-note">上一阶段研究（2026-10-02 早）的结论仍然成立，本轮补充了讯飞、百度、BytePlus Seed 与各平台最新定价。</p>
+
+  <div class="card">
+    <h3>关键平台速览</h3>
+    <table>
+      <thead><tr><th>平台</th><th>男声候选</th><th>情感能力</th><th>韵律控制</th><th class="num">价格量级</th><th>古诗适配</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>火山引擎（豆包）</b></td>
+          <td>擎苍 2.0（男，有声阅读）</td>
+          <td class="ok">10 情感：<code>sad</code>（悲伤）、<code>narrator_immersive</code>（旁白-沉浸）、tear（哭腔）等</td>
+          <td class="mid">句级；大模型接口不支持音高调节，情感为主</td>
+          <td class="num">精品 1–2 元/万字符</td>
+          <td class="ok"><b>首选试</b>：悲伤+沉浸直配静夜思</td>
+        </tr>
+        <tr>
+          <td><b>Azure Speech</b></td>
+          <td>Yunyi（poet）、Yunhan（lonely/whispering）、Yunxi</td>
+          <td class="ok">express-as 风格；poet / lonely / sad / whispering</td>
+          <td class="ok">SSML：pitch / contour / break / emphasis（句级）</td>
+          <td class="num">中国区 15 元/百万字符，免费 50 万字符/月</td>
+          <td class="mid">poet 风格最对口，但中文风格响应稳定性有社区报告</td>
+        </tr>
+        <tr>
+          <td><b>阿里云 CosyVoice API</b></td>
+          <td>龙安洋 / 龙安冲 / 龙云（v3）</td>
+          <td class="ok">instruct 指令式：可写「低沉、缓慢、吟诵」</td>
+          <td class="ok">v3.5-plus free-style 指令控制，SSML + 字级时间戳</td>
+          <td class="num">v3-flash 1 元/万字符</td>
+          <td class="ok">指令最灵活；系统音色含「诗词朗诵」类别</td>
+        </tr>
+        <tr>
+          <td><b>MiniMax</b></td>
+          <td>male-qn-qingse / 播音男声 / audiobook_male</td>
+          <td class="ok">emotion：sad / calm 等</td>
+          <td class="mid">pitch [-12,12] + 语速（全局）</td>
+          <td class="num">3.5 元/万字符</td>
+          <td class="mid">可用，韵律粒度一般</td>
+        </tr>
+        <tr>
+          <td><b>讯飞 / 百度</b></td>
+          <td>七哥（磁性男声）等</td>
+          <td class="mid">语调/语速/音量动态调参</td>
+          <td class="mid">句级参数</td>
+          <td class="num">2.2–3 元/万字符</td>
+          <td class="mid">未发现诗词专属风格</td>
+        </tr>
+        <tr>
+          <td><b>BytePlus Seed Speech</b></td>
+          <td>字节 Seed 系音色</td>
+          <td class="ok">情感与语调预测</td>
+          <td class="mid">预测式，非显式控制</td>
+          <td class="num">2.8 元/万字符，含免费额度</td>
+          <td class="mid">自然度高，控制弱</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="sec-note" style="margin-top:10px">擎苍 2.0 的情感列表（<code>BV701_V2_streaming</code>：happy / sad / angry / scare / hate / surprise / tear / novel_dialog / narrator / narrator_immersive）与音色性别（zh_male，有声阅读场景）来自火山引擎官方文档。<span class="cite">[cite:1][cite:2]</span></p>
+  </div>
+
+  <div class="card good">
+    <h3>Top 3 推荐（针对《静夜思》：男声 · 孤独 · 句级起伏）</h3>
+    <table>
+      <thead><tr><th>#</th><th>方案</th><th>理由</th><th>风险</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="num">1</td>
+          <td><b>火山引擎 擎苍 2.0</b></td>
+          <td>男声 + <code>sad</code> 悲伤 + <code>narrator_immersive</code> 旁白-沉浸，最接近「静夜孤思」；国内接入简单、成本低</td>
+          <td>韵律靠情感标签，句内起伏不可细控</td>
+        </tr>
+        <tr>
+          <td class="num">2</td>
+          <td><b>Azure Yunyi(poet) / Yunhan(lonely)</b></td>
+          <td>「诗人」与「孤独低语」风格语义最对口；SSML 句级 contour/break 可做抑扬顿挫；有免费额度</td>
+          <td>中文风格标签稳定性需实测</td>
+        </tr>
+        <tr>
+          <td class="num">3</td>
+          <td><b>阿里云 CosyVoice v3.5-plus</b></td>
+          <td>instruct 指令最灵活，可写「古诗词朗诵、低缓、带停顿」；系统音色有「诗词朗诵」类别</td>
+          <td>需关注系统音色与声设模型的 SSML 支持差异</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 2 开源本地模型 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">02</span><h2>开源本地模型（2025-2026）</h2></div>
+  <p class="sec-note">本地路线在 2025-12 出现了重大更新：Qwen3-TTS 与 CosyVoice 3 让「本地 + 指令控制 + 可商用」成为现实。</p>
+
+  <div class="card">
+    <h3>候选模型对比</h3>
+    <table>
+      <thead><tr><th>模型</th><th>版本/日期</th><th>情感/指令控制</th><th>克隆</th><th>许可证</th><th>显存</th><th>古诗适配</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>Qwen3-TTS</b></td>
+          <td>1.7B · 2025-12</td>
+          <td class="ok">VoiceDesign（描述式音色设计）+ CustomVoice（指令控制风格）；10 语言</td>
+          <td class="ok">3 秒克隆；文本-语音对上下文学习可保韵律</td>
+          <td class="ok">Apache-2.0 可商用</td>
+          <td>约 24GB</td>
+          <td class="ok"><b>本地首选</b>：描述「低沉男声、思念、缓慢」即可</td>
+        </tr>
+        <tr>
+          <td><b>CosyVoice 3</b></td>
+          <td>0.5B · 2025-12</td>
+          <td class="ok">instruct：语言/方言/情感/语速/音量</td>
+          <td class="ok">3 秒参考</td>
+          <td class="mid">代码 Apache-2.0；PyPI 曾标 GPLv3，需按项目页核实</td>
+          <td>低（0.5B）</td>
+          <td class="mid">instruct 写「吟诵感」可试</td>
+        </tr>
+        <tr>
+          <td><b>GPT-SoVITS</b></td>
+          <td>v4 系</td>
+          <td class="mid">情感靠参考音频/微调</td>
+          <td class="ok">5 秒克隆 + 1 分钟微调</td>
+          <td class="ok">MIT</td>
+          <td>低</td>
+          <td class="mid">适合「自录一段样音 → 克隆出稳定音色」</td>
+        </tr>
+        <tr>
+          <td><b>F5-TTS</b></td>
+          <td>1.x</td>
+          <td class="mid">有情感表达；EmoSteer-TTS 可外置情感控制</td>
+          <td class="ok">zero-shot</td>
+          <td class="mid">代码 MIT，权重 CC-BY-NC-4.0（社区重训版可商用）</td>
+          <td>低</td>
+          <td class="mid">一般</td>
+        </tr>
+        <tr>
+          <td><b>IndexTTS-2 / 2.5</b></td>
+          <td>2025</td>
+          <td class="ok">情感 + 时长控制</td>
+          <td class="ok">zero-shot</td>
+          <td class="mid">官网称 MIT，HuggingFace 另有协议，需复核</td>
+          <td>低</td>
+          <td class="mid">可用</td>
+        </tr>
+        <tr>
+          <td><b>Spark-TTS</b></td>
+          <td>2025</td>
+          <td class="mid">风格控制</td>
+          <td class="ok">零样本</td>
+          <td class="bad">代码 Apache-2.0，权重 CC-BY-NC-SA-4.0（商用受限）</td>
+          <td>低</td>
+          <td class="mid">商用受限是硬伤</td>
+        </tr>
+        <tr>
+          <td><b>Fish-Speech / ChatTTS</b></td>
+          <td>—</td>
+          <td class="mid">ChatTTS 有 break/oral 细粒度标签</td>
+          <td>—</td>
+          <td class="bad">Fish 研究许可；ChatTTS AGPL+NC</td>
+          <td>—</td>
+          <td class="bad">许可不适合本项目</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="sec-note" style="margin-top:10px">Qwen3-TTS 的 VoiceDesign / CustomVoice 能力与 Apache-2.0 许可见官方发布博客与技术报告；CosyVoice 3 的 instruct 能力见 ModelScope 模型卡与论文。<span class="cite">[cite:6][cite:7][cite:8][cite:9]</span></p>
+  </div>
+
+  <div class="verdict"><span class="v-label">推荐</span><p><b>本地首选 Qwen3-TTS</b>（描述式音色设计 + 指令控制 + Apache-2.0 可商用 + 中文一流）；<b>备选 CosyVoice 3</b>（0.5B 轻量、instruct 情感控制，但许可需按项目页核实）。若已有自录样音想固化成稳定音色，GPT-SoVITS 的少样本微调最顺手。</p></div>
+
+  <div class="card warn">
+    <h3>一致的局限</h3>
+    <p>本轮检索的所有开源模型与商用 API 一样：<b>均未提供「逐字音高/时长」的显式控制</b>（即五言诗每个字单独定平仄）。情感控制要么靠指令文本、要么靠参考音频——<b>这正是前期「韵律后处理链路」继续成立的原因</b>：生成器负责「对的情感 + 对的男声」，后处理负责「对的平仄」。<span class="pill un">逐字控制缺口（一致）</span></p>
+  </div>
+</section>
+
+<!-- ============ 3 诗歌专用合成与红线 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">03</span><h2>诗歌专用合成 · 语料 · 法律红线</h2></div>
+  <p class="sec-note">诗歌专用路线仍是空白，但语料与法律边界已经清晰。</p>
+
+  <div class="card">
+    <h3>诗歌专用合成研究现状</h3>
+    <table>
+      <thead><tr><th>项目</th><th>状态</th><th>对本项目的意义</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>Intoner</b>（IJCAI 2025）</td>
+          <td class="bad">论文已发表；未发现开源 / 权重 / Demo</td>
+          <td>最对口但不可用；继续等待开源，不投入</td>
+        </tr>
+        <tr>
+          <td><b>MCGA 语料</b>（ACL 2026）</td>
+          <td class="ok">119 小时 · 22,000 条 · 五类文体 · 版权转移</td>
+          <td class="mid">唯一大规模授权诗词音频语料，但为「朗读」非「吟诵」；可作克隆底料或训练数据</td>
+        </tr>
+        <tr>
+          <td><b>CosyVoice 系统音色「诗词朗诵」类别</b></td>
+          <td class="mid">阿里云音色列表含「李白（古代诗仙男）」预设</td>
+          <td class="ok"><b>意外发现，值得立即实测</b>——若效果对味，是零成本捷径</td>
+        </tr>
+        <tr>
+          <td><b>SongSong / OpenSongSong</b>（arXiv 2602.24071）</td>
+          <td class="mid">宋词音乐生成（旋律+人声+伴奏）</td>
+          <td>属「歌唱」不是「吟诵」，方向不同，暂不采用</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card hard">
+    <h3>法律红线：声音克隆受《民法典》约束</h3>
+    <blockquote>
+      「对自然人声音的保护，参照适用肖像权保护的有关规定。」
+      <span class="src">— 《中华人民共和国民法典》第一千零二十三条第二款 <span class="cite">[cite:11][cite:12]</span></span>
+    </blockquote>
+    <ul>
+      <li>最高法院法答网明确：民法典关于肖像权权能、禁止侵害、合理使用、商业利用的规定，<b>均可参照适用于自然人声音权益</b>。<span class="cite">[cite:12]</span></li>
+      <li>因此：<b>克隆叶嘉莹 / 蒙曼 / 康震等真实人物的声音来读诗，即使非商业用途也建议取得授权</b>；GPT-SoVITS 官方条款同样禁止未经同意冒充个人。<span class="pill cn">CONFIRMED</span></li>
+      <li>安全替代：克隆<b>自己录的样音</b>、或使用<b>虚构/平台预设音色</b>（如 CosyVoice「李白」预设——注意这是平台合成音色，非真人）。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 4 综合推荐路线 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">04</span><h2>《静夜思》配音综合推荐路线</h2></div>
+  <p class="sec-note">与前期研究衔接：生成器（本文）负责情感/男声/句级起伏，韵律后处理链路负责逐字平仄，自录样音作为「韵味基准」。</p>
+
+  <div class="layer">
+    <div class="layer-head"><span class="layer-tag" style="color:var(--qing)">第 1 步</span><h4>商用 API 快速出样（半天内）</h4></div>
+    <p>三条并行出样：<b>火山擎苍 2.0</b>（sad + narrator_immersive）、<b>Azure Yunyi-poet / Yunhan-lonely</b>（免费额度内）、<b>阿里 CosyVoice v3.5</b>（instruct 写「低沉缓慢、古诗词朗诵」+ 试「李白」诗词音色预设）。每样出整首，人工盲听裁决音色气质。</p>
+    <p class="pros">优点：零部署、逐句可精调、成本个位数人民币。</p>
+    <p class="cons">缺点：仍受「逐字平仄不可控」限制。</p>
+  </div>
+  <div class="layer">
+    <div class="layer-head"><span class="layer-tag" style="color:var(--jin)">第 2 步</span><h4>（可选）本地 Qwen3-TTS 或 CosyVoice 3</h4></div>
+    <p>若需要离线/可复现/免 API key，部署 Qwen3-TTS（描述式音色：低沉男声、思念、缓慢）或 CosyVoice 3（instruct）。产出的男声情感底料与商用 API 同规格，供后处理共用。</p>
+    <p class="pros">优点：Apache-2.0 可商用、可版本化、无按量成本。</p>
+    <p class="cons">缺点：Qwen3-TTS 需 24GB 显存；CosyVoice 3 许可需核实。</p>
+  </div>
+  <div class="layer">
+    <div class="layer-head"><span class="layer-tag" style="color:var(--zhu)">第 3 步</span><h4>韵律后处理叠加（衔接前期研究）</h4></div>
+    <p>对选定底料执行「平长仄短 + 入短韵长」时长改写（安全区操作），必要时加「平低仄高」音区平移与韵脚拖腔。工具的 PSOLA / WORLD 依赖已在本机安装验证完毕。</p>
+    <p class="pros">优点：唯一能逼近逐字平仄的路径。</p>
+    <p class="cons">缺点：需逐字核验声调未失真；属自研投入。</p>
+  </div>
+  <div class="layer">
+    <div class="layer-head"><span class="layer-tag" style="color:var(--ink-3)">第 4 步</span><h4>自录样音作基准（可选，1 小时）</h4></div>
+    <p>按「一本九法」自录一版，作为听测的「韵味上限」参照，同时可用于 GPT-SoVITS 克隆固化成稳定音色（无版权风险）。</p>
+    <p class="pros">优点：无版权风险、提供唯一真实韵味基准。</p>
+    <p class="cons">缺点：质量依赖录音环境。</p>
+  </div>
+
+  <div class="verdict hard"><span class="v-label">顺序建议</span><p><b>先做第 1 步（半天），用听测决定后续。</b>若商用 API 的情感+男声已够「情感与抑扬顿挫」，则第 3 步后处理可只做最轻档；若仍觉「没韵味」，再加第 4 步自录基准与第 2 步本地模型。每一步都可度量、可回归，符合项目「先可度量再可规模」的原则。</p></div>
+</section>
+
+<!-- ============ 5 证据缺口 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">05</span><h2>证据缺口</h2></div>
+  <div class="card warn">
+    <ul>
+      <li><b>「诗词朗诵」音色预设效果未验证。</b>CosyVoice 音色列表的「李白（古代诗仙男）」来自平台页面，<b>无实际朗读效果 demo 可查</b>。<span class="pill un">待实测</span></li>
+      <li><b>Azure 中文表达风格稳定性存疑。</b>有社区报告 express-as 在部分中文音色上响应不稳定，官方未否认也未确认。<span class="pill ss">SINGLE-SOURCE</span></li>
+      <li><b>CosyVoice 3 许可证存在口径冲突。</b>代码仓库 Apache-2.0 与 PyPI GPLv3 标记并存，商用前须按项目页核实。<span class="pill ss">SINGLE-SOURCE</span></li>
+      <li><b>无「生成模型在古诗朗读上的横向评测」。</b>所有模型的中文古诗朗读质量均缺第三方可复现数据，最终只能靠本项目小样本听测。<span class="pill un">证据缺口</span></li>
+      <li><b>逐字平仄控制仍是无解项。</b>所有商用 API 与开源模型均无逐字音高/时长显式控制，Intoner 未开源。<span class="pill cn">一致确认</span></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>结论</h3>
+    <ul>
+      <li><b>商用 API 已可满足需求</b>：男声 + 情感 + 句级抑扬顿挫现成可用，Top 3 为火山擎苍 2.0 / Azure（poet・lonely）/ 阿里 CosyVoice v3.5。</li>
+      <li><b>本地路线首次成熟</b>：Qwen3-TTS（Apache-2.0、描述式音色、指令控制）是本地首选。</li>
+      <li><b>诗歌专用仍是空白</b>：Intoner 不可用；MCGA 是唯一大规模授权语料（朗读非吟诵）；CosyVoice「李白」诗词音色预设值得立即实测。</li>
+      <li><b>法律红线明确</b>：克隆真人声音须参照肖像权规则，一律不碰。</li>
+      <li><b>链路结论不变</b>：生成器给「情感 + 男声」，韵律后处理给「逐字平仄」，二者叠加才是完整方案。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 来源 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">注</span><h2>来源</h2></div>
+  <ul class="src-list">
+    <li><span class="n">[cite:1]</span> 火山引擎 · 豆包语音 · 小模型音色列表（擎苍 2.0 BV701_V2_streaming 情感列表）：https://docs.volcengine.com/docs/6561/97465?lang=zh</li>
+    <li><span class="n">[cite:2]</span> 火山引擎 · 豆包语音 · 音色列表（擎苍 zh_male，有声阅读）：https://www.volcengine.com/docs/6561/1257544?lang=zh</li>
+    <li><span class="n">[cite:3]</span> 火山引擎 · 端到端实时语音大模型 API 接入文档：https://docs.volcengine.com/docs/DoubaoVoice/End-to-endreal-timespeechlargemodelAPIaccessdocument?lang=zh</li>
+    <li><span class="n">[cite:4]</span> Microsoft Learn — Azure 高保真（HD）语音与风格列表（Yunyi poet / Yunhan lonely 等）：https://learn.microsoft.com/en-gb/azure/ai-services/speech-service/high-definition-voices</li>
+    <li><span class="n">[cite:5]</span> Microsoft Learn — Azure 语音合成 SSML（prosody / contour / break / emphasis 与限制）：https://docs.azure.cn/ai-services/speech-service/speech-synthesis-markup-voice</li>
+    <li><span class="n">[cite:6]</span> Qwen 官方博客 — Qwen3-TTS（VoiceDesign / CustomVoice / 指令控制 / Apache-2.0）：https://qwen.ai/blog?id=qwen3tts-0115</li>
+    <li><span class="n">[cite:7]</span> Qwen3-TTS Technical Report（3 秒克隆、描述式控制、Apache-2.0）：https://qwen3ttsai.com/Qwen3_TTS.pdf</li>
+    <li><span class="n">[cite:8]</span> FunAudioLLM — CosyVoice GitHub（CosyVoice 3）：https://github.com/FunAudioLLM/CosyVoice</li>
+    <li><span class="n">[cite:9]</span> ModelScope — Fun-CosyVoice3-0.5B-2512（instruct：语言/方言/情感/语速/音量）：https://modelscope.ai/models/FunAudioLLM/Fun-CosyVoice3-0.5B-2512</li>
+    <li><span class="n">[cite:10]</span> CosyVoice 3 技术报告（zero-shot、韵律自然度）：https://arxiv.org/html/2505.17589v1</li>
+    <li><span class="n">[cite:11]</span> 中华人民共和国民法典第一千零二十三条（声音保护参照肖像权）— 最高法公报：http://gongbao.court.gov.cn/Details/7f184078694d811fb3314f6af9accf.html</li>
+    <li><span class="n">[cite:12]</span> 最高人民法院 · 法答网精选答问（人格权专题，声音权益参照肖像权规定）：https://www.court.gov.cn/zixun/xiangqing/464401.html</li>
+    <li><span class="n">[cite:13]</span> 法治网 —《利用AI克隆声音须严守法律边界》：http://www.legaldaily.com.cn/commentary/content/2026-04/01/content_9366284.html</li>
+    <li><span class="n">[cite:14]</span> MCGA — 多任务古典中文文学体裁音频语料（ACL 2026 Findings）：https://arxiv.org/html/2601.09270v3</li>
+    <li><span class="n">[cite:15]</span> GPT-SoVITS 官网（MIT 许可、克隆能力与使用条款）：https://gpt-sovits.com/</li>
+    <li><span class="n">[cite:16]</span> F5-TTS 官网（代码 MIT / 权重 CC-BY-NC-4.0）：https://f5tts.org/</li>
+    <li><span class="n">[cite:17]</span> IndexTTS-2 官网（情感与时长控制、许可声明）：https://indextts2.pro/</li>
+    <li><span class="n">[cite:18]</span> Intoner — For Chinese Poetry Intoning Synthesis（IJCAI 2025，未开源）：https://www.ijcai.org/proceedings/2025/1139.pdf</li>
+  </ul>
+</section>
+
+</div>
+</body>
+</html>

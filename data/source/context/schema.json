@@ -1,0 +1,227 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "poem-context/v1",
+  "title": "诗语境资料 · poem-context/v1",
+  "$comment": "每首诗的『诗外背景』机读规范。由 src/tools/context_schema_check.py 校验（内置轻量 draft-07 子集，无外部依赖）。语义交叉核对（源 ID 解析、prosody 与 text 对齐、韵脚/入声 ⊆ 诗句字）也在该脚本内完成，JSON Schema 只表达结构约束。",
+  "type": "object",
+  "required": [
+    "schema", "id", "poem", "author", "author_lifespan", "genre", "fetched_at",
+    "evidence_grade_scale", "text", "dating", "biography", "glossary",
+    "allusion_chains", "sibling_works", "interpretations", "interpretation_consensus",
+    "prosody", "pipeline_implications", "sources", "gaps"
+  ],
+  "properties": {
+    "schema": { "const": "poem-context/v1" },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$",
+      "description": "稳定短 id（jx/jys/bd…），用作派生文件与下游的键；新诗加入时必填且全局唯一。"
+    },
+    "poem": { "type": "string", "minLength": 1 },
+    "aliases": { "type": "array", "items": { "type": "string" } },
+    "author": { "type": "string", "minLength": 1 },
+    "author_lifespan": { "type": "string", "pattern": "^[0-9]{3,4}-[0-9]{3,4}$" },
+    "genre": { "type": "string", "minLength": 1 },
+    "fetched_at": { "type": "string", "minLength": 4 },
+
+    "evidence_grade_scale": {
+      "type": "object",
+      "required": ["1", "2", "3", "4", "5", "6"],
+      "propertyNames": { "pattern": "^[1-6]$" },
+      "additionalProperties": { "type": "string", "minLength": 1 }
+    },
+
+    "text": {
+      "type": "object",
+      "required": ["base", "version_chosen"],
+      "properties": {
+        "base": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "version_chosen": { "type": "string", "minLength": 1 },
+        "version_reason": { "type": "string" },
+        "variants": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["line", "chosen", "alt"],
+            "properties": {
+              "line": { "type": "integer", "minimum": 1 },
+              "chosen": { "type": "string" },
+              "alt": { "type": "string" },
+              "grade": { "$ref": "#/definitions/grade" },
+              "source_ids": { "$ref": "#/definitions/source_ids" }
+            }
+          }
+        }
+      }
+    },
+
+    "dating": {
+      "type": "object",
+      "required": ["year", "place", "certainty", "grade"],
+      "properties": {
+        "year": { "type": "string" },
+        "place": { "type": "string" },
+        "certainty": {
+          "enum": ["certain", "fairly_certain", "contested", "highly_uncertain", "unknown"],
+          "description": "系年确定度阶梯：certain（定论）> fairly_certain（较可信）> contested（有争议）> highly_uncertain（高度存疑）> unknown（不可考）。"
+        },
+        "note": { "type": "string" },
+        "grade": { "$ref": "#/definitions/grade" },
+        "source_ids": { "$ref": "#/definitions/source_ids" }
+      }
+    },
+
+    "biography": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["event", "grade"],
+        "properties": {
+          "event": { "type": "string", "minLength": 1 },
+          "year": { "type": "string" },
+          "note": { "type": "string" },
+          "grade": { "$ref": "#/definitions/grade" },
+          "source_ids": { "$ref": "#/definitions/source_ids" }
+        }
+      }
+    },
+
+    "glossary": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["term", "gloss", "grade"],
+        "properties": {
+          "term": { "type": "string", "minLength": 1 },
+          "gloss": { "type": "string", "minLength": 1 },
+          "grade": { "$ref": "#/definitions/grade" },
+          "source_ids": { "$ref": "#/definitions/source_ids" }
+        }
+      }
+    },
+
+    "allusion_chains": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["surface", "polarity", "chain", "grade"],
+        "properties": {
+          "surface": { "type": "string", "minLength": 1 },
+          "polarity": { "type": "string", "minLength": 1 },
+          "polarity_note": { "type": "string" },
+          "chain": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "grade": { "$ref": "#/definitions/grade" },
+          "source_ids": { "$ref": "#/definitions/source_ids" }
+        }
+      }
+    },
+
+    "sibling_works": {
+      "type": "object",
+      "required": ["grade", "items"],
+      "properties": {
+        "grade": { "$ref": "#/definitions/grade" },
+        "note": { "type": "string" },
+        "items": { "type": "array", "items": { "type": "string" } },
+        "source_ids": { "$ref": "#/definitions/source_ids" }
+      }
+    },
+
+    "interpretations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "claim", "grade"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "claim": { "type": "string", "minLength": 1 },
+          "proponents": { "type": "array", "items": { "type": "string" } },
+          "grade": { "$ref": "#/definitions/grade" },
+          "source_ids": { "$ref": "#/definitions/source_ids" }
+        }
+      }
+    },
+
+    "interpretation_consensus": {
+      "type": "object",
+      "required": ["verdict", "confidence_penalty", "blank_ratio_uplift"],
+      "properties": {
+        "verdict": { "type": "string", "minLength": 1 },
+        "composite": { "type": "string" },
+        "confidence_penalty": { "type": "boolean" },
+        "blank_ratio_uplift": { "type": "boolean" }
+      }
+    },
+
+    "prosody": {
+      "type": "object",
+      "required": ["form", "rhyme_group", "rhyme_feet", "pingze", "constraints"],
+      "properties": {
+        "form": { "type": "string", "minLength": 1 },
+        "style": { "type": "string" },
+        "rhyme_group": { "type": "string", "minLength": 1 },
+        "rhyme_feet": {
+          "type": "array", "minItems": 2,
+          "items": { "type": "string", "minLength": 1, "maxLength": 1 }
+        },
+        "rusheng_chars": {
+          "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 1 }
+        },
+        "rusheng_ratio": {
+          "type": ["number", "null"], "minimum": 0, "maximum": 1,
+          "description": "入声字占比；null 表示「检索材料未形成可靠结论」（见 rusheng_note），非缺数据。"
+        },
+        "rusheng_note": { "type": "string" },
+        "ze_ratio": { "type": ["number", "null"], "minimum": 0, "maximum": 1 },
+        "pingze": {
+          "type": "array", "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["line", "text", "pattern"],
+            "properties": {
+              "line": { "type": "integer", "minimum": 1 },
+              "text": { "type": "string", "minLength": 1 },
+              "pattern": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        "pingze_variants": { "type": "array", "items": { "type": "object" } },
+        "form_dispute": { "type": "object" },
+        "constraints": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+
+    "pipeline_implications": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "pattern": "^card_[0-9]_[a-z0-9_]+$" },
+      "additionalProperties": { "type": "string", "minLength": 1 }
+    },
+
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "grade"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^S[0-9]+$" },
+          "title": { "type": "string", "minLength": 1 },
+          "type": { "type": "string" },
+          "grade": { "$ref": "#/definitions/grade" },
+          "url": { "type": "string" }
+        }
+      }
+    },
+
+    "gaps": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+  },
+
+  "definitions": {
+    "grade": { "type": "integer", "minimum": 1, "maximum": 6 },
+    "source_ids": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^S[0-9]+$" }
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+ "meta": {
+  "role": "D1 覆盖率护栏：换源/加补遗后重跑，确认不降。",
+  "corpus_size": 20,
+  "d1_chars": 8313,
+  "d1_source": "pingshui-rhyme 0.20"
+ },
+ "summary": {
+  "chars_total": 488,
+  "missing_total": 0,
+  "coverage": 1.0,
+  "missing_unique": []
+ },
+ "per_poem": {
+  "静夜思": {
+   "chars": 20,
+   "missing": []
+  },
+  "江雪": {
+   "chars": 20,
+   "missing": []
+  },
+  "早发白帝城": {
+   "chars": 28,
+   "missing": []
+  },
+  "登鹳雀楼": {
+   "chars": 20,
+   "missing": []
+  },
+  "春晓": {
+   "chars": 20,
+   "missing": []
+  },
+  "相思": {
+   "chars": 20,
+   "missing": []
+  },
+  "鹿柴": {
+   "chars": 20,
+   "missing": []
+  },
+  "竹里馆": {
+   "chars": 20,
+   "missing": []
+  },
+  "送别": {
+   "chars": 20,
+   "missing": []
+  },
+  "悯农": {
+   "chars": 20,
+   "missing": []
+  },
+  "望庐山瀑布": {
+   "chars": 28,
+   "missing": []
+  },
+  "绝句": {
+   "chars": 28,
+   "missing": []
+  },
+  "赠汪伦": {
+   "chars": 28,
+   "missing": []
+  },
+  "黄鹤楼送孟浩然之广陵": {
+   "chars": 28,
+   "missing": []
+  },
+  "山行": {
+   "chars": 28,
+   "missing": []
+  },
+  "泊船瓜洲": {
+   "chars": 28,
+   "missing": []
+  },
+  "枫桥夜泊": {
+   "chars": 28,
+   "missing": []
+  },
+  "出塞": {
+   "chars": 28,
+   "missing": []
+  },
+  "凉州词": {
+   "chars": 28,
+   "missing": []
+  },
+  "九月九日忆山东兄弟": {
+   "chars": 28,
+   "missing": []
+  }
+ }
+}

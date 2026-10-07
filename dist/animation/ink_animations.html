@@ -1,0 +1,1754 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>水墨动画 · 《江雪》《早发白帝城》《静夜思》</title>
+<style>
+  /* 题诗 / 落款字体：书体谱系各档（子集均含三首题诗 69 字 + 落款 + 印章 + 诗题用字），
+     见 build/font_subset.py。跨平台一致，不依赖系统字体名。
+     正文按诗的 V/A/T 定档：江雪（孤峭）→ 龙藏；白帝城 / 静夜思（明朗 / 温润）→ 马善政。
+     落款按「文正款活」用行书 → 志莽行书。 */
+  /* 楷·温润（兜底）—— 霞鹜文楷 LXGW WenKai TC, SIL OFL 1.1 */
+  @font-face {
+    font-family: "PoemKai";
+    src: url("fonts/poem-kai.woff2") format("woff2");
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  /* 楷·开张 —— 马善政毛笔楷 Ma Shan Zheng, SIL OFL 1.1 */
+  @font-face {
+    font-family: "PoemMaShan";
+    src: url("fonts/poem-mashan.woff2") format("woff2");
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  /* 行楷·瘦劲 —— 龙藏 Long Cang, SIL OFL 1.1 */
+  @font-face {
+    font-family: "PoemLongCang";
+    src: url("fonts/poem-longcang.woff2") format("woff2");
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  /* 行·流动（落款）—— 志莽行书 Zhi Mang Xing, SIL OFL 1.1 */
+  @font-face {
+    font-family: "PoemZhiMang";
+    src: url("fonts/poem-zhimang.woff2") format("woff2");
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  /* 草·狂放（谱系占位，三首未用）—— 柳建毛草 Liu Jian Mao Cao, SIL OFL 1.1。
+     补书体谱系「篆隶楷行草」的草档，对应高唤醒区（怒 / 惧 / 惊）；省并连绵、辨识度低，不作正文小字。 */
+  @font-face {
+    font-family: "PoemCao";
+    src: url("fonts/poem-cao.woff2") format("woff2");
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  /* 隶（谱系占位，三首未用）—— 阿里妈妈刀隶体 AlimamaDaoLiTi。
+     授权为「作者声明」：免费商用 + 允许嵌入式使用，但字体文件内无 OFL 记录，非 OFL，出处见 README。 */
+  @font-face {
+    font-family: "PoemDaoLi";
+    src: url("fonts/poem-li.woff2") format("woff2");
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  /* 篆（印章）—— 敬峰中山王篆 JFZSKSealScript, SIL OFL 1.1 子集，仅「江雪白帝静夜」六字。
+     依 OFL §3 改名 PoemSeal（保留名 JFZSKSealScript 不得用于衍生），合「印从篆出」之制。 */
+  @font-face {
+    font-family: "PoemSeal";
+    src: url("fonts/seal-script.woff2") format("woff2");
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  :root {
+    --paper: #F6F3EC;
+    --paper-2: #FFFFFF;
+    --ink: #1C1C1C;
+    --ink-2: #4A4640;
+    --ink-3: #8A8578;
+    --line: rgba(28, 28, 28, 0.14);
+    --line-2: rgba(28, 28, 28, 0.07);
+    --zhu: #A83A2C;
+    --zhu-soft: rgba(168, 58, 44, 0.10);
+    --qing: #3E5C76;
+    --qing-soft: rgba(62, 92, 118, 0.10);
+    --jin: #B08430;
+    --serif: "Songti SC", "STSong", "SimSun", "Noto Serif SC", Georgia, serif;
+    --sans: "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--sans); font-size: 14px; line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 52px 28px 88px; }
+
+  header { border-bottom: 1px solid var(--line); padding-bottom: 26px; margin-bottom: 40px; }
+  .eyebrow { font-size: 12px; letter-spacing: .22em; color: var(--ink-3); text-transform: uppercase; margin-bottom: 16px; }
+  h1 { font-family: var(--serif); font-size: 30px; font-weight: 600; margin: 0 0 8px; letter-spacing: .04em; }
+  .sub { color: var(--ink-3); font-size: 13px; }
+
+  section.player { margin-bottom: 56px; }
+  .p-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 4px; flex-wrap: wrap; }
+  .p-no {
+    font-family: var(--mono); font-size: 12px; color: var(--zhu);
+    border: 1px solid rgba(168,58,44,.32); border-radius: 4px; padding: 1px 7px;
+  }
+  h2 { font-family: var(--serif); font-size: 21px; font-weight: 600; margin: 0; letter-spacing: .03em; }
+  .p-meta { font-size: 12.5px; color: var(--ink-3); margin: 0 0 18px; }
+
+  /* ---------- stage ---------- */
+  .stage {
+    position: relative; width: 100%; aspect-ratio: 3 / 2;
+    border-radius: 10px; overflow: hidden;
+    border: 1px solid var(--line);
+    background: #F6F3EC;
+    box-shadow: 0 1px 2px rgba(28,28,28,.05), 0 8px 28px -12px rgba(28,28,28,.20);
+  }
+  .stage svg.art { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+  /* HUD */
+  .hud {
+    position: absolute; inset: 0; pointer-events: none;
+    font-family: var(--sans);
+  }
+  .hud-time {
+    position: absolute; bottom: 14px; left: 20px;
+    font-family: var(--mono); font-size: 11.5px; color: rgba(28,28,28,.45);
+    background: rgba(246,243,236,.72); padding: 1px 7px; border-radius: 4px;
+  }
+
+  /* ---------- controls ---------- */
+  .ctrl { margin-top: 12px; display: flex; align-items: center; gap: 14px; }
+  button.play {
+    flex: none; display: inline-flex; align-items: center; gap: 7px;
+    font-family: var(--sans); font-size: 13px; color: var(--paper-2);
+    background: var(--ink); border: 1px solid var(--ink); border-radius: 999px;
+    padding: 7px 18px; cursor: pointer; transition: opacity .15s;
+  }
+  button.play:hover { opacity: .84; }
+  button.play svg { width: 12px; height: 12px; fill: currentColor; }
+
+  .track { position: relative; flex: 1; height: 26px; cursor: pointer; }
+  .track-bg {
+    position: absolute; top: 11px; left: 0; right: 0; height: 4px;
+    background: rgba(28,28,28,.09); border-radius: 2px; overflow: hidden;
+  }
+  .track-fill { position: absolute; top: 0; left: 0; bottom: 0; width: 0; background: var(--ink); opacity: .72; }
+  .track-seg {
+    position: absolute; top: 4px; width: 1px; height: 18px; background: rgba(28,28,28,.22);
+  }
+  .track-sil {
+    position: absolute; top: 11px; height: 4px; background: rgba(62,92,118,.30);
+  }
+  .track-head {
+    position: absolute; top: 6px; width: 3px; height: 14px; margin-left: -1.5px;
+    background: var(--zhu); border-radius: 2px;
+  }
+  .seg-labels { display: flex; gap: 14px; font-size: 11.5px; color: var(--ink-3); flex-wrap: wrap; }
+  .seg-labels b { color: var(--ink-2); font-weight: 600; }
+
+  .note {
+    font-size: 12.5px; color: var(--ink-3); margin: 14px 0 0;
+    border-left: 2px solid var(--line); padding-left: 14px;
+  }
+  .note b { color: var(--ink-2); }
+  .legend {
+    display: flex; gap: 18px; flex-wrap: wrap; font-size: 12px; color: var(--ink-3); margin-top: 12px;
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .swatch { width: 14px; height: 4px; border-radius: 2px; display: inline-block; }
+  .footnote { font-size: 12px; color: var(--ink-3); border-top: 1px solid var(--line); padding-top: 20px; margin-top: 8px; }
+
+  /* ---------- 播放器开关（人声 / 标注）：置于重播按钮旁 ---------- */
+  button.ctrl-switch {
+    flex: none; cursor: pointer; font-family: var(--sans);
+    font-size: 12.5px; line-height: 1.5; padding: 6px 14px; border-radius: 999px;
+    background: rgba(246,243,236,.9); border: 1px solid var(--line); color: var(--ink-2);
+    -webkit-appearance: none; appearance: none; transition: opacity .15s;
+  }
+  button.ctrl-switch:hover { opacity: .84; }
+  button.ctrl-switch[aria-pressed="true"] {
+    color: var(--paper-2); background: var(--ink); border-color: var(--ink);
+  }
+  /* 自动播放被策略拦下时的可见提示。默认 hidden，只有拦截真的发生才显示。
+     没有它的话：画面照常推进但全程无声，用户完全无从判断该点哪里。 */
+  .audiotip {
+    flex: none; cursor: pointer; font-family: var(--sans);
+    font-size: 12.5px; line-height: 1.5; padding: 6px 12px; border-radius: 999px;
+    background: rgba(168,58,42,.10); border: 1px solid rgba(168,58,42,.42);
+    color: #8f3a24; white-space: nowrap;
+  }
+  .audiotip[hidden] { display: none; }
+  .anno text {
+    font-family: var(--sans);
+    fill: rgba(28,28,28,.68);
+    paint-order: stroke;
+    stroke: rgba(246,243,236,.94);
+    stroke-linejoin: round;
+    letter-spacing: .05em;
+  }
+  .anno line { stroke: rgba(28,28,28,.34); }
+  .anno circle { fill: rgba(168,58,44,.78); }
+
+  @media (max-width: 700px) {
+    .ctrl { flex-wrap: wrap; }
+    .track { order: 3; width: 100%; flex-basis: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Ink animation · 时间轴合成结果</div>
+  <h1>三幅画，动起来</h1>
+  <div class="sub">按 STEP 7 的节拍表逐段执行：时长、镜头、静默预算、运动元素，全部来自格律层与情感轨迹的计算结果。题诗用墨笔竖排写在留白处，按真实笔顺逐笔写出。</div>
+</header>
+
+<!-- ================= 江雪 ================= -->
+<section class="player" id="p-jx">
+  <div class="p-head"><span class="p-no">01</span><h2>江雪</h2></div>
+  <p class="p-meta">唐 · 柳宗元　五言绝句　入声屑韵　折腰体　—　总时长 19.6s　静默 30%　·　配音：云健（情感版）·　音乐：古琴（羽调式 · 散板）　·　默认纯音乐，可开人声</p>
+
+  <div class="stage">
+    <svg class="art" id="art-jx" viewBox="0 0 900 600" preserveAspectRatio="xMidYMid slice" aria-label="江雪水墨动画">
+      <defs>
+        <filter id="jxEdge" x="-20%" y="-20%" width="140%" height="140%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.014" numOctaves="4" seed="11" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="18" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <filter id="jxSoft" x="-20%" y="-20%" width="140%" height="140%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.028" numOctaves="3" seed="5" result="n2"/>
+          <feDisplacementMap in="SourceGraphic" in2="n2" scale="10" xChannelSelector="R" yChannelSelector="G"/>
+          <feGaussianBlur stdDeviation="3.2"/>
+        </filter>
+        <filter id="jxGrain" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="3" result="g"/>
+          <feColorMatrix in="g" type="saturate" values="0"/>
+        </filter>
+        <filter id="jxDry" x="-30%" y="-30%" width="160%" height="160%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="3" seed="9" result="d"/>
+          <feDisplacementMap in="SourceGraphic" in2="d" scale="6" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <filter id="jxBoatInk" x="-30%" y="-30%" width="160%" height="160%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.014" numOctaves="4" seed="11" result="nb"/>
+          <feDisplacementMap in="SourceGraphic" in2="nb" scale="18" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <!-- 墨笔：位移出毛边，再用细噪点做飞白 -->
+        <filter id="jxInk" x="-18%" y="-18%" width="136%" height="136%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.05 0.085" numOctaves="3" seed="41" result="it"/>
+          <feDisplacementMap in="SourceGraphic" in2="it" scale="3.4" xChannelSelector="R" yChannelSelector="G" result="id"/>
+          <feTurbulence type="fractalNoise" baseFrequency="0.72" numOctaves="2" seed="9" result="ig"/>
+          <feColorMatrix in="ig" type="luminanceToAlpha" result="iga"/>
+          <feComponentTransfer in="iga" result="igm">
+            <feFuncA type="linear" slope="0.5" intercept="0.62"/>
+          </feComponentTransfer>
+          <feComposite in="id" in2="igm" operator="in"/>
+        </filter>
+      </defs>
+
+      <rect width="900" height="600" fill="#F6F3EC"/>
+      <rect width="900" height="600" filter="url(#jxGrain)" opacity="0.055"/>
+
+      <g id="jx-cam">
+        <!-- 远山：左右各延伸出画（覆盖相机横移范围，避免移动时山体被截断） -->
+        <g id="jx-far" filter="url(#jxEdge)">
+          <path d="M-140 252 L-70 206 L0 252 L120 176 L212 234 L320 158 L432 238 L522 194 L642 250 L762 198 L900 252 L980 210 L1040 252 L1040 300 L-140 300 Z" fill="#6E6A60" opacity="0.13"/>
+          <path d="M-140 252 L-60 210 L88 204 L202 248 L332 188 L472 252 L602 212 L742 252 L900 252 L990 218 L1040 252 L1040 300 L-140 300 Z" fill="#5A564D" opacity="0.17"/>
+          <path d="M-140 252 L-40 232 L142 222 L282 252 L422 214 L582 252 L800 234 L960 246 L1040 252 L1040 300 L-140 300 Z" fill="#3A362F" opacity="0.15"/>
+        </g>
+        <path id="jx-waterline" d="M-140 262 Q-40 272 0 258 Q220 274 452 262 Q680 250 900 264 Q960 268 1040 264" fill="none" stroke="#3A362F" stroke-width="1.6" opacity="0.16" filter="url(#jxSoft)"/>
+
+        <!-- 万径 -->
+        <g id="jx-path" filter="url(#jxSoft)" opacity="0.20">
+          <path d="M30 258 L152 302" stroke="#5A564D" stroke-width="2.4" fill="none"/>
+          <path d="M64 258 L200 304" stroke="#5A564D" stroke-width="2" fill="none"/>
+          <path d="M98 258 L246 306" stroke="#5A564D" stroke-width="1.8" fill="none"/>
+        </g>
+
+        <!-- 芦苇 -->
+        <g id="jx-reed" filter="url(#jxDry)" stroke="#2A2724" fill="none" opacity="0.52">
+          <path d="M88 514 Q100 438 80 368" stroke-width="1.8"/>
+          <path d="M114 518 Q130 450 158 392" stroke-width="1.4"/>
+          <path d="M138 522 Q146 464 138 420" stroke-width="1.2"/>
+        </g>
+
+        <!-- 孤舟 + 蓑笠翁 -->
+        <g id="jx-boat" filter="url(#jxBoatInk)">
+          <path d="M468 468 Q585 502 702 468 Q662 490 585 492 Q508 490 468 468 Z" fill="#1C1C1C" opacity="0.88"/>
+          <path d="M566 428 Q586 406 606 428 Z" fill="#1C1C1C" opacity="0.92"/>
+          <path d="M576 428 L596 428 L598 456 L574 456 Z" fill="#1C1C1C" opacity="0.88"/>
+          <path d="M578 458 Q588 466 596 458" fill="none" stroke="#F6F3EC" stroke-width="1" opacity="0.5"/>
+        </g>
+
+        <!-- 钓丝 -->
+        <path id="jx-line" d="M600 452 Q642 500 620 558" fill="none" stroke="#1C1C1C" stroke-width="1.2"
+              opacity="0.5" filter="url(#jxDry)" pathLength="100"
+              stroke-dasharray="100 100" stroke-dashoffset="100"/>
+
+        <!-- 雪 -->
+        <g id="jx-snow"></g>
+
+        <!-- 画中物标注 -->
+        <g id="jx-anno" class="anno" opacity="0">
+          <g class="al" data-t="0.59">
+            <line x1="400" y1="214" x2="358" y2="178"/>
+            <circle cx="400" cy="214" r="2.4"/>
+            <text x="352" y="172" text-anchor="start">远山</text>
+          </g>
+          <g class="al" data-t="1.61">
+            <line x1="118" y1="442" x2="66" y2="400"/>
+            <circle cx="118" cy="442" r="2.4"/>
+            <text x="60" y="394" text-anchor="start">芦苇</text>
+          </g>
+          <g class="al" data-t="1.99">
+            <line x1="706" y1="258" x2="722" y2="240"/>
+            <circle cx="706" cy="258" r="2.4"/>
+            <text x="728" y="236" text-anchor="start">寒江</text>
+          </g>
+          <g class="al" data-t="3.06">
+            <line x1="146" y1="152" x2="146" y2="132"/>
+            <circle cx="146" cy="152" r="2.4"/>
+            <text x="146" y="126" text-anchor="middle">雪</text>
+          </g>
+          <g class="al" data-t="5.33">
+            <line x1="168" y1="292" x2="186" y2="326"/>
+            <circle cx="168" cy="292" r="2.4"/>
+            <text x="190" y="340" text-anchor="start">万径</text>
+          </g>
+          <g class="al" data-t="10.10">
+            <line x1="585" y1="462" x2="585" y2="404"/>
+            <circle cx="585" cy="462" r="2.4"/>
+            <text x="585" y="398" text-anchor="middle">孤舟 · 蓑笠翁</text>
+          </g>
+          <g class="al" data-t="14.45">
+            <line x1="618" y1="520" x2="646" y2="540"/>
+            <circle cx="618" cy="520" r="2.4"/>
+            <text x="652" y="548" text-anchor="start">钓丝</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- 题诗：墨笔竖排，按真实笔顺逐笔写出（屏幕空间，始终可读） -->
+      <g id="jx-poemink" filter="url(#jxInk)"></g>
+
+      <!-- 印章（屏幕空间） -->
+      <g id="jx-seal" opacity="0">
+        <rect x="830" y="522" width="26" height="44" rx="4" fill="#A83A2C" opacity="0.86"/>
+        <text x="843" y="540" font-size="19" fill="#F6F3EC" font-family="PoemSeal, Songti SC, serif" text-anchor="middle">江</text>
+        <text x="843" y="562" font-size="19" fill="#F6F3EC" font-family="PoemSeal, Songti SC, serif" text-anchor="middle">雪</text>
+      </g>
+    </svg>
+
+    <div class="hud">
+      <div class="hud-time" id="jx-time">0.0 / 19.6 s</div>
+    </div>
+  </div>
+
+  <div class="ctrl">
+    <button class="play" data-play="jx">
+      <svg viewBox="0 0 12 12"><path d="M1 0.5 L11 6 L1 11.5 Z"/></svg><span>播放</span>
+    </button>
+    <button class="ctrl-switch" id="jx-voice-btn" type="button" aria-pressed="false" title="默认纯音乐；打开即启用吟诵并自动闪避音乐">人声 关</button>
+    <button class="ctrl-switch" id="jx-anno-btn" type="button" aria-pressed="false">标注</button>
+    <button class="audiotip" id="jx-audiotip" type="button" hidden
+            title="浏览器禁止了自动出声。点这里（属用户手势）即可带声播放">🔇 点此放声</button>
+    <div class="track" data-track="jx">
+      <div class="track-bg"><div class="track-fill"></div></div>
+      <div class="track-head"></div>
+    </div>
+  </div>
+  <div class="seg-labels" style="margin-top:8px">
+    <span><b>起</b> 千山鸟飞绝 3.4s</span>
+    <span><b>承</b> 万径人踪灭 3.1s</span>
+    <span><b>转</b> 孤舟蓑笠翁 3.3s</span>
+    <span><b>合</b> 独钓寒江雪 5.4s</span>
+  </div>
+  <p class="note">
+    <b>转</b>段（9.8s 起）的<b>极缓推近</b>：相机由 0.96 倍沿约 10 秒缓缓推到 1.12 倍，峰值速度约 2.5%/s —— 全片无急推。缩放刻意压平，以免推进过猛破坏寒江的空阔与「孤」的意境。
+    <b>孤舟与蓑笠翁在此段"重放落笔"</b>——从模糊到清晰，模拟墨迹在宣纸上定形（低含水，1.3 秒定形）。
+    <b>钓丝</b>在合段用 1.4 秒画出，是全诗最细的一根墨。
+  </p>
+</section>
+
+<!-- ================= 早发白帝城 ================= -->
+<section class="player" id="p-bd">
+  <div class="p-head"><span class="p-no">02</span><h2>早发白帝城</h2></div>
+  <p class="p-meta">唐 · 李白　七言绝句　上平十五删（平韵）　正格律绝　—　总时长 13.6s　静默 30%　·　配音：云健（情感版）·　音乐：笛（徵调式 · 快板）·　默认纯音乐，可开人声</p>
+
+  <div class="stage">
+    <svg class="art" id="art-bd" viewBox="0 0 900 600" preserveAspectRatio="xMidYMid slice" aria-label="早发白帝城水墨动画">
+      <defs>
+        <filter id="bdEdge" x="-20%" y="-20%" width="140%" height="140%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.016" numOctaves="4" seed="17" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="16" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <filter id="bdSoft" x="-20%" y="-20%" width="140%" height="140%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.030" numOctaves="3" seed="7" result="n2"/>
+          <feDisplacementMap in="SourceGraphic" in2="n2" scale="12" xChannelSelector="R" yChannelSelector="G"/>
+          <feGaussianBlur stdDeviation="4.2"/>
+        </filter>
+        <filter id="bdGrain" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="13" result="g"/>
+          <feColorMatrix in="g" type="saturate" values="0"/>
+        </filter>
+        <filter id="bdDry" x="-30%" y="-30%" width="160%" height="160%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.11" numOctaves="3" seed="21" result="d"/>
+          <feDisplacementMap in="SourceGraphic" in2="d" scale="7" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <linearGradient id="bdCloudG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#6E6A60" stop-opacity="0.22"/>
+          <stop offset="100%" stop-color="#6E6A60" stop-opacity="0"/>
+        </linearGradient>
+        <filter id="bdBoatInk" x="-30%" y="-30%" width="160%" height="160%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.016" numOctaves="4" seed="17" result="nb2"/>
+          <feDisplacementMap in="SourceGraphic" in2="nb2" scale="16" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <linearGradient id="bdRiverG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#6E6A60" stop-opacity="0.16"/>
+          <stop offset="22%" stop-color="#6E6A60" stop-opacity="0.05"/>
+          <stop offset="100%" stop-color="#6E6A60" stop-opacity="0.015"/>
+        </linearGradient>
+        <linearGradient id="bdCliffL" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#4A4640" stop-opacity="0.13"/>
+          <stop offset="68%" stop-color="#4A4640" stop-opacity="0.30"/>
+          <stop offset="100%" stop-color="#2A2724" stop-opacity="0.46"/>
+        </linearGradient>
+        <linearGradient id="bdCliffR" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#2A2724" stop-opacity="0.46"/>
+          <stop offset="32%" stop-color="#4A4640" stop-opacity="0.30"/>
+          <stop offset="100%" stop-color="#4A4640" stop-opacity="0.13"/>
+        </linearGradient>
+        <clipPath id="bdRiverClip">
+          <path d="M400 302 Q480 290 560 302 L800 600 L104 600 Z"/>
+        </clipPath>
+        <!-- 墨笔：位移出毛边，再用细噪点做飞白 -->
+        <filter id="bdInk" x="-18%" y="-18%" width="136%" height="136%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.052 0.088" numOctaves="3" seed="53" result="it"/>
+          <feDisplacementMap in="SourceGraphic" in2="it" scale="3.2" xChannelSelector="R" yChannelSelector="G" result="id"/>
+          <feTurbulence type="fractalNoise" baseFrequency="0.70" numOctaves="2" seed="11" result="ig"/>
+          <feColorMatrix in="ig" type="luminanceToAlpha" result="iga"/>
+          <feComponentTransfer in="iga" result="igm">
+            <feFuncA type="linear" slope="0.5" intercept="0.62"/>
+          </feComponentTransfer>
+          <feComposite in="id" in2="igm" operator="in"/>
+        </filter>
+      </defs>
+
+      <rect width="900" height="600" fill="#F6F3EC"/>
+      <rect width="900" height="600" filter="url(#bdGrain)" opacity="0.055"/>
+
+      <g id="bd-cam">
+        <!-- 彩云 -->
+        <g id="bd-cloud" filter="url(#bdSoft)">
+          <ellipse cx="330" cy="84" rx="210" ry="26" fill="url(#bdCloudG)"/>
+          <ellipse cx="580" cy="56" rx="180" ry="20" fill="url(#bdCloudG)"/>
+          <ellipse cx="460" cy="118" rx="160" ry="15" fill="#8A8578" opacity="0.06"/>
+        </g>
+
+        <!-- 白帝城（立在左崖顶） -->
+        <g id="bd-city" filter="url(#bdEdge)">
+          <path d="M196 104 L214 62 L232 104 Z" fill="#3A362F" opacity="0.48"/>
+          <rect x="204" y="74" width="20" height="16" fill="#2A2724" opacity="0.58"/>
+          <path d="M198 74 L230 74" stroke="#2A2724" stroke-width="2.4" opacity="0.55"/>
+          <path d="M204 90 L224 90" stroke="#2A2724" stroke-width="1.2" opacity="0.32"/>
+          <path d="M176 108 L252 108" stroke="#2A2724" stroke-width="1.4" opacity="0.22"/>
+        </g>
+
+        <!-- 万重山（层层后退，只从峡口缺口里露出来） -->
+        <g id="bd-far" filter="url(#bdEdge)">
+          <path d="M300 304 L372 168 L432 236 L500 130 L576 218 L648 304 Z" fill="#6E6A60" opacity="0.09"/>
+          <path d="M318 304 L388 200 L444 254 L512 172 L584 242 L652 304 Z" fill="#5A564D" opacity="0.12"/>
+          <path d="M338 304 L404 228 L462 272 L534 204 L602 268 L660 304 Z" fill="#3A362F" opacity="0.14"/>
+          <path d="M356 306 L420 250 L480 288 L552 240 L614 300 Z" fill="#2A2724" opacity="0.15"/>
+        </g>
+
+        <!-- 江水（楔形，左右两侧与山壁内缘完全贴合） -->
+        <path d="M400 302 Q480 290 560 302 L800 600 L104 600 Z" fill="#FAF8F3"/>
+        <path d="M400 302 Q480 290 560 302 L800 600 L104 600 Z" fill="url(#bdRiverG)"/>
+
+        <!-- 两岸山壁（内缘直接落在江面两侧，不留缝） -->
+        <g id="bd-cliff" filter="url(#bdEdge)">
+          <path d="M0 0 L0 600 L104 600 L400 302 L330 236 L366 152 L318 78 L352 0 Z" fill="url(#bdCliffL)"/>
+          <path d="M900 0 L900 600 L800 600 L560 302 L630 238 L594 154 L642 80 L608 0 Z" fill="url(#bdCliffR)"/>
+        </g>
+        <g id="bd-cun" filter="url(#bdDry)" stroke="#2A2724" fill="none" opacity="0.30">
+          <path d="M96 66 L150 186" stroke-width="2.2"/>
+          <path d="M140 140 L192 254" stroke-width="1.6"/>
+          <path d="M84 300 L136 420" stroke-width="2.2"/>
+          <path d="M126 396 L170 512" stroke-width="1.6"/>
+          <path d="M804 66 L750 186" stroke-width="2.2"/>
+          <path d="M760 140 L708 254" stroke-width="1.6"/>
+          <path d="M816 300 L764 420" stroke-width="2.2"/>
+          <path d="M774 396 L730 512" stroke-width="1.6"/>
+        </g>
+
+        <!-- 峡口雾：把远山、崖脚一起推远 -->
+        <g id="bd-mist" opacity="0">
+          <ellipse cx="486" cy="318" rx="180" ry="26" fill="#F6F3EC" opacity="0.80" filter="url(#bdSoft)"/>
+          <ellipse cx="368" cy="336" rx="110" ry="20" fill="#F6F3EC" opacity="0.55" filter="url(#bdSoft)"/>
+        </g>
+
+        <!-- 水纹 + 船迹：裁在江面之内 -->
+        <g clip-path="url(#bdRiverClip)">
+          <g id="bd-water" fill="none" stroke="#3A362F" stroke-linecap="round"></g>
+          <g id="bd-trail">
+            <path d="M330 492 Q272 500 218 505" fill="none" stroke="#1C1C1C" stroke-width="2.6"
+                  opacity="0.26" filter="url(#bdDry)" pathLength="100"
+                  stroke-dasharray="100 100" stroke-dashoffset="100"/>
+            <path d="M334 482 Q286 487 244 490" fill="none" stroke="#1C1C1C" stroke-width="1.4"
+                  opacity="0.18" filter="url(#bdDry)" pathLength="100"
+                  stroke-dasharray="100 100" stroke-dashoffset="100"/>
+          </g>
+        </g>
+
+        <!-- 轻舟（篷舟：人在篷下，不出场 —— 见 ink_figure_schemes §8） -->
+        <g id="bd-boat" filter="url(#bdBoatInk)">
+          <path d="M300 486 Q356 508 412 486 Q382 500 356 500 Q330 500 300 486 Z" fill="#1C1C1C" opacity="0.90"/>
+          <path d="M330 471 Q356 457 382 471 Z" fill="#1C1C1C" opacity="0.92"/>
+          <path d="M324 472 L388 472" stroke="#1C1C1C" stroke-width="1.7" opacity="0.64" stroke-linecap="round"/>
+        </g>
+        <path id="bd-bow" d="M412 490 Q440 500 462 512" fill="none" stroke="#3A362F" stroke-width="1.4"
+              opacity="0.32" filter="url(#bdDry)" pathLength="100"
+              stroke-dasharray="100 100" stroke-dashoffset="100"/>
+
+        <!-- 画中物标注 -->
+        <g id="bd-anno" class="anno" opacity="0">
+          <g class="al" data-t="0.40">
+            <line x1="362" y1="86" x2="362" y2="70"/>
+            <circle cx="362" cy="86" r="2.4"/>
+            <text x="362" y="64" text-anchor="middle">彩云</text>
+          </g>
+          <g class="al" data-t="0.59">
+            <line x1="214" y1="92" x2="158" y2="62"/>
+            <circle cx="214" cy="92" r="2.4"/>
+            <text x="152" y="56" text-anchor="end">白帝城</text>
+          </g>
+          <g class="al" data-t="0.83">
+            <line x1="500" y1="140" x2="526" y2="164"/>
+            <circle cx="500" cy="140" r="2.4"/>
+            <text x="532" y="170" text-anchor="start">万重山</text>
+          </g>
+          <g class="al" data-t="0.44">
+            <line x1="120" y1="400" x2="94" y2="376"/>
+            <circle cx="120" cy="400" r="2.4"/>
+            <text x="88" y="370" text-anchor="end">两岸山壁</text>
+          </g>
+          <g class="al" data-t="0.59">
+            <line x1="520" y1="430" x2="554" y2="414"/>
+            <circle cx="520" cy="430" r="2.4"/>
+            <text x="560" y="410" text-anchor="start">江水</text>
+          </g>
+          <g class="al" data-t="0.83">
+            <line x1="356" y1="470" x2="356" y2="448"/>
+            <circle cx="356" cy="470" r="2.4"/>
+            <text x="356" y="442" text-anchor="middle">轻舟</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- 题诗：墨笔竖排，按真实笔顺逐笔写出（屏幕空间，始终可读） -->
+      <g id="bd-poemink" filter="url(#bdInk)"></g>
+
+      <!-- 印章 -->
+      <g id="bd-seal" opacity="0">
+        <rect x="830" y="522" width="26" height="44" rx="4" fill="#A83A2C" opacity="0.86"/>
+        <text x="843" y="539" font-size="18" fill="#F6F3EC" font-family="PoemSeal, Songti SC, serif" text-anchor="middle">白</text>
+        <text x="843" y="562" font-size="18" fill="#F6F3EC" font-family="PoemSeal, Songti SC, serif" text-anchor="middle">帝</text>
+      </g>
+    </svg>
+
+    <div class="hud">
+      <div class="hud-time" id="bd-time">0.0 / 13.6 s</div>
+    </div>
+  </div>
+
+  <div class="ctrl">
+    <button class="play" data-play="bd">
+      <svg viewBox="0 0 12 12"><path d="M1 0.5 L11 6 L1 11.5 Z"/></svg><span>播放</span>
+    </button>
+    <button class="ctrl-switch" id="bd-voice-btn" type="button" aria-pressed="false" title="默认纯音乐；打开即启用吟诵并自动闪避音乐">人声 关</button>
+    <button class="ctrl-switch" id="bd-anno-btn" type="button" aria-pressed="false">标注</button>
+    <button class="audiotip" id="bd-audiotip" type="button" hidden
+            title="浏览器禁止了自动出声。点这里（属用户手势）即可带声播放">🔇 点此放声</button>
+    <div class="track" data-track="bd">
+      <div class="track-bg"><div class="track-fill"></div></div>
+      <div class="track-head"></div>
+    </div>
+  </div>
+  <div class="seg-labels" style="margin-top:8px">
+    <span><b>起</b> 朝辞白帝彩云间 2.5s</span>
+    <span><b>承</b> 千里江陵一日还 2.3s</span>
+    <span><b>转</b> 两岸猿声啼不住 1.9s</span>
+    <span><b>合</b> 轻舟已过万重山 3.9s</span>
+  </div>
+  <p class="note">
+    全片是<b>一个连续长镜头</b>，没有切点——因为平声删韵的呼吸是连贯的。相机速度<b>总体递增</b>：从 1.00 倍一路推到 1.86 倍，
+    终点是峡谷的消失点。<b>转</b>段（6.8–8.8s）相机向右侧掠一次，让两岸山壁擦身而过，随即回到正前方继续冲刺——这就是"猿声追不上船"的镜头语言。
+    <b>猿</b>在全片出现 0 帧，只在听觉轨留下痕迹。
+  </p>
+  <p class="note">
+    空间上只分<b>三层</b>：万重山被夹在两道山壁的缺口里层层后退，两岸山壁的内缘就是江面的左右边界，中间不留一丝缝。
+    江面走的是<b>水墨水法</b>：远水无波，一笔不画；近水只落<b>五道</b>，行距刻意不匀，每道又由几笔短画断续写成——<b>笔断意连</b>，中间留大片白。
+    水纹只做极缓的顺流下移与轻微起伏，起句几乎凝止（0.2px/s），到合句也仅 3px/s，绝不排队、不铺满。真正的"快"交给<b>船迹</b>与镜头：船行千里，水自不动。
+  </p>
+</section>
+
+<!-- ================= 静夜思 ================= -->
+<section class="player" id="p-sy">
+  <div class="p-head"><span class="p-no">03</span><h2>静夜思</h2></div>
+  <p class="p-meta">唐 · 李白　五言绝句　下平七阳（平韵）　—　总时长 18.2s　静默 32%　·　配音：云健（情感版）·　音乐：箫（宫调式 · 一板三眼）·　默认纯音乐，可开人声</p>
+
+  <div class="stage">
+    <svg class="art" id="art-sy" viewBox="0 0 900 600" preserveAspectRatio="xMidYMid slice" aria-label="静夜思水墨动画">
+      <defs>
+        <filter id="syEdge" x="-20%" y="-20%" width="140%" height="140%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="4" seed="23" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="14" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <filter id="sySoft" x="-30%" y="-30%" width="160%" height="160%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.026" numOctaves="3" seed="29" result="n2"/>
+          <feDisplacementMap in="SourceGraphic" in2="n2" scale="16" xChannelSelector="R" yChannelSelector="G"/>
+          <feGaussianBlur stdDeviation="6"/>
+        </filter>
+        <!-- 月盘：仍走湿渲（位移出毛边），但模糊收小，让圆「立得住」而非化开 -->
+        <filter id="syMoon" x="-25%" y="-25%" width="150%" height="150%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.020" numOctaves="3" seed="29" result="nm"/>
+          <feDisplacementMap in="SourceGraphic" in2="nm" scale="8" xChannelSelector="R" yChannelSelector="G"/>
+          <feGaussianBlur stdDeviation="3"/>
+        </filter>
+        <filter id="syGrain" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="31" result="g"/>
+          <feColorMatrix in="g" type="saturate" values="0"/>
+        </filter>
+        <filter id="syDry" x="-30%" y="-30%" width="160%" height="160%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.10" numOctaves="3" seed="37" result="d"/>
+          <feDisplacementMap in="SourceGraphic" in2="d" scale="6" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <filter id="syFigInk" x="-30%" y="-30%" width="160%" height="160%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="4" seed="23" result="nf"/>
+          <feDisplacementMap in="SourceGraphic" in2="nf" scale="14" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+        <linearGradient id="syNight" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#4A4640" stop-opacity="0.14"/>
+          <stop offset="45%" stop-color="#4A4640" stop-opacity="0.05"/>
+          <stop offset="100%" stop-color="#4A4640" stop-opacity="0.015"/>
+        </linearGradient>
+        <linearGradient id="syGlow" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#8A8578" stop-opacity="0.10"/>
+          <stop offset="55%" stop-color="#8A8578" stop-opacity="0.04"/>
+          <stop offset="100%" stop-color="#8A8578" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="syFrost" x1="1" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#6E6A60" stop-opacity="0.11"/>
+          <stop offset="55%" stop-color="#6E6A60" stop-opacity="0.045"/>
+          <stop offset="100%" stop-color="#6E6A60" stop-opacity="0"/>
+        </linearGradient>
+        <!-- 墨笔：位移出毛边，再用细噪点做飞白 -->
+        <filter id="syInk" x="-18%" y="-18%" width="136%" height="136%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.048 0.082" numOctaves="3" seed="61" result="it"/>
+          <feDisplacementMap in="SourceGraphic" in2="it" scale="3.0" xChannelSelector="R" yChannelSelector="G" result="id"/>
+          <feTurbulence type="fractalNoise" baseFrequency="0.74" numOctaves="2" seed="17" result="ig"/>
+          <feColorMatrix in="ig" type="luminanceToAlpha" result="iga"/>
+          <feComponentTransfer in="iga" result="igm">
+            <feFuncA type="linear" slope="0.5" intercept="0.62"/>
+          </feComponentTransfer>
+          <feComposite in="id" in2="igm" operator="in"/>
+        </filter>
+      </defs>
+
+      <rect width="900" height="600" fill="#F6F3EC"/>
+      <rect width="900" height="600" filter="url(#syGrain)" opacity="0.055"/>
+
+      <g id="sy-cam">
+        <!-- 夜空 -->
+        <g id="sy-night" opacity="0">
+          <rect width="900" height="600" fill="url(#syNight)"/>
+        </g>
+
+        <!-- 明月（窗内） -->
+        <g id="sy-moon" opacity="0">
+          <circle cx="660" cy="185" r="88" fill="#8A8578" opacity="0.05" filter="url(#sySoft)"/>
+          <circle cx="660" cy="185" r="62" fill="#8A8578" opacity="0.07" filter="url(#sySoft)"/>
+          <circle cx="660" cy="185" r="44" fill="#EFECE3" opacity="0.92" filter="url(#syMoon)"/>
+        </g>
+
+        <!-- 薄云（过月） -->
+        <g id="sy-cloud" filter="url(#sySoft)" opacity="0">
+          <path d="M540 172 Q600 160 660 168 Q720 176 770 164 Q722 182 660 186 Q598 190 540 172 Z" fill="#8A8578" opacity="0.10"/>
+          <path d="M560 210 Q632 198 700 206" fill="none" stroke="#8A8578" stroke-width="5" opacity="0.07" stroke-linecap="round"/>
+        </g>
+
+        <!-- 窗棂（几笔写就，窗在右，月在其内） -->
+        <g id="sy-win" filter="url(#syEdge)" opacity="0">
+          <path d="M560 70 L560 400" stroke="#3A362F" stroke-width="3" opacity="0.42" fill="none"/>
+          <path d="M760 70 L760 400" stroke="#3A362F" stroke-width="3" opacity="0.42" fill="none"/>
+          <path d="M560 235 L760 235" stroke="#3A362F" stroke-width="1.6" opacity="0.30" fill="none"/>
+          <path d="M548 400 L772 400" stroke="#2A2724" stroke-width="5" opacity="0.40" fill="none"/>
+          <path d="M560 70 L760 70" stroke="#2A2724" stroke-width="2" opacity="0.30" fill="none"/>
+        </g>
+
+        <!-- 窗内月光（起句先亮） -->
+        <g id="sy-glint" opacity="0" filter="url(#sySoft)">
+          <path d="M560 70 L760 70 L760 400 L560 400 Z" fill="url(#syGlow)"/>
+        </g>
+
+        <!-- 床前（榻，淡墨） -->
+        <g id="sy-bed" filter="url(#syDry)" opacity="0">
+          <path d="M52 500 L310 500 L320 542 L42 542 Z" fill="#5A564D" opacity="0.20"/>
+          <path d="M46 488 L316 488" stroke="#3A362F" stroke-width="2" opacity="0.22"/>
+          <path d="M60 500 L60 542" stroke="#3A362F" stroke-width="1.4" opacity="0.18"/>
+        </g>
+
+        <!-- 地上霜（承句才"疑"出来） -->
+        <g id="sy-frost" opacity="0" filter="url(#sySoft)">
+          <path d="M560 400 Q500 500 300 600 L760 600 Q640 500 560 400 Z" fill="url(#syFrost)"/>
+        </g>
+
+        <!-- 背影（我）：减笔剪影，举头→低头 -->
+        <g id="sy-figure" filter="url(#syFigInk)" opacity="0">
+          <g id="sy-body">
+            <path d="M338 560 Q352 470 366 424 Q372 396 400 388 Q428 396 434 424 Q448 470 462 560 Z" fill="#1C1C1C" opacity="0.90"/>
+            <path d="M400 398 L400 556" stroke="#F6F3EC" stroke-width="1" opacity="0.22"/>
+            <path d="M362 442 Q372 456 380 462" fill="none" stroke="#F6F3EC" stroke-width="1" opacity="0.18"/>
+            <path d="M438 442 Q428 456 420 462" fill="none" stroke="#F6F3EC" stroke-width="1" opacity="0.18"/>
+          </g>
+          <g id="sy-head">
+            <!-- 颈与头同组：头上下点头时颈随之，头颈之间不露缝 -->
+            <path d="M391 364 L409 364 L412 398 L388 398 Z" fill="#1C1C1C" opacity="0.90"/>
+            <ellipse cx="400" cy="327" rx="8" ry="11" fill="#1C1C1C" opacity="0.94"/>
+            <circle cx="400" cy="352" r="21" fill="#1C1C1C" opacity="0.94"/>
+          </g>
+        </g>
+
+        <!-- 画中物标注 -->
+        <g id="sy-anno" class="anno" opacity="0">
+          <g class="al" data-t="0.8">
+            <line x1="660" y1="185" x2="660" y2="140"/>
+            <circle cx="660" cy="185" r="2.4"/>
+            <text x="660" y="132" text-anchor="middle">明月</text>
+          </g>
+          <g class="al" data-t="1.0">
+            <line x1="760" y1="300" x2="790" y2="280"/>
+            <circle cx="760" cy="300" r="2.4"/>
+            <text x="796" y="276" text-anchor="start">窗</text>
+          </g>
+          <g class="al" data-t="1.4">
+            <line x1="620" y1="352" x2="656" y2="388"/>
+            <circle cx="620" cy="352" r="2.4"/>
+            <text x="662" y="394" text-anchor="start">月光</text>
+          </g>
+          <g class="al" data-t="1.8">
+            <line x1="400" y1="414" x2="400" y2="376"/>
+            <circle cx="400" cy="414" r="2.4"/>
+            <text x="400" y="370" text-anchor="middle">背影 · 我</text>
+          </g>
+          <g class="al" data-t="2.8">
+            <line x1="188" y1="520" x2="150" y2="494"/>
+            <circle cx="188" cy="520" r="2.4"/>
+            <text x="144" y="490" text-anchor="end">床前</text>
+          </g>
+          <g class="al" data-t="5.2">
+            <line x1="432" y1="548" x2="470" y2="562"/>
+            <circle cx="432" cy="548" r="2.4"/>
+            <text x="476" y="566" text-anchor="start">霜（疑是）</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- 题诗：墨笔竖排，按真实笔顺逐笔写出（屏幕空间，始终可读） -->
+      <g id="sy-poemink" filter="url(#syInk)"></g>
+
+      <!-- 印章 -->
+      <g id="sy-seal" opacity="0">
+        <rect x="830" y="522" width="26" height="44" rx="4" fill="#A83A2C" opacity="0.86"/>
+        <text x="843" y="538" font-size="18" fill="#F6F3EC" font-family="PoemSeal, Songti SC, serif" text-anchor="middle">静</text>
+        <text x="843" y="562" font-size="18" fill="#F6F3EC" font-family="PoemSeal, Songti SC, serif" text-anchor="middle">夜</text>
+      </g>
+    </svg>
+
+    <div class="hud">
+      <div class="hud-time" id="sy-time">0.0 / 18.2 s</div>
+    </div>
+  </div>
+
+  <div class="ctrl">
+    <button class="play" data-play="sy">
+      <svg viewBox="0 0 12 12"><path d="M1 0.5 L11 6 L1 11.5 Z"/></svg><span>播放</span>
+    </button>
+    <button class="ctrl-switch" id="sy-voice-btn" type="button" aria-pressed="false" title="默认纯音乐；打开即启用吟诵并自动闪避音乐">人声 关</button>
+    <button class="ctrl-switch" id="sy-anno-btn" type="button" aria-pressed="false">标注</button>
+    <button class="audiotip" id="sy-audiotip" type="button" hidden
+            title="浏览器禁止了自动出声。点这里（属用户手势）即可带声播放">🔇 点此放声</button>
+    <div class="track" data-track="sy">
+      <div class="track-bg"><div class="track-fill"></div></div>
+      <div class="track-head"></div>
+    </div>
+  </div>
+  <div class="seg-labels" style="margin-top:8px">
+    <span><b>起</b> 床前明月光 3.3s</span>
+    <span><b>承</b> 疑是地上霜 2.7s</span>
+    <span><b>转</b> 举头望明月 2.3s</span>
+    <span><b>合</b> 低头思故乡 3.8s</span>
+  </div>
+  <p class="note">
+    <b>声画同步</b>：本段以「云健 · 情感版」配音（18.187s）为准重排。四句起止即配音的实测行时序——
+    0.25 / 4.8 / 8.563 / 12.827s，句间 1.06–1.98s 的气口留白成为动画的<b>静默段</b>（进度条上以青色标出），
+    镜头与人物动作都随人声推进。点「播放」即人声与画面同步起落；拖动进度条可对齐到任意一句。
+  </p>
+  <p class="note">
+    全片是一个<b>几乎不动的长镜头</b>（1.00→1.10×，峰值速度约 1.7%/s）——室内静夜，镜头不该抢戏。
+    <b>起</b>句先亮窗内月光，<b>承</b>句那一片「霜」才在床前缓缓定形——因为它是「疑是」，不是实有。
+  </p>
+  <p class="note">
+    人物是唯一的<b>主体</b>：中景、减笔背影剪影、浓墨（见 ink_figure_schemes §9）。全片只有两个动作，且都<b>落在人声上</b>——
+    <b>举头</b>（转段 8.66→10.4s，随「举头望明月」抬起，随后跨句间留白定格一瞬）与<b>低头</b>（合段 12.93→15.95s，随「低头思故乡」落下）。
+    姿态就是节奏：思乡不在画面里，只在这一低头的静默里。
+  </p>
+</section>
+
+<div class="legend">
+  <span><i class="swatch" style="background:var(--zhu)"></i> 播放头</span>
+  <span><i class="swatch" style="background:rgba(62,92,118,.30)"></i> 静默段（时间上的留白）</span>
+  <span><i class="swatch" style="background:var(--line)"></i> 分段刻度</span>
+</div>
+
+<div class="footnote">
+  <p>三段动画分别由 <code>jiangxue_pipeline.html</code> / <code>baidicheng_pipeline.html</code> / <code>jingyesi_pipeline.html</code> 的 STEP 7 节拍表驱动。相机运动曲线取自 STEP 4 的情感轨迹（曲率峰值 κ），
+  元素出场时序取自 STEP 5 的构图约束，墨迹定形速度取自 STEP 6 的扩散时间律 L(t) ∝ t<sup>0.5</sup>。</p>
+  <p>点击进度条可跳转到任意时刻。静默段内相机会主动降速，粒子密度降低——这是"时间上的留白"，与画面上的留白同等重要。</p>
+  <p><b>题诗</b>用墨笔竖排写在留白处，自右向左、自上而下<b>逐笔书写</b>：每一字沿<b>真实笔顺</b>一笔一笔运笔而成——笔锋带沿笔画中线铺开，
+  长笔慢、短笔快（按笔画长度分配节拍），每笔起笔缓、行笔稳、收笔顿（smoothstep 笔速曲线）。字形轮廓取自本项目自持字体子集，
+  笔画顺序与运笔中线取自 hanzi-writer-data（Make Me a Hanzi，Arphic Public License），二者在遮罩里合成，故写出的是<b>字的骨与肉</b>，而非自上而下扫出的方块。
+  写字的节拍<b>与诗句同步</b>——第 n 句在动画第 n 段内写完，全诗落笔完毕，<b>印章</b>才钤上；配合毛边与飞白滤镜，让字也是"写"出来的墨，而不是贴上去的文字。
+  题诗固定在纸面上（不随镜头推拉），所以无论镜头怎么动，诗始终可读。</p>
+  <p>右上角<b>「标注」</b>按钮控制画中物的名称指引（红点为实物位置，引线指向名称）。看不懂画面时打开它，就能把每一处墨色对应到具体的诗句意象。</p>
+  <p>三首诗的<b>人物取值</b>见 <code>ink_figure_schemes.html</code>：§8《早发白帝城》视点在场（不放人）、§9《静夜思》主体在场（窗前背影，举头/低头）。</p>
+  <p><b>配音与声画同步</b>：三首诗均接入「云健 · 情感版」吟诵（<code>dist/audio/voice/{poem}_emotion_*.wav</code>：
+  江雪 19.578s ｜ 早发白帝城 13.631s ｜ 静夜思 18.187s），由 <code>src/voice/voice_prosody_process.py</code> 依平长仄短与句调曲线合成。
+  动画的时长、四句节拍、句间留白、举头/低头与题诗落笔<b>全部按配音的实测行时序重排</b>；播放时以音频时钟为准（江雪默认以音乐时钟，见下），声音与画面严格同步。</p>
+  <p><b>吟诵的「连贯性」</b>：早期版本对每个字做<b>分段常数</b>的时长伸缩（平声 ×1.35、入声 ×0.65），音节交界处局部语速
+  瞬间跳变（最大 2.5 倍），听感即"一个字一个字念"。现改为<b>连续时间规整</b>——先取逐音节的理想倍率，再沿时间做高斯平滑
+  （σ≈45ms），使语速连续变化；平滑后整体归一，总时长与旧版一致（偏差 &lt;60ms），故画面时序无需改动。
+  对照试听见 <code>voice_ab.html</code>。</p>
+  <p><b>音乐轨（示范 · 三首）</b>：<code>dist/audio/music/{jx,bd,jys}.wav</code> 由 <code>src/music/music_render.py</code>
+  读声法表 <code>data/source/d3/{poem}_music.json</code> 合成，一诗一调、与画同构：
+  <b>江雪</b>＝羽调式（水 / 冬）· 古琴（散音 / 泛音 / 按音）+ 箫偶入 · <b>散板</b>，终止落徵不上主音羽（T5 不释放）；
+  <b>早发白帝城</b>＝徵调式（火 / 夏 / 喜）· <b>笛</b>主奏 + 古琴点缀（代琵琶）· <b>快板 / 流水板</b>，宽动态（soft_clip 0.4）；
+  <b>静夜思</b>＝宫调式（土 / 长夏 / 思）· <b>箫</b>为主 + 古琴轻点（代筝）· <b>一板三眼（慢）</b>，中动态（soft_clip 0.6）。
+  三者皆取结构「散起 → 入调 → 入慢 → 复起 → 尾声」——散起即空镜起兴，尾声即落款钤印，四句诗＝四个乐句。
+  音乐与人声<b>共用同一条时间轴</b>（逐字起音按配音音节权重分配），并以人声为触发做<b>闪避（ducking）</b>：吟诵时压低 8 dB，气口处恢复。
+  <b>播放默认「纯音乐」</b>（右上「人声 关」）——此时人声不参与、音乐满电平不闪避，画面以音乐时钟为准；
+  点开关切到「人声 开」即启用吟诵，音乐随之闪避、画面改用配音时钟——两者同轴，切换不会错位。
+  音乐为<b>自然连续织体</b>：每个音「响到下一次起音 + 叠音」，行间气口由前音余响与低散音贯入，
+  不再把配音的气口当作音乐静默段（最长连续静默 ≤ 0.30s），故纯音乐模式下听感连贯不断。</p>
+</div>
+
+</div>
+<script src="strokes.js"></script>
+<script>
+(function(){
+  'use strict';
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  var q = function(s, r){ return (r || document).querySelector(s); };
+  var qa = function(s, r){ return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+  function clamp01(v){ return v < 0 ? 0 : (v > 1 ? 1 : v); }
+  function seg(t, a, b){ return clamp01((t - a) / (b - a)); }
+  function easeInOut(t){ return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3)/2; }
+  function easeIn(t){ return t*t*t; }
+  function easeOut(t){ return 1 - Math.pow(1 - t, 3); }
+  function linear(t){ return t; }
+
+  function sampleCam(keys, t){
+    if (t <= keys[0].t) return keys[0];
+    for (var i = 1; i < keys.length; i++){
+      if (t <= keys[i].t){
+        var a = keys[i-1], b = keys[i], e = b.ease || linear;
+        var u = e(clamp01((t - a.t) / (b.t - a.t)));
+        return { s: a.s + (b.s - a.s)*u, cx: a.cx + (b.cx - a.cx)*u, cy: a.cy + (b.cy - a.cy)*u };
+      }
+    }
+    return keys[keys.length - 1];
+  }
+  function camT(c){
+    return 'translate(' + (450 - c.s*c.cx).toFixed(2) + ',' + (300 - c.s*c.cy).toFixed(2) + ') scale(' + c.s.toFixed(4) + ')';
+  }
+  function lerpKeys(keys, t){
+    if (t <= keys[0].t) return keys[0].v;
+    for (var i = 1; i < keys.length; i++){
+      if (t <= keys[i].t){
+        var a = keys[i-1], b = keys[i];
+        var u = (b.ease || linear)(clamp01((t - a.t) / (b.t - a.t)));
+        return a.v + (b.v - a.v)*u;
+      }
+    }
+    return keys[keys.length - 1].v;
+  }
+  function rnd(seed){
+    var x = Math.sin(seed * 127.1 + 311.7) * 43758.5453;
+    return x - Math.floor(x);
+  }
+
+  /* ================= 《江雪》 ================= */
+  /* 声画同步：以「云健 · 情感版」配音（19.578s）为准重排。四句行时序（秒）：
+       句1 0.35–3.735 ｜ 句2 5.224–8.354 ｜ 句3 9.768–13.038 ｜ 句4 14.183–17.778
+     句间停顿 1.489 / 1.414 / 1.145s，句后留白 1.800s —— 这些气口留白即动画的「静默段」。 */
+  var JX = {
+    root: 'jx',
+    T: 19.578,
+    audio: '../audio/voice/jx_emotion_cold_zh-CN-YunjianNeural.wav?v=c7d20823',
+    /* 音乐轨（D3 声法表 data/source/d3/jx_music.json → src/music/music_render.py 渲染）：
+       羽调式 · 古琴（散音/泛音/按音）+ 箫偶入 · 散板 · 自然连续织体（行间气口由余响贯入，最长连续静默 ≤0.30s）。
+       与人声同一条时间轴（P.t），人声吟诵时压低 8 dB，气口处恢复。 */
+    music: '../audio/music/jx.wav?v=b0a61d37',
+    duckDb: -8,
+    /* 人声实际发声的四段（配音实测行时序）：闪避的触发区间。
+       注意 0–0.35s 的「散起」不在其中——那时人声未起，音乐应满电平现出。 */
+    voiceLines: [[0.35, 3.735], [5.224, 8.354], [9.768, 13.038], [14.183, 17.778]],
+    segs: [
+      { t: 0.35,   line: '千山鸟飞绝', cam: '极远景 · 缓横移' },
+      { t: 5.224,  line: '万径人踪灭', cam: '极远景 · 轻推远' },
+      { t: 9.768,  line: '孤舟蓑笠翁', cam: '极缓推近 · 笔触重放' },
+      { t: 14.183, line: '独钓寒江雪', cam: '极缓推近（续）' }
+    ],
+    silence: [[3.735, 5.224], [8.354, 9.768], [13.038, 14.183], [17.778, 19.578]],
+    cam: [
+      { t: 0,      s: 1.00, cx: 450, cy: 300 },
+      { t: 5.224,  s: 1.00, cx: 474, cy: 300, ease: easeInOut },
+      { t: 9.768,  s: 0.96, cx: 450, cy: 300, ease: easeInOut },
+      { t: 19.578, s: 1.12, cx: 520, cy: 372, ease: easeInOut }
+    ],
+    snowKeys: [
+      { t: 0,      v: 0.45 }, { t: 5.224, v: 1.00 }, { t: 9.768, v: 0.30 },
+      { t: 14.183, v: 0.85 }, { t: 19.578, v: 0.85 }
+    ],
+    snowCount: 46,
+    /* 题诗：竖排、自右向左，逐字写出；每句落笔节拍按该句配音时长分配，
+       使末字（韵脚）恰在句末写就 */
+    poem: {
+      lines: ['千山鸟飞绝', '万径人踪灭', '孤舟蓑笠翁', '独钓寒江雪'],
+      author: '柳宗元',
+      start: [0.45, 5.324, 9.868, 14.283],
+      pitch: [0.63, 0.58, 0.61, 0.67],
+      dur:   [0.63, 0.58, 0.61, 0.67],
+      firstColX: 826, colPitch: 33,
+      topY: 78, charPitch: 30,
+      fontSize: 23,
+      /* 书体定档：V −0.40 孤冷 · A 0.15 低 → 瘦劲行楷；落款「文正款活」→ 行书 */
+      face: 'PoemLongCang', authorFace: 'PoemZhiMang'
+    }
+  };
+
+  /* ============== 《早发白帝城》 ============== */
+  /* 声画同步：以「云健 · 情感版」配音（13.631s，连续时间规整）为准重排。四句行时序（秒）：
+       句1 0.2–2.73 ｜ 句2 3.62–5.87 ｜ 句3 6.812–8.757 ｜ 句4 9.776–12.431
+     句间停顿 0.89 / 0.942 / 1.019s，句后留白 1.200s。相机与水流速度表同比例压缩，
+     保持原有「总体渐快 · 中段回望 · 结尾冲刺」的曲线形状。
+     注：旧版此处按未平滑的阶跃版记 13.671s，比平滑后的实际配音长 40ms，致各行整体后移
+     15–40ms；已按配音实测行时序校正。 */
+  var BD = {
+    root: 'bd',
+    T: 13.631,
+    audio: '../audio/voice/bd_emotion_joy_zh-CN-YunjianNeural.wav?v=fcd584c2',
+    /* 音乐轨（D3 声法表 data/source/d3/bd_music.json → src/music/music_render.py 渲染）：
+       徵调式（火 / 夏 / 喜）· 笛主奏 + 古琴点缀（代琵琶）· 快板 / 流水板 · 宽动态（soft_clip 0.4）。
+       与人声同一条时间轴（P.t），人声吟诵时压低 8 dB，气口处恢复。 */
+    music: '../audio/music/bd.wav?v=3aa51a61',
+    duckDb: -8,
+    /* 人声实际发声的四段（配音实测行时序）：闪避的触发区间。
+       0–0.2s 的「散起」不在其中——那时人声未起，音乐应满电平现出。 */
+    voiceLines: [[0.2, 2.73], [3.62, 5.87], [6.812, 8.757], [9.776, 12.431]],
+    segs: [
+      { t: 0.2,   line: '朝辞白帝彩云间', cam: '高角俯瞰 · 缓起' },
+      { t: 3.62,  line: '千里江陵一日还', cam: '顺流俯冲 · 加速' },
+      { t: 6.812, line: '两岸猿声啼不住', cam: '侧掠两岸 · 一瞬回望' },
+      { t: 9.776, line: '轻舟已过万重山', cam: '冲刺前推 · 开放结尾' }
+    ],
+    silence: [[2.73, 3.62], [5.87, 6.812], [8.757, 9.776], [12.431, 13.631]],
+    cam: [
+      { t: 0,      s: 1.00, cx: 450, cy: 300 },
+      { t: 3.62,   s: 1.06, cx: 468, cy: 334, ease: easeInOut },
+      { t: 5.388,  s: 1.14, cx: 462, cy: 382, ease: easeIn },
+      { t: 6.812,  s: 1.18, cx: 452, cy: 402, ease: easeInOut },
+      { t: 8.232,  s: 1.20, cx: 596, cy: 346, ease: easeInOut },
+      { t: 9.776,  s: 1.18, cx: 456, cy: 368, ease: easeInOut },
+      { t: 13.631, s: 1.86, cx: 470, cy: 352, ease: easeIn }
+    ],
+    /* 水流速度表：总体渐快，唯 8.23–9.78s 有一次小回退（对应转段「侧掠两岸 · 一瞬回望」），
+       与 cam 键值 s 1.20→1.18 同向，避免后续改曲线时把这段回望抹掉 */
+    speedKeys: [
+      { t: 0, v: 0.05 }, { t: 3.62, v: 0.30 }, { t: 6.812, v: 0.80 },
+      { t: 8.232, v: 0.86 }, { t: 9.776, v: 0.82 }, { t: 13.631, v: 1.00 }
+    ],
+    /* 题诗：竖排、自右向左，逐字写出；每句落笔节拍按该句配音时长分配 */
+    poem: {
+      lines: ['朝辞白帝彩云间', '千里江陵一日还', '两岸猿声啼不住', '轻舟已过万重山'],
+      author: '李白',
+      start: [0.30, 3.72, 6.912, 9.876],
+      pitch: [0.34, 0.30, 0.26, 0.36],
+      dur:   [0.34, 0.30, 0.26, 0.36],
+      firstColX: 208, colPitch: 32,
+      topY: 170, charPitch: 28,
+      fontSize: 21,
+      /* 书体定档：V +0.35 明朗 · A 0.32 高 → 圆厚开张毛笔楷；落款 → 行书 */
+      face: 'PoemMaShan', authorFace: 'PoemZhiMang'
+    }
+  };
+
+  /* ============== 《静夜思》 ============== */
+  /* 声画同步：以「云健 · 情感版」配音（18.187s，连续时间规整）为准重排。四句行时序（秒）：
+       句1 0.25–3.535 ｜ 句2 4.8–7.5 ｜ 句3 8.563–10.843 ｜ 句4 12.827–16.587
+     句间停顿 1.265 / 1.063 / 1.984s，句后留白 1.600s —— 这些气口留白即动画的「静默段」。
+     注：旧版此处把第三停顿记为 1.704s（应为 1.984s），致合句整体早 0.28s；已按配音
+     实测行时序校正。 */
+  var SY = {
+    root: 'sy',
+    T: 18.187,
+    audio: '../audio/voice/jys_emotion_sad_zh-CN-YunjianNeural.wav?v=e0e78635',
+    /* 音乐轨（D3 声法表 data/source/d3/jys_music.json → src/music/music_render.py 渲染）：
+       宫调式（土 / 长夏 / 思）· 北箫为主 + 古筝轻点 · 一板三眼（慢）· 中动态（soft_clip 0.6）。
+       与人声同一条时间轴（P.t），人声吟诵时压低 8 dB，气口处恢复。 */
+    music: '../audio/music/jys.wav?v=173450af',
+    duckDb: -8,
+    /* 人声实际发声的四段（配音实测行时序）：闪避的触发区间。
+       0–0.25s 的「散起」不在其中——那时人声未起，音乐应满电平现出。 */
+    voiceLines: [[0.25, 3.535], [4.8, 7.5], [8.563, 10.843], [12.827, 16.587]],
+    segs: [
+      { t: 0.25,   line: '床前明月光', cam: '静夜 · 凝止' },
+      { t: 4.8,    line: '疑是地上霜', cam: '静夜 · 凝止' },
+      { t: 8.563,  line: '举头望明月', cam: '微推 · 随人举头' },
+      { t: 12.827, line: '低头思故乡', cam: '定住 · 随人低头' }
+    ],
+    silence: [[3.535, 4.8], [7.5, 8.563], [10.843, 12.827], [16.587, 18.187]],
+    cam: [
+      { t: 0,      s: 1.00, cx: 450, cy: 300 },
+      { t: 8.563,  s: 1.00, cx: 450, cy: 300 },
+      { t: 10.843, s: 1.04, cx: 432, cy: 300, ease: easeInOut },
+      { t: 16.587, s: 1.10, cx: 424, cy: 292, ease: easeInOut },
+      { t: 18.187, s: 1.10, cx: 424, cy: 306, ease: easeInOut }
+    ],
+    /* 举头/低头：头（含髻、颈）纵向抬沉，单位=像素；正=低头（下沉），负=举头（上抬）。
+       转段 8.66→10.4 举头（配「举头望明月」）；10.4→12.93 定格望月（跨句间留白）；
+       合段 12.93→15.95 低头（配「低头思故乡」），其后定格至收束。 */
+    headKeys: [
+      { t: 0,      v: 0 },
+      { t: 8.66,   v: 0 },
+      { t: 10.4,   v: -6, ease: easeInOut },
+      { t: 12.93,  v: -6 },
+      { t: 15.95,  v: 10, ease: easeInOut },
+      { t: 18.187, v: 10 }
+    ],
+    /* 题诗：竖排、自右向左，逐字写出；每句落笔节拍按该句配音时长分配，
+       使末字（韵脚）恰在句末写就 */
+    poem: {
+      lines: ['床前明月光', '疑是地上霜', '举头望明月', '低头思故乡'],
+      author: '李白',
+      start: [0.35, 4.90, 8.66, 12.93],
+      pitch: [0.62, 0.50, 0.42, 0.70],
+      dur:   [0.62, 0.50, 0.42, 0.70],
+      firstColX: 172, colPitch: 34,
+      topY: 86, charPitch: 30,
+      fontSize: 22,
+      /* 书体定档：V −0.30 孤冷 · T 0.45 高 → 温润小楷；落款 → 行书 */
+      face: 'PoemMaShan', authorFace: 'PoemZhiMang'
+    }
+  };
+
+  function makePlayer(cfg){
+    var root    = document.getElementById('art-' + cfg.root);
+    var cam     = q('#' + cfg.root + '-cam', root);
+    var timeEl  = document.getElementById(cfg.root + '-time');
+    var seal    = q('#' + cfg.root + '-seal', root);
+    var btn     = document.querySelector('button[data-play="' + cfg.root + '"]');
+    var icoPath = btn.querySelector('svg path');
+    var track   = document.querySelector('.track[data-track="' + cfg.root + '"]');
+    var fill    = q('.track-fill', track);
+    var head    = q('.track-head', track);
+
+    var P = { t: 0, T: cfg.T, playing: false };
+
+    /* --- 配音轨（该画有配音时才建）：播放/暂停/拖动与动画同步 --- */
+    var audio = null;
+    if (cfg.audio){
+      audio = new Audio(cfg.audio);
+      audio.preload = 'auto';
+      audio.addEventListener('ended', function(){
+        if (music) music.pause();
+        P.t = P.T; P.playing = false; updateBtn();
+      });
+    }
+
+    /* --- 音乐轨 + 人声闪避（ducking）---
+       音乐与人声共用同一条时间轴（P.t，即 audio.currentTime）：四句诗＝四个乐句，
+       乐句落在各行窗口内，气口（cfg.silence）处音乐本已「顿」住（江雪铁律：禁渐隐）。
+       闪避以「人声出现」为触发：吟诵中把音乐压低 duckDb，气口处恢复。
+       闪避包络取自配音实测行时序（确定性、可复核），不用实时分析器 —— 避免抖动，
+       也不改动既有配音链路（不引入 Web Audio 图，配音播放行为保持不变）。 */
+    var music = null;
+    var duckDb = (typeof cfg.duckDb === 'number') ? cfg.duckDb : -8;
+    if (cfg.music){
+      music = new Audio(cfg.music);
+      music.preload = 'auto';
+    }
+    /* 人声开关：默认「纯音乐」——有音乐轨时人声不参与；无音乐轨的画恒为人声。 */
+    var voiceOn = !cfg.music;
+    function duckTarget(t){
+      /* 无人声（默认）→ 音乐满电平；人声发声段内 → duckDb；气口与「散起」等无人声处 → 0 dB 恢复 */
+      if (!voiceOn) return 1.0;
+      for (var i = 0; i < cfg.voiceLines.length; i++){
+        if (t >= cfg.voiceLines[i][0] && t < cfg.voiceLines[i][1]) return Math.pow(10, duckDb / 20);
+      }
+      return 1.0;
+    }
+    var duckV = 1.0;   /* 平滑后的闪避增益 */
+
+    /* --- 自动播放被拦截的兜底 -------------------------------------------
+       浏览器（Chrome/Edge/Safari）只允许**有用户手势**的 play() 出声。
+       本页在画作滚入视口 45% 时就 autostart()（无手势），music.play()
+       的 promise 会被 reject；若把它 `.catch(function(){})` 静默吞掉，
+       则 tick() 里因 music.paused 恒为 true 而落到 `P.t += dt` 分支——
+       **画面照常推进、全程无声**，用户看到的正是「有动画但听不到声」，
+       且完全不知道该点哪里。
+       故：① 记录 blocked 状态；② 在画面上给出可点击的提示；
+       ③ 点播放按钮时（此时有手势）正常出声。 */
+    var audioBlocked = false;
+    function markBlocked(){
+      audioBlocked = true;
+      var tip = document.getElementById(cfg.root + '-audiotip');
+      if (tip){ tip.hidden = false; }
+    }
+    function clearBlocked(){
+      audioBlocked = false;
+      var tip = document.getElementById(cfg.root + '-audiotip');
+      if (tip){ tip.hidden = true; }
+    }
+
+    /* --- 人声开关按钮（仅在有音乐轨的画上存在）---
+       默认关＝纯音乐：人声不参与、音乐满电平不闪避，画面以音乐时钟为准；
+       打开＝恢复「人声 + 闪避」，画面以人声时钟为准（既有声画同步保证不变）。 */
+    var voiceBtn = document.getElementById(cfg.root + '-voice-btn');
+    function syncVoiceBtn(){
+      if (!voiceBtn) return;
+      voiceBtn.setAttribute('aria-pressed', voiceOn ? 'true' : 'false');
+      voiceBtn.textContent = voiceOn ? '人声 开' : '人声 关';
+    }
+    if (voiceBtn){
+      voiceBtn.addEventListener('click', function(){
+        voiceOn = !voiceOn;
+        syncVoiceBtn();
+        if (voiceOn){
+          if (audio){
+            try { audio.currentTime = Math.min(P.t, Math.max(0, (audio.duration || P.T) - 0.02)); } catch (e) {}
+            if (P.playing){ var pr = audio.play(); if (pr && pr.catch) pr.catch(function(){}); }
+          }
+        } else if (audio){
+          audio.pause();
+        }
+        duckV = duckTarget(P.t);
+        if (music){ try { music.volume = clamp01(duckV); } catch (e) {} }
+        render();
+      });
+    }
+    /* 「点此放声」：拦截已经发生，这里是用户手势，play() 必定被允许 */
+    var audioTip = document.getElementById(cfg.root + '-audiotip');
+    if (audioTip){
+      audioTip.addEventListener('click', function(){
+        if (music){
+          try { music.currentTime = Math.min(P.t, Math.max(0, (P.T || 0) - 0.02)); } catch (e) {}
+          duckV = duckTarget(P.t);
+          music.volume = duckV;
+          var pr = music.play();
+          if (pr && pr.then) pr.then(clearBlocked).catch(markBlocked);
+        }
+        if (audio && voiceOn && audio.paused){
+          try { audio.currentTime = P.t; } catch (e) {}
+          var ar = audio.play();
+          if (ar && ar.catch) ar.catch(function(){});
+        }
+        P.playing = true;
+        updateBtn();
+      });
+    }
+    syncVoiceBtn();
+
+    /* --- 题诗：真笔顺书写（path 字形 + 逐笔中线遮罩）---
+       数据 window.POEM_STROKES 由 build/stroke_data.py 生成：中线取自 hanzi-writer-data
+       （Make Me a Hanzi，Arphic Public License），字形轮廓取自本项目自持字体子集。
+       每字 = 一条字形 path，被 mask 遮住；mask 内是逐笔「笔锋带」（中线按笔画长度加粗），
+       笔锋带用 stroke-dashoffset 沿笔顺逐笔铺开，铺满即字形写就。
+       数据缺失（strokes.js 未加载 / 该字缺字）时自动降级为旧的「矩形自上而下揭示」。 */
+    var poemChars = [];
+    var poemG = q('#' + cfg.root + '-poemink', root);
+    if (poemG && cfg.poem){
+      var pdefs = q('defs', root);
+      var PL = cfg.poem;
+      var SD = window.POEM_STROKES || null;
+      var boxW = PL.fontSize * 1.34;
+      var boxTop = PL.fontSize * 0.96;
+      var boxH = PL.fontSize * 1.06;
+
+      /* 单字：返回可绘制的句柄（真笔顺或降级） */
+      var makeChar = function(o){
+        var G = SD && SD.glyphs[o.face] && SD.glyphs[o.face][o.ch];
+        var C = SD && SD.chars[o.ch];
+        var fb = o.fb;                                   /* {w, top, h} 降级矩形 */
+        if (!G || !C || !C.m || !C.m.length){            /* 降级：矩形自上而下揭示 */
+          var cid = o.id + '-clip';
+          var cp = document.createElementNS(SVGNS, 'clipPath');
+          cp.setAttribute('id', cid);
+          var rc = document.createElementNS(SVGNS, 'rect');
+          rc.setAttribute('x', (o.x - fb.w / 2).toFixed(1));
+          rc.setAttribute('y', (o.y - fb.top).toFixed(1));
+          rc.setAttribute('width', fb.w.toFixed(1));
+          rc.setAttribute('height', '0');
+          cp.appendChild(rc);
+          pdefs.appendChild(cp);
+          var cg = document.createElementNS(SVGNS, 'g');
+          cg.setAttribute('clip-path', 'url(#' + cid + ')');
+          var tx = document.createElementNS(SVGNS, 'text');
+          tx.setAttribute('x', o.x);
+          tx.setAttribute('y', o.y);
+          tx.setAttribute('text-anchor', 'middle');
+          tx.setAttribute('font-size', o.size);
+          tx.setAttribute('font-family', o.face + ', Kaiti SC, STKaiti, KaiTi, SimSun, serif');
+          tx.setAttribute('fill', '#161616');
+          tx.textContent = o.ch;
+          cg.appendChild(tx);
+          poemG.appendChild(cg);
+          return { mode: 'rect', rect: rc, h: fb.h, t: o.t, dur: o.dur, state: -1 };
+        }
+
+        var s = o.size / SD.meta.upem;
+        var tx = 'translate(' + o.x.toFixed(2) + ',' + o.y.toFixed(2) + ') scale(' +
+                 s.toFixed(6) + ',' + (-s).toFixed(6) + ') translate(' + (-G.a / 2).toFixed(1) + ',0)';
+        var mid = o.id + '-m';
+        var mask = document.createElementNS(SVGNS, 'mask');
+        mask.setAttribute('id', mid);
+        mask.setAttribute('maskUnits', 'userSpaceOnUse');
+        mask.setAttribute('x', '-600');  mask.setAttribute('y', '-1400');
+        mask.setAttribute('width', '2200'); mask.setAttribute('height', '3000');
+        var mg = document.createElementNS(SVGNS, 'g');
+        mg.setAttribute('fill', 'none');
+        mg.setAttribute('stroke', '#fff');
+        mg.setAttribute('stroke-linecap', 'round');
+        mg.setAttribute('stroke-linejoin', 'round');
+        var strokes = [], total = 0;
+        for (var i = 0; i < C.m.length; i++){
+          var pl = C.m[i];
+          var dd = 'M' + pl.map(function(p){ return p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join('L');
+          var sp = document.createElementNS(SVGNS, 'path');
+          sp.setAttribute('d', dd);
+          sp.setAttribute('stroke-width', G.w[i] != null ? G.w[i] : G.w[G.w.length - 1]);
+          sp.setAttribute('stroke-dasharray', C.l[i]);
+          sp.setAttribute('stroke-dashoffset', C.l[i]);
+          sp.setAttribute('display', 'none');        /* 起笔前整条藏起（见 render 里的说明） */
+          mg.appendChild(sp);
+          strokes.push({ el: sp, len: C.l[i], on: false });
+          total += C.l[i];
+        }
+        mask.appendChild(mg);
+        pdefs.appendChild(mask);
+
+        var wrap = document.createElementNS(SVGNS, 'g');
+        wrap.setAttribute('transform', tx);
+        var gp = document.createElementNS(SVGNS, 'path');
+        gp.setAttribute('d', G.d);
+        gp.setAttribute('fill', '#161616');
+        gp.setAttribute('mask', 'url(#' + mid + ')');
+        wrap.appendChild(gp);
+        poemG.appendChild(wrap);
+
+        /* 逐笔节拍：按笔画长度分配该字时长（长笔慢、短笔快） */
+        var cum = [], acc = 0;
+        for (var k = 0; k < C.l.length; k++){ cum.push(acc / total); acc += C.l[k]; }
+        cum.push(1);
+        return { mode: 'stroke', strokes: strokes, cum: cum, t: o.t, dur: o.dur, state: -1 };
+      };
+
+      PL.lines.forEach(function(line, li){
+        var colX = PL.firstColX - li * PL.colPitch;
+        /* pitch / dur 可为标量，也可为逐句数组（声画同步时每句节拍不同） */
+        var pitchL = Array.isArray(PL.pitch) ? PL.pitch[li] : PL.pitch;
+        var durL   = Array.isArray(PL.dur)   ? PL.dur[li]   : PL.dur;
+        for (var ci = 0; ci < line.length; ci++){
+          poemChars.push(makeChar({
+            ch: line[ci], face: PL.face || 'PoemKai', size: PL.fontSize,
+            x: colX, y: PL.topY + ci * PL.charPitch,
+            t: PL.start[li] + ci * pitchL, dur: durL,
+            id: cfg.root + '-pc-' + li + '-' + ci,
+            fb: { w: boxW, top: boxTop, h: boxH }
+          }));
+        }
+      });
+
+      /* --- 落款：诗人名，小字，末句左邻新列、下齐；末句写毕后逐字写出 --- */
+      if (PL.author){
+        var aSize   = PL.fontSize * 0.58;
+        var aPitch  = aSize * 1.34;
+        var aBoxW   = aSize * 1.34;
+        var aBoxTop = aSize * 0.96;
+        var aBoxH   = aSize * 1.06;
+        var aColX   = PL.firstColX - PL.lines.length * PL.colPitch;
+        var lastLi  = PL.lines.length - 1;
+        var lastLen = PL.lines[lastLi].length;
+        var aBotY   = PL.topY + (lastLen - 1) * PL.charPitch;
+        var aTopY   = aBotY - (PL.author.length - 1) * aPitch;
+        var lastPitch = Array.isArray(PL.pitch) ? PL.pitch[lastLi] : PL.pitch;
+        var lastDur   = Array.isArray(PL.dur)   ? PL.dur[lastLi]   : PL.dur;
+        var aT0   = PL.start[lastLi] + (lastLen - 1) * lastPitch + lastDur;
+        var aStep = 0.30;
+        for (var aki = 0; aki < PL.author.length; aki++){
+          poemChars.push(makeChar({
+            ch: PL.author[aki], face: PL.authorFace || PL.face || 'PoemKai', size: aSize,
+            x: aColX, y: aTopY + aki * aPitch,
+            t: aT0 + aki * aStep, dur: aStep,
+            id: cfg.root + '-ac-' + aki,
+            fb: { w: aBoxW, top: aBoxTop, h: aBoxH }
+          }));
+        }
+      }
+    }
+
+    /* --- 画中物标注 --- */
+    var annoG = q('#' + cfg.root + '-anno', root);
+    var annoBtn = document.getElementById(cfg.root + '-anno-btn');
+    var annoOn = false;
+    var annoItems = [], annoTexts = [];
+    if (annoG){
+      qa('.al', annoG).forEach(function(el){
+        annoItems.push({ el: el, t: parseFloat(el.getAttribute('data-t')) || 0 });
+      });
+      annoTexts = qa('text', annoG);
+    }
+    if (annoBtn){
+      annoBtn.addEventListener('click', function(){
+        annoOn = !annoOn;
+        annoBtn.setAttribute('aria-pressed', annoOn ? 'true' : 'false');
+        render();
+      });
+    }
+
+    /* --- snow --- */
+    var snowEls = null, snowData = null;
+    if (cfg.snowCount){
+      var g = q('#' + cfg.root + '-snow', root);
+      snowEls = []; snowData = [];
+      for (var i = 0; i < cfg.snowCount; i++){
+        var c = document.createElementNS(SVGNS, 'circle');
+        c.setAttribute('fill', '#8A8578');
+        c.setAttribute('r', (1.0 + rnd(i*3 + 1)*1.1).toFixed(2));
+        g.appendChild(c);
+        snowEls.push(c);
+        snowData.push({
+          x:  20 + rnd(i*7  + 2)*860,
+          y:       rnd(i*11 + 3)*660,
+          vy: 22 * (0.65 + rnd(i*13 + 4)*0.85),
+          ph:      rnd(i*17 + 5)*6.283,
+          th:      rnd(i*19 + 6)
+        });
+      }
+    }
+
+    /* --- 水流位移积分：精确积分，拖动进度条也完全一致 --- */
+    var driftTable = null, DRIFTN = 0;
+    if (cfg.speedKeys){
+      DRIFTN = 2400;
+      driftTable = new Float64Array(DRIFTN + 1);
+      var acc = 0, dtStep = cfg.T / DRIFTN;
+      for (var k = 0; k < DRIFTN; k++){
+        var t0 = k*dtStep, t1 = (k+1)*dtStep;
+        var v0 = 3 + lerpKeys(cfg.speedKeys, t0) * 26;
+        var v1 = 3 + lerpKeys(cfg.speedKeys, t1) * 26;
+        acc += (v0 + v1) / 2 * dtStep;
+        driftTable[k+1] = acc;
+      }
+    }
+    function driftAt(t){
+      if (!driftTable) return t;
+      var x = Math.max(0, Math.min(DRIFTN, t / cfg.T * DRIFTN));
+      var i2 = Math.floor(x), f2 = x - i2;
+      return driftTable[i2] + (driftTable[Math.min(DRIFTN, i2+1)] - driftTable[i2]) * f2;
+    }
+
+    /* --- 水纹：远水无波，近水数笔。大面积留白，笔断意连 --- */
+    var ripples = [], waterG = q('#' + cfg.root + '-water', root);
+    if (waterG){
+      /* 只画五道，行距不均；每道由几笔短画断续组成，绝不满幅 */
+      var ROWS = [
+        { y: 412, w: 1.05, o: 0.13, amp: 6.0,  n: 3, span: 300 },
+        { y: 462, w: 1.40, o: 0.17, amp: 7.0,  n: 3, span: 372 },
+        { y: 500, w: 1.75, o: 0.21, amp: 8.0,  n: 4, span: 442 },
+        { y: 548, w: 2.15, o: 0.25, amp: 9.0,  n: 4, span: 512 },
+        { y: 590, w: 2.60, o: 0.27, amp: 10.0, n: 3, span: 580 }
+      ];
+      ROWS.forEach(function(r, ri){
+        var el = document.createElementNS(SVGNS, 'path');
+        el.setAttribute('fill', 'none');
+        el.setAttribute('stroke', '#3A362F');
+        el.setAttribute('stroke-linecap', 'round');
+        waterG.appendChild(el);
+
+        /* 江面是楔形：越近越宽，中轴也随之左移 */
+        var cxRow = 480 - (r.y - 302) * 28 / 298;
+        var segs = [], x0 = cxRow - r.span / 2;
+        for (var si = 0; si < r.n; si++){
+          segs.push({
+            x:   x0 + r.span * (si + rnd(ri*29 + si*13) * 0.52) / r.n,
+            len: r.span * (0.26 + rnd(ri*37 + si*19) * 0.24) / r.n,
+            dir: rnd(ri*11 + si*23) > 0.5 ? 1 : -1,
+            ph:  rnd(ri*41 + si*7) * 6.283
+          });
+        }
+        ripples.push({
+          el: el, y: r.y, w: r.w, o: r.o, amp: r.amp, segs: segs,
+          ph: rnd(ri*53) * 6.283,
+          mul: 0.55 + ri * 0.14
+        });
+      });
+    }
+
+    /* --- track ticks --- */
+    cfg.segs.forEach(function(s){
+      if (s.t <= 0) return;
+      var d = document.createElement('div');
+      d.className = 'track-seg';
+      d.style.left = (s.t / cfg.T * 100) + '%';
+      track.appendChild(d);
+    });
+    cfg.silence.forEach(function(w){
+      var d = document.createElement('div');
+      d.className = 'track-sil';
+      d.style.left = (w[0] / cfg.T * 100) + '%';
+      d.style.width = ((w[1] - w[0]) / cfg.T * 100) + '%';
+      track.appendChild(d);
+    });
+
+    /* --- render --- */
+    function render(){
+      var t = P.t;
+      var c = sampleCam(cfg.cam, t);
+      cam.setAttribute('transform', camT(c));
+
+      /* 题诗逐字书写：真笔顺沿中线运笔；降级时退回矩形揭示 */
+      for (var pi = 0; pi < poemChars.length; pi++){
+        var pc = poemChars[pi];
+        var pr = seg(t, pc.t, pc.t + pc.dur);
+        if (pc.mode === 'rect'){
+          if (pr <= 0){ pc.rect.setAttribute('height', '0'); continue; }
+          var pw = pr * pr * (3 - 2 * pr);          /* smoothstep：起笔缓、行笔稳、收笔顿 */
+          pc.rect.setAttribute('height', (pw * pc.h).toFixed(2));
+          continue;
+        }
+        if (pr <= 0){
+          if (pc.state !== 0){
+            for (var z0 = 0; z0 < pc.strokes.length; z0++){
+              var st0 = pc.strokes[z0];
+              if (st0.on){ st0.el.setAttribute('display', 'none'); st0.on = false; }
+              st0.el.setAttribute('stroke-dashoffset', st0.len);
+            }
+            pc.state = 0;
+          }
+          continue;
+        }
+        if (pr >= 1){
+          if (pc.state !== 2){
+            for (var z1 = 0; z1 < pc.strokes.length; z1++){
+              var st1 = pc.strokes[z1];
+              if (!st1.on){ st1.el.removeAttribute('display'); st1.on = true; }
+              st1.el.setAttribute('stroke-dashoffset', '0');
+            }
+            pc.state = 2;
+          }
+          continue;
+        }
+        pc.state = 1;
+        for (var sk = 0; sk < pc.strokes.length; sk++){
+          var st = pc.strokes[sk];
+          var u = clamp01((pr - pc.cum[sk]) / (pc.cum[sk + 1] - pc.cum[sk]));
+          /* 未起笔的笔画必须整条藏起来：圆头笔锋带在 dashoffset=全长 时仍会在
+             起点露出一个半径 w/2 的圆点，故用 display 关掉，而非仅靠 dash 偏移 */
+          if (u <= 0){
+            if (st.on){ st.el.setAttribute('display', 'none'); st.on = false; }
+            continue;
+          }
+          if (!st.on){ st.el.removeAttribute('display'); st.on = true; }
+          u = u * u * (3 - 2 * u);                  /* 每笔：起笔缓、行笔稳、收笔顿 */
+          st.el.setAttribute('stroke-dashoffset', (st.len * (1 - u)).toFixed(1));
+        }
+      }
+
+      timeEl.textContent = t.toFixed(1) + ' / ' + P.T.toFixed(1) + ' s';
+      var frac = t / P.T;
+      fill.style.width = (frac * 100) + '%';
+      head.style.left  = (frac * 100) + '%';
+
+      if (annoG){
+        annoG.setAttribute('opacity', annoOn ? '1' : '0');
+        if (annoOn){
+          var inv = 1 / c.s;
+          annoG.setAttribute('font-size', (12.5 * inv).toFixed(2));
+          annoG.setAttribute('stroke-width', (1 * inv).toFixed(2));
+          var tw = (2.6 * inv).toFixed(2);
+          for (var ai = 0; ai < annoTexts.length; ai++) annoTexts[ai].setAttribute('stroke-width', tw);
+          for (var aj = 0; aj < annoItems.length; aj++){
+            annoItems[aj].el.setAttribute('opacity', easeOut(seg(t, annoItems[aj].t, annoItems[aj].t + 0.9)).toFixed(3));
+          }
+        }
+      }
+
+      if (cfg.root === 'jx'){
+        q('#jx-far',  root).setAttribute('opacity', easeOut(seg(t, 0.35, 1.90)).toFixed(3));
+        q('#jx-path', root).setAttribute('opacity', (0.20 * easeOut(seg(t, 5.22, 7.05))).toFixed(3));
+        q('#jx-reed', root).setAttribute('opacity', (0.52 * easeOut(seg(t, 1.56, 3.25))).toFixed(3));
+
+        var bp = easeOut(seg(t, 9.77, 11.08));
+        var boat = q('#jx-boat', root);
+        boat.setAttribute('opacity', bp.toFixed(3));
+        boat.setAttribute('transform',
+          'translate(585,460) scale(' + (1 + (1 - bp) * 0.06).toFixed(4) + ') translate(-585,-460)');
+        var dsc = q('#jxBoatInk feDisplacementMap');
+        if (dsc) dsc.setAttribute('scale', (58 - 40 * bp).toFixed(1));
+
+        q('#jx-line', root).setAttribute('stroke-dashoffset', (100 - 100 * easeInOut(seg(t, 14.32, 15.67))).toFixed(1));
+        seal.setAttribute('opacity', easeOut(seg(t, 17.56, 18.36)).toFixed(3));
+
+        var dens = lerpKeys(cfg.snowKeys, t);
+        for (var s1 = 0; s1 < snowData.length; s1++){
+          var d1 = snowData[s1];
+          var yRaw = (d1.y + d1.vy * t) % 660;
+          var a1 = clamp01((dens - d1.th) / 0.14);
+          if (yRaw < 40) a1 *= yRaw / 40;
+          if (yRaw > 600) a1 *= (660 - yRaw) / 60;
+          var el1 = snowEls[s1];
+          el1.setAttribute('cx', (d1.x + Math.sin(t * 0.35 + d1.ph) * 16).toFixed(1));
+          el1.setAttribute('cy', (yRaw - 30).toFixed(1));
+          el1.setAttribute('opacity', (a1 * 0.42).toFixed(3));
+        }
+      }
+
+      if (cfg.root === 'bd'){
+        var cloud = q('#bd-cloud', root);
+        cloud.setAttribute('opacity', easeOut(seg(t, 0.20, 1.06)).toFixed(3));
+        cloud.setAttribute('transform', 'translate(' + (28 * t / cfg.T).toFixed(2) + ',0)');
+
+        q('#bd-city',  root).setAttribute('opacity', easeOut(seg(t, 0.44, 0.94)).toFixed(3));
+        q('#bd-far',   root).setAttribute('opacity', easeOut(seg(t, 0.67, 1.61)).toFixed(3));
+        q('#bd-cliff', root).setAttribute('opacity', easeOut(seg(t, 0.20, 0.98)).toFixed(3));
+        q('#bd-cun',   root).setAttribute('opacity', (0.30 * easeOut(seg(t, 0.36, 1.22))).toFixed(3));
+        q('#bd-mist',  root).setAttribute('opacity', easeOut(seg(t, 0.51, 1.37)).toFixed(3));
+
+        var bp2 = easeOut(seg(t, 0.67, 1.14));
+        var boat2 = q('#bd-boat', root);
+        boat2.setAttribute('opacity', bp2.toFixed(3));
+        boat2.setAttribute('transform', 'translate(0,' + (Math.sin(t * 2.6) * 1.1).toFixed(2) + ')');
+        var dsc2 = q('#bdBoatInk feDisplacementMap');
+        if (dsc2) dsc2.setAttribute('scale', (52 - 36 * bp2).toFixed(1));
+
+        var tp = easeIn(seg(t, 3.64, 11.46));
+        qa('#bd-trail path', root).forEach(function(p){
+          p.setAttribute('stroke-dashoffset', (100 - 100 * tp).toFixed(1));
+        });
+        q('#bd-bow', root).setAttribute('stroke-dashoffset', (100 - 100 * easeOut(seg(t, 6.84, 7.39))).toFixed(1));
+
+        /* 水纹：极缓的下移（顺流的一点点暗示）+ 上下呼吸；笔道本身在起伏 */
+        var dr = driftAt(t);
+        for (var wj = 0; wj < ripples.length; wj++){
+          var rp = ripples[wj];
+          var yNow = rp.y + dr * rp.mul * 0.10 + Math.sin(t * 0.42 + rp.ph) * 3.2;
+          var dep = clamp01((yNow - 300) / 300);
+          rp.el.setAttribute('stroke-width', (rp.w * (0.82 + dep * 0.40)).toFixed(2));
+          rp.el.setAttribute('opacity', (rp.o * (0.55 + dep * 0.55)).toFixed(3));
+          var dd = '';
+          for (var sk = 0; sk < rp.segs.length; sk++){
+            var sg = rp.segs[sk];
+            var amp = rp.amp * (0.65 + 0.35 * Math.sin(t * 0.85 + sg.ph));
+            var x1 = sg.x, x2 = sg.x + sg.len, xm = (x1 + x2) / 2;
+            dd += 'M' + x1.toFixed(1) + ' ' + yNow.toFixed(1)
+                + 'Q' + xm.toFixed(1) + ' ' + (yNow + sg.dir * amp).toFixed(1)
+                + ' ' + x2.toFixed(1) + ' ' + yNow.toFixed(1);
+          }
+          rp.el.setAttribute('d', dd);
+        }
+
+        seal.setAttribute('opacity', easeOut(seg(t, 12.73, 13.34)).toFixed(3));
+      }
+
+      if (cfg.root === 'sy'){
+        /* 起句（0.25–3.555s）：窗、月、月光、床、背影依次登场 */
+        q('#sy-night', root).setAttribute('opacity', easeOut(seg(t, 0, 1.8)).toFixed(3));
+
+        /* 明月：淡入后只有极缓的呼吸，不晃动 */
+        var moon = q('#sy-moon', root);
+        moon.setAttribute('opacity', easeOut(seg(t, 0.4, 2.4)).toFixed(3));
+        var halo = qa('#sy-moon circle', root);
+        if (halo.length >= 2) halo[0].setAttribute('r', (86 + Math.sin(t * 0.22) * 3).toFixed(1));
+
+        var cloud = q('#sy-cloud', root);
+        cloud.setAttribute('opacity', (0.9 * easeOut(seg(t, 0.8, 2.6))).toFixed(3));
+        cloud.setAttribute('transform', 'translate(' + (6 * t / cfg.T).toFixed(2) + ',0)');
+
+        q('#sy-win',   root).setAttribute('opacity', easeOut(seg(t, 0.6, 2.4)).toFixed(3));
+        q('#sy-glint', root).setAttribute('opacity', (0.85 * easeOut(seg(t, 1.2, 3.2))).toFixed(3));
+        q('#sy-bed',   root).setAttribute('opacity', easeOut(seg(t, 1.0, 2.8)).toFixed(3));
+
+        /* 霜是"疑是"：承句（4.82–7.54s）才在床前定形 */
+        q('#sy-frost', root).setAttribute('opacity', easeOut(seg(t, 4.9, 7.4)).toFixed(3));
+
+        var fp = easeOut(seg(t, 1.4, 3.0));
+        var fig = q('#sy-figure', root);
+        fig.setAttribute('opacity', fp.toFixed(3));
+        fig.setAttribute('transform', 'translate(0,' + (Math.sin(t * 1.1) * 1.0).toFixed(2) + ')');
+        var dsc3 = q('#syFigInk feDisplacementMap');
+        if (dsc3) dsc3.setAttribute('scale', (46 - 32 * fp).toFixed(1));
+
+        /* 举头→低头：头（含髻、颈）纵向抬沉，姿态就是节拍 */
+        var nod = lerpKeys(cfg.headKeys, t);
+        q('#sy-head', root).setAttribute('transform',
+          'translate(0,' + nod.toFixed(2) + ') rotate(' + (nod * 0.4).toFixed(2) + ' 400 372)');
+
+        seal.setAttribute('opacity', easeOut(seg(t, 16.4, 17.6)).toFixed(3));
+      }
+    }
+
+    function updateBtn(){
+      var label = btn.querySelector('span');
+      if (P.playing){
+        label.textContent = '暂停';
+        icoPath.setAttribute('d', 'M1.5 0.5 h3 v11 h-3 z M7.5 0.5 h3 v11 h-3 z');
+      } else {
+        label.textContent = (P.t >= P.T) ? '重播' : '播放';
+        icoPath.setAttribute('d', 'M1 0.5 L11 6 L1 11.5 Z');
+      }
+    }
+
+    btn.addEventListener('click', function(){
+      if (P.t >= P.T) P.t = 0;
+      P.playing = !P.playing;
+      if (audio && voiceOn){
+        if (P.playing){
+          try { audio.currentTime = Math.min(P.t, Math.max(0, (audio.duration || P.T) - 0.02)); } catch (e) {}
+          var pr = audio.play();
+          if (pr && pr.catch) pr.catch(function(){});
+        } else {
+          audio.pause();
+        }
+      }
+      if (music){
+        if (P.playing){
+          try { music.currentTime = P.t; } catch (e) {}
+          duckV = duckTarget(P.t);
+          music.volume = duckV;
+          var pm = music.play();
+          if (pm && pm.then) pm.then(clearBlocked).catch(markBlocked);
+        } else {
+          music.pause();
+        }
+      }
+      updateBtn();
+    });
+
+    var dragging = false;
+    function scrub(e){
+      var r = track.getBoundingClientRect();
+      P.t = clamp01((e.clientX - r.left) / r.width) * P.T;
+      if (audio && voiceOn){ try { audio.currentTime = P.t; } catch (e2) {} }
+      if (music){
+        try { music.currentTime = P.t; } catch (e3) {}
+        duckV = duckTarget(P.t);
+        music.volume = duckV;
+      }
+      render();
+    }
+    track.addEventListener('pointerdown', function(e){
+      dragging = true; P.playing = false; if (audio) audio.pause(); if (music) music.pause(); updateBtn(); scrub(e);
+      if (track.setPointerCapture) track.setPointerCapture(e.pointerId);
+    });
+    track.addEventListener('pointermove', function(e){ if (dragging) scrub(e); });
+    track.addEventListener('pointerup',     function(){ dragging = false; });
+    track.addEventListener('pointercancel', function(){ dragging = false; });
+
+    render();
+    updateBtn();
+
+    return {
+      P: P,
+      tick: function(dt){
+        if (P.playing){
+          if (audio && voiceOn && !audio.paused && isFinite(audio.duration) && audio.duration > 0){
+            /* 有人声：以人声时钟为准，保证声画严格同步 */
+            P.t = audio.currentTime;
+            if (P.t >= P.T - 0.001 || audio.ended){ P.t = P.T; P.playing = false; updateBtn(); }
+          } else if (music && !music.paused && isFinite(music.duration) && music.duration > 0){
+            /* 纯音乐：以音乐时钟为准，音乐与画面同源不错位 */
+            P.t = music.currentTime;
+            if (P.t >= P.T - 0.001 || music.ended){ P.t = P.T; P.playing = false; updateBtn(); }
+          } else {
+            P.t += dt;
+            if (P.t >= P.T){ P.t = P.T; P.playing = false; updateBtn(); }
+          }
+        }
+        if (music){
+          /* 音乐跟配音同轴；漂移超过 80ms 才回拉，避免频繁 seek 产生爆音 */
+          if (P.playing && !music.paused && Math.abs(music.currentTime - P.t) > 0.08){
+            try { music.currentTime = P.t; } catch (e) {}
+          }
+          /* 闪避平滑：约 150ms 时间常数，避免边界处「咔哒」 */
+          var tg = duckTarget(P.t);
+          duckV += (tg - duckV) * Math.min(1, dt / 0.15);
+          try { music.volume = clamp01(duckV); } catch (e) {}
+        }
+        render();
+      },
+      autostart: function(){
+        if (P.playing || P.t > 0) return;
+        P.playing = true;
+        if (audio && voiceOn){
+          /* 无人手势的自动播放必然被策略拦下，故这里**预期会失败**：
+             失败时静默即可（音乐轨会给出可见提示），但一旦用户点过播放
+             按钮，后续开关切换时这里是在手势内调用的，应正常出声。 */
+          try { audio.currentTime = 0; } catch (e) {}
+          var pr = audio.play();
+          if (pr && pr.catch) pr.catch(function(){});
+        }
+        if (music){
+          try { music.currentTime = 0; } catch (e) {}
+          duckV = duckTarget(0);
+          music.volume = duckV;
+          var pm = music.play();
+          if (pm && pm.then) pm.then(clearBlocked).catch(markBlocked);
+        }
+        updateBtn();
+      }
+    };
+  }
+
+  var players = [makePlayer(JX), makePlayer(BD), makePlayer(SY)];
+
+  var last = performance.now();
+  function loop(now){
+    var dt = Math.min((now - last) / 1000, 0.05);
+    last = now;
+    for (var i = 0; i < players.length; i++) players[i].tick(dt);
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  /* 首次进入视口时自动播放 */
+  if ('IntersectionObserver' in window){
+    var seen = [false, false, false];
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        var id = en.target.id;
+        var k = id === 'art-jx' ? 0 : (id === 'art-bd' ? 1 : (id === 'art-sy' ? 2 : -1));
+        if (k >= 0 && en.isIntersecting && !seen[k]){
+          seen[k] = true;
+          players[k].autostart();
+        }
+      });
+    }, { threshold: 0.45 });
+    io.observe(document.getElementById('art-jx'));
+    io.observe(document.getElementById('art-bd'));
+    io.observe(document.getElementById('art-sy'));
+  }
+})();
+</script>
+</body>
+</html>

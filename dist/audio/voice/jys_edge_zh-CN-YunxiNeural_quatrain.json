@@ -1,0 +1,45 @@
+{
+  "poem": "静夜思 · 李白",
+  "backend": "edge",
+  "voice": "zh-CN-YunxiNeural",
+  "sr": 24000,
+  "duration": 22.084,
+  "lines": [
+    {
+      "seg": "起",
+      "text": "床前明月光",
+      "rate": 0.62,
+      "pitch": 0.9,
+      "vol": 0.8,
+      "pre": 0.3,
+      "post": 1.0
+    },
+    {
+      "seg": "承",
+      "text": "疑是地上霜",
+      "rate": 0.58,
+      "pitch": 0.85,
+      "vol": 0.7,
+      "pre": 0.6,
+      "post": 1.5
+    },
+    {
+      "seg": "转",
+      "text": "举头望明月",
+      "rate": 0.66,
+      "pitch": 1.0,
+      "vol": 0.85,
+      "pre": 0.4,
+      "post": 1.3
+    },
+    {
+      "seg": "合",
+      "text": "低头思故乡",
+      "rate": 0.52,
+      "pitch": 0.8,
+      "vol": 0.75,
+      "pre": 0.8,
+      "post": 2.0
+    }
+  ]
+}

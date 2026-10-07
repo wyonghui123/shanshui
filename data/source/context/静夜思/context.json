@@ -1,0 +1,186 @@
+{
+  "schema": "poem-context/v1",
+  "id": "jys",
+  "poem": "静夜思",
+  "author": "李白",
+  "author_lifespan": "701-762",
+  "genre": "五言绝句",
+  "fetched_at": "2026-10-03",
+  "evidence_grade_scale": {
+    "1": "诗内字词、格律",
+    "2": "同人同期作品",
+    "3": "史料编年",
+    "4": "历代权威注",
+    "5": "现代学术解读（仅限解读/韵味字段，须标注）",
+    "6": "大众网站（仅作线索，不得进 evidence）"
+  },
+  "text": {
+    "base": [
+      "床前明月光",
+      "疑是地上霜",
+      "举头望明月",
+      "低头思故乡"
+    ],
+    "version_chosen": "通行本（床前明月光 / 举头望明月）",
+    "version_reason": "明代中后期定型（明万历闵氏刻朱墨套印本《唐诗选》为重要节点），清孙洙《唐诗三百首》沿用，影响最大；但版本可靠性上宋本「看月光 / 望山月」更可信。动画沿用通行本，但必须在 context.json 写明版本选择及理由",
+    "variants": [
+      {
+        "line": 1,
+        "chosen": "床前明月光",
+        "alt": "床前看月光",
+        "grade": 4,
+        "note": "宋蜀刻本《李太白集》、郭茂倩《乐府诗集》、洪迈《万首唐人绝句》、元萧士赟《分类补注李太白集》、明高棅《唐诗品汇》作「看月光」",
+        "source_ids": ["S2", "S3"]
+      },
+      {
+        "line": 3,
+        "chosen": "举头望明月",
+        "alt": "举头望山月",
+        "grade": 4,
+        "note": "同上宋本系统作「望山月」",
+        "source_ids": ["S2", "S3"]
+      }
+    ]
+  },
+  "dating": {
+    "year": "四说并存，无定论",
+    "place": "不确定（扬州 / 安陆 / 金陵等）",
+    "certainty": "highly_uncertain",
+    "note": "本诗是三首中唯一「文本与系年双重不确定」者",
+    "candidates": [
+      { "say": "开元十四年（726）· 扬州旅舍 · 26 岁", "basis": "多数教材与赏析材料沿用", "grade": 6, "source_ids": ["S7"] },
+      { "say": "开元十五年（727）· 安陆寿山 · 27 岁", "basis": "安旗主编《李白全集编年注释》倾向此说", "grade": 5, "source_ids": ["S6"] },
+      { "say": "开元十九年（731）· 安陆 · 31 岁", "basis": "日本学者前野直彬等", "grade": 5, "source_ids": ["S6"] },
+      { "say": "天宝六至八载（747–749）· 金陵 · 47–49 岁", "basis": "孙宏亮提出", "grade": 5, "source_ids": ["S6"] }
+    ],
+    "grade": 5,
+    "source_ids": ["S6", "S3"]
+  },
+  "biography": [
+    {
+      "event": "早年出蜀漫游，客居、思乡为其诗歌重要主题",
+      "grade": 3,
+      "source_ids": ["S4"]
+    },
+    {
+      "event": "27 岁前后有《秋夕旅怀》《淮南卧病书怀寄蜀中赵徵君蕤》等思乡、卧病、客居之作，地点涉及扬州",
+      "grade": 5,
+      "source_ids": ["S4"]
+    }
+  ],
+  "glossary": [
+    {
+      "term": "床",
+      "gloss": "三说并存：①卧具之床（室内，见月光洒床，误作霜）；②井床/井栏；③坐具/胡床/马扎（另有条凳、大方凳说）。核心分歧在室内/室外、坐卧/井栏、月光照射范围",
+      "grade": 5,
+      "source_ids": ["S1", "S5"]
+    },
+    { "term": "疑", "gloss": "仿佛、好像；错觉式比喻的关节，是睡意未消、短梦初回时的心理感受", "grade": 5, "source_ids": ["S5"] },
+    { "term": "明月光", "gloss": "明亮的月光（宋本作「看月光」）", "grade": 6, "source_ids": ["S7"] },
+    { "term": "故乡", "gloss": "家乡（一说指蜀中）", "grade": 6, "source_ids": ["S7"] }
+  ],
+  "allusion_chains": [
+    {
+      "surface": "望月思乡（母题继承，非用典）",
+      "polarity": "中性（思乡母题）",
+      "polarity_note": "与《古诗十九首·明月何皎皎》、乐府「昭昭素月明，晖光烛我床」、曹丕「明月皎皎照我床」存在主题与意象关联，属母题继承与意象渊源，不宜等同于用典；「疑是」句一说化用梁简文帝「夜月似秋霜」",
+      "chain": ["《古诗十九首·明月何皎皎》", "乐府古辞「昭昭素月明，晖光烛我床」", "曹丕「明月皎皎照我床」"],
+      "grade": 2,
+      "source_ids": ["S4", "S3"]
+    }
+  ],
+  "sibling_works": {
+    "grade": 2,
+    "note": "同人同期作品，用于交叉验证「客居思乡」心境",
+    "items": [
+      "《秋夕旅怀》",
+      "《淮南卧病书怀寄蜀中赵徵君蕤》"
+    ],
+    "source_ids": ["S4"]
+  },
+  "interpretations": [
+    {
+      "name": "明清评点·自然神妙",
+      "claim": "「自是古意，不须言笑」（刘云，附高棅《唐诗品汇》后）；「此诗如不经意，而得之自然。故群服其神妙」（王尧衢《古唐诗合解》）",
+      "proponents": ["刘云", "王尧衢"],
+      "grade": 4,
+      "source_ids": ["S3"]
+    },
+    {
+      "name": "明清评点·旅中情思",
+      "claim": "「旅中情思，虽说明却不说尽」（沈德潜《唐诗别裁集》）；「月色侵床，凄清之景，易动乡思」「举头低头，同此月也，一俯一仰间多少情怀」（吴烻《唐诗选胜直解》）",
+      "proponents": ["沈德潜", "吴烻"],
+      "grade": 4,
+      "source_ids": ["S3"]
+    },
+    {
+      "name": "文本建构说",
+      "claim": "发乎天然、通俗易懂是古今共识；但从文本建构角度审视，并不简单",
+      "proponents": ["范子烨"],
+      "grade": 5,
+      "source_ids": ["S3"]
+    },
+    {
+      "name": "禅意说",
+      "claim": "（未找到可靠依据）",
+      "proponents": [],
+      "grade": 6,
+      "note": "未找到可靠依据支持此说 → 不采纳",
+      "source_ids": ["S7"]
+    }
+  ],
+  "interpretation_consensus": {
+    "verdict": "文本与系年双重不确定；「床」三说并存；无明确用典",
+    "composite": "思乡母题的天然书写，中性偏负、淡淡的情思",
+    "confidence_penalty": true,
+    "blank_ratio_uplift": true,
+    "note": "系年四说 + 「床」三说 + 文本两系 → 置信度显著下调、留白率上调"
+  },
+  "prosody": {
+    "form": "五言绝句",
+    "rhyme_group": "阳韵（平声·七阳）",
+    "rhyme_feet": ["光", "霜", "乡"],
+    "rusheng_chars": [],
+    "rusheng_ratio": null,
+    "rusheng_note": "检索材料未形成可靠结论，不宜确定",
+    "pingze": [
+      { "line": 1, "text": "床前明月光", "pattern": "平平平仄平" },
+      { "line": 2, "text": "疑是地上霜", "pattern": "平仄仄仄平" },
+      { "line": 3, "text": "举头望明月", "pattern": "仄平仄平仄" },
+      { "line": 4, "text": "低头思故乡", "pattern": "平平平仄平" }
+    ],
+    "pingze_variants": [
+      { "version": "宋本「床前看月光」", "pattern": "平平仄仄平（首句）" }
+    ],
+    "form_dispute": {
+      "status": "inconsistent",
+      "note": "韵脚较稳定，但平仄格式在不同文本与不同格律工具下存在差异，不能把某一种标注视为唯一结论"
+    },
+    "constraints": ["可舒缓", "忌强冲突", "忌渐隐"]
+  },
+  "pipeline_implications": {
+    "card_1_prosody": "阳韵平声 → 与《江雪》入声基调相反，可舒缓",
+    "card_2_imagery": "无明确用典 → 不得添加典故性元素；「望山月/望明月」异文影响画面中是否有山，山是否入画需说明依据",
+    "card_3_style": "天然平淡，不收敛到强烈气质；保留「淡淡情思」",
+    "card_4_emotion": "V 中性偏负（思乡，非悲恸）；T 低（无对抗、无悬置）；系年四说 → confidence 显著下调",
+    "card_5_composition": "「床」三说（卧具/井栏/坐具）→ 室内/室外不定，构图不得锁死室内陈设，避免床榻、井栏等具象；留白率上调",
+    "card_7_timeline": "阳韵平声 → 可舒缓；忌强冲突、忌渐隐",
+    "card_9_selfcheck": "文本异文（宋本 vs 明本）与「床」三说须挂源；不得把「床」坐实为任一物"
+  },
+  "sources": [
+    { "id": "S1", "title": "马执斌《也说李白的〈静夜思〉》，中华读书报 2014-03-05", "type": "学术媒体", "grade": 5, "url": "https://epaper.gmw.cn/zhdsb/html/2014-03/05/nw.D110000zhdsb_20140305_2-15.htm" },
+    { "id": "S2", "title": "中国作家网《改出来的〈静夜思〉》2013-08-28", "type": "学术转载", "grade": 5, "url": "https://www.chinawriter.com.cn/2013/2013-08-28/172352.html" },
+    { "id": "S3", "title": "范子烨《李白〈静夜思〉的文本奥秘》，《文史知识》2020", "type": "学术论文", "grade": 5, "url": "https://www.chinawriter.com.cn/n1/2020/1116/c404064-31932366.html" },
+    { "id": "S4", "title": "夏国强《静夜思：李白的人间书写》，光明日报 2025-04-28", "type": "学术媒体", "grade": 5, "url": "https://www.chinawriter.com.cn/n1/2025/0428/c442005-40470136.html" },
+    { "id": "S5", "title": "宁源声《〈静夜思〉中的「床」究竟该作何解释？》，中华读书报 2024-10-16", "type": "学术媒体", "grade": 5, "url": "https://epaper.gmw.cn/zhdsb/html/2024-10/16/nw.D110000zhdsb_20241016_2-05.htm" },
+    { "id": "S6", "title": "光明网转述陈尚君研究", "type": "学术媒体", "grade": 5, "url": "https://m.gmw.cn/toutiao/2021-09/18/content_35173652.htm" },
+    { "id": "S7", "title": "古文岛/古诗文网《静夜思》赏析", "type": "大众网站", "grade": 6, "url": "https://www.gushiwen.cn/mingju.aspx?id=1092" },
+    { "id": "S8", "title": "诗词志《静夜思》平仄韵律对照", "type": "大众网站", "grade": 6, "url": "https://shicizhi.com/JING-YE-SI_tangshi_6dc241659f15c14a" },
+    { "id": "S9", "title": "CCTV《李白〈静夜思〉诗句曾被改动，日本保留原文》", "type": "媒体", "grade": 6, "url": "http://news.cctv.com/china/20090130/102321.shtml" }
+  ],
+  "gaps": [
+    "未找到可靠来源：支持「禅意」说的依据",
+    "未找到可靠来源：《静夜思》入声字的可靠结论",
+    "未获取：「看月光 → 明月光」「望山月 → 望明月」改字过程的完整溯源"
+  ]
+}

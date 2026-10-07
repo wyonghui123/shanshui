@@ -1,0 +1,126 @@
+{
+  "poems": {
+    "bd": {
+      "title": "早发白帝城",
+      "rows": [
+        {
+          "ok": true,
+          "kind": "焦点",
+          "item": "轻舟@bd-boat",
+          "detail": "eff=0.909 全场最深（次深 bd-city=0.568）[D2 role=焦点]"
+        },
+        {
+          "ok": true,
+          "kind": "含水",
+          "item": "彩云@bd-cloud",
+          "detail": "极高 → eff=0.188 σ=4.2 disp=12.0（eff≤0.30 且 soft）"
+        },
+        {
+          "ok": true,
+          "kind": "含水",
+          "item": "万重山@bd-far",
+          "detail": "高 → eff=0.147 σ=0.0 disp=16.0（eff≤0.30 且 soft）"
+        },
+        {
+          "ok": true,
+          "kind": "含水",
+          "item": "白帝@bd-city",
+          "detail": "中 → eff=0.568 σ=0.0 disp=16.0（0.05≤eff≤0.70）"
+        },
+        {
+          "ok": true,
+          "kind": "含水",
+          "item": "两岸@bd-cliff",
+          "detail": "中 → eff=0.450 σ=0.0 disp=16.0（0.05≤eff≤0.70）"
+        },
+        {
+          "ok": true,
+          "kind": "含水",
+          "item": "轻舟@bd-boat",
+          "detail": "极低 → eff=0.909 σ=0.0 disp=16.0（eff≥0.40 且 σ=0）"
+        }
+      ],
+      "ok": 6,
+      "n": 6
+    },
+    "jx": {
+      "title": "江雪",
+      "rows": [
+        {
+          "ok": true,
+          "kind": "焦点",
+          "item": "孤舟@jx-boat",
+          "detail": "eff=0.909 全场最深（次深 jx-line=0.494）[D2 role=焦点]"
+        },
+        {
+          "ok": true,
+          "kind": "含水",
+          "item": "千山@jx-far",
+          "detail": "高 → eff=0.154 σ=0.0 disp=18.0（eff≤0.30 且 soft）"
+        },
+        {
+          "ok": true,
+          "kind": "含水",
+          "item": "万径@jx-path",
+          "detail": "中 → eff=0.181 σ=3.2 disp=10.0（0.05≤eff≤0.70）"
+        },
+        {
+          "ok": true,
+          "kind": "含水",
+          "item": "孤舟@jx-boat",
+          "detail": "低 → eff=0.909 σ=0.0 disp=18.0（eff≥0.40 且 σ=0）"
+        },
+        {
+          "ok": true,
+          "kind": "含水",
+          "item": "独钓@jx-line",
+          "detail": "极低 → eff=0.494 σ=0.0 disp=6.0（eff≥0.40 且 σ=0）"
+        },
+        {
+          "ok": true,
+          "kind": "人物",
+          "item": "蓑笠翁@jx-boat",
+          "detail": "人高 8.3% ∈ 点景 6–9%"
+        }
+      ],
+      "ok": 6,
+      "n": 6
+    },
+    "jys": {
+      "title": "静夜思",
+      "rows": [
+        {
+          "ok": true,
+          "kind": "焦点",
+          "item": "明月@sy-moon",
+          "detail": "亮度 0.772 − 背景 sy-night 0.009 = 0.763 ≥ 0.30（视觉焦点最亮）"
+        },
+        {
+          "ok": true,
+          "kind": "焦点",
+          "item": "背影@sy-figure",
+          "detail": "eff=0.929 全场最深（次深 sy-win=0.404）[design 焦点]"
+        },
+        {
+          "ok": true,
+          "kind": "含水",
+          "item": "明月@sy-moon",
+          "detail": "极高 → eff=0.148 σ=6.0 disp=16.0（eff≤0.30 且 soft）"
+        },
+        {
+          "ok": true,
+          "kind": "含水",
+          "item": "霜@sy-frost",
+          "detail": "极高 → eff=0.094 σ=6.0 disp=16.0（eff≤0.30 且 soft）"
+        }
+      ],
+      "ok": 4,
+      "n": 4
+    }
+  },
+  "summary": {
+    "ok": 16,
+    "n": 16,
+    "fails": 0
+  }
+}

@@ -1,0 +1,270 @@
+{
+  "license": {
+    "dataset": "Flute Dizi C all notes + pitched semitones",
+    "author": "Hypnotriod (Freesound)",
+    "source": "Freesound pack 21613",
+    "url": "https://freesound.org/people/Hypnotriod/packs/21613/",
+    "license": "CC0 1.0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "attribution": "Hypnotriod, Freesound pack 21613, CC0 1.0",
+    "note": "公开可取素材为 HQ 预览 MP3（原始 WAV 需登录 Freesound）：25 条单声道 44.1kHz，实测平均码率 182.4 kbps。包名含 '+ pitched semitones'，即半音由真实录音变调得到。文件名标注的音名比实际高一个八度，实测音域 G4–G6（其中 81/82/90 三条的 f0 检测落到低八度，播放一律以 f0_hz 为准，不影响输出音高）。",
+    "decode_note": "个别预览的 Xing 头损坏，ffmpeg 拒解但 libsndfile 可读，故解码顺序为 soundfile → ffmpeg；下载后即校验可解码，损坏则重试（CDN 偶发返回截断文件）。",
+    "f0_method": "谐波求和（150–2000Hz 内 8 次谐波能量最大者）"
+  },
+  "range_hz": [
+    395.25,
+    1553.75
+  ],
+  "samples": [
+    {
+      "label": "dizi_067",
+      "file": "dizi_067.wav",
+      "midi": 67,
+      "note": "G4",
+      "sr": 44100,
+      "dur_s": 8.436,
+      "f0_hz": 395.25,
+      "f0_source": "实测（谐波求和）"
+    },
+    {
+      "label": "dizi_068",
+      "file": "dizi_068.wav",
+      "midi": 68,
+      "note": "G#4",
+      "sr": 44100,
+      "dur_s": 7.963,
+      "f0_hz": 418.75,
+      "f0_source": "实测（谐波求和）"
+    },
+    {
+      "label": "dizi_069",
+      "file": "dizi_069.wav",
+      "midi": 69,
+      "note": "A4",
+      "sr": 44100,
+      "dur_s": 8.534,
+      "f0_hz": 435.75,
+      "f0_source": "实测（谐波求和）"
+    },
+    {
+      "label": "dizi_070",
+      "file": "dizi_070.wav",
+      "midi": 70,
+      "note": "A#4",
+      "sr": 44100,
+      "dur_s": 8.055,
+      "f0_hz": 461.75,
+      "f0_source": "实测（谐波求和）"
+    },
+    {
+      "label": "dizi_071",
+      "file": "dizi_071.wav",
+      "midi": 71,
+      "note": "B4",
+      "sr": 44100,
+      "dur_s": 7.266,
+      "f0_hz": 486.75,
+      "f0_source": "实测（谐波求和）"
+    },
+    {
+      "label": "dizi_072",
+      "file": "dizi_072.wav",
+      "midi": 72,
+      "note": "C5",
+      "sr": 44100,
+      "dur_s": 7.708,
+      "f0_hz": 517.25,
+      "f0_source": "实测（谐波求和）"
+    },
+    {
+      "label": "dizi_073",
+      "file": "dizi_073.wav",
+      "midi": 73,
+      "note": "C#5",
+      "sr": 44100,
+      "dur_s": 7.275,
+      "f0_hz": 548.0,
+      "f0_source": "实测（谐波求和）"
+    },
+    {
+      "label": "dizi_074",
+      "file": "dizi_074.wav",
+      "midi": 74,
+      "note": "D5",
+      "sr": 44100,
+      "dur_s": 8.64,
+      "f0_hz": 580.5,
+      "f0_source": "实测（谐波求和）"
+    },
+    {
+      "label": "dizi_075",
+      "file": "dizi_075.wav",
+      "midi": 75,
+      "note": "D#5",
+      "sr": 44100,
+      "dur_s": 8.155,
+      "f0_hz": 615.0,
+      "f0_source": "实测（谐波求和）"
+    },
+    {
+      "label": "dizi_076",
+      "file": "dizi_076.wav",
+      "midi": 76,
+      "note": "E5",
+      "sr": 44100,
+      "dur_s": 7.555,
+      "f0_hz": 655.5,
+      "f0_source": "实测（谐波求和）"
+    },
+    {
+      "label": "dizi_077",
+      "file": "dizi_077.wav",
+      "midi": 77,
+      "note": "F5",
+      "sr": 44100,
+      "dur_s": 7.131,
+      "f0_hz": 694.25,
+      "f0_source": "实测（谐波求和）"
+    },
+    {
+      "label": "dizi_078",
+      "file": "dizi_078.wav",
+      "midi": 78,
+      "note": "F#5",
+      "sr": 44100,
+      "dur_s": 8.587,
+      "f0_hz": 733.75,
+      "f0_source": "实测（谐波求和）"
+    },
+    {
+      "label": "dizi_079",
+      "file": "dizi_079.wav",
+      "midi": 79,
+      "note": "G5",
+      "sr": 44100,
+      "dur_s": 7.55,
+      "f0_hz": 774.0,
+      "f0_source": "实测（谐波求和）"
+    },
+    {
+      "label": "dizi_080",
+      "file": "dizi_080.wav",
+      "midi": 80,
+      "note": "G#5",
+      "sr": 44100,
+      "dur_s": 7.126,
+      "f0_hz": 820.0,
+      "f0_source": "实测（谐波求和）"
+    },
+    {
+      "label": "dizi_081",
+      "file": "dizi_081.wav",
+      "midi": 81,
+      "note": "A5",
+      "sr": 44100,
+      "dur_s": 7.654,
+      "f0_hz": 435.25,
+      "f0_source": "实测（谐波求和）"
+    },
+    {
+      "label": "dizi_082",
+      "file": "dizi_082.wav",
+      "midi": 82,
+      "note": "A#5",
+      "sr": 44100,
+      "dur_s": 7.224,
+      "f0_hz": 461.0,
+      "f0_source": "实测（谐波求和）"
+    },
+    {
+      "label": "dizi_083",
+      "file": "dizi_083.wav",
+      "midi": 83,
+      "note": "B5",
+      "sr": 44100,
+      "dur_s": 8.257,
+      "f0_hz": 976.5,
+      "f0_source": "实测（谐波求和）"
+    },
+    {
+      "label": "dizi_084",
+      "file": "dizi_084.wav",
+      "midi": 84,
+      "note": "C6",
+      "sr": 44100,
+      "dur_s": 8.715,
+      "f0_hz": 1038.5,
+      "f0_source": "实测（谐波求和）"
+    },
+    {
+      "label": "dizi_085",
+      "file": "dizi_085.wav",
+      "midi": 85,
+      "note": "C#6",
+      "sr": 44100,
+      "dur_s": 8.226,
+      "f0_hz": 1100.25,
+      "f0_source": "实测（谐波求和）"
+    },
+    {
+      "label": "dizi_086",
+      "file": "dizi_086.wav",
+      "midi": 86,
+      "note": "D6",
+      "sr": 44100,
+      "dur_s": 9.075,
+      "f0_hz": 1161.0,
+      "f0_source": "实测（谐波求和）"
+    },
+    {
+      "label": "dizi_087",
+      "file": "dizi_087.wav",
+      "midi": 87,
+      "note": "D#6",
+      "sr": 44100,
+      "dur_s": 8.566,
+      "f0_hz": 1230.0,
+      "f0_source": "实测（谐波求和）"
+    },
+    {
+      "label": "dizi_088",
+      "file": "dizi_088.wav",
+      "midi": 88,
+      "note": "E6",
+      "sr": 44100,
+      "dur_s": 9.741,
+      "f0_hz": 1315.5,
+      "f0_source": "实测（谐波求和）"
+    },
+    {
+      "label": "dizi_089",
+      "file": "dizi_089.wav",
+      "midi": 89,
+      "note": "F6",
+      "sr": 44100,
+      "dur_s": 9.194,
+      "f0_hz": 1393.75,
+      "f0_source": "实测（谐波求和）"
+    },
+    {
+      "label": "dizi_090",
+      "file": "dizi_090.wav",
+      "midi": 90,
+      "note": "F#6",
+      "sr": 44100,
+      "dur_s": 8.152,
+      "f0_hz": 737.25,
+      "f0_source": "实测（谐波求和）"
+    },
+    {
+      "label": "dizi_091",
+      "file": "dizi_091.wav",
+      "midi": 91,
+      "note": "G6",
+      "sr": 44100,
+      "dur_s": 8.741,
+      "f0_hz": 1553.75,
+      "f0_source": "实测（谐波求和）"
+    }
+  ]
+}

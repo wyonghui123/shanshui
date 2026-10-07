@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>配音连贯性 A/B 试听</title>
+<style>
+  :root {
+    --paper:#f6f1e7; --ink:#2b2724; --ink-soft:#6b625a; --line:#d9cfbf;
+    --accent:#8c3a2e; --jade:#3f6b5c;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink);
+    font-family:"Songti SC","Noto Serif SC","Source Han Serif SC",Georgia,serif;
+    line-height:1.75; }
+  .wrap { max-width:1060px; margin:0 auto; padding:44px 26px 90px; }
+  header { border-bottom:2px solid var(--ink); padding-bottom:18px; margin-bottom:10px; }
+  h1 { font-size:30px; margin:0 0 6px; letter-spacing:.04em; }
+  .sub { color:var(--ink-soft); font-size:14px; }
+  .intro { background:#fbf7ef; border:1px solid var(--line); border-left:4px solid var(--accent);
+    padding:16px 20px; margin:22px 0 34px; font-size:14.5px; }
+  .intro b { color:var(--accent); }
+  .intro code { background:#efe7d8; padding:1px 5px; border-radius:3px; font-size:13px; }
+  h2 { font-size:22px; margin:38px 0 2px; padding-bottom:6px; border-bottom:1px solid var(--line); }
+  .lines { color:var(--ink-soft); font-size:14px; letter-spacing:.14em; margin:8px 0 18px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:14px; }
+  .card { background:#fdfbf6; border:1px solid var(--line); border-radius:6px; padding:14px 16px; }
+  .card[data-id="smooth"] { border-color:var(--jade); box-shadow:0 0 0 2px rgba(63,107,92,.12); }
+  .card[data-id="step"] { border-color:#d8b9b3; background:#fdf6f4; }
+  .chead { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .vlabel { font-weight:600; font-size:15.5px; }
+  .vtag { font-size:11.5px; padding:1px 8px; border-radius:10px; color:#fff; }
+  .t-plain { background:#9a9188; }
+  .t-step { background:#b5533f; }
+  .t-smooth { background:var(--jade); }
+  .t-soft { background:#5c7a99; }
+  .t-soft70 { background:#4b6b8a; }
+  .t-fast { background:#8a6d3b; }
+  .vdesc { font-size:13px; color:var(--ink-soft); margin:8px 0 10px; min-height:52px; }
+  audio { width:100%; height:36px; }
+  .vmeta { font-size:12px; color:#8a8078; margin-top:8px; font-family:Consolas,monospace; }
+  .verdict { margin-top:46px; background:#fbf7ef; border:1px solid var(--line); padding:20px 24px; }
+  .verdict h3 { margin:0 0 10px; font-size:17px; }
+  .verdict ol { margin:0; padding-left:22px; font-size:14px; }
+  .verdict li { margin:6px 0; }
+  footer { margin-top:40px; color:#9a9188; font-size:12px; text-align:center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>配音连贯性 A/B 试听</h1>
+    <div class="sub">静夜思 · 江雪 · 早发白帝城　｜　音色 zh-CN-Yunjian（云健）· 情感版</div>
+  </header>
+
+  <div class="intro">
+    <p>你反馈的「一个字一个字念出来、不连贯」，来自两处：<b>其一</b>，旧版对每个字做<b>独立</b>的时长伸缩
+    （平 1.35 / 仄 0.85 / 入 0.65 / 韵 1.65），字与字交界处语速<b>瞬间跳变</b>（最大约 2.1×），听感即一顿一顿；
+    <b>其二</b>，底样本身念得很慢（约 -38%），字间留白被放大。</p>
+    <p>下方每首诗给出六个版本：<code>旧版·逐音节阶跃</code> 是问题原貌；<code>当前·连续规整 σ45</code> 是已并入动画的修复版
+    （理想倍率沿时间高斯平滑，字间语速连续，总时长与旧版对齐）；另有三个备选档，分别从<b>收窄倍率差</b>、
+    <b>加大平滑</b>、<b>加速底样</b>三个方向进一步提升连贯度。请逐条试听，在文末给出选择。</p>
+  </div>
+
+    <section class="poem">
+      <h2>静夜思 · 李白</h2>
+      <p class="lines">床前明月光　疑是地上霜　举头望明月　低头思故乡</p>
+      <div class="grid">
+      <div class="card" data-id="plain">
+        <div class="chead">
+          <span class="vlabel">平读底样</span>
+          <span class="vtag t-plain">参照</span>
+        </div>
+        <p class="vdesc">edge 原始朗读，未做任何韵律后处理。</p>
+        <audio controls preload="none" src="../../dist/audio/voice/jys_edge_zh-CN-YunjianNeural_quatrain.wav"></audio>
+        <div class="vmeta">时长 22.012s ｜ —</div>
+      </div>
+      <div class="card" data-id="step">
+        <div class="chead">
+          <span class="vlabel">旧版 · 逐音节阶跃</span>
+          <span class="vtag t-step">问题版</span>
+        </div>
+        <p class="vdesc">每个字独立伸缩（平 1.35 / 仄 0.85 / 入 0.65 / 韵 1.65），字与字之间语速瞬间跳变——你听到的「一字一顿」就是它。</p>
+        <audio controls preload="none" src="../../dist/audio/voice/ab/jys_step.wav"></audio>
+        <div class="vmeta">时长 18.232s ｜ 逐帧最大跳变 1.1100 ｜ 音节间速度比 ×2.54（均 ×1.53）</div>
+      </div>
+      <div class="card" data-id="smooth">
+        <div class="chead">
+          <span class="vlabel">当前 · 连续规整 σ45</span>
+          <span class="vtag t-smooth">已并入动画</span>
+        </div>
+        <p class="vdesc">理想倍率沿时间做高斯平滑（σ=45ms），字间语速连续变化；平长仄短的对比保持全量。</p>
+        <audio controls preload="none" src="../../dist/audio/voice/ab/jys_smooth.wav"></audio>
+        <div class="vmeta">时长 18.187s ｜ 逐帧最大跳变 0.0493 ｜ 音节间速度比 ×2.21（均 ×1.44）</div>
+      </div>
+      <div class="card" data-id="soft">
+        <div class="chead">
+          <span class="vlabel">备选A · 对比减半 σ45</span>
+          <span class="vtag t-soft">更连贯</span>
+        </div>
+        <p class="vdesc">平长仄短对比收窄一半（factor′=1+0.5(f−1)），字长更均匀，听感更接近「说话」。</p>
+        <audio controls preload="none" src="../../dist/audio/voice/ab/jys_soft.wav"></audio>
+        <div class="vmeta">时长 17.712s ｜ 逐帧最大跳变 0.0255 ｜ 音节间速度比 ×1.51（均 ×1.20）</div>
+      </div>
+      <div class="card" data-id="soft70">
+        <div class="chead">
+          <span class="vlabel">备选B · 对比减半 σ70</span>
+          <span class="vtag t-soft70">最连贯</span>
+        </div>
+        <p class="vdesc">过渡更缓（σ=70ms）叠加对比减半；连贯度最高，吟诵腔最弱。</p>
+        <audio controls preload="none" src="../../dist/audio/voice/ab/jys_soft70.wav"></audio>
+        <div class="vmeta">时长 17.687s ｜ 逐帧最大跳变 0.0164 ｜ 音节间速度比 ×1.46（均 ×1.18）</div>
+      </div>
+      <div class="card" data-id="fast">
+        <div class="chead">
+          <span class="vlabel">备选C · 底样加速</span>
+          <span class="vtag t-fast">针对念得慢</span>
+        </div>
+        <p class="vdesc">底样减速量减半（-38% → -19%），再走当前规整。直接针对「念得太慢、拖字」这一成因。</p>
+        <audio controls preload="none" src="../../dist/audio/voice/ab/jys_fast.wav"></audio>
+        <div class="vmeta">时长 15.434s ｜ 逐帧最大跳变 0.0493 ｜ 音节间速度比 ×2.14（均 ×1.41）</div>
+      </div>
+      </div>
+    </section>
+    <section class="poem">
+      <h2>江雪 · 柳宗元</h2>
+      <p class="lines">千山鸟飞绝　万径人踪灭　孤舟蓑笠翁　独钓寒江雪</p>
+      <div class="grid">
+      <div class="card" data-id="plain">
+        <div class="chead">
+          <span class="vlabel">平读底样</span>
+          <span class="vtag t-plain">参照</span>
+        </div>
+        <p class="vdesc">edge 原始朗读，未做任何韵律后处理。</p>
+        <audio controls preload="none" src="../../dist/audio/voice/jx_edge_zh-CN-YunjianNeural_quatrain.wav"></audio>
+        <div class="vmeta">时长 23.632s ｜ —</div>
+      </div>
+      <div class="card" data-id="step">
+        <div class="chead">
+          <span class="vlabel">旧版 · 逐音节阶跃</span>
+          <span class="vtag t-step">问题版</span>
+        </div>
+        <p class="vdesc">每个字独立伸缩（平 1.35 / 仄 0.85 / 入 0.65 / 韵 1.65），字与字之间语速瞬间跳变——你听到的「一字一顿」就是它。</p>
+        <audio controls preload="none" src="../../dist/audio/voice/ab/jx_step.wav"></audio>
+        <div class="vmeta">时长 19.578s ｜ 逐帧最大跳变 0.8120 ｜ 音节间速度比 ×2.08（均 ×1.50）</div>
+      </div>
+      <div class="card" data-id="smooth">
+        <div class="chead">
+          <span class="vlabel">当前 · 连续规整 σ45</span>
+          <span class="vtag t-smooth">已并入动画</span>
+        </div>
+        <p class="vdesc">理想倍率沿时间做高斯平滑（σ=45ms），字间语速连续变化；平长仄短的对比保持全量。</p>
+        <audio controls preload="none" src="../../dist/audio/voice/ab/jx_smooth.wav"></audio>
+        <div class="vmeta">时长 19.578s ｜ 逐帧最大跳变 0.0361 ｜ 音节间速度比 ×1.95（均 ×1.43）</div>
+      </div>
+      <div class="card" data-id="soft">
+        <div class="chead">
+          <span class="vlabel">备选A · 对比减半 σ45</span>
+          <span class="vtag t-soft">更连贯</span>
+        </div>
+        <p class="vdesc">平长仄短对比收窄一半（factor′=1+0.5(f−1)），字长更均匀，听感更接近「说话」。</p>
+        <audio controls preload="none" src="../../dist/audio/voice/ab/jx_soft.wav"></audio>
+        <div class="vmeta">时长 19.328s ｜ 逐帧最大跳变 0.0183 ｜ 音节间速度比 ×1.38（均 ×1.18）</div>
+      </div>
+      <div class="card" data-id="soft70">
+        <div class="chead">
+          <span class="vlabel">备选B · 对比减半 σ70</span>
+          <span class="vtag t-soft70">最连贯</span>
+        </div>
+        <p class="vdesc">过渡更缓（σ=70ms）叠加对比减半；连贯度最高，吟诵腔最弱。</p>
+        <audio controls preload="none" src="../../dist/audio/voice/ab/jx_soft70.wav"></audio>
+        <div class="vmeta">时长 19.328s ｜ 逐帧最大跳变 0.0118 ｜ 音节间速度比 ×1.36（均 ×1.17）</div>
+      </div>
+      <div class="card" data-id="fast">
+        <div class="chead">
+          <span class="vlabel">备选C · 底样加速</span>
+          <span class="vtag t-fast">针对念得慢</span>
+        </div>
+        <p class="vdesc">底样减速量减半（-38% → -19%），再走当前规整。直接针对「念得太慢、拖字」这一成因。</p>
+        <audio controls preload="none" src="../../dist/audio/voice/ab/jx_fast.wav"></audio>
+        <div class="vmeta">时长 16.176s ｜ 逐帧最大跳变 0.0361 ｜ 音节间速度比 ×1.88（均 ×1.40）</div>
+      </div>
+      </div>
+    </section>
+    <section class="poem">
+      <h2>早发白帝城 · 李白</h2>
+      <p class="lines">朝辞白帝彩云间　千里江陵一日还　两岸猿声啼不住　轻舟已过万重山</p>
+      <div class="grid">
+      <div class="card" data-id="plain">
+        <div class="chead">
+          <span class="vlabel">平读底样</span>
+          <span class="vtag t-plain">参照</span>
+        </div>
+        <p class="vdesc">edge 原始朗读，未做任何韵律后处理。</p>
+        <audio controls preload="none" src="../../dist/audio/voice/bd_edge_zh-CN-YunjianNeural_quatrain.wav"></audio>
+        <div class="vmeta">时长 17.664s ｜ —</div>
+      </div>
+      <div class="card" data-id="step">
+        <div class="chead">
+          <span class="vlabel">旧版 · 逐音节阶跃</span>
+          <span class="vtag t-step">问题版</span>
+        </div>
+        <p class="vdesc">每个字独立伸缩（平 1.35 / 仄 0.85 / 入 0.65 / 韵 1.65），字与字之间语速瞬间跳变——你听到的「一字一顿」就是它。</p>
+        <audio controls preload="none" src="../../dist/audio/voice/ab/bd_step.wav"></audio>
+        <div class="vmeta">时长 13.671s ｜ 逐帧最大跳变 0.9400 ｜ 音节间速度比 ×2.54（均 ×1.39）</div>
+      </div>
+      <div class="card" data-id="smooth">
+        <div class="chead">
+          <span class="vlabel">当前 · 连续规整 σ45</span>
+          <span class="vtag t-smooth">已并入动画</span>
+        </div>
+        <p class="vdesc">理想倍率沿时间做高斯平滑（σ=45ms），字间语速连续变化；平长仄短的对比保持全量。</p>
+        <audio controls preload="none" src="../../dist/audio/voice/ab/bd_smooth.wav"></audio>
+        <div class="vmeta">时长 13.631s ｜ 逐帧最大跳变 0.0418 ｜ 音节间速度比 ×2.18（均 ×1.32）</div>
+      </div>
+      <div class="card" data-id="soft">
+        <div class="chead">
+          <span class="vlabel">备选A · 对比减半 σ45</span>
+          <span class="vtag t-soft">更连贯</span>
+        </div>
+        <p class="vdesc">平长仄短对比收窄一半（factor′=1+0.5(f−1)），字长更均匀，听感更接近「说话」。</p>
+        <audio controls preload="none" src="../../dist/audio/voice/ab/bd_soft.wav"></audio>
+        <div class="vmeta">时长 13.406s ｜ 逐帧最大跳变 0.0215 ｜ 音节间速度比 ×1.49（均 ×1.15）</div>
+      </div>
+      <div class="card" data-id="soft70">
+        <div class="chead">
+          <span class="vlabel">备选B · 对比减半 σ70</span>
+          <span class="vtag t-soft70">最连贯</span>
+        </div>
+        <p class="vdesc">过渡更缓（σ=70ms）叠加对比减半；连贯度最高，吟诵腔最弱。</p>
+        <audio controls preload="none" src="../../dist/audio/voice/ab/bd_soft70.wav"></audio>
+        <div class="vmeta">时长 13.401s ｜ 逐帧最大跳变 0.0138 ｜ 音节间速度比 ×1.42（均 ×1.13）</div>
+      </div>
+      <div class="card" data-id="fast">
+        <div class="chead">
+          <span class="vlabel">备选C · 底样加速</span>
+          <span class="vtag t-fast">针对念得慢</span>
+        </div>
+        <p class="vdesc">底样减速量减半（-38% → -19%），再走当前规整。直接针对「念得太慢、拖字」这一成因。</p>
+        <audio controls preload="none" src="../../dist/audio/voice/ab/bd_fast.wav"></audio>
+        <div class="vmeta">时长 12.970s ｜ 逐帧最大跳变 0.0418 ｜ 音节间速度比 ×2.15（均 ×1.32）</div>
+      </div>
+      </div>
+    </section>
+
+  <div class="verdict">
+    <h3>请裁定</h3>
+    <ol>
+      <li>「当前·连续规整 σ45」相比「旧版·逐音节阶跃」，顿挫是否已消除？</li>
+      <li>三首中哪一档最合你意？（当前 / 备选A / 备选B / 备选C）</li>
+      <li>若选「备选C·底样加速」，动画需按新时长重新对齐（我可自动重排）。</li>
+    </ol>
+  </div>
+
+  <footer>voice_ab.html　·　素材由 src/voice/voice_ab_build.py 生成　·　音频位于 dist/audio/voice/ab/</footer>
+</div>
+</body>
+</html>

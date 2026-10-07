@@ -1,0 +1,46 @@
+{
+  "poem": "早发白帝城 · 李白",
+  "poem_key": "bd",
+  "backend": "edge",
+  "voice": "zh-CN-YunjianNeural",
+  "sr": 24000,
+  "duration": 17.664,
+  "lines": [
+    {
+      "seg": "起",
+      "text": "朝辞白帝彩云间",
+      "rate": 0.8,
+      "pitch": 1.02,
+      "vol": 0.86,
+      "pre": 0.3,
+      "post": 0.8
+    },
+    {
+      "seg": "承",
+      "text": "千里江陵一日还",
+      "rate": 0.82,
+      "pitch": 1.04,
+      "vol": 0.86,
+      "pre": 0.4,
+      "post": 0.9
+    },
+    {
+      "seg": "转",
+      "text": "两岸猿声啼不住",
+      "rate": 0.84,
+      "pitch": 1.06,
+      "vol": 0.9,
+      "pre": 0.3,
+      "post": 0.9
+    },
+    {
+      "seg": "合",
+      "text": "轻舟已过万重山",
+      "rate": 0.86,
+      "pitch": 1.06,
+      "vol": 0.9,
+      "pre": 0.4,
+      "post": 1.4
+    }
+  ]
+}

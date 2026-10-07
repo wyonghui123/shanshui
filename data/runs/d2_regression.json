@@ -1,0 +1,715 @@
+{
+  "checks": [
+    {
+      "poem": "jx",
+      "check": "三远",
+      "pass": true,
+      "got": [
+        "平远",
+        "深远"
+      ],
+      "want": [
+        "平远",
+        "深远"
+      ]
+    },
+    {
+      "poem": "jx",
+      "check": "皴法",
+      "pass": true,
+      "got": [
+        "无皴"
+      ],
+      "want": [
+        "无皴"
+      ]
+    },
+    {
+      "poem": "jx",
+      "check": "留白区间含实测ρ",
+      "pass": true,
+      "got": [
+        0.78,
+        0.92
+      ],
+      "want": 0.79
+    },
+    {
+      "poem": "jx",
+      "check": "墨阶 孤舟>千山",
+      "pass": true,
+      "got": "孤舟=浓 vs 千山=清",
+      "want": "前者更深"
+    },
+    {
+      "poem": "jx",
+      "check": "墨阶 蓑笠翁>千山",
+      "pass": true,
+      "got": "蓑笠翁=浓 vs 千山=清",
+      "want": "前者更深"
+    },
+    {
+      "poem": "jx",
+      "check": "墨阶 孤舟>独钓",
+      "pass": true,
+      "got": "孤舟=浓 vs 独钓=淡",
+      "want": "前者更深"
+    },
+    {
+      "poem": "jx",
+      "check": "虚写留白 雪",
+      "pass": true,
+      "got": "留白",
+      "want": "留白"
+    },
+    {
+      "poem": "jx",
+      "check": "虚写留白 寒江",
+      "pass": true,
+      "got": "留白",
+      "want": "留白"
+    },
+    {
+      "poem": "jx",
+      "check": "负节点不画 鸟",
+      "pass": true,
+      "got": "不画",
+      "want": "不画"
+    },
+    {
+      "poem": "jx",
+      "check": "负节点不画 人踪",
+      "pass": true,
+      "got": "不画",
+      "want": "不画"
+    },
+    {
+      "poem": "jx",
+      "check": "人物尺寸 蓑笠翁",
+      "pass": true,
+      "got": "点景",
+      "want": "点景"
+    },
+    {
+      "poem": "jx",
+      "check": "极性归一无漏",
+      "pass": true,
+      "got": [],
+      "want": "[]"
+    },
+    {
+      "poem": "jx",
+      "check": "极性规范键",
+      "pass": true,
+      "got": [
+        "隐逸·渔樵",
+        "漂泊·孤立",
+        "孤守·不屈"
+      ],
+      "want": [
+        "隐逸·渔樵",
+        "孤守·不屈"
+      ]
+    },
+    {
+      "poem": "jx",
+      "check": "底色候选非空",
+      "pass": true,
+      "got": [
+        "素白",
+        "冷灰"
+      ],
+      "want": "≥1 色"
+    },
+    {
+      "poem": "jx",
+      "check": "底色候选含极性色",
+      "pass": true,
+      "got": [
+        "素白",
+        "冷灰"
+      ],
+      "want": [
+        "冷灰"
+      ]
+    },
+    {
+      "poem": "jx",
+      "check": "墨法候选非空",
+      "pass": true,
+      "got": 6,
+      "want": "≥1"
+    },
+    {
+      "poem": "jx",
+      "check": "墨法建议非空",
+      "pass": true,
+      "got": [
+        "破墨",
+        "宿墨",
+        "焦墨",
+        "积墨"
+      ],
+      "want": "≥1"
+    },
+    {
+      "poem": "jx",
+      "check": "范式默认档",
+      "pass": true,
+      "got": "水墨",
+      "want": "水墨"
+    },
+    {
+      "poem": "jx",
+      "check": "范式候选非空",
+      "pass": true,
+      "got": [
+        "水墨"
+      ],
+      "want": "≥1"
+    },
+    {
+      "poem": "jx",
+      "check": "范式色域投影非空",
+      "pass": true,
+      "got": [
+        "素白",
+        "冷灰"
+      ],
+      "want": "≥1 色"
+    },
+    {
+      "poem": "jx",
+      "check": "范式墨骨比例有效",
+      "pass": true,
+      "got": 1.0,
+      "want": "[0,1]"
+    },
+    {
+      "poem": "jx",
+      "check": "静默预算同源 G14",
+      "pass": true,
+      "got": 0.26,
+      "want": 0.26
+    },
+    {
+      "poem": "jx",
+      "check": "视点档 G7",
+      "pass": true,
+      "got": "平视",
+      "want": "平视"
+    },
+    {
+      "poem": "jx",
+      "check": "天候档 G4",
+      "pass": true,
+      "got": "雪",
+      "want": "雪"
+    },
+    {
+      "poem": "jx",
+      "check": "时辰档 G5",
+      "pass": true,
+      "got": null,
+      "want": null
+    },
+    {
+      "poem": "jx",
+      "check": "构图算子 G1",
+      "pass": true,
+      "got": "截断",
+      "want": "截断"
+    },
+    {
+      "poem": "jx",
+      "check": "钤印印面 G8",
+      "pass": true,
+      "got": "小幅",
+      "want": "小幅"
+    },
+    {
+      "poem": "jx",
+      "check": "钤印印位 G8",
+      "pass": true,
+      "got": "册页",
+      "want": "册页"
+    },
+    {
+      "poem": "jx",
+      "check": "材质系数非空 G6",
+      "pass": true,
+      "got": {
+        "纸绢": "生宣",
+        "笔": "兼毫",
+        "墨": "松烟"
+      },
+      "want": "≥1"
+    },
+    {
+      "poem": "jx",
+      "check": "笔法质量维非空 G2",
+      "pass": true,
+      "got": [
+        "气",
+        "圆",
+        "留",
+        "重",
+        "变",
+        "骨",
+        "平",
+        "筋"
+      ],
+      "want": "≥1"
+    },
+    {
+      "poem": "bd",
+      "check": "三远",
+      "pass": true,
+      "got": [
+        "高远",
+        "深远"
+      ],
+      "want": [
+        "高远",
+        "深远"
+      ]
+    },
+    {
+      "poem": "bd",
+      "check": "皴法",
+      "pass": true,
+      "got": [
+        "大斧劈",
+        "小斧劈"
+      ],
+      "want": [
+        "大斧劈",
+        "小斧劈"
+      ]
+    },
+    {
+      "poem": "bd",
+      "check": "留白区间含实测ρ",
+      "pass": true,
+      "got": [
+        0.38,
+        0.58
+      ],
+      "want": 0.52
+    },
+    {
+      "poem": "bd",
+      "check": "墨阶 轻舟>两岸",
+      "pass": true,
+      "got": "轻舟=浓 vs 两岸=重",
+      "want": "前者更深"
+    },
+    {
+      "poem": "bd",
+      "check": "墨阶 两岸>彩云",
+      "pass": true,
+      "got": "两岸=重 vs 彩云=清",
+      "want": "前者更深"
+    },
+    {
+      "poem": "bd",
+      "check": "墨阶 轻舟>万重山",
+      "pass": true,
+      "got": "轻舟=浓 vs 万重山=清",
+      "want": "前者更深"
+    },
+    {
+      "poem": "bd",
+      "check": "极性归一无漏",
+      "pass": true,
+      "got": [],
+      "want": "[]"
+    },
+    {
+      "poem": "bd",
+      "check": "极性规范键",
+      "pass": true,
+      "got": [
+        "高峻·起点",
+        "冷寂·静",
+        "轻快·自由"
+      ],
+      "want": [
+        "高峻·起点",
+        "轻快·自由",
+        "冷寂·静"
+      ]
+    },
+    {
+      "poem": "bd",
+      "check": "底色候选非空",
+      "pass": true,
+      "got": [
+        "冷灰",
+        "赭石/花青淡彩"
+      ],
+      "want": "≥1 色"
+    },
+    {
+      "poem": "bd",
+      "check": "底色候选含极性色",
+      "pass": true,
+      "got": [
+        "冷灰",
+        "赭石/花青淡彩"
+      ],
+      "want": [
+        "冷灰",
+        "赭石/花青淡彩"
+      ]
+    },
+    {
+      "poem": "bd",
+      "check": "墨法候选非空",
+      "pass": true,
+      "got": 6,
+      "want": "≥1"
+    },
+    {
+      "poem": "bd",
+      "check": "墨法建议非空",
+      "pass": true,
+      "got": [
+        "破墨",
+        "焦墨",
+        "飞白",
+        "泼墨",
+        "积墨"
+      ],
+      "want": "≥1"
+    },
+    {
+      "poem": "bd",
+      "check": "范式默认档",
+      "pass": true,
+      "got": "浅绛",
+      "want": "浅绛"
+    },
+    {
+      "poem": "bd",
+      "check": "范式候选非空",
+      "pass": true,
+      "got": [
+        "浅绛",
+        "水墨"
+      ],
+      "want": "≥1"
+    },
+    {
+      "poem": "bd",
+      "check": "范式色域投影非空",
+      "pass": true,
+      "got": [
+        "赭石",
+        "花青",
+        "汁绿"
+      ],
+      "want": "≥1 色"
+    },
+    {
+      "poem": "bd",
+      "check": "范式墨骨比例有效",
+      "pass": true,
+      "got": 0.8,
+      "want": "[0,1]"
+    },
+    {
+      "poem": "bd",
+      "check": "视点档 G7",
+      "pass": true,
+      "got": "仰视",
+      "want": "仰视"
+    },
+    {
+      "poem": "bd",
+      "check": "天候档 G4",
+      "pass": true,
+      "got": null,
+      "want": null
+    },
+    {
+      "poem": "bd",
+      "check": "时辰档 G5",
+      "pass": true,
+      "got": "晨",
+      "want": "晨"
+    },
+    {
+      "poem": "bd",
+      "check": "构图算子 G1",
+      "pass": true,
+      "got": "险峻",
+      "want": "险峻"
+    },
+    {
+      "poem": "bd",
+      "check": "钤印印面 G8",
+      "pass": true,
+      "got": "大幅",
+      "want": "大幅"
+    },
+    {
+      "poem": "bd",
+      "check": "钤印印位 G8",
+      "pass": true,
+      "got": "手卷",
+      "want": "手卷"
+    },
+    {
+      "poem": "bd",
+      "check": "材质系数非空 G6",
+      "pass": true,
+      "got": {
+        "纸绢": "生宣",
+        "笔": "兼毫",
+        "墨": "松烟"
+      },
+      "want": "≥1"
+    },
+    {
+      "poem": "bd",
+      "check": "笔法质量维非空 G2",
+      "pass": true,
+      "got": [
+        "骨",
+        "平",
+        "气",
+        "变",
+        "重"
+      ],
+      "want": "≥1"
+    },
+    {
+      "poem": "jys",
+      "check": "三远不适用",
+      "pass": true,
+      "got": [],
+      "want": "[]"
+    },
+    {
+      "poem": "jys",
+      "check": "皴法不适用",
+      "pass": true,
+      "got": [],
+      "want": "[]"
+    },
+    {
+      "poem": "jys",
+      "check": "留白区间含实测ρ",
+      "pass": true,
+      "got": [
+        0.76,
+        0.92
+      ],
+      "want": 0.78
+    },
+    {
+      "poem": "jys",
+      "check": "墨阶 床>霜",
+      "pass": true,
+      "got": "床=淡 vs 霜=清",
+      "want": "前者更深"
+    },
+    {
+      "poem": "jys",
+      "check": "极性归一无漏",
+      "pass": true,
+      "got": [],
+      "want": "[]"
+    },
+    {
+      "poem": "jys",
+      "check": "极性规范键",
+      "pass": true,
+      "got": [
+        "漂泊·孤立"
+      ],
+      "want": [
+        "漂泊·孤立"
+      ]
+    },
+    {
+      "poem": "jys",
+      "check": "底色候选非空",
+      "pass": true,
+      "got": [
+        "明净",
+        "冷灰"
+      ],
+      "want": "≥1 色"
+    },
+    {
+      "poem": "jys",
+      "check": "底色候选含极性色",
+      "pass": true,
+      "got": [
+        "明净",
+        "冷灰"
+      ],
+      "want": [
+        "冷灰"
+      ]
+    },
+    {
+      "poem": "jys",
+      "check": "墨法候选非空",
+      "pass": true,
+      "got": 6,
+      "want": "≥1"
+    },
+    {
+      "poem": "jys",
+      "check": "墨法建议非空",
+      "pass": true,
+      "got": [
+        "破墨"
+      ],
+      "want": "≥1"
+    },
+    {
+      "poem": "jys",
+      "check": "范式默认档",
+      "pass": true,
+      "got": "水墨",
+      "want": "水墨"
+    },
+    {
+      "poem": "jys",
+      "check": "范式候选非空",
+      "pass": true,
+      "got": [
+        "水墨"
+      ],
+      "want": "≥1"
+    },
+    {
+      "poem": "jys",
+      "check": "范式色域投影非空",
+      "pass": true,
+      "got": [
+        "明净",
+        "冷灰"
+      ],
+      "want": "≥1 色"
+    },
+    {
+      "poem": "jys",
+      "check": "范式墨骨比例有效",
+      "pass": true,
+      "got": 1.0,
+      "want": "[0,1]"
+    },
+    {
+      "poem": "jys",
+      "check": "视点不适用 G7",
+      "pass": true,
+      "got": false,
+      "want": false
+    },
+    {
+      "poem": "jys",
+      "check": "天候档 G4",
+      "pass": true,
+      "got": null,
+      "want": null
+    },
+    {
+      "poem": "jys",
+      "check": "时辰档 G5",
+      "pass": true,
+      "got": "夜",
+      "want": "夜"
+    },
+    {
+      "poem": "jys",
+      "check": "构图算子 G1",
+      "pass": true,
+      "got": "借景",
+      "want": "借景"
+    },
+    {
+      "poem": "jys",
+      "check": "钤印印面 G8",
+      "pass": true,
+      "got": "小幅",
+      "want": "小幅"
+    },
+    {
+      "poem": "jys",
+      "check": "钤印印位 G8",
+      "pass": true,
+      "got": "册页",
+      "want": "册页"
+    },
+    {
+      "poem": "jys",
+      "check": "材质系数非空 G6",
+      "pass": true,
+      "got": {
+        "纸绢": "生宣",
+        "笔": "兼毫",
+        "墨": "松烟"
+      },
+      "want": "≥1"
+    },
+    {
+      "poem": "jys",
+      "check": "笔法质量维非空 G2",
+      "pass": true,
+      "got": [
+        "骨",
+        "肉",
+        "气",
+        "圆",
+        "变"
+      ],
+      "want": "≥1"
+    },
+    {
+      "poem": "全局",
+      "check": "皴法谱 G10",
+      "pass": true,
+      "got": "vocab=['干擦', '折带皴', '米点皴', '雨点皴'] pool=['折带皴', '米点皴', '雨点皴']",
+      "want": "vocab⊇['干擦', '折带皴', '米点皴', '雨点皴'] 且 山石池⊇['折带皴', '米点皴', '雨点皴']"
+    },
+    {
+      "poem": "全局",
+      "check": "墨法独立 G11",
+      "pass": true,
+      "got": "宿墨μ=[0.4, 0.7] 焦墨μ=[0.1, 0.3] 泼墨μ=[1.4, 2.0]",
+      "want": "宿墨/焦墨独立立档且 μ 有效、宿墨 μ < 泼墨 μ"
+    },
+    {
+      "poem": "全局",
+      "check": "设色范式档 G3",
+      "pass": true,
+      "got": "vocab=['水墨', '没骨', '浅绛', '青绿'] rules=['P1', 'P2', 'P3']",
+      "want": "四范式齐备 + 规则 P1/P2/P3 + 色域投影键一致"
+    },
+    {
+      "poem": "全局",
+      "check": "新算子齐备 C 组",
+      "pass": true,
+      "got": "视点3 天候4 时辰4 材质8 质量维9 病5 构图8 印位5",
+      "want": "视点3 天候4 时辰4 材质8 质量维9 病5 构图8 印位5"
+    },
+    {
+      "poem": "全局",
+      "check": "时辰口径 G5",
+      "pass": true,
+      "got": "season_words含月=False time_words[月]=夜",
+      "want": "season_words 不含月 且 time_words[月]=夜"
+    }
+  ],
+  "summary": {
+    "passed": 81,
+    "total": 81,
+    "rate": 1.0,
+    "all_pass": true
+  }
+}

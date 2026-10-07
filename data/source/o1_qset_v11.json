@@ -1,0 +1,162 @@
+{
+  "meta": {
+    "id": "o1-eval-v1",
+    "name": "水墨动画忠实度评估 · 问题集（模板 + 实例）",
+    "version": "1.1",
+    "date": "2026-10-02",
+    "principle": "问题由「诗」生成，答案由「画面」给出。期望答案写在数据里，评分 = 画面答案与期望答案的一致率。",
+    "axes": {
+      "EXIST": "意象存在性 —— 诗中该有的东西，画面里有没有",
+      "ATTR": "属性 —— 浓淡／虚实／疏密／数量是否符合该意象的身份",
+      "SPATIAL": "空间关系 —— 意象之间的相对位置、景深、贴合关系",
+      "TEMPORAL": "时序 —— 出场先后、镜头连续性是否与诗句顺序一致",
+      "NEGATIVE": "负节点 —— 诗中「本该有却没有」的意象，是否确实缺席（留白检验）"
+    },
+    "basis": {
+      "poem": "期望答案直接来自诗句语义（画错了 = 不忠实于诗）",
+      "design": "期望答案来自本项目的构图／节拍设计（答错 = 画面没实现设计意图）"
+    },
+    "answer_types": ["yes_no", "choice"],
+    "scoring": {
+      "per_question": "s = 1 若作答与 expect 完全一致，否则 0",
+      "aggregate": "加权通过率 = Σ(w·s) / Σ(w)",
+      "axis_rollup": "同一 axis 内的加权通过率",
+      "failure_list": "s = 0 的题即「看不懂」的定位点；按 axis 与 basis 归类",
+      "exclude_defect": "判为「题面缺陷」的题不计入分母，单列清单 —— 否则会把工具的毛病记到画面头上"
+    },
+    "generation_rules": [
+      "STEP 2 每个「正节点」→ 1 道 EXIST（expect 是）+ 1 道 ATTR（该意象的浓淡／虚实身份）",
+      "STEP 2 每个「负节点」→ 1 道 NEGATIVE（expect 否），权重上调，因为它是本项目最独特的判据",
+      "STEP 2「虚／留白」意象 → 1 道 ATTR（用留白表现的检验），而非 EXIST，避免把「留白」误判成「缺失」",
+      "STEP 5 场景图每一条空间关系边 → 1 道 SPATIAL；构图约束（重心、地平线、留白率）各 → 1 道 SPATIAL／ATTR",
+      "STEP 7 节拍表每个出场先后关系 → 1 道 TEMPORAL；镜头结构（长镜头／定格）→ 1 道 TEMPORAL",
+      "跨通道节点（如「猿声」）→ 视觉通道记 1 道 NEGATIVE（expect 否），听觉通道不入画面题",
+      "设计额外添加、诗中无据的元素（如芦苇、船迹）→ 仍出题，但 basis=design 且权重减半"
+    ],
+    "protocol": {
+      "note": "v1.1 新增。v1.0 只写了「问什么」，没写「在哪一帧判读」，导致急推镜头改变主体位置后同一道题有两个答案。",
+      "frame_binding": "每题必须绑定判读帧（frame 字段）。构图类题默认绑在「设计意图最易读的那一帧」，而非终帧。",
+      "anno_off": "基线一律关闭「画中物标注」图层 —— 标注会直接写出意象名，使 EXIST／NEGATIVE 题失去意义。",
+      "nopoem_crosscheck": "凡负节点题与意象词重合者（「鸟」「猿」），必须以「去题诗」对照帧复核，排除诗句文字的假阳性。",
+      "pairs_for_temporal": "时序题须用成对帧或视频判读，单帧不可判（见缺陷 D7）。"
+    },
+    "probe": {
+      "note": "v1.1 新增。属性类题的答案若肉眼处于阈值附近，改由客观探针给出硬数据。",
+      "scripts": {
+        "src/o1/o1_render.mjs": "按节拍抽帧（关自动播放、定位到指定秒、关标注、可选去题诗）",
+        "src/o1/o1_probe.mjs": "对指定区域做亮度直方图 + 12×6 亮度网格（留白率、墨色分布）",
+        "src/o1/o1_probe2.mjs": "60×24 细网格墨迹图 + 最暗点定位（判定极淡笔画是否真的画出来了）",
+        "src/o1/o1_thumbs.mjs": "生成 760px 缩略图供工装页使用"
+      }
+    },
+    "known_confounds": [
+      "题诗（墨笔书法）与画面同框：诗句文字里含有意象词（如「千山」「鸟」「猿」），可能干扰 VQA 判断。已另采「去题诗」帧做对照。",
+      "「标注」图层会直接写出意象名称，会使 EXIST／NEGATIVE 题失去意义。基线一律关闭标注。",
+      "留白率 ρ 有两套口径：设计文档的值算在「构图线稿」上（jx 0.79 / bd 0.52），探针测的是「渲染后含墨晕」的帧（jx 83.1% / bd 30.7–44.1%）。两者不可直接比较（见缺陷 D4）。"
+    ]
+  },
+  "poems": [
+    {
+      "id": "jx",
+      "title": "江雪",
+      "author": "唐 · 柳宗元",
+      "form": "五言绝句 · 入声屑韵 · 折腰体",
+      "total_s": 25.0,
+      "segments": [
+        { "t": 0, "name": "起", "line": "千山鸟飞绝", "dur": 7.0 },
+        { "t": 7, "name": "承", "line": "万径人踪灭", "dur": 6.0 },
+        { "t": 13, "name": "转", "line": "孤舟蓑笠翁", "dur": 4.0 },
+        { "t": 17, "name": "合", "line": "独钓寒江雪", "dur": 8.0 }
+      ],
+      "frames": [
+        { "name": "jx_01", "t": 1.0, "label": "起 · 远山初现（孤舟未出）" },
+        { "name": "jx_02", "t": 6.5, "label": "起末 · 雪与芦苇" },
+        { "name": "jx_05", "t": 10.0, "label": "承 · 极远景全构图（万径区）" },
+        { "name": "jx_05_nopoem", "t": 10.0, "label": "承 · 去题诗对照帧" },
+        { "name": "jx_03", "t": 15.5, "label": "转 · 急推，孤舟重放落笔" },
+        { "name": "jx_04", "t": 24.3, "label": "合末 · 钓丝已成、钤印" },
+        { "name": "jx_04_nopoem", "t": 24.3, "label": "合末 · 去题诗对照帧" },
+        { "name": "jx_04_anno", "t": 24.3, "label": "合末 · 带标注（仅供核对图层，不入基线）" }
+      ],
+      "questions": [
+        { "id": "JX-E1", "axis": "EXIST", "basis": "poem", "frame": "jx_02", "q": "画面中是否出现山（远山／群山）？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "「千山」" },
+        { "id": "JX-E2", "axis": "EXIST", "basis": "poem", "frame": "jx_03", "q": "画面中是否出现一条小船？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "「孤舟」" },
+        { "id": "JX-E3", "axis": "EXIST", "basis": "poem", "frame": "jx_04", "q": "画面中是否出现人物（渔翁）？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "「蓑笠翁」" },
+        { "id": "JX-E4", "axis": "EXIST", "basis": "design", "frame": "jx_02", "q": "画面中是否出现芦苇／枯草？", "type": "yes_no", "expect": "是", "w": 0.5, "why": "构图为制造疏密对比所加，诗中无据，故权重减半" },
+        { "id": "JX-E5", "axis": "EXIST", "basis": "poem", "frame": "jx_04", "q": "画面中是否出现钓丝／钓线？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "「独钓」" },
+        { "id": "JX-E6", "axis": "EXIST", "basis": "poem", "frame": "jx_02", "q": "画面中是否出现飘落的雪？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "「雪」" },
+
+        { "id": "JX-N1", "axis": "NEGATIVE", "basis": "poem", "frame": "jx_05_nopoem", "q": "画面中是否出现飞鸟？", "type": "yes_no", "expect": "否", "w": 1.5, "why": "「千山鸟飞绝」—— 负节点，必须缺席" },
+        { "id": "JX-N2", "axis": "NEGATIVE", "basis": "poem", "frame": "jx_04", "q": "画面中是否出现除渔翁以外的第二个人？", "type": "yes_no", "expect": "否", "w": 1.5, "why": "「万径人踪灭」—— 负节点" },
+        { "id": "JX-N3", "axis": "NEGATIVE", "basis": "poem", "frame": "jx_05_nopoem", "q": "画面中是否出现人的脚印／足迹？", "type": "yes_no", "expect": "否", "w": 1.0, "why": "「人踪灭」" },
+
+        { "id": "JX-A1", "axis": "ATTR", "basis": "poem", "frame": "jx_04", "q": "全画面墨色最浓的实体是？", "type": "choice", "options": ["孤舟与蓑笠翁", "远山", "芦苇", "雪"], "expect": "孤舟与蓑笠翁", "w": 1.0, "why": "「孤舟蓑笠翁」是唯一实写焦点，浓墨" },
+        { "id": "JX-A2", "axis": "ATTR", "basis": "poem", "frame": "jx_02", "q": "远山的墨色浓淡？", "type": "choice", "options": ["很淡", "中等", "很浓"], "expect": "很淡", "w": 1.0, "why": "远景层，淡墨" },
+        { "id": "JX-A3", "axis": "ATTR", "basis": "design", "frame": "jx_02", "q": "画面整体是「大面留白」还是「画满」？", "type": "choice", "options": ["大面积留白", "大致均衡", "画得很满"], "expect": "大面积留白", "w": 1.0, "why": "留白率 ρ = 0.79" },
+        { "id": "JX-A4", "axis": "ATTR", "basis": "poem", "frame": "jx_05", "q": "江面（寒江）是否用水波／水纹描绘？", "type": "choice", "options": ["几乎不画，以留白表现", "画了少量水纹", "画满水纹"], "expect": "几乎不画，以留白表现", "w": 1.0, "why": "「寒江」为虚写，由留白承载" },
+        { "id": "JX-A5", "axis": "ATTR", "basis": "design", "frame": "jx_05_nopoem", "q": "小路（万径）在画面中是否可辨认？", "type": "choice", "options": ["清晰可见", "极淡、几乎不可见", "完全没有"], "expect": "极淡、几乎不可见", "w": 0.5, "why": "「万径」近乎虚写，仅极淡斜线暗示" },
+
+        { "id": "JX-S1", "axis": "SPATIAL", "basis": "design", "frame": "jx_02", "q": "远山位于画面的？", "type": "choice", "options": ["上部", "中部", "下部"], "expect": "上部", "w": 1.0, "why": "远景层" },
+        { "id": "JX-S2", "axis": "SPATIAL", "basis": "design", "frame": "jx_03", "q": "孤舟与蓑笠翁位于画面的？", "type": "choice", "options": ["左上", "右上", "左下", "右下"], "expect": "右下", "w": 1.0, "why": "视觉重心 (0.65, 0.69)，三七停。注意：终帧因急推落至正中，故判读帧绑 jx_03" },
+        { "id": "JX-S3", "axis": "SPATIAL", "basis": "design", "frame": "jx_02", "q": "芦苇位于画面的？", "type": "choice", "options": ["左下", "右下", "左上"], "expect": "左下", "w": 0.5, "why": "与右下焦点形成疏密对角" },
+        { "id": "JX-S4", "axis": "SPATIAL", "basis": "design", "frame": "jx_02", "q": "地平线大致在画面高度的？", "type": "choice", "options": ["上 1/3 附近", "正中", "下 1/3 附近"], "expect": "上 1/3 附近", "w": 0.5, "why": "地平线定在 0.42H，取平远" },
+        { "id": "JX-S5", "axis": "SPATIAL", "basis": "design", "frame": "jx_03", "q": "远山与孤舟的前后关系？", "type": "choice", "options": ["孤舟在前、远山在后", "远山在前、孤舟在后", "两者同一平面"], "expect": "孤舟在前、远山在后", "w": 1.0, "why": "近景焦点 vs 远景淡墨" },
+
+        { "id": "JX-T1", "axis": "TEMPORAL", "basis": "design", "frame": "jx_01+jx_03", "q": "远山是否比孤舟更早出现在画面中？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "远山 0–3.2s 淡入，孤舟 13s 后才实写" },
+        { "id": "JX-T2", "axis": "TEMPORAL", "basis": "design", "frame": "jx_03+jx_04", "q": "钓丝是否在动画后段才被画出？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "钓丝 17.2–19.2s 画出，属合段" },
+        { "id": "JX-T3", "axis": "TEMPORAL", "basis": "design", "frame": "jx_01+jx_02+jx_04", "q": "雪是否在全片多个时段都可见？", "type": "yes_no", "expect": "是", "w": 0.5, "why": "雪贯穿全片，密度随情感起伏" },
+        { "id": "JX-T4", "axis": "TEMPORAL", "basis": "design", "frame": "jx_01+jx_04", "q": "全片是否只有一个场景（无场景切换）？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "单场景，靠相机推拉分段" }
+      ]
+    },
+    {
+      "id": "bd",
+      "title": "早发白帝城",
+      "author": "唐 · 李白",
+      "form": "七言绝句 · 上平十五删（平韵） · 正格律绝",
+      "total_s": 24.0,
+      "segments": [
+        { "t": 0, "name": "起", "line": "朝辞白帝彩云间", "dur": 6.5 },
+        { "t": 6.5, "name": "承", "line": "千里江陵一日还", "dur": 5.5 },
+        { "t": 12, "name": "转", "line": "两岸猿声啼不住", "dur": 5.0 },
+        { "t": 17, "name": "合", "line": "轻舟已过万重山", "dur": 7.0 }
+      ],
+      "frames": [
+        { "name": "bd_01", "t": 1.0, "label": "起 · 白帝城初现（轻舟未出）" },
+        { "name": "bd_02", "t": 4.5, "label": "起 · 云／城／两岸／万重山／江面／轻舟齐备" },
+        { "name": "bd_03", "t": 14.5, "label": "转 · 侧掠两岸" },
+        { "name": "bd_04", "t": 23.3, "label": "合末 · 万重山飞退、钤印" },
+        { "name": "bd_04_nopoem", "t": 23.3, "label": "合末 · 去题诗对照帧" },
+        { "name": "bd_04_anno", "t": 23.3, "label": "合末 · 带标注（仅供核对图层，不入基线）" }
+      ],
+      "questions": [
+        { "id": "BD-E1", "axis": "EXIST", "basis": "poem", "frame": "bd_02", "q": "画面中是否出现一座城／城楼？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "「白帝城」" },
+        { "id": "BD-E2", "axis": "EXIST", "basis": "poem", "frame": "bd_02", "q": "画面中是否出现云？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "「彩云」" },
+        { "id": "BD-E3", "axis": "EXIST", "basis": "poem", "frame": "bd_02", "q": "画面中是否出现一条小船？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "「轻舟」" },
+        { "id": "BD-E4", "axis": "EXIST", "basis": "poem", "frame": "bd_02", "q": "画面中是否出现两侧夹峙的山壁／峡谷？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "「两岸」" },
+        { "id": "BD-E5", "axis": "EXIST", "basis": "poem", "frame": "bd_02", "q": "画面中是否出现层层叠叠的远山？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "「万重山」" },
+        { "id": "BD-E6", "axis": "EXIST", "basis": "poem", "frame": "bd_02", "q": "画面中是否出现江面／水面？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "「江陵」「一日还」的水路" },
+        { "id": "BD-E7", "axis": "EXIST", "basis": "design", "frame": "bd_04", "q": "画面中是否出现船尾拖痕／尾迹？", "type": "yes_no", "expect": "是", "w": 0.5, "why": "速度线／船迹，设计所加，诗中无据" },
+
+        { "id": "BD-N1", "axis": "NEGATIVE", "basis": "poem", "frame": "bd_04_nopoem", "q": "画面中是否出现猿／猴子？", "type": "yes_no", "expect": "否", "w": 1.5, "why": "「两岸猿声」—— 跨通道节点：听觉正、视觉负。画出猿即错" },
+        { "id": "BD-N2", "axis": "NEGATIVE", "basis": "poem", "frame": "bd_04", "q": "画面中是否出现江陵城（终点）？", "type": "yes_no", "expect": "否", "w": 1.0, "why": "「江陵」为虚 · 不可见" },
+
+        { "id": "BD-A1", "axis": "ATTR", "basis": "poem", "frame": "bd_04", "q": "全画面墨色最浓的实体是？", "type": "choice", "options": ["轻舟", "白帝城", "彩云", "两岸山壁"], "expect": "轻舟", "w": 1.0, "why": "「轻舟」是焦点，浓墨飞白" },
+        { "id": "BD-A2", "axis": "ATTR", "basis": "poem", "frame": "bd_02", "q": "云的墨色？", "type": "choice", "options": ["淡墨浅灰", "浓墨", "彩色（红黄等）"], "expect": "淡墨浅灰", "w": 1.0, "why": "「彩云」为虚 · 淡染，水墨不宜设色" },
+        { "id": "BD-A3", "axis": "ATTR", "basis": "design", "frame": "bd_02", "q": "江面水纹的疏密？", "type": "choice", "options": ["稀疏、仅数道", "中等", "密集布满"], "expect": "稀疏、仅数道", "w": 1.0, "why": "远水无波，近水仅五道，笔断意连" },
+        { "id": "BD-A4", "axis": "ATTR", "basis": "design", "frame": "bd_04", "q": "画面整体留白程度？", "type": "choice", "options": ["大面积留白", "约一半", "几乎不留白"], "expect": "约一半", "w": 1.0, "why": "留白率 ρ = 0.52，山壁压住画面" },
+
+        { "id": "BD-S1", "axis": "SPATIAL", "basis": "design", "frame": "bd_02", "q": "白帝城位于画面的？", "type": "choice", "options": ["左上", "右上", "左下", "右下", "正中"], "expect": "左上", "w": 1.0, "why": "立于左崖顶，高远" },
+        { "id": "BD-S2", "axis": "SPATIAL", "basis": "design", "frame": "bd_02", "q": "轻舟位于画面的？", "type": "choice", "options": ["左上", "左下", "右上", "右下", "正中"], "expect": "左下", "w": 1.0, "why": "视觉重心 (0.41, 0.69)" },
+        { "id": "BD-S3", "axis": "SPATIAL", "basis": "design", "frame": "bd_02", "q": "江水在画面中的走向？", "type": "choice", "options": ["从画面中央向远处纵深延伸", "横贯画面左右", "沿画面右缘垂直而下"], "expect": "从画面中央向远处纵深延伸", "w": 1.0, "why": "楔形江面，收敛于消失点" },
+        { "id": "BD-S4", "axis": "SPATIAL", "basis": "design", "frame": "bd_02", "q": "万重山与两岸山壁的关系？", "type": "choice", "options": ["万重山在两道山壁的缺口之间、层层后退", "万重山在山壁之上、位于画面顶部", "万重山覆盖在山壁之上"], "expect": "万重山在两道山壁的缺口之间、层层后退", "w": 1.0, "why": "用户曾反馈「远处的山在中间、又有两边的岸，空间很乱」——此项即该修复的检验点" },
+        { "id": "BD-S5", "axis": "SPATIAL", "basis": "design", "frame": "bd_02", "q": "两岸山壁与江面的关系？", "type": "choice", "options": ["山壁内缘即江面左右边界、紧贴无缝", "山壁与江面之间另有一条岸／滩", "江面在画面一侧、山壁在另一侧"], "expect": "山壁内缘即江面左右边界、紧贴无缝", "w": 1.0, "why": "单点透视三层结构，中间不留缝" },
+        { "id": "BD-S6", "axis": "SPATIAL", "basis": "design", "frame": "bd_02", "q": "画面视觉重心位于？", "type": "choice", "options": ["左下", "右下", "正中"], "expect": "左下", "w": 0.5, "why": "重心 (0.41, 0.69)" },
+
+        { "id": "BD-T1", "axis": "TEMPORAL", "basis": "design", "frame": "bd_01+bd_02", "q": "白帝城是否比轻舟更早出现在画面中？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "城 0.6–1.9s 淡入，舟 1.2–2.4s 淡入，城略先" },
+        { "id": "BD-T2", "axis": "TEMPORAL", "basis": "design", "frame": "bd_01+bd_03+bd_04", "q": "全片是否为连续长镜头（无场景切换）？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "平韵呼吸连贯，强制单一长镜头" },
+        { "id": "BD-T3", "axis": "TEMPORAL", "basis": "design", "frame": "bd_02+bd_04", "q": "船尾拖痕是否在动画中后段才明显拉长？", "type": "yes_no", "expect": "是", "w": 0.5, "why": "船迹 6.5–20s 渐次拉出" },
+        { "id": "BD-T4", "axis": "TEMPORAL", "basis": "design", "frame": "bd_04", "q": "相机是否贯穿全片持续向前推进（结尾无定格）？", "type": "yes_no", "expect": "是", "w": 1.0, "why": "速度单调递增至 1.86 倍，禁止定格结尾" }
+      ]
+    }
+  ]
+}

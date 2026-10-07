@@ -1,0 +1,78 @@
+{
+  "meta": {
+    "name": "o2_gold",
+    "version": "1.1",
+    "role": "人工意象层（STEP 2 意象表的机器可读版），仅用于验证 O2 自动抽取，不作为抽取输入。",
+    "source": "jiangxue_pipeline.html / baidicheng_pipeline.html 的 STEP 2 表格",
+    "gold_class_enum": ["实写", "虚写", "不可实写", "负节点-缺席", "负节点-跨通道", "动作"],
+    "note": "层级与极性是人工解读项，O2 只给词典提示；验证只比对 surface / 句 / 位置 / 类型四列。",
+    "revision": { "from": "1.0", "to": "1.1", "date": "2026-10-02", "note": "drawn_map 的 role 增加 design（诗中无据、设计所加）；jx-reed 由 imagery 改判为 design。" },
+    "design_note": "role=design 的元素为「诗中无据、设计所加」，不参与诗意忠实度核对，也不计入「画中多出」。现有：jx-reed（芦苇，为疏密对比所加）。O1 侧对应 basis=design、w=0.5 的题（JX-E4）。"
+  },
+  "poems": {
+    "jx": {
+      "title": "江雪",
+      "author": "柳宗元",
+      "form": { "name": "五言绝句", "lines": 4, "perLine": 5 },
+      "text": ["千山鸟飞绝", "万径人踪灭", "孤舟蓑笠翁", "独钓寒江雪"],
+      "rows": [
+        { "surface": "千山", "canonical": "千山", "line": 1, "span": [1, 2], "layer": "远景", "polarity": "壮阔 · 冷寂", "gold_class": "实写" },
+        { "surface": "鸟", "canonical": "鸟", "line": 1, "span": [3, 3], "layer": "远景", "polarity": "生机 → 断绝", "gold_class": "负节点-缺席", "neg_kind": "缺席" },
+        { "surface": "万径", "canonical": "万径", "line": 2, "span": [1, 2], "layer": "中景", "polarity": "人世 · 荒芜", "gold_class": "实写", "gold_note": "近乎虚写" },
+        { "surface": "人踪", "canonical": "人踪", "line": 2, "span": [3, 4], "layer": "中景", "polarity": "人事 → 湮灭", "gold_class": "负节点-缺席", "neg_kind": "缺席" },
+        { "surface": "孤舟", "canonical": "孤舟", "line": 3, "span": [1, 2], "layer": "近景", "polarity": "漂泊 · 孤立", "gold_class": "实写", "focus": true },
+        { "surface": "蓑笠翁", "canonical": "蓑笠翁", "line": 3, "span": [3, 5], "layer": "近景", "polarity": "隐逸 · 渔樵", "gold_class": "实写", "focus": true },
+        { "surface": "独钓", "canonical": "独钓", "line": 4, "span": [1, 2], "layer": "近景", "polarity": "孤守 · 不屈", "gold_class": "动作" },
+        { "surface": "寒江", "canonical": "寒江", "line": 4, "span": [3, 4], "layer": "中景", "polarity": "冷寂 · 静", "gold_class": "虚写" },
+        { "surface": "雪", "canonical": "雪", "line": 4, "span": [5, 5], "layer": "全域", "polarity": "洁净 · 覆盖", "gold_class": "虚写" }
+      ]
+    },
+    "bd": {
+      "title": "早发白帝城",
+      "author": "李白",
+      "form": { "name": "七言绝句", "lines": 4, "perLine": 7 },
+      "text": ["朝辞白帝彩云间", "千里江陵一日还", "两岸猿声啼不住", "轻舟已过万重山"],
+      "rows": [
+        { "surface": "白帝", "canonical": "白帝城", "line": 1, "span": [3, 4], "layer": "远景（高处）", "polarity": "高峻 · 起点", "gold_class": "实写", "gold_note": "点景" },
+        { "surface": "彩云", "canonical": "彩云", "line": 1, "span": [5, 6], "layer": "远景（天）", "polarity": "明丽 · 祥瑞", "gold_class": "虚写", "gold_note": "淡染" },
+        { "surface": "千里", "canonical": "千里", "line": 2, "span": [1, 2], "layer": "全域", "polarity": "遥远 · 辽廓", "gold_class": "不可实写", "gold_note": "空间量" },
+        { "surface": "江陵", "canonical": "江陵", "line": 2, "span": [3, 4], "layer": "极远", "polarity": "归处 · 目标", "gold_class": "不可实写", "gold_note": "不可见" },
+        { "surface": "一日", "canonical": "一日", "line": 2, "span": [5, 6], "layer": "全域", "polarity": "迅疾 · 时间压缩", "gold_class": "不可实写", "gold_note": "时间量" },
+        { "surface": "两岸", "canonical": "两岸", "line": 3, "span": [1, 2], "layer": "中景", "polarity": "夹峙 · 峡谷", "gold_class": "实写" },
+        { "surface": "猿声", "canonical": "猿声", "line": 3, "span": [3, 4], "layer": "中景（两侧）", "polarity": "悲（原典）→ 被超越", "gold_class": "负节点-跨通道", "neg_kind": "跨通道", "audio_positive": true },
+        { "surface": "轻舟", "canonical": "轻舟", "line": 4, "span": [1, 2], "layer": "近景", "polarity": "轻快 · 自由", "gold_class": "实写", "focus": true },
+        { "surface": "万重山", "canonical": "万重山", "line": 4, "span": [5, 7], "layer": "远景 · 层叠", "polarity": "险阻 → 被越过", "gold_class": "实写", "gold_note": "递远" }
+      ]
+    }
+  },
+  "drawn_map": {
+    "note": "画面元素 ↔ 意象的对应（据 o1_source_facts.json 的元素清单人工对齐），用于「意象↔画面」交叉核对。role: imagery=意象 / design=设计附加（诗中无据，为构图／审美所加） / setting=场景基底 / detail=渲染细节 / metadata=元数据层",
+    "jx": [
+      { "el": "jx-far", "canonical": "千山", "role": "imagery" },
+      { "el": "jx-path", "canonical": "万径", "role": "imagery" },
+      { "el": "jx-boat", "canonical": "孤舟", "role": "imagery", "with": "蓑笠翁" },
+      { "el": "jx-line", "canonical": "独钓", "role": "imagery" },
+      { "el": "jx-waterline", "canonical": "寒江", "role": "imagery" },
+      { "el": "jx-snow", "canonical": "雪", "role": "imagery" },
+      { "el": "jx-reed", "canonical": null, "role": "design", "note": "芦苇：诗中无据，为疏密对比所加 —— 裁定保留为设计附加元素，非诗意意象" },
+      { "el": "jx-anno", "canonical": null, "role": "metadata" },
+      { "el": "jx-poemink", "canonical": null, "role": "metadata" },
+      { "el": "jx-seal", "canonical": null, "role": "metadata" }
+    ],
+    "bd": [
+      { "el": "bd-city", "canonical": "白帝城", "role": "imagery" },
+      { "el": "bd-cloud", "canonical": "彩云", "role": "imagery" },
+      { "el": "bd-cliff", "canonical": "两岸", "role": "imagery" },
+      { "el": "bd-far", "canonical": "万重山", "role": "imagery" },
+      { "el": "bd-boat", "canonical": "轻舟", "role": "imagery" },
+      { "el": "bd-water", "canonical": null, "role": "setting", "note": "河道／水纹：场景基底，非意象" },
+      { "el": "bd-cun", "canonical": null, "role": "detail" },
+      { "el": "bd-mist", "canonical": null, "role": "detail" },
+      { "el": "bd-trail", "canonical": null, "role": "detail" },
+      { "el": "bd-bow", "canonical": null, "role": "detail" },
+      { "el": "bd-anno", "canonical": null, "role": "metadata" },
+      { "el": "bd-poemink", "canonical": null, "role": "metadata" },
+      { "el": "bd-seal", "canonical": null, "role": "metadata" }
+    ]
+  }
+}

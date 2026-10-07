@@ -1,0 +1,194 @@
+{
+ "poems": {
+  "jys": {
+   "lines": [
+    "床前明月光",
+    "疑是地上霜",
+    "举头望明月",
+    "低头思故乡"
+   ],
+   "detected_rhyme": "七陽",
+   "rhyme_feet_lines": [
+    1,
+    2,
+    4
+   ],
+   "patterns": [
+    "平平平仄平",
+    "平仄仄仄平",
+    "仄平◐平仄",
+    "平平◐仄平"
+   ],
+   "patterns_meter": [
+    "平平平仄平",
+    "平仄仄仄平",
+    "仄平◐平仄",
+    "平平◐仄平"
+   ],
+   "ambiguous_chars": [
+    {
+     "line": 3,
+     "col": 3,
+     "char": "望",
+     "options": [
+      "仄",
+      "平"
+     ],
+     "chosen": "平",
+     "resolved_by": null
+    },
+    {
+     "line": 4,
+     "col": 3,
+     "char": "思",
+     "options": [
+      "仄",
+      "平"
+     ],
+     "chosen": "平",
+     "resolved_by": null
+    }
+   ],
+   "mismatch_options": [],
+   "mismatch_auto": [
+    {
+     "i": 12,
+     "char": "望",
+     "manual": "oblique",
+     "manual_ze": "仄",
+     "auto_ze": "平"
+    }
+   ],
+   "unknown": []
+  },
+  "jx": {
+   "lines": [
+    "千山鸟飞绝",
+    "万径人踪灭",
+    "孤舟蓑笠翁",
+    "独钓寒江雪"
+   ],
+   "detected_rhyme": "九屑",
+   "rhyme_feet_lines": [
+    1,
+    2,
+    4
+   ],
+   "patterns": [
+    "平平仄平仄",
+    "仄仄平平仄",
+    "平平平仄平",
+    "仄仄平平仄"
+   ],
+   "patterns_meter": [
+    "平平仄平仄",
+    "仄仄平平仄",
+    "平平平仄平",
+    "仄仄平平仄"
+   ],
+   "ambiguous_chars": [],
+   "mismatch_options": [],
+   "mismatch_auto": [],
+   "unknown": []
+  },
+  "bd": {
+   "lines": [
+    "朝辞白帝彩云间",
+    "千里江陵一日还",
+    "两岸猿声啼不住",
+    "轻舟已过万重山"
+   ],
+   "detected_rhyme": "十五刪",
+   "rhyme_feet_lines": [
+    1,
+    2,
+    4
+   ],
+   "patterns": [
+    "平平仄仄仄平平",
+    "平仄平平仄仄平",
+    "仄仄平平平◐仄",
+    "◐平仄◐仄◐平"
+   ],
+   "patterns_meter": [
+    "平平仄仄仄平平",
+    "平仄平平仄仄平",
+    "仄仄平平平仄仄",
+    "◐平仄仄仄平平"
+   ],
+   "ambiguous_chars": [
+    {
+     "line": 3,
+     "col": 6,
+     "char": "不",
+     "options": [
+      "仄",
+      "平"
+     ],
+     "chosen": "平",
+     "resolved_by": null
+    },
+    {
+     "line": 4,
+     "col": 1,
+     "char": "轻",
+     "options": [
+      "仄",
+      "平"
+     ],
+     "chosen": "平",
+     "resolved_by": null
+    },
+    {
+     "line": 4,
+     "col": 4,
+     "char": "过",
+     "options": [
+      "仄",
+      "平"
+     ],
+     "chosen": "平",
+     "resolved_by": null
+    },
+    {
+     "line": 4,
+     "col": 6,
+     "char": "重",
+     "options": [
+      "仄",
+      "平"
+     ],
+     "chosen": "平",
+     "resolved_by": null
+    }
+   ],
+   "mismatch_options": [],
+   "mismatch_auto": [
+    {
+     "i": 19,
+     "char": "不",
+     "manual": "entering",
+     "manual_ze": "仄",
+     "auto_ze": "平"
+    },
+    {
+     "i": 24,
+     "char": "过",
+     "manual": "oblique",
+     "manual_ze": "仄",
+     "auto_ze": "平"
+    }
+   ],
+   "unknown": []
+  }
+ },
+ "summary": {
+  "chars_total": 68,
+  "coverage": 1.0,
+  "option_hit_rate": 1.0,
+  "auto_hit_rate": 0.9559,
+  "meter_hit_rate": 0.9853,
+  "ambiguous_chars": 8,
+  "unknown_chars": 0
+ }
+}

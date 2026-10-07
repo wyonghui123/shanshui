@@ -1,0 +1,669 @@
+{
+ "meta": {
+  "poem": "早发白帝城",
+  "pid": "bd",
+  "role": "场景几何单一真源（冻结自动画 #bd-cam）：动画与全链路静帧/线稿皆由此渲染。",
+  "source": "dist/animation/ink_animations.html#bd-cam",
+  "generated_by": "python build/scene_render.py --extract",
+  "rest_state": "相机 identity；各层显隐取终态；JS 变换（漂移/振荡/姿态）取基础位；描边取画完态（dashoffset=0）；JS 生成内容（水纹 t=0 相位 / 飘雪终态）静态复现。",
+  "note": "本文件由 --extract 从动画抽取，勿手改；改场景请改动画后重抽再 --write。"
+ },
+ "viewBox": [
+  0,
+  0,
+  900,
+  600
+ ],
+ "paper": "#F6F3EC",
+ "defs": "<filter id=\"bdEdge\" x=\"-20%\" y=\"-20%\" width=\"140%\" height=\"140%\">\n          <feTurbulence type=\"fractalNoise\" baseFrequency=\"0.016\" numOctaves=\"4\" seed=\"17\" result=\"n\"/>\n          <feDisplacementMap in=\"SourceGraphic\" in2=\"n\" scale=\"16\" xChannelSelector=\"R\" yChannelSelector=\"G\"/>\n        </filter>\n        <filter id=\"bdSoft\" x=\"-20%\" y=\"-20%\" width=\"140%\" height=\"140%\">\n          <feTurbulence type=\"fractalNoise\" baseFrequency=\"0.030\" numOctaves=\"3\" seed=\"7\" result=\"n2\"/>\n          <feDisplacementMap in=\"SourceGraphic\" in2=\"n2\" scale=\"12\" xChannelSelector=\"R\" yChannelSelector=\"G\"/>\n          <feGaussianBlur stdDeviation=\"4.2\"/>\n        </filter>\n        <filter id=\"bdGrain\" x=\"0\" y=\"0\" width=\"100%\" height=\"100%\">\n          <feTurbulence type=\"fractalNoise\" baseFrequency=\"0.85\" numOctaves=\"2\" seed=\"13\" result=\"g\"/>\n          <feColorMatrix in=\"g\" type=\"saturate\" values=\"0\"/>\n        </filter>\n        <filter id=\"bdDry\" x=\"-30%\" y=\"-30%\" width=\"160%\" height=\"160%\">\n          <feTurbulence type=\"fractalNoise\" baseFrequency=\"0.11\" numOctaves=\"3\" seed=\"21\" result=\"d\"/>\n          <feDisplacementMap in=\"SourceGraphic\" in2=\"d\" scale=\"7\" xChannelSelector=\"R\" yChannelSelector=\"G\"/>\n        </filter>\n        <linearGradient id=\"bdCloudG\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#6E6A60\" stop-opacity=\"0.22\"/>\n          <stop offset=\"100%\" stop-color=\"#6E6A60\" stop-opacity=\"0\"/>\n        </linearGradient>\n        <filter id=\"bdBoatInk\" x=\"-30%\" y=\"-30%\" width=\"160%\" height=\"160%\">\n          <feTurbulence type=\"fractalNoise\" baseFrequency=\"0.016\" numOctaves=\"4\" seed=\"17\" result=\"nb2\"/>\n          <feDisplacementMap in=\"SourceGraphic\" in2=\"nb2\" scale=\"16\" xChannelSelector=\"R\" yChannelSelector=\"G\"/>\n        </filter>\n        <linearGradient id=\"bdRiverG\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n          <stop offset=\"0%\" stop-color=\"#6E6A60\" stop-opacity=\"0.16\"/>\n          <stop offset=\"22%\" stop-color=\"#6E6A60\" stop-opacity=\"0.05\"/>\n          <stop offset=\"100%\" stop-color=\"#6E6A60\" stop-opacity=\"0.015\"/>\n        </linearGradient>\n        <linearGradient id=\"bdCliffL\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"0\">\n          <stop offset=\"0%\" stop-color=\"#4A4640\" stop-opacity=\"0.13\"/>\n          <stop offset=\"68%\" stop-color=\"#4A4640\" stop-opacity=\"0.30\"/>\n          <stop offset=\"100%\" stop-color=\"#2A2724\" stop-opacity=\"0.46\"/>\n        </linearGradient>\n        <linearGradient id=\"bdCliffR\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"0\">\n          <stop offset=\"0%\" stop-color=\"#2A2724\" stop-opacity=\"0.46\"/>\n          <stop offset=\"32%\" stop-color=\"#4A4640\" stop-opacity=\"0.30\"/>\n          <stop offset=\"100%\" stop-color=\"#4A4640\" stop-opacity=\"0.13\"/>\n        </linearGradient>\n        <clipPath id=\"bdRiverClip\">\n          <path d=\"M400 302 Q480 290 560 302 L800 600 L104 600 Z\"/>\n        </clipPath>\n        <!-- 墨笔：位移出毛边，再用细噪点做飞白 -->\n        <filter id=\"bdInk\" x=\"-18%\" y=\"-18%\" width=\"136%\" height=\"136%\">\n          <feTurbulence type=\"fractalNoise\" baseFrequency=\"0.052 0.088\" numOctaves=\"3\" seed=\"53\" result=\"it\"/>\n          <feDisplacementMap in=\"SourceGraphic\" in2=\"it\" scale=\"3.2\" xChannelSelector=\"R\" yChannelSelector=\"G\" result=\"id\"/>\n          <feTurbulence type=\"fractalNoise\" baseFrequency=\"0.70\" numOctaves=\"2\" seed=\"11\" result=\"ig\"/>\n          <feColorMatrix in=\"ig\" type=\"luminanceToAlpha\" result=\"iga\"/>\n          <feComponentTransfer in=\"iga\" result=\"igm\">\n            <feFuncA type=\"linear\" slope=\"0.5\" intercept=\"0.62\"/>\n          </feComponentTransfer>\n          <feComposite in=\"id\" in2=\"igm\" operator=\"in\"/>\n        </filter>",
+ "layers": [
+  {
+   "id": "bd-cloud",
+   "label": "彩云",
+   "filter": "bdSoft",
+   "opacity": null,
+   "clip": null,
+   "shapes": [
+    {
+     "tag": "ellipse",
+     "attrs": {
+      "cx": "330",
+      "cy": "84",
+      "rx": "210",
+      "ry": "26",
+      "fill": "url(#bdCloudG)"
+     }
+    },
+    {
+     "tag": "ellipse",
+     "attrs": {
+      "cx": "580",
+      "cy": "56",
+      "rx": "180",
+      "ry": "20",
+      "fill": "url(#bdCloudG)"
+     }
+    },
+    {
+     "tag": "ellipse",
+     "attrs": {
+      "cx": "460",
+      "cy": "118",
+      "rx": "160",
+      "ry": "15",
+      "fill": "#8A8578",
+      "opacity": "0.06"
+     }
+    }
+   ]
+  },
+  {
+   "id": "bd-city",
+   "label": "白帝城",
+   "filter": "bdEdge",
+   "opacity": null,
+   "clip": null,
+   "shapes": [
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M196 104 L214 62 L232 104 Z",
+      "fill": "#3A362F",
+      "opacity": "0.48"
+     }
+    },
+    {
+     "tag": "rect",
+     "attrs": {
+      "x": "204",
+      "y": "74",
+      "width": "20",
+      "height": "16",
+      "fill": "#2A2724",
+      "opacity": "0.58"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M198 74 L230 74",
+      "stroke": "#2A2724",
+      "stroke-width": "2.4",
+      "opacity": "0.55"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M204 90 L224 90",
+      "stroke": "#2A2724",
+      "stroke-width": "1.2",
+      "opacity": "0.32"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M176 108 L252 108",
+      "stroke": "#2A2724",
+      "stroke-width": "1.4",
+      "opacity": "0.22"
+     }
+    }
+   ]
+  },
+  {
+   "id": "bd-far",
+   "label": "万重山",
+   "filter": "bdEdge",
+   "opacity": null,
+   "clip": null,
+   "shapes": [
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M300 304 L372 168 L432 236 L500 130 L576 218 L648 304 Z",
+      "fill": "#6E6A60",
+      "opacity": "0.09"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M318 304 L388 200 L444 254 L512 172 L584 242 L652 304 Z",
+      "fill": "#5A564D",
+      "opacity": "0.12"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M338 304 L404 228 L462 272 L534 204 L602 268 L660 304 Z",
+      "fill": "#3A362F",
+      "opacity": "0.14"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M356 306 L420 250 L480 288 L552 240 L614 300 Z",
+      "fill": "#2A2724",
+      "opacity": "0.15"
+     }
+    }
+   ]
+  },
+  {
+   "id": "bd-river",
+   "label": "江水",
+   "filter": null,
+   "opacity": null,
+   "clip": null,
+   "shapes": [
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M400 302 Q480 290 560 302 L800 600 L104 600 Z",
+      "fill": "#FAF8F3"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M400 302 Q480 290 560 302 L800 600 L104 600 Z",
+      "fill": "url(#bdRiverG)"
+     }
+    }
+   ]
+  },
+  {
+   "id": "bd-cliff",
+   "label": "两岸山壁",
+   "filter": "bdEdge",
+   "opacity": null,
+   "clip": null,
+   "shapes": [
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M0 0 L0 600 L104 600 L400 302 L330 236 L366 152 L318 78 L352 0 Z",
+      "fill": "url(#bdCliffL)"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M900 0 L900 600 L800 600 L560 302 L630 238 L594 154 L642 80 L608 0 Z",
+      "fill": "url(#bdCliffR)"
+     }
+    }
+   ]
+  },
+  {
+   "id": "bd-cun",
+   "label": "斧劈皴",
+   "filter": "bdDry",
+   "opacity": "0.30",
+   "clip": null,
+   "shapes": [
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M96 66 L150 186",
+      "stroke-width": "2.2"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M140 140 L192 254",
+      "stroke-width": "1.6"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M84 300 L136 420",
+      "stroke-width": "2.2"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M126 396 L170 512",
+      "stroke-width": "1.6"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M804 66 L750 186",
+      "stroke-width": "2.2"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M760 140 L708 254",
+      "stroke-width": "1.6"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M816 300 L764 420",
+      "stroke-width": "2.2"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M774 396 L730 512",
+      "stroke-width": "1.6"
+     }
+    }
+   ]
+  },
+  {
+   "id": "bd-mist",
+   "label": "峡口雾",
+   "filter": null,
+   "opacity": "1",
+   "clip": null,
+   "shapes": [
+    {
+     "tag": "ellipse",
+     "attrs": {
+      "cx": "486",
+      "cy": "318",
+      "rx": "180",
+      "ry": "26",
+      "fill": "#F6F3EC",
+      "opacity": "0.80",
+      "filter": "url(#bdSoft)"
+     }
+    },
+    {
+     "tag": "ellipse",
+     "attrs": {
+      "cx": "368",
+      "cy": "336",
+      "rx": "110",
+      "ry": "20",
+      "fill": "#F6F3EC",
+      "opacity": "0.55",
+      "filter": "url(#bdSoft)"
+     }
+    }
+   ]
+  },
+  {
+   "id": "bd-water",
+   "label": "水纹",
+   "filter": null,
+   "opacity": null,
+   "clip": "bdRiverClip",
+   "shapes": [
+    {
+     "tag": "path",
+     "attrs": {
+      "fill": "none",
+      "stroke": "#3A362F",
+      "stroke-linecap": "round",
+      "stroke-width": "1.01",
+      "opacity": "0.098",
+      "d": "M362.3 409.1 Q385.1 411.1 407.9 409.1M468.3 409.1 Q483.7 412.0 499.1 409.1M550.0 409.1 Q566.7 414.4 583.4 409.1"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "fill": "none",
+      "stroke": "#3A362F",
+      "stroke-linecap": "round",
+      "stroke-width": "1.46",
+      "opacity": "0.145",
+      "d": "M282.6 464.9 Q299.5 468.5 316.4 464.9M421.7 464.9 Q438.9 471.9 456.1 464.9M539.7 464.9 Q566.3 458.0 592.9 464.9"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "fill": "none",
+      "stroke": "#3A362F",
+      "stroke-linecap": "round",
+      "stroke-width": "1.91",
+      "opacity": "0.194",
+      "d": "M264.9 502.8 Q281.2 499.4 297.4 502.8M392.9 502.8 Q417.2 508.4 441.5 502.8M462.7 502.8 Q478.5 495.0 494.3 502.8M618.9 502.8 Q646.4 496.1 673.9 502.8"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "fill": "none",
+      "stroke": "#3A362F",
+      "stroke-linecap": "round",
+      "stroke-width": "2.47",
+      "opacity": "0.251",
+      "d": "M263.4 548.2 Q281.3 541.3 299.2 548.2M389.2 548.2 Q418.5 545.2 447.7 548.2M515.3 548.2 Q536.6 557.1 557.9 548.2M609.9 548.2 Q637.8 556.3 665.7 548.2"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "fill": "none",
+      "stroke": "#3A362F",
+      "stroke-linecap": "round",
+      "stroke-width": "3.14",
+      "opacity": "0.293",
+      "d": "M212.1 591.4 Q248.2 582.7 284.4 591.4M403.1 591.4 Q430.6 599.2 458.1 591.4M582.6 591.4 Q618.8 600.9 655.0 591.4"
+     }
+    }
+   ]
+  },
+  {
+   "id": "bd-trail",
+   "label": "拖尾",
+   "filter": null,
+   "opacity": null,
+   "clip": "bdRiverClip",
+   "shapes": [
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M330 492 Q272 500 218 505",
+      "fill": "none",
+      "stroke": "#1C1C1C",
+      "stroke-width": "2.6",
+      "opacity": "0.26",
+      "filter": "url(#bdDry)",
+      "pathLength": "100",
+      "stroke-dasharray": "100 100",
+      "stroke-dashoffset": "0"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M334 482 Q286 487 244 490",
+      "fill": "none",
+      "stroke": "#1C1C1C",
+      "stroke-width": "1.4",
+      "opacity": "0.18",
+      "filter": "url(#bdDry)",
+      "pathLength": "100",
+      "stroke-dasharray": "100 100",
+      "stroke-dashoffset": "0"
+     }
+    }
+   ]
+  },
+  {
+   "id": "bd-boat",
+   "label": "轻舟",
+   "filter": "bdBoatInk",
+   "opacity": null,
+   "clip": null,
+   "shapes": [
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M300 486 Q356 508 412 486 Q382 500 356 500 Q330 500 300 486 Z",
+      "fill": "#1C1C1C",
+      "opacity": "0.90"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M330 471 Q356 457 382 471 Z",
+      "fill": "#1C1C1C",
+      "opacity": "0.92"
+     }
+    },
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M324 472 L388 472",
+      "stroke": "#1C1C1C",
+      "stroke-width": "1.7",
+      "opacity": "0.64",
+      "stroke-linecap": "round"
+     }
+    }
+   ]
+  },
+  {
+   "id": "bd-bow",
+   "label": "船头破水",
+   "filter": null,
+   "opacity": null,
+   "clip": null,
+   "shapes": [
+    {
+     "tag": "path",
+     "attrs": {
+      "d": "M412 490 Q440 500 462 512",
+      "fill": "none",
+      "stroke": "#3A362F",
+      "stroke-width": "1.4",
+      "opacity": "0.32",
+      "filter": "url(#bdDry)",
+      "pathLength": "100",
+      "stroke-dasharray": "100 100",
+      "stroke-dashoffset": "0"
+     }
+    }
+   ]
+  },
+  {
+   "id": "bd-anno",
+   "label": "画中物标注",
+   "filter": null,
+   "opacity": "0",
+   "clip": null,
+   "shapes": [
+    {
+     "tag": "line",
+     "attrs": {
+      "x1": "362",
+      "y1": "86",
+      "x2": "362",
+      "y2": "70"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "cx": "362",
+      "cy": "86",
+      "r": "2.4"
+     }
+    },
+    {
+     "tag": "text",
+     "attrs": {
+      "x": "362",
+      "y": "64",
+      "text-anchor": "middle"
+     },
+     "text": "彩云"
+    },
+    {
+     "tag": "line",
+     "attrs": {
+      "x1": "214",
+      "y1": "92",
+      "x2": "158",
+      "y2": "62"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "cx": "214",
+      "cy": "92",
+      "r": "2.4"
+     }
+    },
+    {
+     "tag": "text",
+     "attrs": {
+      "x": "152",
+      "y": "56",
+      "text-anchor": "end"
+     },
+     "text": "白帝城"
+    },
+    {
+     "tag": "line",
+     "attrs": {
+      "x1": "500",
+      "y1": "140",
+      "x2": "526",
+      "y2": "164"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "cx": "500",
+      "cy": "140",
+      "r": "2.4"
+     }
+    },
+    {
+     "tag": "text",
+     "attrs": {
+      "x": "532",
+      "y": "170",
+      "text-anchor": "start"
+     },
+     "text": "万重山"
+    },
+    {
+     "tag": "line",
+     "attrs": {
+      "x1": "120",
+      "y1": "400",
+      "x2": "94",
+      "y2": "376"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "cx": "120",
+      "cy": "400",
+      "r": "2.4"
+     }
+    },
+    {
+     "tag": "text",
+     "attrs": {
+      "x": "88",
+      "y": "370",
+      "text-anchor": "end"
+     },
+     "text": "两岸山壁"
+    },
+    {
+     "tag": "line",
+     "attrs": {
+      "x1": "520",
+      "y1": "430",
+      "x2": "554",
+      "y2": "414"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "cx": "520",
+      "cy": "430",
+      "r": "2.4"
+     }
+    },
+    {
+     "tag": "text",
+     "attrs": {
+      "x": "560",
+      "y": "410",
+      "text-anchor": "start"
+     },
+     "text": "江水"
+    },
+    {
+     "tag": "line",
+     "attrs": {
+      "x1": "356",
+      "y1": "470",
+      "x2": "356",
+      "y2": "448"
+     }
+    },
+    {
+     "tag": "circle",
+     "attrs": {
+      "cx": "356",
+      "cy": "470",
+      "r": "2.4"
+     }
+    },
+    {
+     "tag": "text",
+     "attrs": {
+      "x": "356",
+      "y": "442",
+      "text-anchor": "middle"
+     },
+     "text": "轻舟"
+    }
+   ]
+  }
+ ],
+ "seal": {
+  "attrs": {
+   "id": "bd-seal",
+   "opacity": "1"
+  },
+  "shapes": [
+   {
+    "tag": "rect",
+    "attrs": {
+     "x": "830",
+     "y": "522",
+     "width": "26",
+     "height": "44",
+     "rx": "4",
+     "fill": "#A83A2C",
+     "opacity": "0.86"
+    }
+   },
+   {
+    "tag": "text",
+    "attrs": {
+     "x": "843",
+     "y": "539",
+     "font-size": "18",
+     "fill": "#F6F3EC",
+     "font-family": "PoemSeal, Songti SC, serif",
+     "text-anchor": "middle"
+    },
+    "text": "白"
+   },
+   {
+    "tag": "text",
+    "attrs": {
+     "x": "843",
+     "y": "562",
+     "font-size": "18",
+     "fill": "#F6F3EC",
+     "font-family": "PoemSeal, Songti SC, serif",
+     "text-anchor": "middle"
+    },
+    "text": "帝"
+   }
+  ]
+ }
+}

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>配音深化研究 · 情感 · 抑扬顿挫 · 性别匹配</title>
+<style>
+  :root {
+    --paper: #F6F3EC;
+    --paper-2: #FFFFFF;
+    --ink: #1C1C1C;
+    --ink-2: #4A4640;
+    --ink-3: #8A8578;
+    --line: rgba(28, 28, 28, 0.14);
+    --line-2: rgba(28, 28, 28, 0.07);
+    --zhu: #A83A2C;
+    --zhu-soft: rgba(168, 58, 44, 0.10);
+    --qing: #3E5C76;
+    --qing-soft: rgba(62, 92, 118, 0.10);
+    --jin: #B08430;
+    --jin-soft: rgba(176, 132, 48, 0.10);
+    --serif: "Songti SC", "STSong", "SimSun", "Noto Serif SC", Georgia, serif;
+    --sans: "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--sans); font-size: 14px; line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1020px; margin: 0 auto; padding: 56px 32px 96px; }
+
+  header { border-bottom: 1px solid var(--line); padding-bottom: 32px; margin-bottom: 44px; }
+  .eyebrow { font-size: 12px; letter-spacing: .22em; color: var(--ink-3); text-transform: uppercase; margin-bottom: 18px; }
+  h1 { font-family: var(--serif); font-size: 31px; font-weight: 600; margin: 0 0 8px; letter-spacing: .03em; }
+  .sub { color: var(--ink-3); font-size: 13px; margin-bottom: 24px; }
+  .meta-line {
+    font-size: 12.5px; color: var(--ink-3); border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line); padding: 10px 0; letter-spacing: .03em;
+  }
+
+  section { margin-bottom: 50px; }
+  .sec-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 8px; }
+  .sec-no {
+    font-family: var(--mono); font-size: 12px; color: var(--zhu);
+    border: 1px solid rgba(168,58,44,.32); border-radius: 4px; padding: 1px 7px; flex: none;
+  }
+  h2 { font-family: var(--serif); font-size: 21px; font-weight: 600; margin: 0; letter-spacing: .02em; }
+  .sec-note { color: var(--ink-3); font-size: 12.5px; margin: 0 0 20px; }
+  h3 { font-size: 14px; font-weight: 600; margin: 24px 0 10px; }
+  h4 { font-size: 13px; font-weight: 600; margin: 18px 0 8px; color: var(--ink-2); }
+
+  .card {
+    background: var(--paper-2); border: 1px solid var(--line-2);
+    border-radius: 10px; padding: 20px 24px; margin-bottom: 14px;
+  }
+  .card.warn { border-left: 3px solid var(--jin); }
+  .card.hard { border-left: 3px solid var(--zhu); }
+
+  .verdict {
+    display: flex; gap: 12px; align-items: flex-start;
+    background: var(--paper-2); border: 1px solid var(--line-2);
+    border-left: 3px solid var(--qing); border-radius: 8px; padding: 14px 18px; margin: 14px 0;
+  }
+  .verdict .v-label { font-family: var(--mono); font-size: 11px; color: var(--qing); flex: none; padding-top: 3px; white-space: nowrap; }
+  .verdict p { margin: 0; font-size: 13.5px; }
+  .verdict.warn { border-left-color: var(--jin); }
+  .verdict.warn .v-label { color: var(--jin); }
+  .verdict.hard { border-left-color: var(--zhu); }
+  .verdict.hard .v-label { color: var(--zhu); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 10px 0 6px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line-2); vertical-align: top; }
+  th { font-weight: 600; font-size: 11.5px; color: var(--ink-3); letter-spacing: .05em; border-bottom: 1px solid var(--line); }
+  tbody tr:last-child td { border-bottom: none; }
+  td.num, th.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .ok { color: var(--qing); font-weight: 600; }
+  .bad { color: var(--zhu); font-weight: 600; }
+  .mid { color: var(--jin); font-weight: 600; }
+  .cite { color: var(--ink-3); font-size: 11px; font-family: var(--mono); }
+  code { font-family: var(--mono); font-size: 12px; background: rgba(28,28,28,.05); padding: 1px 5px; border-radius: 4px; }
+
+  ul { margin: 8px 0; padding-left: 22px; }
+  li { margin-bottom: 6px; }
+  .pill {
+    display: inline-block; font-size: 11px; padding: 1px 8px; border-radius: 999px;
+    border: 1px solid var(--line); color: var(--ink-3); margin-right: 6px; vertical-align: 1px;
+  }
+  .pill.cn { color: var(--qing); border-color: rgba(62,92,118,.35); background: var(--qing-soft); }
+  .pill.ss { color: var(--jin); border-color: rgba(176,132,48,.40); background: var(--jin-soft); }
+  .pill.un { color: var(--ink-3); }
+
+  .gap-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 8px; }
+  @media (max-width: 820px) { .gap-grid { grid-template-columns: 1fr; } }
+  .gap {
+    background: var(--paper-2); border: 1px solid var(--line-2); border-radius: 10px; padding: 16px 18px;
+  }
+  .gap .g-title { font-family: var(--serif); font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .gap .g-status { font-family: var(--mono); font-size: 11px; margin-bottom: 8px; }
+  .gap p { font-size: 12.5px; color: var(--ink-2); margin: 0; line-height: 1.7; }
+  .gap .g-ok { color: var(--qing); }
+  .gap .g-mid { color: var(--jin); }
+  .gap .g-bad { color: var(--zhu); }
+
+  .layer { border: 1px solid var(--line-2); border-radius: 10px; padding: 16px 20px; margin-bottom: 12px; background: var(--paper-2); }
+  .layer-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+  .layer-tag { font-family: var(--mono); font-size: 12px; font-weight: 600; }
+  .layer-head h4 { margin: 0; font-size: 14px; }
+  .layer p { margin: 5px 0; font-size: 13px; }
+  .layer .pros { color: var(--qing); }
+  .layer .cons { color: var(--zhu); }
+
+  .src-list { font-size: 12px; color: var(--ink-2); }
+  .src-list li { margin-bottom: 5px; word-break: break-all; }
+  .src-list .n { font-family: var(--mono); color: var(--zhu); }
+
+  blockquote {
+    margin: 14px 0; padding: 12px 18px; border-left: 3px solid var(--line);
+    background: rgba(28,28,28,.03); font-family: var(--serif); font-size: 14px; color: var(--ink-2);
+  }
+  blockquote .src { display: block; margin-top: 6px; font-size: 12px; color: var(--ink-3); font-family: var(--sans); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Research · 配音深化 · 2026-10-02</div>
+  <h1>配音深化研究：情感 · 抑扬顿挫 · 性别匹配</h1>
+  <p class="sub">针对《静夜思》配音原型「无情感、无抑扬顿挫、性别未定」三个缺口的专项技术研究</p>
+  <div class="meta-line">方法：三条并行证据线（韵律控制技术路径 · 性别与音色语义 · 工程落地与成本）→ 交叉验证 → 落地建议。置信标注：[CONFIRMED] 多源 / [SINGLE-SOURCE] 单源 / [unverified] 未核实。</div>
+</header>
+
+<!-- ============ 摘要 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">摘要</span><h2>三个缺口的诊断结论</h2></div>
+  <p class="sec-note">三条缺口的可解程度差别很大——一个易解、一个半解、一个触及行业天花板。</p>
+  <div class="gap-grid">
+    <div class="gap">
+      <div class="g-title">情感</div>
+      <div class="g-status g-ok">● 可解</div>
+      <p>商业 TTS 已成熟。Azure <code>mstts:express-as</code>、MiniMax <code>emotion</code>、CosyVoice <code>instruct</code> 都提供情感风格，且可做到<b>逐句</b>指定——足以表达《静夜思》的起承转合。</p>
+    </div>
+    <div class="gap">
+      <div class="g-title">抑扬顿挫</div>
+      <div class="g-status g-mid">● 半解（句级可，逐字难）</div>
+      <p><b>句级</b>起伏现成可用（Azure SSML 的 pitch/contour/break/emphasis）；但<b>逐字平仄</b>——五言诗每个字单独定音高与时长——没有任何商用 API 支持。</p>
+    </div>
+    <div class="gap">
+      <div class="g-title">性别匹配</div>
+      <div class="g-status g-ok">● 可解</div>
+      <p>男声资源充足，且 Azure 有专门的中文「诗人」风格男声（<code>Yunyi</code> 的 <code>poet</code> style）。性别语义上「第一人称诗宜用诗人自己的声音」成立。</p>
+    </div>
+  </div>
+
+  <div class="verdict hard"><span class="v-label">关键约束</span><p><b>「逐字抑扬顿挫」是当前行业天花板。</b>Azure 官方文档明确说明：pitch contour「不适用于单个单词和短短语，建议在整句或长短语上调整」。也就是说，市面上最完整的韵律控制 API，也无法直接给五言诗的每个字指定平仄音高。<span class="cite">[cite:2]</span></p></div>
+  <div class="verdict"><span class="v-label">诊断</span><p>原型的扁平听感<b>不是参数没调好，而是架构天花板</b>：Web Speech API 的 <code>SpeechSynthesisUtterance</code> 只暴露 rate / pitch / volume 三个整句级属性，且不支持自定义 SSML（不支持的标签会被剥离）。<span class="cite">[cite:1]</span></p></div>
+</section>
+
+<!-- ============ 1 诊断 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">01</span><h2>诊断：为什么原型的听感是扁平的</h2></div>
+  <div class="card hard">
+    <h3>Web Speech API 的能力边界</h3>
+    <table>
+      <thead><tr><th>能力</th><th>支持情况</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>语速 rate</td><td class="mid">整句级</td><td>一个 utterance 一个值</td></tr>
+        <tr><td>音高 pitch</td><td class="mid">整句级</td><td>同上，无法逐字变化</td></tr>
+        <tr><td>音量 volume</td><td class="mid">整句级</td><td>同上</td></tr>
+        <tr><td>停顿 / 重音</td><td class="bad">不支持</td><td>无 <code>&lt;break&gt;</code> / <code>&lt;emphasis&gt;</code></td></tr>
+        <tr><td>情感风格</td><td class="bad">不支持</td><td>无 style / emotion 参数</td></tr>
+        <tr><td>SSML</td><td class="bad">实质不支持</td><td>MDN：可传 SSML 文本，但不支持的标签会被<b>剥离</b><span class="cite">[cite:1]</span></td></tr>
+      </tbody>
+    </table>
+    <p class="sec-note" style="margin-top:10px">结论：原型只能做「四句之间语速/音高略有差异」，做不到句内的起伏，也做不到情感着色。要突破，必须离开 Web Speech API。<span class="pill cn">CONFIRMED</span></p>
+  </div>
+</section>
+
+<!-- ============ 2 情感 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">02</span><h2>缺口一：情感 — 可解，且可逐句</h2></div>
+  <p class="sec-note">情感控制已成熟，关键在于粒度：句级情感足以支撑《静夜思》的起承转合。</p>
+  <div class="card">
+    <h3>可用的情感控制接口</h3>
+    <table>
+      <thead><tr><th>平台</th><th>接口</th><th>可用风格（节选）</th><th class="num">粒度</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>Azure</b></td>
+          <td><code>mstts:express-as style=...</code></td>
+          <td><code>poetry-reading</code>、<code>sad</code>、<code>sentimental</code>、<code>lonely</code>、<code>whispering</code>、<code>empathetic</code>、<code>depressed</code>、<code>serious</code>、<code>narration-relaxed</code></td>
+          <td class="num ok">句 / 段级</td>
+        </tr>
+        <tr>
+          <td><b>MiniMax</b></td>
+          <td><code>emotion</code> 参数</td>
+          <td><code>happy</code>、<code>sad</code>、<code>angry</code>、<code>fearful</code>、<code>disgusted</code>、<code>surprised</code>、<code>calm</code></td>
+          <td class="num mid">utterance 级</td>
+        </tr>
+        <tr>
+          <td><b>CosyVoice</b></td>
+          <td><code>instruct</code> 文本指令</td>
+          <td>如「你正在进行诗歌朗诵，你说话的情感是 neutral」；v3-flash 男声支持 sad / fearful / happy 等</td>
+          <td class="num ok">句级（指令式）</td>
+        </tr>
+        <tr>
+          <td><b>ElevenLabs v3</b></td>
+          <td>audio tags</td>
+          <td><code>[sighs]</code>、<code>[whispers]</code>、<code>[sad]</code>、<code>[slow]</code>、<code>[pauses]</code></td>
+          <td class="num mid">标签级（定性）</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="sec-note" style="margin-top:10px">Azure 与 CosyVoice 支持把风格标签<b>分别套在每一句上</b>，因此《静夜思》可以做「起句 neutral → 承句 lonely/sad → 转句稍扬 → 合句 sad/depressed」的句级情感弧。<span class="cite">[cite:2][cite:3][cite:5][cite:10]</span></p>
+  </div>
+  <div class="card warn">
+    <h3>已知风险</h3>
+    <p>有社区报告称 Azure 中文语音的 <code>mstts:express-as</code> styles 与副语言标签在部分音色下可能「无论怎么设输出都一样」，且部分标签未生效。这是<b>社区报告而非官方定论</b>，但意味着情感风格<b>必须逐音色实测</b>，不能只看文档列表。<span class="cite">[cite:2]</span></p>
+  </div>
+</section>
+
+<!-- ============ 3 抑扬顿挫 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">03</span><h2>缺口二：抑扬顿挫 — 句级可解，逐字触顶</h2></div>
+  <p class="sec-note">这是三个缺口里最难的一个。必须先区分两个不同层次的「抑扬顿挫」。</p>
+
+  <div class="card">
+    <h3>先把问题拆开：两种抑扬顿挫</h3>
+    <table>
+      <thead><tr><th>层次</th><th>含义</th><th>技术需求</th><th>现成可用？</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>句级起伏</b></td>
+          <td>四句之间有高低、快慢、轻重、停顿的变化</td>
+          <td>句级 pitch / rate / break / emphasis</td>
+          <td class="ok">✓ Azure SSML 完整支持</td>
+        </tr>
+        <tr>
+          <td><b>逐字平仄</b></td>
+          <td>五言诗每个字按平仄单独定音高与时长（平长仄短、句末拖腔、入声短促）</td>
+          <td>每字 pitch + duration 独立控制</td>
+          <td class="bad">✗ 无商用 API 支持</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="sec-note" style="margin-top:10px">你听到的「没有抑扬顿挫」，一部分是原型连<b>句级起伏</b>都没有（Web Speech API 限制）；另一部分——真正意义上的「韵味」——属于<b>逐字平仄</b>，那是另一道门槛。</p>
+  </div>
+
+  <div class="card hard">
+    <h3>天花板在哪里：Azure contour 的官方限制</h3>
+    <blockquote>
+      「Pitch contour doesn't work on single words and short phrases. It's recommended to adjust the pitch contour on whole sentences or long phrases.」
+      <span class="src">— Azure 语音合成 SSML 文档 <span class="cite">[cite:2]</span></span>
+    </blockquote>
+    <p>Azure 的 <code>&lt;prosody contour="(0%,+20Hz) (10%,-2st) (40%,+10Hz)"&gt;</code> 是<b>目前商用 API 中最接近「抑扬顿挫」的能力</b>——它能沿时间轴画出音高曲线。但官方明确说它只对整句/长短语有效，<b>不能对单个字生效</b>。因此无法直接写出「床（+2st）前（0）明（+1st）月（-3st）光（+4st，拖长）」这样的逐字平仄谱。<span class="pill cn">CONFIRMED</span></p>
+  </div>
+
+  <div class="card">
+    <h3>逐字平仄的三条可能路径</h3>
+    <table>
+      <thead><tr><th>路径</th><th>做法</th><th>可行性</th><th>风险</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>A. 逐字合成 + 拼接</b></td>
+          <td>把每个字单独合成（各自指定 pitch/rate），再按平仄时长拼接</td>
+          <td class="mid">工程可行</td>
+          <td>字间过渡生硬、气息断裂，可能比扁平更难听</td>
+        </tr>
+        <tr>
+          <td><b>B. 后处理改韵律</b></td>
+          <td>先合成整句，再用声学工具（如 Praat / WORLD 声码器）改写音高与时长曲线</td>
+          <td class="mid">技术可行</td>
+          <td>需自研工具链；处理不当会产生机械感/颤音伪影</td>
+        </tr>
+        <tr>
+          <td><b>C. 诗歌专用合成模型</b></td>
+          <td>用 Intoner（Chinese Poetry Intoning Synthesis，IJCAI 2025）这类从格律出发、字符级控制旋律与时长的扩散模型</td>
+          <td class="bad">最对口但不可用</td>
+          <td>仍是研究论文，未开放为 API 或可下载模型<span class="cite">[cite:4]</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="sec-note" style="margin-top:10px">ChatTTS 的 <code>[break_0-7]</code> / <code>[oral_0-9]</code> 只能控制停顿与口语化程度，不涉及音高，不能承担平仄。<span class="cite">[cite:16]</span></p>
+  </div>
+
+  <div class="verdict warn"><span class="v-label">判断</span><p><b>句级抑扬顿挫</b>：现成可用，Azure SSML 即可做到，配合逐句情感标签，已能明显改善听感。<b>逐字平仄</b>：没有任何开箱方案——要么自研后处理（路径 B，风险中等），要么等 Intoner 类模型开源，要么改用<b>真人吟诵采样</b>（唯一真正有「韵味」的来源）。</p></div>
+</section>
+
+<!-- ============ 4 性别 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">04</span><h2>缺口三：性别与音色匹配</h2></div>
+  <p class="sec-note">男声资源充足；关键不是「有没有男声」，而是「哪种气质的男声配得上留白的人物」。</p>
+
+  <div class="card">
+    <h3>中文男声候选（含情感风格）</h3>
+    <table>
+      <thead><tr><th>平台</th><th>音色</th><th>可用风格 / 气质</th><th>与《静夜思》的匹配度</th></tr></thead>
+      <tbody>
+        <tr>
+          <td rowspan="4"><b>Azure</b></td>
+          <td><code>zh-CN-Yunyi:DragonHDFlashLatestNeural</code></td>
+          <td><b><code>poet</code></b>、game-narrator、captain、cavalier、geomancer</td>
+          <td class="ok">最高——唯一带「诗人」风格的音色</td>
+        </tr>
+        <tr>
+          <td><code>zh-CN-Yunhan:DragonHDFlashLatestNeural</code></td>
+          <td><code>sad</code>、<code>lonely</code>、<code>whispering</code>、<code>empathetic</code>、<code>tired</code></td>
+          <td class="ok">很高——孤独 + 低语，正是静夜气质</td>
+        </tr>
+        <tr>
+          <td><code>zh-CN-YunxiNeural</code></td>
+          <td><code>narration-relaxed</code>、<code>sad</code>、<code>depressed</code>、<code>serious</code></td>
+          <td class="mid">中——通用旁白，偏平实</td>
+        </tr>
+        <tr>
+          <td><code>zh-CN-YunzeNeural</code></td>
+          <td><code>sad</code>、<code>serious</code>、<code>depressed</code>、<code>documentary-narration</code>（SeniorMale）</td>
+          <td class="mid">中——偏年长，可用但易「过老」</td>
+        </tr>
+        <tr>
+          <td><b>火山 / 豆包</b></td>
+          <td><code>BV701</code>（擎苍）</td>
+          <td>旁白舒缓、沉浸、平和、悲伤</td>
+          <td class="ok">较高——「沉浸 + 悲伤」贴合</td>
+        </tr>
+        <tr>
+          <td rowspan="2"><b>CosyVoice</b></td>
+          <td><code>longanyang</code>（龙安洋，20–30 岁）</td>
+          <td>支持 sad / fearful / happy / neutral + instruct + SSML + 声音复刻</td>
+          <td class="ok">高——可控性最强</td>
+        </tr>
+        <tr>
+          <td><code>longshuo</code>（龙硕）</td>
+          <td>中年男性</td>
+          <td class="mid">中——中年感，需实测气质</td>
+        </tr>
+        <tr>
+          <td><b>MiniMax</b></td>
+          <td><code>male-qn-qingse</code> / 温润男声</td>
+          <td>清朗、温润</td>
+          <td class="mid">中——气质偏亮，未必够「夜」</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="sec-note" style="margin-top:10px">音色清单与风格字段来自各平台官方语音列表文档。<span class="cite">[cite:3][cite:6][cite:8][cite:10]</span></p>
+  </div>
+
+  <div class="card">
+    <h3>语义层：这该是谁的声音？</h3>
+    <p>《静夜思》是第一人称抒情诗，「我」即李白。配音有两种定位：</p>
+    <ul>
+      <li><b>诗人自己的声音</b>——强化「李白夜思故乡」的第一人称沉浸感，与「背影剪影、无五官」的画面设计同构（画面不画脸，声音给身份但不给五官）。</li>
+      <li><b>叙述者 / 吟诵者的声音</b>——客观呈现，适合朗诵会、配乐诗朗诵。</li>
+    </ul>
+    <p>检索到的资料（朗诵教学、音乐朗诵会评述）显示，中文古诗朗读的性别选择<b>更多与作品气质、角色分配相关</b>，而非固定惯例——例如《中国唐宋名篇音乐朗诵会》中《雨霖铃》《声声慢》用女声，《长恨歌》由男声与女声分读。<b>未检索到「古诗朗读音色选择」的学术综述或行业硬标准</b>，因此「诗人自己的声音」是本项目的<b>设计选择</b>，不是既定惯例。<span class="cite">[cite:15]</span><span class="pill un">行业惯例证据不足</span></p>
+  </div>
+
+  <div class="card warn">
+    <h3>性别 × 留白：一个需要诚实说明的空白</h3>
+    <p>本项目人物刻意「减笔、背影、无五官」，靠轮廓与姿态表达。一个自然的疑问是：<b>配音性别会不会过度具象化人物身份，反而损害留白意境？</b></p>
+    <p><b>没有检索到支持「人声性别越模糊越留白」的直接学术证据</b>，也没有找到「男声更适合思乡/孤寂」的权威论述——现有材料只是音色特质的常识性描述（男声浑厚低沉、女声清亮柔和）。因此这个问题<b>不能靠文献裁决</b>，只能作为设计判断：<span class="pill un">证据缺口</span></p>
+    <ul>
+      <li>建议取<b>平衡解</b>：用男声（与剪影的男性身份一致），但避免夸张的「苍老诗人」或硬朗「朗诵腔」；目标是<b>中年、低语、慢速、略带孤独、留白感强</b>的声音。</li>
+      <li>理由是：性别提供了最低限度的身份锚点（「我」是男性），而音量、语速、停顿与情感风格承担留白——不把「李白是谁」讲满。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 5 落地 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">05</span><h2>落地路径：改为「预生成音频」</h2></div>
+  <p class="sec-note">项目是固定文本（四句诗），不是实时交互——这消除了延迟约束，可以直接选质量最高的方案。</p>
+
+  <div class="verdict"><span class="v-label">建议</span><p>把配音从「浏览器实时合成」改为<b>离线预生成音频文件（mp3/wav）再嵌入 HTML</b>。固定文本 + 无延迟要求 = 可以慢慢生成、反复挑音色、逐句精调，且产物可版本化、可回归（与项目「可度量」原则一致）。</p></div>
+
+  <div class="card">
+    <h3>工程路径对比</h3>
+    <table>
+      <thead><tr><th>方案</th><th class="num">成本</th><th>门槛</th><th class="num">逐字韵律</th><th class="num">男声</th><th>适合本项目？</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>edge-tts</b>（Python）</td>
+          <td class="num ok">免费</td>
+          <td>pip 安装，<b>无需 API key</b></td>
+          <td class="num bad">✗（SSML 已移除）</td>
+          <td class="num ok">✓ Yunxi / Yunjian / Yunyang</td>
+          <td class="ok">低门槛起点</td>
+        </tr>
+        <tr>
+          <td><b>Azure Speech</b>（MAI / DragonHD）</td>
+          <td class="num">≈ $15 / 百万字符<br>部分区域有免费额度</td>
+          <td>需订阅 + API key</td>
+          <td class="num mid">句级（contour/break/emphasis）</td>
+          <td class="num ok">✓ 含 <code>poet</code> / <code>lonely</code> 风格</td>
+          <td class="ok"><b>最匹配目标</b></td>
+        </tr>
+        <tr>
+          <td><b>火山引擎</b>大模型语音</td>
+          <td class="num ok">5 元 / 万字符<br>10 万字 / 年 45 元</td>
+          <td>需账号 + API key</td>
+          <td class="num mid">未见逐字 prosody</td>
+          <td class="num ok">✓ 擎苍（沉浸/悲伤）</td>
+          <td class="mid">备选</td>
+        </tr>
+        <tr>
+          <td><b>CosyVoice2 / v3</b>（本地）</td>
+          <td class="num ok">模型免费</td>
+          <td class="bad">6–8GB 显存（云端实例建议 16GB）</td>
+          <td class="num mid">instruct 句级</td>
+          <td class="num ok">✓ 龙安洋 + 情感 + 复刻</td>
+          <td class="mid">本地离线潜力最高，门槛最高</td>
+        </tr>
+        <tr>
+          <td><b>GPT-SoVITS</b>（本地）</td>
+          <td class="num ok">免费</td>
+          <td class="bad">推理 4–6GB / 训练 8–12GB 显存</td>
+          <td class="num bad">非逐字 prosody</td>
+          <td class="num ok">✓ 可训练自定义男声</td>
+          <td class="mid">追求特定音色时</td>
+        </tr>
+        <tr>
+          <td><b>Web Speech API</b></td>
+          <td class="num ok">免费</td>
+          <td>无</td>
+          <td class="num bad">✗</td>
+          <td class="num mid">取决于系统</td>
+          <td class="bad">已证不足，仅作兜底</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="sec-note" style="margin-top:10px">edge-tts 的 SSML 支持已被移除（GitHub README 明确说明），只能调 rate/volume/pitch。<span class="cite">[cite:11]</span> 成本数据来自各平台官方定价页。<span class="cite">[cite:9][cite:14]</span></p>
+  </div>
+
+  <div class="card">
+    <h3>推荐阶梯（按成本递增、质量递增）</h3>
+    <div class="layer">
+      <div class="layer-head"><span class="layer-tag" style="color:var(--qing)">第 1 步</span><h4>edge-tts 预生成 — 零成本验证</h4></div>
+      <p>用 <code>zh-CN-YunxiNeural</code> / <code>YunjianNeural</code> 各生成一版，逐句生成（而非整首一次），人工比对音色气质。</p>
+      <p class="pros">优点：免费、无需 key、几分钟出结果，可立即替换掉扁平的原型。</p>
+      <p class="cons">缺点：仍无句级情感与韵律控制，只是音色比系统默认好。</p>
+    </div>
+    <div class="layer">
+      <div class="layer-head"><span class="layer-tag" style="color:var(--jin)">第 2 步</span><h4>Azure SSML 逐句合成 — 句级情感 + 句级抑扬顿挫</h4></div>
+      <p>按句拆分，每句单独套 <code>&lt;mstts:express-as&gt;</code> 风格与 <code>&lt;prosody&gt;</code> 参数：起句 <code>neutral</code> / 承句 <code>lonely</code> 更慢更轻 / 转句音高微扬 / 合句 <code>sad</code> 最慢最低；句间用 <code>&lt;break&gt;</code> 精确控制停顿。优先试 <code>Yunyi</code>（poet）与 <code>Yunhan</code>（lonely + whispering）。</p>
+      <p class="pros">优点：<b>同时解决情感与句级抑扬顿挫</b>，且参数全部显式可记录，能进项目评估链。</p>
+      <p class="cons">缺点：需 API key；中文风格标签须逐音色实测；仍做不到逐字平仄。</p>
+    </div>
+    <div class="layer">
+      <div class="layer-head"><span class="layer-tag" style="color:var(--zhu)">第 3 步</span><h4>（可选）真人吟诵或韵律后处理 — 追求真正的「韵味」</h4></div>
+      <p>逐字平仄无开箱方案。若句级方案仍觉「没韵味」，两条路：<b>(a)</b> 采录/授权一段真人吟诵，作为最终方案（唯一真正具备拖腔、入声、平长仄短的来源）；<b>(b)</b> 自研韵律后处理（生成整句 → 用声学工具改写音高/时长曲线），风险是机械感。</p>
+      <p class="pros">优点：唯一能真正还原吟诵韵味。</p>
+      <p class="cons">缺点：前者不可规模化且涉版权；后者需自研工具链，属研究性投入。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6 缺口 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">06</span><h2>证据缺口与结论</h2></div>
+  <div class="card warn">
+    <h3>必须声明的证据缺口</h3>
+    <ul>
+      <li><b>没有古诗朗读的 TTS 横向评测。</b>检索未发现对 Azure / 火山 / MiniMax / CosyVoice 在古诗朗读上表现的第三方可复现评测。相关线索仅有 Audio Turing Test（arXiv 2505.11200），其评测维度含「Classical Chinese Poetry/Prose」，但不足以形成排名。<span class="cite">[cite:13]</span><span class="pill un">证据缺口</span></li>
+      <li><b>「性别模糊是否更留白」无文献支撑。</b>见 §4，只能作为设计判断。</li>
+      <li><b>Intoner 的可用性未证实。</b>论文存在，但未找到开放 API 或可下载模型。<span class="cite">[cite:4]</span></li>
+    </ul>
+    <p class="sec-note" style="margin-top:8px">因此「哪条方案在古诗上更好听」这个问题的最终答案，<b>只能靠本项目自建小样本听测</b>（4 句诗 × 4–6 个候选音色，重点听停顿、尾音、节奏、情感变化）——这恰好与项目「先可度量」的原则一致。</p>
+  </div>
+
+  <div class="card">
+    <h3>结论</h3>
+    <ul>
+      <li><b>情感</b>：可解，且可逐句。Azure <code>express-as</code> 或 CosyVoice <code>instruct</code> 足以表达起承转合。</li>
+      <li><b>抑扬顿挫</b>：句级可解（Azure SSML 的 pitch / contour / break / emphasis）；<b>逐字平仄是行业天花板</b>，无商用 API 支持，需真人吟诵或自研后处理。</li>
+      <li><b>性别</b>：男声资源充足；Azure <code>Yunyi</code> 的 <code>poet</code> 风格与 <code>Yunhan</code> 的 <code>lonely</code>+<code>whispering</code> 最对口。目标气质：中年、低语、慢速、留白感强。</li>
+      <li><b>工程</b>：改为「离线预生成音频」模式；路径按 <b>edge-tts（零成本验证）→ Azure SSML（情感 + 句级韵律）→ 真人吟诵（韵味）</b> 递进。</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 来源 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">注</span><h2>来源</h2></div>
+  <ul class="src-list">
+    <li><span class="n">[cite:1]</span> MDN — SpeechSynthesisUtterance.text（SSML 标签剥离说明）：https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesisUtterance/text</li>
+    <li><span class="n">[cite:2]</span> Microsoft Learn — Azure 语音合成 SSML（prosody / contour / break / emphasis 与 contour 限制）：https://docs.azure.cn/ai-services/speech-service/speech-synthesis-markup-voice</li>
+    <li><span class="n">[cite:3]</span> Microsoft Learn — Azure 高保真（HD）语音与风格列表：https://learn.microsoft.com/en-gb/azure/ai-services/speech-service/high-definition-voices</li>
+    <li><span class="n">[cite:4]</span> Intoner — Chinese Poetry Intoning Synthesis（IJCAI 2025）：https://www.ijcai.org/proceedings/2025/1139.pdf</li>
+    <li><span class="n">[cite:5]</span> 阿里云 — CosyVoice SSML 标记语言：https://help.aliyun.com/zh/model-studio/introduction-to-cosyvoice-ssml-markup-language</li>
+    <li><span class="n">[cite:6]</span> 阿里云 — CosyVoice 音色列表：https://help.aliyun.com/zh/model-studio/cosyvoice-voice-list</li>
+    <li><span class="n">[cite:7]</span> 阿里云 — CosyVoice 声音复刻服务（10–20s 样本要求）：https://help.aliyun.com/zh/isi/developer-reference/cosyvoice-voice-voice-replica-service/</li>
+    <li><span class="n">[cite:8]</span> 火山引擎 — 豆包语音音色列表：https://www.volcengine.com/docs/6561/1257544</li>
+    <li><span class="n">[cite:9]</span> 火山引擎 — 大模型语音合成文档与计费：https://www.volcengine.com/docs/6561/1096680</li>
+    <li><span class="n">[cite:10]</span> MiniMax — T2A 接口文档（emotion / pitch 参数）：https://www.minimax.io/platform/document/t2a_http</li>
+    <li><span class="n">[cite:11]</span> edge-tts（GitHub，SSML 已移除说明）：https://github.com/rany2/edge-tts</li>
+    <li><span class="n">[cite:12]</span> ElevenLabs — v3 Audio Tags：https://elevenlabs.io/blog/v3-audiotags</li>
+    <li><span class="n">[cite:13]</span> Audio Turing Test（arXiv 2505.11200，含古典诗文评测维度）：https://arxiv.org/abs/2505.11200</li>
+    <li><span class="n">[cite:14]</span> Microsoft Azure — 语音服务定价：https://azure.microsoft.com/en-us/pricing/details/cognitive-services/speech-services/</li>
+    <li><span class="n">[cite:15]</span> 《中国唐宋名篇音乐朗诵会》评述（朗诵音色与作品气质的关系）：http://gjaqyj.cnjournals.com/js/pdf/web/viewer.aspx?file_no=200003010&amp;journal_id=gjaqyj</li>
+    <li><span class="n">[cite:16]</span> ChatTTS（PyPI，[break] / [oral] 标签）：https://pypi.org/project/chattts/</li>
+  </ul>
+</section>
+
+</div>
+</body>
+</html>

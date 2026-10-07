@@ -1,0 +1,29 @@
+{
+ "meta": {
+  "name": "context_schema",
+  "schema": "poem-context/v1",
+  "role": "D5 护栏：context.json 结构 + 语义交叉核对"
+ },
+ "files": [
+  {
+   "file": "data\\source\\context\\早发白帝城\\context.json",
+   "id": "bd",
+   "errors": []
+  },
+  {
+   "file": "data\\source\\context\\江雪\\context.json",
+   "id": "jx",
+   "errors": []
+  },
+  {
+   "file": "data\\source\\context\\静夜思\\context.json",
+   "id": "jys",
+   "errors": []
+  }
+ ],
+ "summary": {
+  "files": 3,
+  "errors": 0,
+  "ok": true
+ }
+}

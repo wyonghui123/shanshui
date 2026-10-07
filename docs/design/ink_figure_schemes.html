@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>水墨画中人的合理展示方案 · 以《江雪》蓑笠翁为例</title>
+<style>
+:root{
+  --paper:#F6F3EC; --paper2:#FBF9F4; --ink:#1C1C1C; --ink2:#3A362F; --ink3:#6E6A60;
+  --line:rgba(28,28,28,.14); --line2:rgba(28,28,28,.08);
+  --zhu:#A83A2C; --jin:#B8860B; --qing:#2F5D62;
+  --serif:"Noto Serif SC","Songti SC","Source Han Serif SC",serif;
+  --sans:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:56px 28px 90px}
+h1{font-family:var(--serif);font-size:30px;font-weight:600;letter-spacing:.02em;margin:0 0 8px}
+.lead{color:var(--ink3);font-size:14.5px;line-height:1.75;margin:0 0 6px;max-width:74ch}
+.meta-line{font-size:12.5px;color:var(--ink3);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0;margin:22px 0 34px;letter-spacing:.03em}
+section{margin:0 0 46px}
+.sec-head{display:flex;align-items:baseline;gap:12px;margin:0 0 14px}
+.sec-no{font-family:var(--serif);font-size:13px;color:var(--zhu);letter-spacing:.12em}
+.sec-head h2{font-family:var(--serif);font-size:20px;font-weight:600;margin:0}
+.sec-note{font-size:13.5px;color:var(--ink3);line-height:1.8;margin:0 0 16px;max-width:80ch}
+.card{background:var(--paper2);border:1px solid var(--line2);border-radius:10px;padding:20px 22px;margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:820px){.grid2,.grid4{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.grid2,.grid4{grid-template-columns:1fr}}
+
+/* 依据卡 */
+.src h3{font-family:var(--serif);font-size:15px;margin:0 0 4px;font-weight:600}
+.src .who{font-size:11.5px;color:var(--zhu);letter-spacing:.06em;margin:0 0 8px}
+.src p{font-size:13px;line-height:1.75;color:var(--ink2);margin:0}
+.src b{color:var(--ink)}
+
+/* 现状标注 */
+.now{display:grid;grid-template-columns:340px 1fr;gap:22px;align-items:start}
+@media(max-width:760px){.now{grid-template-columns:1fr}}
+.now figure{margin:0;background:var(--paper2);border:1px solid var(--line2);border-radius:10px;padding:10px}
+.now figcaption{font-size:11.5px;color:var(--ink3);text-align:center;margin-top:6px}
+.find{display:grid;grid-template-columns:20px 1fr;gap:10px;margin:0 0 12px;font-size:13.5px;line-height:1.7}
+.find .n{font-family:var(--serif);color:var(--zhu);font-size:15px}
+.find b{font-weight:600}
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:999px;border:1px solid var(--line);color:var(--ink3);margin-left:6px}
+
+/* 对照台 */
+.bench{display:grid;grid-template-columns:1fr 300px;gap:20px;align-items:start}
+@media(max-width:860px){.bench{grid-template-columns:1fr}}
+.stage-box{background:var(--paper2);border:1px solid var(--line2);border-radius:12px;padding:10px;position:relative}
+.stage-box svg{display:block;width:100%;height:auto;border-radius:8px}
+.stage-cap{position:absolute;left:18px;bottom:16px;font-size:12px;color:var(--ink3);background:rgba(246,243,236,.82);padding:2px 8px;border-radius:6px}
+.ctrl h4{font-family:var(--serif);font-size:14px;margin:0 0 8px;font-weight:600}
+.thumb{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.thumb button{border:1px solid var(--line);background:var(--paper2);border-radius:9px;padding:8px 8px 6px;cursor:pointer;text-align:left;transition:.15s}
+.thumb button:hover{border-color:var(--ink3)}
+.thumb button[aria-pressed="true"]{border-color:var(--zhu);box-shadow:0 0 0 1px var(--zhu) inset}
+.thumb svg{display:block;width:100%;height:auto;border-radius:5px;background:var(--paper)}
+.thumb .tn{font-size:11.5px;color:var(--ink2);margin-top:5px;display:block;line-height:1.4}
+.thumb .tn b{font-family:var(--serif)}
+.toggles{display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--ink2)}
+.toggles label{display:flex;align-items:center;gap:8px;cursor:pointer}
+.toggles input{accent-color:var(--zhu)}
+.hint{font-size:12px;color:var(--ink3);line-height:1.7;margin-top:12px;border-top:1px dashed var(--line);padding-top:10px}
+
+/* 表 */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line2);vertical-align:top}
+th{font-family:var(--serif);font-weight:600;color:var(--ink3);font-size:12px;letter-spacing:.04em}
+td b{font-weight:600}
+code{font-family:ui-monospace,Consolas,monospace;font-size:12px;background:rgba(28,28,28,.05);padding:1px 5px;border-radius:4px}
+
+/* 旋钮 */
+.knob{display:grid;grid-template-columns:64px 1fr;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line2)}
+.knob:last-child{border-bottom:0}
+.knob .k{font-family:var(--serif);font-size:13.5px;color:var(--ink2)}
+.knob .vals{display:flex;flex-wrap:wrap;gap:6px}
+.knob .vals span{font-size:11.5px;padding:2px 9px;border-radius:999px;border:1px solid var(--line);color:var(--ink3)}
+.knob .vals span.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+.risk{display:grid;grid-template-columns:26px 1fr;gap:10px;font-size:13.5px;line-height:1.7;margin-bottom:12px}
+.risk .lv{font-family:var(--serif);font-size:12px;color:#fff;background:var(--zhu);border-radius:5px;text-align:center;height:20px;line-height:20px;margin-top:2px}
+.risk .lv.m{background:var(--jin)}
+.risk .lv.l{background:var(--ink3)}
+.risk b{font-weight:600}
+.callout{background:var(--paper2);border:1px solid var(--line2);border-left:3px solid var(--jin);border-radius:8px;padding:14px 18px;font-size:13.5px;line-height:1.8;color:var(--ink2);margin:0 0 16px}
+.callout b{color:var(--ink)}
+.layers{display:grid;gap:10px;margin-bottom:18px}
+.layer{background:var(--paper2);border:1px solid var(--line2);border-radius:10px;padding:16px 20px}
+.layer h3{font-family:var(--serif);font-size:14.5px;margin:0 0 4px;font-weight:600}
+.layer .cap{font-size:12px;color:var(--ink3);margin:0 0 12px}
+.layer .foot{font-size:12px;color:var(--ink3);margin:12px 0 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips span{font-size:12.5px;padding:5px 12px;border-radius:8px;border:1px solid var(--line);color:var(--ink2);background:var(--paper)}
+.chips.b span{border-color:rgba(47,93,98,.35);color:var(--qing);background:rgba(47,93,98,.06)}
+.chips.a span{border-color:rgba(168,58,44,.30);color:var(--zhu);background:rgba(168,58,44,.05)}
+.arrow-down{text-align:center;font-size:12px;color:var(--ink3);margin:1px 0 2px}
+a{color:var(--zhu)}
+footer{font-size:12px;color:var(--ink3);border-top:1px solid var(--line);padding-top:16px;line-height:1.8}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>水墨画中人的合理展示方案</h1>
+<p class="lead">以《江雪》蓑笠翁为例，回答一个具体问题：在写意水墨动画里，"人"怎么画才既<b>读得懂</b>、又不破<b>意境</b>。核心矛盾是——放大人物换可读性，代价是"孤"；缩到点景保意境，风险是读成"一坨墨"。</p>
+<p class="lead">结论先行：走<b>点景尺寸 + 减笔造型 + 墨色分档 + 持竿垂钓 + 舟身微倾</b>，即马远《寒江独钓图》的当代动画化。不放大、不勾线、不加五官。这是一套通用造型语法在《江雪》上的取值——哪些跨诗不变、哪些每诗单独定，见 §7。</p>
+<div class="meta-line">研究对象：ink_animations.html 的 <code>#jx-boat</code> / <code>#bd-boat</code>　·　画布 900×600　·　转段推近 0.96→1.12×（v1.3 压平，原 0.93→1.55×）　·　日期 2026-10-02</div>
+
+<!-- ============ §0 现状实测 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">§0</span><h2>现状实测：现在的人是什么</h2></div>
+  <p class="sec-note">先把当前画法拆开看，不改动，只测量。左侧是为便于判读做的局部放大（转段相机现为 0.96→1.12× 极缓推近，v1.3 压平；此处放大倍率高于实际镜头，只为看清笔形）。</p>
+  <div class="now">
+    <figure>
+      <svg viewBox="452 372 268 152" width="100%" role="img" aria-label="当前蓑笠翁实况放大">
+        <rect x="452" y="372" width="268" height="152" fill="#F6F3EC"/>
+        <path d="M0 258 Q220 274 452 262 Q680 250 900 264" fill="none" stroke="#3A362F" stroke-width="1.6" opacity="0.16"/>
+        <g filter="url(#nowInk)">
+          <path d="M468 468 Q585 502 702 468 Q662 490 585 492 Q508 490 468 468 Z" fill="#1C1C1C" opacity="0.88"/>
+          <path d="M566 428 Q586 406 606 428 Z" fill="#1C1C1C" opacity="0.92"/>
+          <path d="M576 428 L596 428 L598 456 L574 456 Z" fill="#1C1C1C" opacity="0.88"/>
+        </g>
+        <path d="M600 452 Q642 500 620 558" fill="none" stroke="#1C1C1C" stroke-width="1.2" opacity="0.5"/>
+        <!-- 标注 -->
+        <g font-family="PingFang SC,sans-serif" font-size="9.5" fill="#A83A2C">
+          <line x1="586" y1="406" x2="586" y2="384" stroke="#A83A2C" stroke-width=".8"/>
+          <text x="590" y="381">帽：光滑弧顶（无檐）</text>
+          <line x1="598" y1="445" x2="662" y2="418" stroke="#A83A2C" stroke-width=".8"/>
+          <text x="664" y="415">身：四边形墨块</text>
+          <line x1="500" y1="490" x2="470" y2="512" stroke="#A83A2C" stroke-width=".8"/>
+          <text x="466" y="523">舟：水平对称</text>
+        </g>
+        <defs><filter id="nowInk" x="-30%" y="-30%" width="160%" height="160%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.014" numOctaves="4" seed="11" result="n"/>
+          <feDisplacementMap in="SourceGraphic" in2="n" scale="18" xChannelSelector="R" yChannelSelector="G"/>
+        </filter></defs>
+      </svg>
+      <figcaption>现状：人 = 帽弧 + 身块，共约 40×50px，单色 #1C1C1C</figcaption>
+    </figure>
+    <div>
+      <div class="find"><span class="n">①</span><div><b>落笔后完全静止。</b>江雪舟只在 13.0–14.6s 做"重放落笔"（透明度 0→1、缩放 1.06→1.0、墨位移 58→18），此后<b>再无任何运动</b>；对照白帝城舟有 <code>sin(t*2.6)*1.1</code> 的呼吸。<span class="tag">无生命迹象</span></div></div>
+      <div class="find"><span class="n">②</span><div><b>帽是光滑弧顶，不是斗笠。</b><code>M566 428 Q586 406 606 428 Z</code> 是一条圆滑上凸曲线，没有<b>檐</b>、没有<b>锥</b>，视觉上读作"土包 / 船篷"，而非可识别的斗笠轮廓。<span class="tag">识别符号弱</span></div></div>
+      <div class="find"><span class="n">③</span><div><b>人与舟粘成一团。</b>舟 0.88、身 0.88、帽 0.92，同为 #1C1C1C，只差 4% 透明度——在墨位移滤镜下边界互相咬合，看不出"人坐在舟上"。<span class="tag">无层次</span></div></div>
+      <div class="find"><span class="n">④</span><div><b>有钓丝、无钓竿。</b>钓丝（<code>#jx-line</code>）从 (600,452) 垂到水面，但它没有连到任何"手"或"竿"上——"钓"这个动作缺了主语。<span class="tag">动作不完整</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ §1 传统依据 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">§1</span><h2>传统依据：古人怎么处理"人"</h2></div>
+  <p class="sec-note">这不是审美偏好，是有明确传承的四条硬规矩。它们共同指向一个反直觉的结论——<b>人的可读性来自轮廓特征与姿态，不来自细节</b>。</p>
+  <div class="grid2">
+    <div class="card src">
+      <h3>点景人物：小，且高度概括</h3>
+      <p class="who">山水画通则 · 沈周一路</p>
+      <p>人物在画面中<b>所占比例很小</b>，却是"画龙点睛，使画面意境毕现"的关键。要点是<b>姿态、动作高度概括</b>（策杖、观瀑、对谈），位置选在视觉焦点。功能是点明主题、增生活气、体现"可游可居"。渔樵人物尤其被视为把现实与意境连起来的关键纽带。</p>
+    </div>
+    <div class="card src">
+      <h3>寒江独钓：蓑笠在篷上，人端坐船头</h3>
+      <p class="who">南宋 · 马远《寒江独钓图》</p>
+      <p>本图是《江雪》意象的直接祖本。画中<b>船篷上搭着蓑衣与斗笠</b>，<b>渔翁端坐船头</b>独钓，全神贯注于漂浮的钓丝；<b>舟身微倾一侧</b>——"既合生活常理，又破平板之局"。除寥寥数笔微波外<b>余皆留白</b>。</p>
+    </div>
+    <div class="card src">
+      <h3>减笔：几笔定形，不画五官</h3>
+      <p class="who">南宋 · 梁楷《泼墨仙人》《太白行吟图》</p>
+      <p>人物置于画面中心，四周大量空白；侧面漫步、口唇微启，靠<b>姿态与气韵</b>传神，衣袍仅"灵动肆意的线条几笔"。面部不作刻画——<b>留白本身就是表情</b>。</p>
+    </div>
+    <div class="card src">
+      <h3>水墨动画：似与不似之间</h3>
+      <p class="who">《山水情》1988 · 人物设计吴山明</p>
+      <p>水墨动画的典范解法。吴山明以<b>简练线条</b>勾人物神韵，<b>抛开比例关系</b>，以"似与不似之间"为造型准则，使人物与氤氲山水融会贯通；背景卓鹤君以泼墨写意造境，靠分层渲染让虚实相生。</p>
+    </div>
+  </div>
+  <div class="callout"><b>四条规矩收敛成一句话：</b>人要做成"<b>可识别的姿态符号</b>"——斗笠的锥与檐负责被认出，前倾的身姿负责传神，墨色的浓淡负责把它从舟上"拎"出来。细节（五官、衣纹、四肢）全部让位给留白。</div>
+</section>
+
+<!-- ============ §2 对照台 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">§2</span><h2>对照台：四个方案，实时可看</h2></div>
+  <p class="sec-note">点缩略图切换方案；勾选"推近"看转段 1.12× 后的观感（v1.3 压平后，推近已不足以放大轮廓，可读性须靠造型本身）。四案共用同一背景与同一落笔节拍，只有"人"的造型不同——方便直接比美感。</p>
+  <div class="bench">
+    <div class="stage-box">
+      <svg id="stage" viewBox="0 0 900 600" role="img" aria-label="江雪场景人物方案预览">
+        <rect width="900" height="600" fill="#F6F3EC"/>
+        <g id="bg-far" filter="url(#bgEdge)">
+          <path d="M0 252 L120 176 L212 234 L320 158 L432 238 L522 194 L642 250 L762 198 L900 252 L900 300 L0 300 Z" fill="#6E6A60" opacity="0.13"/>
+          <path d="M0 252 L88 204 L202 248 L332 188 L472 252 L602 212 L742 252 L900 252 L900 300 L0 300 Z" fill="#5A564D" opacity="0.17"/>
+          <path d="M0 252 L142 222 L282 252 L422 214 L582 252 L900 252 L900 300 L0 300 Z" fill="#3A362F" opacity="0.15"/>
+        </g>
+        <path d="M0 258 Q220 274 452 262 Q680 250 900 264" fill="none" stroke="#3A362F" stroke-width="1.6" opacity="0.16"/>
+        <g opacity="0.20" stroke="#5A564D" fill="none">
+          <path d="M30 258 L152 302" stroke-width="2.4"/><path d="M64 258 L200 304" stroke-width="2"/><path d="M98 258 L246 306" stroke-width="1.8"/>
+        </g>
+        <g stroke="#2A2724" fill="none" opacity="0.52">
+          <path d="M88 514 Q100 438 80 368" stroke-width="1.8"/><path d="M114 518 Q130 450 158 392" stroke-width="1.4"/><path d="M138 522 Q146 464 138 420" stroke-width="1.2"/>
+        </g>
+        <g id="rig" filter="url(#rigInk)"></g>
+        <defs>
+          <filter id="rigInk" x="-30%" y="-30%" width="160%" height="160%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.014" numOctaves="4" seed="11" result="n"/>
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="9" xChannelSelector="R" yChannelSelector="G"/>
+          </filter>
+          <filter id="bgEdge" x="-20%" y="-20%" width="140%" height="140%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.016" numOctaves="4" seed="17" result="n"/>
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="10" xChannelSelector="R" yChannelSelector="G"/>
+          </filter>
+        </defs>
+      </svg>
+      <div class="stage-cap" id="stageCap">方案 B · 减笔点景　—　转段 1.12× 观感</div>
+    </div>
+
+    <div class="ctrl">
+      <h4>选择方案</h4>
+      <div class="thumb" id="thumbs"></div>
+      <div class="toggles">
+        <label><input type="checkbox" id="zoom"> 推近到转段（1.12×）</label>
+        <label><input type="checkbox" id="motion" checked> 舟身呼吸 / 微倾（动）</label>
+        <label><input type="checkbox" id="annot"> 显示识别要素标注</label>
+      </div>
+      <p class="hint">判读建议：先看"不推近"时能不能认出是个人；再推近看斗笠轮廓、蓑衣飞白、竿与丝的连接是否成立。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ §3 推荐规格 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">§3</span><h2>推荐规格：可直接落地的参数</h2></div>
+  <p class="sec-note">推荐 <b>方案 C（分档减笔）</b>。它在方案 B 的减笔造型上加了墨色分档，用"浓淡"代替"细节"解决人舟粘连——这正是传统最经济的手段。下表为可写进源码的具体值。</p>
+  <table>
+    <thead><tr><th style="width:96px">要素</th><th style="width:150px">做法</th><th>参数（画布 900×600，锚点 585,470）</th></tr></thead>
+    <tbody>
+      <tr><td><b>斗笠</b></td><td>锥 + 檐（浓墨）</td><td>锥顶 (586,400)，檐左右 (560,428)→(612,428)，底沿微垂；<code>opacity .97</code>。<b>关键是锥形与檐线</b>，不是圆弧。</td></tr>
+      <tr><td><b>蓑衣</b></td><td>前倾包裹（重墨 + 飞白）</td><td>肩 (572,430) 收至座 (574,464)，背线右倾约 8°；<code>opacity .80</code>；沿背脊叠一道纸色细线做飞白。</td></tr>
+      <tr><td><b>船篷</b></td><td>淡墨矮弧（马远式）</td><td><code>M524 470 Q585 442 648 470 Z</code>，<code>#6E6A60 / .28</code>。蓑笠可视需要"搭"在篷上，与人不叠死。</td></tr>
+      <tr><td><b>舟身</b></td><td>中墨 + 微倾</td><td>沿用原 hull，<code>opacity .70</code>（较现状降 18%）；绕 (585,470) 恒定 <b>-2°</b> 倾角，破对称。</td></tr>
+      <tr><td><b>钓竿</b></td><td>淡墨短线</td><td>(600,448)→(650,466)，<code>#3A362F / .50</code>，宽 1.6。补上"钓"的主语。</td></tr>
+      <tr><td><b>钓丝</b></td><td>最细的墨（保留）</td><td>竿尖 (650,466) 垂入水，宽 1、<code>opacity .40</code>。仍由合段 2s 画出，是全诗最细一根。</td></tr>
+      <tr><td><b>动</b></td><td>呼吸 + 微倾（新增）</td><td>绕锚点 <code>rotate(±0.9°)</code> 叠 <code>translateY(±0.7px)</code>，周期 ~7s，相位与白帝城错开。极缓，不抢钓丝。</td></tr>
+      <tr><td><b>五官</b></td><td>不画</td><td>留白即表情（梁楷）。任何点眼/勾唇都会立刻拉向插画。</td></tr>
+    </tbody>
+  </table>
+  <div class="callout" style="margin-top:16px"><b>尺寸守则：</b>人高控制在画面高的 <b>9% 以内</b>（现状约 8.3%），<b>不放大</b>。v1.3 把转段推近由 1.55× 压平到 1.12× 后，可读性<b>不能再指望镜头放大</b>，只能由<b>轮廓特征</b>兜住：斗笠的锥与檐、蓑衣的飞白断口、竿与丝的连接——这三样就是"读得懂"的全部预算，因此造型档不能再减。一旦靠放大到中景换可读性，留白率 ρ 下滑、"孤"的强度被稀释——这是本方案的硬边界。</div>
+</section>
+
+<!-- ============ §4 三旋钮 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">§4</span><h2>决策框架：三个旋钮</h2></div>
+  <p class="sec-note">换任何诗、任何人物，都在这三个旋钮上取值。推荐档位已加粗。</p>
+  <div class="card">
+    <div class="knob"><span class="k">尺寸</span><div class="vals"><span>极微点景</span><span class="on">点景（推荐）</span><span>中景</span><span>主体</span></div></div>
+    <div class="knob"><span class="k">造型</span><div class="vals"><span>叠墨块</span><span>极简剪影</span><span class="on">减笔点景（推荐）</span><span>白描勾线</span></div></div>
+    <div class="knob"><span class="k">墨色</span><div class="vals"><span>单色</span><span class="on">分档（推荐）</span></div></div>
+    <div class="knob"><span class="k">动作</span><div class="vals"><span>静坐</span><span class="on">持竿垂钓（推荐）</span><span>摇橹 / 回望</span></div></div>
+  </div>
+  <p class="sec-note" style="margin-top:14px">三旋钮越往右，可读性越高、意境越薄。本项目的取中点固定在"点景 + 减笔 + 分档"——<b>与《山水情》同源，而非与插画同源</b>。</p>
+</section>
+
+<!-- ============ §5 与评估接口 + 风险 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">§5</span><h2>与现有评估的接口</h2></div>
+  <p class="sec-note">人物方案不能只谈美感，必须过现有那把"忠实度护栏"（O1）与"留白代理"（O3），否则就是改坏。</p>
+  <div class="grid2">
+    <div class="card">
+      <h3 style="font-family:var(--serif);font-size:14px;margin:0 0 8px">必须保持命中的题</h3>
+      <p style="font-size:13px;line-height:1.8;color:var(--ink2);margin:0">
+        <b>JX-E2</b>（exist，expect「孤舟与蓑笠翁」）—— 人舟分离后仍需被认出，不能只剩舟。<br>
+        <b>全片仅 1 个人物</b> —— 加竿、加篷都行，<b>不得再添第二个人</b>（"孤"的判据）。<br>
+        <b>探针 <code>jx-boat</code></b> @15.5s 可见性 &gt; 0.05 —— 降低舟身墨浓度到 .70 后需重跑确认。
+      </p>
+    </div>
+    <div class="card">
+      <h3 style="font-family:var(--serif);font-size:14px;margin:0 0 8px">必须守住的上限</h3>
+      <p style="font-size:13px;line-height:1.8;color:var(--ink2);margin:0">
+        <b>留白率 ρ_layout / ρ_render</b> —— 人高 ≤9% 画面高，是这条上限的操作化表达。<br>
+        <b>O3 正节点</b> —— 「孤舟」是正节点，不能因降墨浓度跌成负节点。<br>
+        <b>不要新增"像不像"细粒度题</b> —— 斗笠锥形这类可由人眼直接判；把它做成题，等于把护栏当目标，正是要避免的。
+      </p>
+    </div>
+  </div>
+  <p class="sec-note" style="margin-top:14px">落地顺序建议：改 <code>#jx-boat</code> → 重跑 <code>node src/o1/o1_run.mjs</code> + <code>node src/o3/o3_run.mjs</code> → 确认 JX-E2 命中、ρ 不降、无回退 → 再把同一套造型规则搬到 <code>#bd-boat</code>。</p>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-no">§6</span><h2>风险清单</h2></div>
+  <div class="risk"><span class="lv">高</span><div><b>可读性 ↔ 意境是零和的。</b>任何"为了让人看清"而放大人物的改动，都会直接稀释"孤"。守尺寸上限是第一纪律。</div></div>
+  <div class="risk"><span class="lv">高</span><div><b>勾线即插画。</b>方案 D（白描）可读性最高，但只要出现连续封闭轮廓线，写意立刻破功、滑向连环画。除非全片统一换语言，否则不采用。</div></div>
+  <div class="risk"><span class="lv m">中</span><div><b>动态过强会卡通化。</b>摇橹、回望这类大动作会把水墨的"静"打散。呼吸幅度控制在 ±1px、倾角 ±1° 内。</div></div>
+  <div class="risk"><span class="lv m">中</span><div><b>人舟仍可能粘连。</b>若墨色分档不足（舟 .70 / 蓑 .80 只差 10%），在位移滤镜下仍会咬合。必要时把舟再降到 .62，或给蓑衣加纸色飞白拉开边界。</div></div>
+  <div class="risk"><span class="lv l">低</span><div><b>蓑笠"移出"人身的语义风险。</b>马远把蓑笠搭在篷上，但我们的 O1 判据把"蓑笠翁"当作一个人。若要还原原作的"蓑笠在篷上"，需确认 JX-E2 仍判命中——建议<b>蓑笠仍画在人身上</b>，篷只作淡墨底。</div></div>
+</section>
+
+<!-- ============ §7 通用性边界 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">§7</span><h2>通用性边界：哪些跨诗不变，哪些每诗单独定</h2></div>
+  <p class="sec-note">本方案不是一套固定配方，而是「<b>通用语法层 + 每诗取值层</b>」。前者跨诗不变、来自传统；后者随诗而变、由诗句语义驱动。§2–§3 给出的其实是<b>参数化生成器 + 硬边界</b>，《江雪》那版只是它在「孤 + 隐逸 + 钓」这组输入下的一个实例。</p>
+
+  <div class="layers">
+    <div class="layer">
+      <h3>通用 · 语法层（跨诗不变）</h3>
+      <p class="cap">从马远 / 梁楷 /《山水情》提炼，与哪首诗无关。</p>
+      <div class="chips b"><span>点景尺寸</span><span>减笔造型（轮廓+姿态）</span><span>墨色分档</span></div>
+      <p class="foot">护栏：存在题命中 · 留白率上限 · 不勾线</p>
+    </div>
+    <div class="arrow-down">框架给出「旋钮」　↓</div>
+    <div class="layer">
+      <h3>每诗 · 取值层（随诗而变）</h3>
+      <p class="cap">六个取值，全部由诗的语义驱动。</p>
+      <div class="chips a"><span>在场？（诗中有人吗）</span><span>角色（点景/主体/背景）</span><span>尺寸档</span><span>造型档</span><span>墨色分档值</span><span>动作档（由动词定）</span></div>
+      <p class="foot">驱动源：意象表 · 诗句动词 · 诗的气质 —— 取值可回溯，不是拍脑袋</p>
+    </div>
+  </div>
+
+  <h3 style="font-family:var(--serif);font-size:15px;margin:22px 0 10px">同一框架，四种取值</h3>
+  <table>
+    <thead><tr><th style="width:100px">取值</th><th>《江雪》</th><th>《早发白帝城》</th><th>《竹里馆》独坐幽篁里，弹琴复长啸</th><th>《鹿柴》返景入深林</th></tr></thead>
+    <tbody>
+      <tr><td><b>在场？</b></td><td>必有人（诗明写「蓑笠翁」）</td><td>诗中无人，放不放是个决断</td><td>有人，且是主体</td><td>无人</td></tr>
+      <tr><td><b>角色</b></td><td>点景，但为全诗焦点</td><td>几乎无 / 可省</td><td>主体</td><td>—</td></tr>
+      <tr><td><b>尺寸档</b></td><td>极小</td><td>更小</td><td>可升到中景</td><td>—</td></tr>
+      <tr><td><b>造型档</b></td><td>减笔剪影</td><td>更简（可只剩一个墨点）</td><td>减笔，姿态「弹琴」</td><td>—</td></tr>
+      <tr><td><b>动作档</b></td><td>持竿垂钓</td><td>无（随舟）</td><td>弹琴</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout" style="margin-top:18px"><b>两个要害：</b>① 通用的是「取值规则 + 边界」，不是「这套参数」——做成一版固定配方到处套，就退化成模板化的要素匹配，正是要避免的。② 「每诗单独定」不等于拍脑袋——取值要能回溯到诗句（动词 / 意象 / 气质），这正是 O2 意象表在做的事，所以单独看仍有可复核的判据，而非审美主观。</div>
+
+  <div class="callout" style="margin-top:16px;border-left-color:var(--qing)"><b>通用层已独立成篇 →</b> <a href="ink_figure_grammar.html">《水墨画中古代人物的造型语法 · 通用层》</a>。本页回答「<b>这一首</b>怎么画人」（以《江雪》蓑笠翁为例）；那一页把 §7 的「通用语法层」完整展开——§1 的四条规矩补成三条古诀（<b>比例诀 / 简化诀 / 功能诀</b>），并给出身份谱（8 类最少符号）、姿态式谱（《芥子园画传》归一）、笔法护栏、四档尺寸，以及一台可交互的<b>参数化生成器</b>（身份 × 姿态 × 尺寸 × 墨色）。两页互为「实例 ↔ 通用」。</div>
+</section>
+
+<!-- ============ §8 落地裁定：《早发白帝城》要不要放人 ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">§8</span><h2>落地裁定：《早发白帝城》要不要放人</h2></div>
+  <p class="sec-note">按 §7 的取值层逐项填。结论：<b>不放人——让「人」以视点在场，而不是以客体在场。</b></p>
+
+  <table>
+    <thead><tr><th style="width:170px">取值</th><th>《早发白帝城》</th><th>依据</th></tr></thead>
+    <tbody>
+      <tr><td><b>在场？</b></td><td><b>实体不在场</b>；人 = 第一人称视点</td><td>O2 意象表 9 行无「人」；「朝辞／还／过」的主语是诗人自己，是叙述者，不是画面客体</td></tr>
+      <tr><td><b>角色</b></td><td><b>视点</b>（摄影机即诗人）</td><td>BD 相机 14.5s「一瞬回望」（cx 452→596→456）——那是「我」回望</td></tr>
+      <tr><td><b>尺寸档 / 造型档 / 墨色分档值</b></td><td>不适用</td><td>无实体</td></tr>
+      <tr><td><b>动作档</b></td><td>交给<b>舟与水</b></td><td>轻舟是 <code>focus:true</code>；速度感就是动作的替身</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout" style="margin-top:18px"><b>三条理由：</b>① <b>语义</b>——全诗是「我在舟中看两岸」，人一旦被画进画面，就从视点降格为客体，观众变成「看一个人坐船」而非「我在飞驰」。② <b>意境</b>——这首的核是轻快·速度·畅快（千里一日还），人的身体带重量与细节，把「轻」往下拽；与《江雪》恰好相反（江雪要「孤」，白帝城要「轻」）。③ <b>口径</b>——意象表无「人」行、O1 的 33 条 bd 题里 0 条涉及人；若放人只能归为 design 附加（半权重，如芦苇），等于为画面凭空加要素。</div>
+
+  <p class="sec-note" style="margin-top:16px"><b>注意区分：</b>框架<b>允许</b>放人（会自动归为 design 附加），但<b>这首诗的语义驱动出的取值是 0</b>。不是「绝对不能有」，是「这首不需要有」。反例检验：若坚持放人，最小代价是点景级极小背影，但即便这样也会削弱「轻」，且须登记为 design 附加——不建议。</p>
+
+  <h3 style="font-family:var(--serif);font-size:15px;margin:22px 0 10px">「视点在场」的三处落实</h3>
+  <table>
+    <thead><tr><th style="width:150px">装置</th><th>做法</th><th style="width:150px">状态</th></tr></thead>
+    <tbody>
+      <tr><td><b>舟是「我」的舟</b></td><td>原 <code>#bd-boat</code> 的弧浮在舷沿上 16px，经 <code>bdBoatInk</code>（位移 scale=16，±8px）与船身糊连，读作「舷沿上探出的头」。改为明确的<b>篷</b>：加宽压平（36→52px）+ 补檐口一线。<b>斗笠无檐、篷有檐</b>——一笔把「人头」改回「篷舟」，人自然不在场。</td><td><b>已落地</b></td></tr>
+      <tr><td><b>「朝辞」的落点</b></td><td>由城与镜头的分离表达：白帝城 0.6–1.9s 先淡入、随后留在身后，舟向前。「辞」发生在镜头运动里，不需要人出现在画面。</td><td>已具备</td></tr>
+      <tr><td><b>「一瞬回望」</b></td><td>14.5s 相机侧掠回望（cx 452→596→456，s 1.20→1.18）即「辞」的情感落点。该曲线被 BD-T4／BD-T5 探针绑定，<b>不改动</b>。</td><td>已具备（受探针绑定，不动）</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout" style="margin-top:18px"><b>回归结果（改动仅 <code>#bd-boat</code> 一个元素）：</b><br>
+  · <code>node src/o1/o1_run.mjs</code>：57/57 · 加权 100.0% · 自动层 45（78.9%）/ 目视层 12 · lint 0 错 · 较基线 Δ命中 +0，回归门槛通过。<br>
+  · <code>node src/o3/o3_run.mjs</code>：负节点精确 100% / 召回 100% · Sinkhorn 行和相对误差 0.00% · 复核队列 0 条。<br>
+  · 留白率未变：bd_02 仍为 30.7%（新增笔画对全幅占比 &lt;0.04%）。<br>
+  <b>回退方式：</b>把 <code>#bd-boat</code> 内第 2 条 path 换回 <code>M338 470 Q356 456 374 470 Z</code>、删掉檐口那条 path 即可。</div>
+</section>
+
+<!-- ============ §9 落地裁定：《静夜思》放不放人（与怎么放） ============ -->
+<section>
+  <div class="sec-head"><span class="sec-no">§9</span><h2>落地裁定：《静夜思》放不放人（与怎么放）</h2></div>
+  <p class="sec-note">按 §7 的取值层逐项填。结论：<b>必有人，且是主体——中景、减笔背影剪影、浓墨，动作只有两个：举头 → 低头。</b></p>
+
+  <table>
+    <thead><tr><th style="width:170px">取值</th><th>《静夜思》</th><th>依据</th></tr></thead>
+    <tbody>
+      <tr><td><b>在场？</b></td><td><b>必有人</b>——第一人称「我」是唯一在场者</td><td>O2 意象表：全诗 20 字里「我」是叙述主体；「举头」「低头」是两个由「我」发出的画面动词——不画人，就没有动作可画</td></tr>
+      <tr><td><b>角色</b></td><td><b>主体</b>（中景）</td><td>与《早发白帝城》的「视点在场」相反：那首的人在看在飞（客体不可见，视点即人）；这首的人在做动作（姿态即主体）</td></tr>
+      <tr><td><b>尺寸档</b></td><td><b>中景</b>（约 175px / 600px 画幅，近《竹里馆》档）</td><td>主体须可读；但仍是减笔，不是近景写实</td></tr>
+      <tr><td><b>造型档</b></td><td><b>减笔背影剪影</b>（髻 + 头 + 长袍 + 拢袖，无五官）</td><td>§1 的硬规矩：可读性来自轮廓与姿态。背影把注意力从「他是谁」转向「他在想什么」——思乡不需要脸，也避开五官的插画风险</td></tr>
+      <tr><td><b>墨色分档值</b></td><td><b>浓墨剪影</b>（近景逆光，与淡墨月光形成浓淡对照）</td><td>夜景唯一的重色块；窗棂中墨、明月与霜淡墨——三档分明</td></tr>
+      <tr><td><b>动作档</b></td><td><b>举头 → 低头</b>（转/合两句的动词驱动）</td><td>头（含髻）绕颈枢旋转：转段举头 3s、合段低头 3.5s，镜头几乎不动——姿态就是这首诗的节拍</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout" style="margin-top:18px"><b>三条理由：</b>① <b>语义</b>——「疑是」把霜从实有降为疑似，「思故乡」把故乡留在画面之外；画面里唯一确凿的实体，就是那个举头又低头的人。② <b>意境</b>——静夜思的核是孤独与乡愁，一个浓墨背影立在月光里，比任何表情都安静；若画正面，反而把「我」变成「他」。③ <b>对照</b>——与《江雪》同一套旋钮的两个极端：江雪人极小（点景）、动作交给钓竿；静夜思人中景（主体）、动作交给脖颈。与《早发白帝城》则是「实体在场 / 视点在场」的正反两面。</div>
+
+  <p class="sec-note" style="margin-top:16px"><b>注意区分：</b>背影剪影不是「看不见脸」的偷懒，而是把全部可读性押在<b>轮廓 + 姿态</b>上——髻的高低就是头抬得多高，袍的静立就是不动。反例检验：若画侧面或正面，需引入五官/衣纹细节，滑向插画，且「他在想什么」会被「他长什么样」盖过——不建议。</p>
+
+  <h3 style="font-family:var(--serif);font-size:15px;margin:22px 0 10px">「主体在场」的五处落实</h3>
+  <table>
+    <thead><tr><th style="width:150px">装置</th><th>做法</th><th style="width:150px">状态</th></tr></thead>
+    <tbody>
+      <tr><td><b>背影剪影 <code>#sy-figure</code></b></td><td>髻 + 头 + 长袍 + 拢袖（两手拢于背后），四笔浓墨；衣缝线、袖缝线用纸色淡线破开，避免整块墨糊成剪影黑团。</td><td><b>已落地</b></td></tr>
+      <tr><td><b>举头 / 低头</b></td><td>头组绕颈枢（400,378）旋转：承句低头看霜（+22°）→ 转段 3s 举头望月（-32°）→ 合段 3.5s 低头思乡（+28°）。正 = 低头（髻向前），负 = 举头（髻向后）。</td><td><b>已落地</b></td></tr>
+      <tr><td><b>「疑是」的霜</b></td><td>月光先从窗内亮起（起句），床前那片「霜」到承句才缓缓定形——因为它是「疑是」，不是实有。</td><td><b>已落地</b></td></tr>
+      <tr><td><b>「床前」的榻</b></td><td>左下角淡墨榻沿三笔，点在月光落地的位置——床前。</td><td><b>已落地</b></td></tr>
+      <tr><td><b>「思故乡」的去向</b></td><td>故乡不在画面里。合段唯一的动作是低头，随后全片落入 2s 静默——思乡只在一低头的静默里。</td><td><b>已落地</b></td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout" style="margin-top:18px"><b>镜头约束（与 §8 同源）：</b>全片 1.00→1.10×，单段峰值速度约 1.7%/s，全片跨度 1.10×——远低于 1.25× 上限，不触发「急推破坏意境」问题。人物的举头/低头由姿态完成，不靠镜头推拉。</div>
+</section>
+
+<footer>
+  依据来源：马远《寒江独钓图》相关著录与赏析、沈周山水点景研究、梁楷减笔人物、以及《山水情》(1988，人物设计吴山明 / 背景卓鹤君) 相关报道。§0–§7 为设计方案；§8 的裁定已落地到 ink_animations.html 的 <code>#bd-boat</code>（仅改篷，未加人），并重跑 O1／O3 通过。§9 的裁定已落地到第三幅《静夜思》（<code>#sy-figure</code> 窗前背影）。<br>
+  <b>通用层：</b>本页的跨诗语法（三条古诀 · 身份谱 · 姿态式谱 · 笔法 · 四档 · 参数化生成器）见 <a href="ink_figure_grammar.html">《水墨画中古代人物的造型语法 · 通用层》</a>。
+</footer>
+</div>
+
+<script>
+(function(){
+  var HULL = 'M468 468 Q585 502 702 468 Q662 490 585 492 Q508 490 468 468 Z';
+
+  // 四个方案：只改"人"的造型，舟/背景/节拍共用
+  var SCHEMES = {
+    A: { name:'A · 叠墨块', desc:'现状。帽弧+身块，单色，舟对称。', build:function(){
+      return '<path d="'+HULL+'" fill="#1C1C1C" opacity="0.88"/>'
+           + '<path d="M566 428 Q586 406 606 428 Z" fill="#1C1C1C" opacity="0.92"/>'
+           + '<path d="M576 428 L596 428 L598 456 L574 456 Z" fill="#1C1C1C" opacity="0.88"/>';
+    }},
+    B: { name:'B · 减笔点景', desc:'斗笠锥+檐、前倾蓑衣、持竿、篷为淡底。', build:function(){
+      return '<path d="M524 470 Q585 442 648 470 Z" fill="#5A564D" opacity="0.30"/>'
+           + '<path d="'+HULL+'" fill="#1C1C1C" opacity="0.86"/>'
+           + '<path d="M572 430 Q564 448 574 464 Q585 471 597 464 Q605 450 600 430 Q586 423 572 430 Z" fill="#1C1C1C" opacity="0.86"/>'
+           + '<path d="M586 400 L612 428 Q586 434 560 428 Z" fill="#1C1C1C" opacity="0.94"/>'
+           + '<path d="M600 448 L650 466" stroke="#1C1C1C" stroke-width="1.7" fill="none" opacity="0.85"/>'
+           + '<path d="M650 466 Q664 504 650 552" stroke="#1C1C1C" stroke-width="1" fill="none" opacity="0.5"/>';
+    }},
+    C: { name:'C · 分档减笔', desc:'推荐。造型同 B，墨分浓/重/中/淡，人从舟上"拎"出来。', build:function(){
+      return '<path d="M524 470 Q585 442 648 470 Z" fill="#6E6A60" opacity="0.28"/>'
+           + '<path d="'+HULL+'" fill="#1C1C1C" opacity="0.70"/>'
+           + '<path d="M572 430 Q564 448 574 464 Q585 471 597 464 Q605 450 600 430 Q586 423 572 430 Z" fill="#1C1C1C" opacity="0.80"/>'
+           + '<path d="M578 436 Q584 452 579 462" stroke="#F6F3EC" stroke-width="1" fill="none" opacity="0.55"/>'
+           + '<path d="M586 400 L612 428 Q586 434 560 428 Z" fill="#1C1C1C" opacity="0.97"/>'
+           + '<path d="M600 448 L650 466" stroke="#3A362F" stroke-width="1.6" fill="none" opacity="0.50"/>'
+           + '<path d="M650 466 Q664 504 650 552" stroke="#3A362F" stroke-width="1" fill="none" opacity="0.40"/>';
+    }},
+    D: { name:'D · 白描勾线', desc:'线描轮廓。可读性最高，但最易滑向插画。', build:function(){
+      return '<path d="M524 470 Q585 442 648 470" fill="none" stroke="#5A564D" stroke-width="1" opacity="0.5"/>'
+           + '<path d="'+HULL+'" fill="none" stroke="#1C1C1C" stroke-width="1.6" opacity="0.85"/>'
+           + '<path d="M572 430 Q564 448 574 464 Q585 471 597 464 Q605 450 600 430" fill="none" stroke="#1C1C1C" stroke-width="1.4" opacity="0.85"/>'
+           + '<path d="M579 438 Q584 452 580 462" fill="none" stroke="#1C1C1C" stroke-width="0.9" opacity="0.55"/>'
+           + '<path d="M592 438 Q596 452 593 462" fill="none" stroke="#1C1C1C" stroke-width="0.9" opacity="0.55"/>'
+           + '<path d="M586 400 L612 428 Q586 434 560 428 Z" fill="none" stroke="#1C1C1C" stroke-width="1.4" opacity="0.9"/>'
+           + '<path d="M600 448 L650 466" stroke="#1C1C1C" stroke-width="1.4" fill="none" opacity="0.8"/>'
+           + '<path d="M650 466 Q664 504 650 552" stroke="#1C1C1C" stroke-width="0.9" fill="none" opacity="0.5"/>';
+    }}
+  };
+
+  var ANNOT = '<g font-family="PingFang SC,sans-serif" font-size="10" fill="#A83A2C">'
+    + '<line x1="586" y1="400" x2="586" y2="378" stroke="#A83A2C" stroke-width=".8"/><text x="590" y="375">斗笠：锥+檐</text>'
+    + '<line x1="572" y1="448" x2="520" y2="424" stroke="#A83A2C" stroke-width=".8"/><text x="470" y="421">蓑衣：前倾+飞白</text>'
+    + '<line x1="650" y1="466" x2="690" y2="446" stroke="#A83A2C" stroke-width=".8"/><text x="692" y="443">竿 → 丝</text>'
+    + '<line x1="640" y1="470" x2="676" y2="492" stroke="#A83A2C" stroke-width=".8"/><text x="678" y="497">篷：淡墨底</text>'
+    + '</g>';
+
+  var rig = document.getElementById('rig');
+  var stage = document.getElementById('stage');
+  var cap = document.getElementById('stageCap');
+  var thumbs = document.getElementById('thumbs');
+  var zoomEl = document.getElementById('zoom');
+  var motionEl = document.getElementById('motion');
+  var annotEl = document.getElementById('annot');
+  var current = 'C';
+  var playing = true;
+
+  function renderThumb(key){
+    return '<svg viewBox="470 380 240 150" aria-hidden="true">'
+      + '<rect x="470" y="380" width="240" height="150" fill="#F6F3EC"/>'
+      + '<path d="M0 258 Q220 274 452 262 Q680 250 900 264" fill="none" stroke="#3A362F" stroke-width="1.4" opacity="0.16"/>'
+      + SCHEMES[key].build() + '</svg>';
+  }
+
+  Object.keys(SCHEMES).forEach(function(k){
+    var b = document.createElement('button');
+    b.setAttribute('aria-pressed', k === current ? 'true' : 'false');
+    b.innerHTML = renderThumb(k) + '<span class="tn"><b>' + k + '</b> ' + SCHEMES[k].name.split('· ')[1] + '</span>';
+    b.addEventListener('click', function(){ current = k; sync(); });
+    thumbs.appendChild(b);
+  });
+
+  function sync(){
+    Array.prototype.forEach.call(thumbs.children, function(b, i){
+      b.setAttribute('aria-pressed', Object.keys(SCHEMES)[i] === current ? 'true' : 'false');
+    });
+    rig.innerHTML = SCHEMES[current].build() + (annotEl.checked ? ANNOT : '');
+    cap.textContent = SCHEMES[current].name + '　—　' + (zoomEl.checked ? '转段 1.12× 观感' : '全景');
+    stage.setAttribute('viewBox', zoomEl.checked ? '183 202 804 536' : '0 0 900 600');
+  }
+
+  zoomEl.addEventListener('change', sync);
+  annotEl.addEventListener('change', sync);
+
+  var t0 = performance.now();
+  function loop(now){
+    var t = (now - t0) / 1000;
+    if (motionEl.checked){
+      var tilt = Math.sin(t * 0.55) * 0.9;
+      var bob = Math.sin(t * 1.15) * 0.7;
+      rig.setAttribute('transform', 'rotate(' + tilt.toFixed(2) + ' 585 470) translate(0 ' + bob.toFixed(2) + ')');
+    } else {
+      rig.setAttribute('transform', 'rotate(0 585 470)');
+    }
+    requestAnimationFrame(loop);
+  }
+  sync();
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

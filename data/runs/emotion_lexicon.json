@@ -1,0 +1,188 @@
+{
+ "meta": {
+  "name": "emotion_lexicon_report",
+  "version": "1.0",
+  "role": "D6 护栏：情感词表结构 + 字面情感统计（ρ/H 统计前提）",
+  "note": "ρ/H 属卡3，本报告只给 ŷ_literal 与密度，不裁定 ρ/H 数值。"
+ },
+ "lexicon": {
+  "taxonomy": 14,
+  "words": 85,
+  "qing": 65,
+  "jing": 20
+ },
+ "poems": {
+  "jx": {
+   "title": "江雪",
+   "n_chars": 20,
+   "qing": [],
+   "jing": [
+    {
+     "w": "孤",
+     "cat": "寂",
+     "kind": "jing",
+     "i": 0.6,
+     "code": null,
+     "pos": 10
+    },
+    {
+     "w": "舟",
+     "cat": "寂",
+     "kind": "jing",
+     "i": 0.3,
+     "code": null,
+     "pos": 11
+    },
+    {
+     "w": "独",
+     "cat": "寂",
+     "kind": "jing",
+     "i": 0.55,
+     "code": null,
+     "pos": 15
+    },
+    {
+     "w": "寒",
+     "cat": "寂",
+     "kind": "jing",
+     "i": 0.55,
+     "code": null,
+     "pos": 17
+    }
+   ],
+   "coded": [],
+   "qing_count": 0,
+   "qing_density": 0.0,
+   "jing_density": 0.1,
+   "y_literal": {
+    "V": -0.4,
+    "A": 0.15,
+    "T": 0.3
+   },
+   "y_literal_with_code": {
+    "V": -0.4,
+    "A": 0.15,
+    "T": 0.3
+   }
+  },
+  "jys": {
+   "title": "静夜思",
+   "n_chars": 20,
+   "qing": [
+    {
+     "w": "思",
+     "cat": "思",
+     "kind": "qing",
+     "i": 0.7,
+     "code": null,
+     "pos": 17
+    }
+   ],
+   "jing": [],
+   "coded": [],
+   "qing_count": 1,
+   "qing_density": 0.035,
+   "jing_density": 0.0,
+   "y_literal": {
+    "V": -0.3,
+    "A": 0.25,
+    "T": 0.45
+   },
+   "y_literal_with_code": {
+    "V": -0.3,
+    "A": 0.25,
+    "T": 0.45
+   }
+  },
+  "bd": {
+   "title": "早发白帝城",
+   "n_chars": 28,
+   "qing": [],
+   "jing": [
+    {
+     "w": "彩",
+     "cat": "喜",
+     "kind": "jing",
+     "i": 0.45,
+     "code": null,
+     "pos": 4
+    },
+    {
+     "w": "猿",
+     "cat": "哀",
+     "kind": "jing",
+     "i": 0.55,
+     "code": "cultural",
+     "pos": 16
+    },
+    {
+     "w": "啼",
+     "cat": "哀",
+     "kind": "jing",
+     "i": 0.5,
+     "code": "cultural",
+     "pos": 18
+    },
+    {
+     "w": "轻",
+     "cat": "闲",
+     "kind": "jing",
+     "i": 0.45,
+     "code": null,
+     "pos": 21
+    },
+    {
+     "w": "舟",
+     "cat": "寂",
+     "kind": "jing",
+     "i": 0.3,
+     "code": null,
+     "pos": 22
+    }
+   ],
+   "coded": [
+    {
+     "w": "猿",
+     "cat": "哀",
+     "kind": "jing",
+     "i": 0.55,
+     "code": "cultural",
+     "pos": 16
+    },
+    {
+     "w": "啼",
+     "cat": "哀",
+     "kind": "jing",
+     "i": 0.5,
+     "code": "cultural",
+     "pos": 18
+    }
+   ],
+   "qing_count": 0,
+   "qing_density": 0.0,
+   "jing_density": 0.0804,
+   "y_literal": {
+    "V": 0.35,
+    "A": 0.3188,
+    "T": 0.1688
+   },
+   "y_literal_with_code": {
+    "V": -0.1633,
+    "A": 0.2867,
+    "T": 0.3233
+   }
+  }
+ },
+ "checks": [
+  "江雪 情语数 = 0 ✓（卡3 关键事实）",
+  "静夜思 含情语 ['思'] ✓",
+  "白帝城 字面剖面 V=0.35 > 0 ✓（卡3「字面上全是欢快」）",
+  "江雪 字面剖面 V=-0.4 < 0 ✓（孤/寒之景）"
+ ],
+ "errors": [],
+ "summary": {
+  "poems": 3,
+  "errors": 0,
+  "all_pass": true
+ }
+}

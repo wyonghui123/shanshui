@@ -1,0 +1,46 @@
+{
+  "poem": "江雪 · 柳宗元",
+  "poem_key": "jx",
+  "backend": "edge",
+  "voice": "zh-CN-YunjianNeural",
+  "sr": 24000,
+  "duration": 18.952,
+  "lines": [
+    {
+      "seg": "起",
+      "text": "千山鸟飞绝",
+      "rate": 0.56,
+      "pitch": 0.82,
+      "vol": 0.72,
+      "pre": 0.4,
+      "post": 1.2
+    },
+    {
+      "seg": "承",
+      "text": "万径人踪灭",
+      "rate": 0.54,
+      "pitch": 0.8,
+      "vol": 0.68,
+      "pre": 0.5,
+      "post": 1.4
+    },
+    {
+      "seg": "转",
+      "text": "孤舟蓑笠翁",
+      "rate": 0.58,
+      "pitch": 0.86,
+      "vol": 0.78,
+      "pre": 0.4,
+      "post": 1.2
+    },
+    {
+      "seg": "合",
+      "text": "独钓寒江雪",
+      "rate": 0.5,
+      "pitch": 0.78,
+      "vol": 0.74,
+      "pre": 0.7,
+      "post": 1.8
+    }
+  ]
+}

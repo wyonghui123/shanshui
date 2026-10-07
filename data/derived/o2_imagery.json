@@ -1,0 +1,1198 @@
+{
+  "meta": {
+    "generated": "2026-10-06T11:03:31",
+    "lexicon": "o2_lexicon.json @ v1.0",
+    "gold": "o2_gold.json @ v1.1",
+    "gate": "o2_gate.json @ v1.0 · real=0.575 blank=0.275",
+    "pluggable": {
+      "①分词": "T15 TopWORDS-Poetry 格律先验",
+      "②意象": "C1 Albert-BiLSTM-MHA-CRF",
+      "③消歧": "B2 UD-Kanbun / guwencombo"
+    },
+    "current": "词典 + 规则替身（模型未接入）；接口固定，替换 [PLUG] 函数即可",
+    "scope_note": "层级与极性为词典提示，非可自动推断项；正式层级由 O4 构图求解器给出。"
+  },
+  "poems": {
+    "jx": {
+      "title": "江雪",
+      "author": "柳宗元",
+      "form": {
+        "name": "五言绝句",
+        "lines": 4,
+        "perLine": 5
+      },
+      "text": [
+        "千山鸟飞绝",
+        "万径人踪灭",
+        "孤舟蓑笠翁",
+        "独钓寒江雪"
+      ],
+      "segment_ok": true,
+      "nodes": [
+        {
+          "id": "jx-1-1",
+          "poem": "jx",
+          "surface": "千山",
+          "canonical": "千山",
+          "line": 1,
+          "span": [
+            1,
+            2
+          ],
+          "pos": "n",
+          "channel": "v",
+          "conc": 0.9,
+          "neg_kind": null,
+          "layer_hint": "远景",
+          "layer_source": "lexicon-hint",
+          "polarity_hint": "壮阔·冷寂",
+          "polarity_source": "lexicon-hint",
+          "focus": false,
+          "e": {
+            "pos": "n",
+            "head": "山",
+            "gloss": "重重山峦",
+            "conc": 0.9,
+            "channel": "v",
+            "polarity": "壮阔·冷寂",
+            "layer": "远景",
+            "mod": "千(num)+山"
+          },
+          "gate": {
+            "class": "实写",
+            "render": "直接绘制",
+            "basis": "可画性 0.9 ≥ 0.575"
+          }
+        },
+        {
+          "id": "jx-1-3",
+          "poem": "jx",
+          "surface": "鸟",
+          "canonical": "鸟",
+          "line": 1,
+          "span": [
+            3,
+            3
+          ],
+          "pos": "n",
+          "channel": "v",
+          "conc": 0.9,
+          "neg_kind": "缺席",
+          "layer_hint": "远景",
+          "layer_source": "lexicon-hint",
+          "polarity_hint": "生机",
+          "polarity_source": "lexicon-hint",
+          "focus": false,
+          "e": {
+            "pos": "n",
+            "gloss": "飞鸟",
+            "conc": 0.9,
+            "channel": "v",
+            "polarity": "生机",
+            "layer": "远景"
+          },
+          "gate": {
+            "class": "不画（负节点）",
+            "render": "约束留白的面积与连通性",
+            "basis": "否定性存在：本该有而没有"
+          }
+        },
+        {
+          "id": "jx-2-1",
+          "poem": "jx",
+          "surface": "万径",
+          "canonical": "万径",
+          "line": 2,
+          "span": [
+            1,
+            2
+          ],
+          "pos": "n",
+          "channel": "v",
+          "conc": 0.6,
+          "neg_kind": null,
+          "layer_hint": "中景",
+          "layer_source": "lexicon-hint",
+          "polarity_hint": "人世·荒芜",
+          "polarity_source": "lexicon-hint",
+          "focus": false,
+          "e": {
+            "pos": "n",
+            "head": "径",
+            "gloss": "众多小路",
+            "conc": 0.6,
+            "channel": "v",
+            "polarity": "人世·荒芜",
+            "layer": "中景",
+            "mod": "万(num)+径",
+            "note": "实而近乎虚写"
+          },
+          "gate": {
+            "class": "实写",
+            "render": "直接绘制",
+            "basis": "可画性 0.6 ≥ 0.575"
+          }
+        },
+        {
+          "id": "jx-2-3",
+          "poem": "jx",
+          "surface": "人踪",
+          "canonical": "人踪",
+          "line": 2,
+          "span": [
+            3,
+            4
+          ],
+          "pos": "n",
+          "channel": "v",
+          "conc": 0.3,
+          "neg_kind": "缺席",
+          "layer_hint": "中景",
+          "layer_source": "lexicon-hint",
+          "polarity_hint": "人事",
+          "polarity_source": "lexicon-hint",
+          "focus": false,
+          "e": {
+            "pos": "n",
+            "head": "踪",
+            "gloss": "人的足迹",
+            "conc": 0.3,
+            "channel": "v",
+            "polarity": "人事",
+            "layer": "中景",
+            "mod": "人+踪"
+          },
+          "gate": {
+            "class": "不画（负节点）",
+            "render": "约束留白的面积与连通性",
+            "basis": "否定性存在：本该有而没有"
+          }
+        },
+        {
+          "id": "jx-3-1",
+          "poem": "jx",
+          "surface": "孤舟",
+          "canonical": "孤舟",
+          "line": 3,
+          "span": [
+            1,
+            2
+          ],
+          "pos": "n",
+          "channel": "v",
+          "conc": 0.95,
+          "neg_kind": null,
+          "layer_hint": "近景",
+          "layer_source": "lexicon-hint",
+          "polarity_hint": "漂泊·孤立",
+          "polarity_source": "lexicon-hint",
+          "focus": true,
+          "e": {
+            "pos": "n",
+            "head": "舟",
+            "gloss": "孤零小船",
+            "conc": 0.95,
+            "channel": "v",
+            "polarity": "漂泊·孤立",
+            "layer": "近景",
+            "mod": "孤(adj)+舟",
+            "focus": true
+          },
+          "gate": {
+            "class": "实写",
+            "render": "直接绘制",
+            "basis": "可画性 0.95 ≥ 0.575"
+          }
+        },
+        {
+          "id": "jx-3-3",
+          "poem": "jx",
+          "surface": "蓑笠翁",
+          "canonical": "蓑笠翁",
+          "line": 3,
+          "span": [
+            3,
+            5
+          ],
+          "pos": "n",
+          "channel": "v",
+          "conc": 0.9,
+          "neg_kind": null,
+          "layer_hint": "近景",
+          "layer_source": "lexicon-hint",
+          "polarity_hint": "隐逸·渔樵",
+          "polarity_source": "lexicon-hint",
+          "focus": true,
+          "e": {
+            "pos": "n",
+            "head": "翁",
+            "gloss": "披蓑戴笠的老翁",
+            "conc": 0.9,
+            "channel": "v",
+            "polarity": "隐逸·渔樵",
+            "layer": "近景",
+            "mod": "蓑笠+翁",
+            "focus": true
+          },
+          "gate": {
+            "class": "实写",
+            "render": "直接绘制",
+            "basis": "可画性 0.9 ≥ 0.575"
+          }
+        },
+        {
+          "id": "jx-4-1",
+          "poem": "jx",
+          "surface": "独钓",
+          "canonical": "独钓",
+          "line": 4,
+          "span": [
+            1,
+            2
+          ],
+          "pos": "v",
+          "channel": "v",
+          "conc": 0.7,
+          "neg_kind": null,
+          "layer_hint": "近景",
+          "layer_source": "lexicon-hint",
+          "polarity_hint": "孤守·不屈",
+          "polarity_source": "lexicon-hint",
+          "focus": false,
+          "e": {
+            "pos": "v",
+            "head": "钓",
+            "gloss": "独自垂钓",
+            "conc": 0.7,
+            "channel": "v",
+            "polarity": "孤守·不屈",
+            "layer": "近景",
+            "action": true,
+            "mod": "独(adv)+钓"
+          },
+          "gate": {
+            "class": "动作（以钓丝／船迹代形）",
+            "render": "以轨迹而非实体呈现",
+            "basis": "动词意象，无独立实体"
+          }
+        },
+        {
+          "id": "jx-4-3",
+          "poem": "jx",
+          "surface": "寒江",
+          "canonical": "寒江",
+          "line": 4,
+          "span": [
+            3,
+            4
+          ],
+          "pos": "n",
+          "channel": "v",
+          "conc": 0.45,
+          "neg_kind": null,
+          "layer_hint": "中景",
+          "layer_source": "lexicon-hint",
+          "polarity_hint": "冷寂·静",
+          "polarity_source": "lexicon-hint",
+          "focus": false,
+          "e": {
+            "pos": "n",
+            "head": "江",
+            "gloss": "寒冷的江面",
+            "conc": 0.45,
+            "channel": "v",
+            "polarity": "冷寂·静",
+            "layer": "中景",
+            "mod": "寒(adj)+江"
+          },
+          "gate": {
+            "class": "虚写",
+            "render": "淡染／留白式表现，仍占位",
+            "basis": "可画性 0.45 ∈ [0.275, 0.575)"
+          }
+        },
+        {
+          "id": "jx-4-5",
+          "poem": "jx",
+          "surface": "雪",
+          "canonical": "雪",
+          "line": 4,
+          "span": [
+            5,
+            5
+          ],
+          "pos": "n",
+          "channel": "v",
+          "conc": 0.35,
+          "neg_kind": null,
+          "layer_hint": "全域",
+          "layer_source": "lexicon-hint",
+          "polarity_hint": "洁净·覆盖",
+          "polarity_source": "lexicon-hint",
+          "focus": false,
+          "e": {
+            "pos": "n",
+            "gloss": "雪",
+            "conc": 0.35,
+            "channel": "v",
+            "polarity": "洁净·覆盖",
+            "layer": "全域"
+          },
+          "gate": {
+            "class": "虚写",
+            "render": "淡染／留白式表现，仍占位",
+            "basis": "可画性 0.35 ∈ [0.275, 0.575)"
+          }
+        }
+      ],
+      "edges": [
+        {
+          "from": "鸟",
+          "to": "飞绝",
+          "rel": "neg-exist",
+          "src": "rule:neg",
+          "line": 1
+        },
+        {
+          "from": "千山",
+          "to": "鸟",
+          "rel": "coexist",
+          "src": "rule:adjacent",
+          "line": 1
+        },
+        {
+          "from": "千山",
+          "to": "山",
+          "rel": "mod(intra)",
+          "src": "lexicon:mod",
+          "line": 1
+        },
+        {
+          "from": "人踪",
+          "to": "灭",
+          "rel": "neg-exist",
+          "src": "rule:neg",
+          "line": 2
+        },
+        {
+          "from": "万径",
+          "to": "人踪",
+          "rel": "coexist",
+          "src": "rule:adjacent",
+          "line": 2
+        },
+        {
+          "from": "万径",
+          "to": "径",
+          "rel": "mod(intra)",
+          "src": "lexicon:mod",
+          "line": 2
+        },
+        {
+          "from": "人踪",
+          "to": "踪",
+          "rel": "mod(intra)",
+          "src": "lexicon:mod",
+          "line": 2
+        },
+        {
+          "from": "孤舟",
+          "to": "蓑笠翁",
+          "rel": "coexist",
+          "src": "rule:adjacent",
+          "line": 3
+        },
+        {
+          "from": "孤舟",
+          "to": "舟",
+          "rel": "mod(intra)",
+          "src": "lexicon:mod",
+          "line": 3
+        },
+        {
+          "from": "蓑笠翁",
+          "to": "翁",
+          "rel": "mod(intra)",
+          "src": "lexicon:mod",
+          "line": 3
+        },
+        {
+          "from": "寒江",
+          "to": "雪",
+          "rel": "coexist",
+          "src": "rule:adjacent",
+          "line": 4
+        },
+        {
+          "from": "独钓",
+          "to": "钓",
+          "rel": "mod(intra)",
+          "src": "lexicon:mod",
+          "line": 4
+        },
+        {
+          "from": "寒江",
+          "to": "江",
+          "rel": "mod(intra)",
+          "src": "lexicon:mod",
+          "line": 4
+        }
+      ],
+      "disambiguation": [
+        {
+          "span": "孤舟蓑笠翁",
+          "chosen": "两个并列意象（孤舟 ‖ 蓑笠翁）",
+          "alt": "「孤舟上的蓑笠翁」定中／领属（合并为一）",
+          "why": "① 五言 2/3 顿把「孤舟」与「蓑笠翁」切在顿的两侧；② 全诗节点两两成对（千山/万径、鸟/人踪、孤舟/蓑笠翁），并列读法维持对仗；③ 「独钓」以「翁」为施事，合并则「独钓」失独立主体。",
+          "need_review": true,
+          "line": 3
+        },
+        {
+          "span": "独钓寒江雪",
+          "chosen": "两个意象（寒江 ‖ 雪）",
+          "alt": "「寒江之雪」定中（合并为一）",
+          "why": "「雪」为全域覆盖物，「寒江」为水域；二者景深不同（中景／全域），gold 亦分列。",
+          "need_review": true,
+          "line": 4
+        }
+      ],
+      "nodes_summary": {
+        "正节点": [
+          "千山",
+          "万径",
+          "孤舟",
+          "蓑笠翁",
+          "寒江",
+          "雪"
+        ],
+        "留白节点": [],
+        "负节点": [
+          {
+            "canonical": "鸟",
+            "kind": "缺席"
+          },
+          {
+            "canonical": "人踪",
+            "kind": "缺席"
+          }
+        ],
+        "动作节点": [
+          "独钓"
+        ]
+      },
+      "counts": {
+        "imagery": 9,
+        "pos": 6,
+        "blank": 0,
+        "neg": 2,
+        "action": 1
+      }
+    },
+    "bd": {
+      "title": "早发白帝城",
+      "author": "李白",
+      "form": {
+        "name": "七言绝句",
+        "lines": 4,
+        "perLine": 7
+      },
+      "text": [
+        "朝辞白帝彩云间",
+        "千里江陵一日还",
+        "两岸猿声啼不住",
+        "轻舟已过万重山"
+      ],
+      "segment_ok": true,
+      "nodes": [
+        {
+          "id": "bd-1-3",
+          "poem": "bd",
+          "surface": "白帝",
+          "canonical": "白帝城",
+          "line": 1,
+          "span": [
+            3,
+            4
+          ],
+          "pos": "n",
+          "channel": "v",
+          "conc": 0.85,
+          "neg_kind": null,
+          "layer_hint": "远景",
+          "layer_source": "lexicon-hint",
+          "polarity_hint": "高峻·起点",
+          "polarity_source": "lexicon-hint",
+          "focus": false,
+          "e": {
+            "pos": "n",
+            "canonical": "白帝城",
+            "head": "城",
+            "gloss": "白帝（城）",
+            "conc": 0.85,
+            "channel": "v",
+            "polarity": "高峻·起点",
+            "layer": "远景"
+          },
+          "gate": {
+            "class": "实写",
+            "render": "直接绘制",
+            "basis": "可画性 0.85 ≥ 0.575"
+          }
+        },
+        {
+          "id": "bd-1-5",
+          "poem": "bd",
+          "surface": "彩云",
+          "canonical": "彩云",
+          "line": 1,
+          "span": [
+            5,
+            6
+          ],
+          "pos": "n",
+          "channel": "v",
+          "conc": 0.55,
+          "neg_kind": null,
+          "layer_hint": "远景",
+          "layer_source": "lexicon-hint",
+          "polarity_hint": "明丽·祥瑞",
+          "polarity_source": "lexicon-hint",
+          "focus": false,
+          "e": {
+            "pos": "n",
+            "head": "云",
+            "gloss": "绚丽的云霞",
+            "conc": 0.55,
+            "channel": "v",
+            "polarity": "明丽·祥瑞",
+            "layer": "远景",
+            "mod": "彩(adj)+云"
+          },
+          "gate": {
+            "class": "虚写",
+            "render": "淡染／留白式表现，仍占位",
+            "basis": "可画性 0.55 ∈ [0.275, 0.575)"
+          }
+        },
+        {
+          "id": "bd-2-1",
+          "poem": "bd",
+          "surface": "千里",
+          "canonical": "千里",
+          "line": 2,
+          "span": [
+            1,
+            2
+          ],
+          "pos": "nq",
+          "channel": "v",
+          "conc": 0.15,
+          "neg_kind": null,
+          "layer_hint": "全域",
+          "layer_source": "lexicon-hint",
+          "polarity_hint": "遥远·辽廓",
+          "polarity_source": "lexicon-hint",
+          "focus": false,
+          "e": {
+            "pos": "nq",
+            "head": "里",
+            "gloss": "千里之遥",
+            "conc": 0.15,
+            "channel": "v",
+            "polarity": "遥远·辽廓",
+            "layer": "全域",
+            "quantity": true
+          },
+          "gate": {
+            "class": "不可实写",
+            "render": "留白／转译为空间或时间量感",
+            "basis": "可画性 0.15 < 0.275"
+          }
+        },
+        {
+          "id": "bd-2-3",
+          "poem": "bd",
+          "surface": "江陵",
+          "canonical": "江陵",
+          "line": 2,
+          "span": [
+            3,
+            4
+          ],
+          "pos": "n",
+          "channel": "v",
+          "conc": 0.2,
+          "neg_kind": null,
+          "layer_hint": "极远",
+          "layer_source": "lexicon-hint",
+          "polarity_hint": "归处·目标",
+          "polarity_source": "lexicon-hint",
+          "focus": false,
+          "e": {
+            "pos": "n",
+            "gloss": "江陵（地名）",
+            "conc": 0.2,
+            "channel": "v",
+            "polarity": "归处·目标",
+            "layer": "极远"
+          },
+          "gate": {
+            "class": "不可实写",
+            "render": "留白／转译为空间或时间量感",
+            "basis": "可画性 0.2 < 0.275"
+          }
+        },
+        {
+          "id": "bd-2-5",
+          "poem": "bd",
+          "surface": "一日",
+          "canonical": "一日",
+          "line": 2,
+          "span": [
+            5,
+            6
+          ],
+          "pos": "nq",
+          "channel": "v",
+          "conc": 0.1,
+          "neg_kind": null,
+          "layer_hint": "全域",
+          "layer_source": "lexicon-hint",
+          "polarity_hint": "迅疾·时间压缩",
+          "polarity_source": "lexicon-hint",
+          "focus": false,
+          "e": {
+            "pos": "nq",
+            "head": "日",
+            "gloss": "一天之内",
+            "conc": 0.1,
+            "channel": "v",
+            "polarity": "迅疾·时间压缩",
+            "layer": "全域",
+            "temporal": true
+          },
+          "gate": {
+            "class": "不可实写",
+            "render": "留白／转译为空间或时间量感",
+            "basis": "可画性 0.1 < 0.275"
+          }
+        },
+        {
+          "id": "bd-3-1",
+          "poem": "bd",
+          "surface": "两岸",
+          "canonical": "两岸",
+          "line": 3,
+          "span": [
+            1,
+            2
+          ],
+          "pos": "n",
+          "channel": "v",
+          "conc": 0.8,
+          "neg_kind": null,
+          "layer_hint": "中景",
+          "layer_source": "lexicon-hint",
+          "polarity_hint": "夹峙·峡谷",
+          "polarity_source": "lexicon-hint",
+          "focus": false,
+          "e": {
+            "pos": "n",
+            "head": "岸",
+            "gloss": "江流两岸",
+            "conc": 0.8,
+            "channel": "v",
+            "polarity": "夹峙·峡谷",
+            "layer": "中景",
+            "mod": "两(num)+岸",
+            "locative": true
+          },
+          "gate": {
+            "class": "实写",
+            "render": "直接绘制",
+            "basis": "可画性 0.8 ≥ 0.575"
+          }
+        },
+        {
+          "id": "bd-3-3",
+          "poem": "bd",
+          "surface": "猿声",
+          "canonical": "猿声",
+          "line": 3,
+          "span": [
+            3,
+            4
+          ],
+          "pos": "n",
+          "channel": "a",
+          "conc": 0,
+          "neg_kind": "跨通道",
+          "layer_hint": "中景",
+          "layer_source": "lexicon-hint",
+          "polarity_hint": "悲（原典）→被超越",
+          "polarity_source": "lexicon-hint",
+          "focus": false,
+          "e": {
+            "pos": "n",
+            "head": "声",
+            "gloss": "猿的啼声",
+            "conc": 0,
+            "channel": "a",
+            "polarity": "悲（原典）→被超越",
+            "layer": "中景",
+            "mod": "猿+声",
+            "audio": true
+          },
+          "gate": {
+            "class": "视觉不画（听觉正）",
+            "render": "约束音频轨与视觉轨的相位差",
+            "basis": "听觉通道为正、视觉通道为负"
+          }
+        },
+        {
+          "id": "bd-4-1",
+          "poem": "bd",
+          "surface": "轻舟",
+          "canonical": "轻舟",
+          "line": 4,
+          "span": [
+            1,
+            2
+          ],
+          "pos": "n",
+          "channel": "v",
+          "conc": 0.95,
+          "neg_kind": null,
+          "layer_hint": "近景",
+          "layer_source": "lexicon-hint",
+          "polarity_hint": "轻快·自由",
+          "polarity_source": "lexicon-hint",
+          "focus": true,
+          "e": {
+            "pos": "n",
+            "head": "舟",
+            "gloss": "轻快的小船",
+            "conc": 0.95,
+            "channel": "v",
+            "polarity": "轻快·自由",
+            "layer": "近景",
+            "mod": "轻(adj)+舟",
+            "focus": true
+          },
+          "gate": {
+            "class": "实写",
+            "render": "直接绘制",
+            "basis": "可画性 0.95 ≥ 0.575"
+          }
+        },
+        {
+          "id": "bd-4-5",
+          "poem": "bd",
+          "surface": "万重山",
+          "canonical": "万重山",
+          "line": 4,
+          "span": [
+            5,
+            7
+          ],
+          "pos": "n",
+          "channel": "v",
+          "conc": 0.85,
+          "neg_kind": null,
+          "layer_hint": "远景",
+          "layer_source": "lexicon-hint",
+          "polarity_hint": "险阻→被越过",
+          "polarity_source": "lexicon-hint",
+          "focus": false,
+          "e": {
+            "pos": "n",
+            "head": "山",
+            "gloss": "层叠万重山",
+            "conc": 0.85,
+            "channel": "v",
+            "polarity": "险阻→被越过",
+            "layer": "远景",
+            "mod": "万重(num)+山"
+          },
+          "gate": {
+            "class": "实写",
+            "render": "直接绘制",
+            "basis": "可画性 0.85 ≥ 0.575"
+          }
+        }
+      ],
+      "edges": [
+        {
+          "from": "彩云",
+          "to": "间",
+          "rel": "locative",
+          "src": "rule:loc",
+          "line": 1
+        },
+        {
+          "from": "白帝城",
+          "to": "彩云",
+          "rel": "coexist",
+          "src": "rule:adjacent",
+          "line": 1
+        },
+        {
+          "from": "彩云",
+          "to": "云",
+          "rel": "mod(intra)",
+          "src": "lexicon:mod",
+          "line": 1
+        },
+        {
+          "from": "千里",
+          "to": "江陵",
+          "rel": "coexist",
+          "src": "rule:adjacent",
+          "line": 2
+        },
+        {
+          "from": "江陵",
+          "to": "一日",
+          "rel": "coexist",
+          "src": "rule:adjacent",
+          "line": 2
+        },
+        {
+          "from": "猿声",
+          "to": "两岸",
+          "rel": "locative",
+          "src": "rule:loc",
+          "line": 3
+        },
+        {
+          "from": "两岸",
+          "to": "猿声",
+          "rel": "coexist",
+          "src": "rule:adjacent",
+          "line": 3
+        },
+        {
+          "from": "两岸",
+          "to": "岸",
+          "rel": "mod(intra)",
+          "src": "lexicon:mod",
+          "line": 3
+        },
+        {
+          "from": "猿声",
+          "to": "声",
+          "rel": "mod(intra)",
+          "src": "lexicon:mod",
+          "line": 3
+        },
+        {
+          "from": "轻舟",
+          "to": "舟",
+          "rel": "mod(intra)",
+          "src": "lexicon:mod",
+          "line": 4
+        },
+        {
+          "from": "万重山",
+          "to": "山",
+          "rel": "mod(intra)",
+          "src": "lexicon:mod",
+          "line": 4
+        }
+      ],
+      "disambiguation": [
+        {
+          "span": "两岸猿声啼不住",
+          "chosen": "处所+主体（两岸 ⊃ 猿声）",
+          "alt": "「两岸的猿声」定中",
+          "why": "「两岸」标处所、「猿声」为主体；猿声为听觉通道，视觉不画。",
+          "need_review": false,
+          "line": 3
+        }
+      ],
+      "nodes_summary": {
+        "正节点": [
+          "白帝城",
+          "彩云",
+          "两岸",
+          "轻舟",
+          "万重山"
+        ],
+        "留白节点": [
+          "千里",
+          "江陵",
+          "一日"
+        ],
+        "负节点": [
+          {
+            "canonical": "猿声",
+            "kind": "跨通道"
+          }
+        ],
+        "动作节点": []
+      },
+      "counts": {
+        "imagery": 9,
+        "pos": 5,
+        "blank": 3,
+        "neg": 1,
+        "action": 0
+      }
+    }
+  },
+  "validation": {
+    "jx": {
+      "recall": 1,
+      "precision": 1,
+      "lineOk": 1,
+      "spanOk": 1,
+      "classOk": 1,
+      "rows": [
+        {
+          "canonical": "千山",
+          "in_gold": true,
+          "in_auto": true,
+          "line": true,
+          "span": true,
+          "class_gold": "实写",
+          "class_auto": "实写",
+          "class_ok": true
+        },
+        {
+          "canonical": "鸟",
+          "in_gold": true,
+          "in_auto": true,
+          "line": true,
+          "span": true,
+          "class_gold": "负节点-缺席",
+          "class_auto": "负节点-缺席",
+          "class_ok": true
+        },
+        {
+          "canonical": "万径",
+          "in_gold": true,
+          "in_auto": true,
+          "line": true,
+          "span": true,
+          "class_gold": "实写",
+          "class_auto": "实写",
+          "class_ok": true
+        },
+        {
+          "canonical": "人踪",
+          "in_gold": true,
+          "in_auto": true,
+          "line": true,
+          "span": true,
+          "class_gold": "负节点-缺席",
+          "class_auto": "负节点-缺席",
+          "class_ok": true
+        },
+        {
+          "canonical": "孤舟",
+          "in_gold": true,
+          "in_auto": true,
+          "line": true,
+          "span": true,
+          "class_gold": "实写",
+          "class_auto": "实写",
+          "class_ok": true
+        },
+        {
+          "canonical": "蓑笠翁",
+          "in_gold": true,
+          "in_auto": true,
+          "line": true,
+          "span": true,
+          "class_gold": "实写",
+          "class_auto": "实写",
+          "class_ok": true
+        },
+        {
+          "canonical": "独钓",
+          "in_gold": true,
+          "in_auto": true,
+          "line": true,
+          "span": true,
+          "class_gold": "动作",
+          "class_auto": "动作",
+          "class_ok": true
+        },
+        {
+          "canonical": "寒江",
+          "in_gold": true,
+          "in_auto": true,
+          "line": true,
+          "span": true,
+          "class_gold": "虚写",
+          "class_auto": "虚写",
+          "class_ok": true
+        },
+        {
+          "canonical": "雪",
+          "in_gold": true,
+          "in_auto": true,
+          "line": true,
+          "span": true,
+          "class_gold": "虚写",
+          "class_auto": "虚写",
+          "class_ok": true
+        }
+      ],
+      "extra": []
+    },
+    "bd": {
+      "recall": 1,
+      "precision": 1,
+      "lineOk": 1,
+      "spanOk": 1,
+      "classOk": 1,
+      "rows": [
+        {
+          "canonical": "白帝城",
+          "in_gold": true,
+          "in_auto": true,
+          "line": true,
+          "span": true,
+          "class_gold": "实写",
+          "class_auto": "实写",
+          "class_ok": true
+        },
+        {
+          "canonical": "彩云",
+          "in_gold": true,
+          "in_auto": true,
+          "line": true,
+          "span": true,
+          "class_gold": "虚写",
+          "class_auto": "虚写",
+          "class_ok": true
+        },
+        {
+          "canonical": "千里",
+          "in_gold": true,
+          "in_auto": true,
+          "line": true,
+          "span": true,
+          "class_gold": "不可实写",
+          "class_auto": "不可实写",
+          "class_ok": true
+        },
+        {
+          "canonical": "江陵",
+          "in_gold": true,
+          "in_auto": true,
+          "line": true,
+          "span": true,
+          "class_gold": "不可实写",
+          "class_auto": "不可实写",
+          "class_ok": true
+        },
+        {
+          "canonical": "一日",
+          "in_gold": true,
+          "in_auto": true,
+          "line": true,
+          "span": true,
+          "class_gold": "不可实写",
+          "class_auto": "不可实写",
+          "class_ok": true
+        },
+        {
+          "canonical": "两岸",
+          "in_gold": true,
+          "in_auto": true,
+          "line": true,
+          "span": true,
+          "class_gold": "实写",
+          "class_auto": "实写",
+          "class_ok": true
+        },
+        {
+          "canonical": "猿声",
+          "in_gold": true,
+          "in_auto": true,
+          "line": true,
+          "span": true,
+          "class_gold": "负节点-跨通道",
+          "class_auto": "负节点-跨通道",
+          "class_ok": true
+        },
+        {
+          "canonical": "轻舟",
+          "in_gold": true,
+          "in_auto": true,
+          "line": true,
+          "span": true,
+          "class_gold": "实写",
+          "class_auto": "实写",
+          "class_ok": true
+        },
+        {
+          "canonical": "万重山",
+          "in_gold": true,
+          "in_auto": true,
+          "line": true,
+          "span": true,
+          "class_gold": "实写",
+          "class_auto": "实写",
+          "class_ok": true
+        }
+      ],
+      "extra": []
+    }
+  },
+  "crosscheck": {
+    "jx": {
+      "drawnImagery": [
+        "千山",
+        "万径",
+        "孤舟",
+        "蓑笠翁",
+        "独钓",
+        "寒江",
+        "雪"
+      ],
+      "missing": [],
+      "extra_in_art": [],
+      "design_added": [
+        {
+          "el": "jx-reed",
+          "note": "芦苇：诗中无据，为疏密对比所加 —— 裁定保留为设计附加元素，非诗意意象"
+        }
+      ],
+      "negLeak": []
+    },
+    "bd": {
+      "drawnImagery": [
+        "白帝城",
+        "彩云",
+        "两岸",
+        "万重山",
+        "轻舟"
+      ],
+      "missing": [],
+      "extra_in_art": [],
+      "design_added": [],
+      "negLeak": []
+    }
+  },
+  "review_queue": [
+    {
+      "poem": "jx",
+      "kind": "歧义句",
+      "line": 3,
+      "item": "孤舟蓑笠翁",
+      "detail": "取「两个并列意象（孤舟 ‖ 蓑笠翁）」，备选「「孤舟上的蓑笠翁」定中／领属（合并为一）」",
+      "why": "① 五言 2/3 顿把「孤舟」与「蓑笠翁」切在顿的两侧；② 全诗节点两两成对（千山/万径、鸟/人踪、孤舟/蓑笠翁），并列读法维持对仗；③ 「独钓」以「翁」为施事，合并则「独钓」失独立主体。"
+    },
+    {
+      "poem": "jx",
+      "kind": "歧义句",
+      "line": 4,
+      "item": "独钓寒江雪",
+      "detail": "取「两个意象（寒江 ‖ 雪）」，备选「「寒江之雪」定中（合并为一）」",
+      "why": "「雪」为全域覆盖物，「寒江」为水域；二者景深不同（中景／全域），gold 亦分列。"
+    }
+  ]
+}

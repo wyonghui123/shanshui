@@ -1,0 +1,531 @@
+{
+  "meta": {
+    "name": "d3_music_jys",
+    "version": "0.1",
+    "generated": "2026-10-05",
+    "status": "demo",
+    "role": "D3 声法表（示范 · 静夜思）。音乐层的单一真源：调式 / 配器 / 板式 / 结构 / 静默 + 逐字音事件。渲染器 src/music/music_render.py 只读本表，不自行编曲。",
+    "basis": "docs/research/music_expression_elements.html §3（情感→音乐映射：V3 客观 → 宫 + 箫为主 + 一板三眼）· §6（D3）",
+    "boundary": "本表只提供「与画面同调」的音乐参数；依嵇康《声无哀乐论》「和声无象」，不宣称音乐直出情感。",
+    "voice_note": "主奏为箫（真实北箫干声，pattingthestar / NeoSoundFonts pattingthestar-instruments 的 Beixiao-Raw.sf2，CC0 1.0，见 sampler.XiaoBank 与 src/music/build_xiao.py；采样库覆盖 C5–D6，按 rules.legato 连奏成乐句）；支持层为真实古筝（Pufermufin / Freesound sound 396868，CC0 1.0，见 sampler.GuzhengBank 与 src/music/build_guzheng.py；D 五声音阶，采样库覆盖 D2–A5），替掉原先的「古琴代筝」。events[] 逐字带 voice=xiao，起音取自配音实测逐字帧（voice_json），故 平长仄短 由起音疏密与音长自然兑现。"
+  },
+  "poem": {
+    "pid": "jys",
+    "title": "静夜思",
+    "author": "李白",
+    "lines": [
+      "床前明月光",
+      "疑是地上霜",
+      "举头望明月",
+      "低头思故乡"
+    ]
+  },
+  "anchor": {
+    "timing_authority": "dist/animation/ink_animations.html 的 SY 配置（画面与配音共用的实测行时序）",
+    "voice_json": "dist/audio/voice/jys_emotion_sad_zh-CN-YunjianNeural.json",
+    "voice_asset": "dist/audio/voice/jys_emotion_sad_zh-CN-YunjianNeural.wav",
+    "T": 18.187,
+    "line_windows": [
+      [
+        0.25,
+        3.535
+      ],
+      [
+        4.8,
+        7.5
+      ],
+      [
+        8.563,
+        10.843
+      ],
+      [
+        12.827,
+        16.587
+      ]
+    ],
+    "breath_windows": [
+      [
+        3.535,
+        4.8
+      ],
+      [
+        7.5,
+        8.563
+      ],
+      [
+        10.843,
+        12.827
+      ],
+      [
+        16.587,
+        18.187
+      ]
+    ],
+    "breath_note": "配音的行间气口。音乐不随之留白——由前音余响与低散音贯入（见 rules.ring_max_s / note_overlap_s / breath_events）。",
+    "char_onset_source": "voice_json syllables[].frames 作权重，线性分配到各行窗口",
+    "drift_tolerance_ms": 15
+  },
+  "mode": {
+    "name": "宫调式",
+    "tonic": "C",
+    "tonic_hz": 523.25,
+    "tonic_note": "本曲记谱音区：宫 = C5（oct 0）",
+    "register_note": "记谱音区由 C4 上移到 C5，实测修正而非风格选择：北箫实录采样库的真实音域是 D5–A6（587–1760 Hz，build_xiao.py 按包络事件切分 + 谐波簇定音核定），而 C4 一带的旋律要整体降 10 半音去迁就它，变调超过 ±3 半音后箫的管腔共振与气声结构就垮了，听感上主奏消失、只剩支持层的筝。改记在素材真实音区后，旋律 C5–A5 落在库的 D5–A6 内，最大变调约 2 半音。五声音阶内的级进关系与和声不变（宫= C、商 = D、角 = E、徵 = G、羽 = A 全部保持），只是整首上移一个八度。",
+    "degrees": {
+      "宫": 0,
+      "商": 2,
+      "角": 4,
+      "徵": 7,
+      "羽": 9
+    },
+    "scale_semitones": [
+      0,
+      2,
+      4,
+      7,
+      9
+    ],
+    "tuning_pattern": "五声宫调式：宫 商 角 徵 羽 = C D E G A（记在 C5–A5）",
+    "classical_basis": "《素问·阴阳应象大论》宫→土/中/长夏→脾→志为思（在声为歌）；《礼记·月令》季夏之月律中林钟。",
+    "V_A_T": {
+      "V": "V3 客观",
+      "A": "A2 缓",
+      "T": "T3 中 · 释放"
+    }
+  },
+  "instrument": {
+    "lead": "xiao",
+    "timbre": [
+      "箫（真实北箫干声）"
+    ],
+    "guest": [
+      {
+        "name": "guzheng",
+        "count": 4,
+        "note": "轻点：明月 / 霜 / 乡 处拨弦轻点（真实古筝，替代原先「古琴代筝」）"
+      }
+    ],
+    "substitution_note": "主奏箫与支持层筝均为真实干声（北箫 pattingthestar CC0 1.0；古筝 Pufermufin / Freesound 396868 CC0 1.0）。本曲不再有「代奏」：原「古琴代筝」已换为真实古筝。古琴库（GuqinSonGest, CC BY 4.0）仍保留给《江雪》。"
+  },
+  "meter": {
+    "name": "一板三眼（慢）",
+    "rule": "一板三眼、四拍一板（慢）；句间连贯——音随下一次起音收，行间气口由余响与低散音贯入，不设长静默"
+  },
+  "structure": [
+    {
+      "seg": "散起",
+      "t": [
+        0.0,
+        0.25
+      ],
+      "note": "空镜起兴：一声低音（商 · D3），余响贯入第 1 句"
+    },
+    {
+      "seg": "入调",
+      "t": [
+        0.25,
+        8.563
+      ],
+      "note": "第 1–2 句（缓）"
+    },
+    {
+      "seg": "入慢",
+      "t": [
+        8.563,
+        12.827
+      ],
+      "note": "第 3 句 + 句后气口（更缓）"
+    },
+    {
+      "seg": "尾声",
+      "t": [
+        12.827,
+        18.187
+      ],
+      "note": "第 4 句 → 末句韵脚（宫 · C5）余响贯至曲末；终止落主音宫 → T3 释放"
+    }
+  ],
+  "rules": {
+    "ring_max_s": 3.0,
+    "ring_min_s": 0.35,
+    "note_overlap_s": 0.22,
+    "note_release_ms": 120,
+    "legato_voice": "xiao",
+    "legato": {
+      "enabled": true,
+      "max_notes": 3,
+      "break_gap_s": 1.05,
+      "glide_ms": 55,
+      "tau": 3.2,
+      "vib_cents": 14,
+      "phrase_release_ms": 130,
+      "accent_role": [
+        "entering"
+      ],
+      "accent_gain": 0.2,
+      "tail_hold_s": 0.3,
+      "gain": 0.85,
+      "note": "箫主奏按乐句连奏：一板三眼宜缓，每 2–3 字换一次气，句内只换指不重新起音（滑音 55ms 略慢于笛，取箫按孔较缓之意）。逐字独立起音会让一句变成一串风琴，故不用。"
+    },
+    "ring_note": "每个音「响到下一次起音 + overlap」，末音贯至曲末；行间气口由余响与低散音填满，全曲无长静默。",
+    "melody_note": "主奏箫声的 平长仄短 / 入声短顿 由起音疏密与音长兑现（起音来自 voice_json 逐字帧），不再逐音标注音色档。"
+  },
+  "events": [
+    {
+      "line": 1,
+      "pos": 1,
+      "char": "床",
+      "role": "level",
+      "deg": 2,
+      "oct": 0,
+      "voice": "xiao",
+      "expr": "none",
+      "gain": 0.6
+    },
+    {
+      "line": 1,
+      "pos": 2,
+      "char": "前",
+      "role": "level",
+      "deg": 3,
+      "oct": 0,
+      "voice": "xiao",
+      "expr": "none",
+      "gain": 0.62
+    },
+    {
+      "line": 1,
+      "pos": 3,
+      "char": "明",
+      "role": "level",
+      "deg": 4,
+      "oct": 0,
+      "voice": "xiao",
+      "expr": "none",
+      "gain": 0.64
+    },
+    {
+      "line": 1,
+      "pos": 4,
+      "char": "月",
+      "role": "entering",
+      "deg": 3,
+      "oct": 0,
+      "voice": "xiao",
+      "expr": "none",
+      "gain": 0.6
+    },
+    {
+      "line": 1,
+      "pos": 5,
+      "char": "光",
+      "role": "rhyme",
+      "deg": 2,
+      "oct": 0,
+      "voice": "xiao",
+      "expr": "none",
+      "gain": 0.62,
+      "rhyme": true
+    },
+    {
+      "line": 2,
+      "pos": 1,
+      "char": "疑",
+      "role": "level",
+      "deg": 1,
+      "oct": 0,
+      "voice": "xiao",
+      "expr": "none",
+      "gain": 0.6
+    },
+    {
+      "line": 2,
+      "pos": 2,
+      "char": "是",
+      "role": "oblique",
+      "deg": 2,
+      "oct": 0,
+      "voice": "xiao",
+      "expr": "none",
+      "gain": 0.6
+    },
+    {
+      "line": 2,
+      "pos": 3,
+      "char": "地",
+      "role": "oblique",
+      "deg": 3,
+      "oct": 0,
+      "voice": "xiao",
+      "expr": "none",
+      "gain": 0.62
+    },
+    {
+      "line": 2,
+      "pos": 4,
+      "char": "上",
+      "role": "oblique",
+      "deg": 2,
+      "oct": 0,
+      "voice": "xiao",
+      "expr": "none",
+      "gain": 0.6
+    },
+    {
+      "line": 2,
+      "pos": 5,
+      "char": "霜",
+      "role": "rhyme",
+      "deg": 3,
+      "oct": 0,
+      "voice": "xiao",
+      "expr": "none",
+      "gain": 0.62,
+      "rhyme": true
+    },
+    {
+      "line": 3,
+      "pos": 1,
+      "char": "举",
+      "role": "oblique",
+      "deg": 2,
+      "oct": 0,
+      "voice": "xiao",
+      "expr": "none",
+      "gain": 0.6
+    },
+    {
+      "line": 3,
+      "pos": 2,
+      "char": "头",
+      "role": "level",
+      "deg": 3,
+      "oct": 0,
+      "voice": "xiao",
+      "expr": "none",
+      "gain": 0.62
+    },
+    {
+      "line": 3,
+      "pos": 3,
+      "char": "望",
+      "role": "oblique",
+      "deg": 4,
+      "oct": 0,
+      "voice": "xiao",
+      "expr": "none",
+      "gain": 0.64
+    },
+    {
+      "line": 3,
+      "pos": 4,
+      "char": "明",
+      "role": "level",
+      "deg": 4,
+      "oct": 0,
+      "voice": "xiao",
+      "expr": "none",
+      "gain": 0.64
+    },
+    {
+      "line": 3,
+      "pos": 5,
+      "char": "月",
+      "role": "entering",
+      "deg": 3,
+      "oct": 0,
+      "voice": "xiao",
+      "expr": "none",
+      "gain": 0.6
+    },
+    {
+      "line": 4,
+      "pos": 1,
+      "char": "低",
+      "role": "level",
+      "deg": 2,
+      "oct": 0,
+      "voice": "xiao",
+      "expr": "none",
+      "gain": 0.6
+    },
+    {
+      "line": 4,
+      "pos": 2,
+      "char": "头",
+      "role": "level",
+      "deg": 1,
+      "oct": 0,
+      "voice": "xiao",
+      "expr": "none",
+      "gain": 0.58
+    },
+    {
+      "line": 4,
+      "pos": 3,
+      "char": "思",
+      "role": "level",
+      "deg": 2,
+      "oct": 0,
+      "voice": "xiao",
+      "expr": "none",
+      "gain": 0.6
+    },
+    {
+      "line": 4,
+      "pos": 4,
+      "char": "故",
+      "role": "oblique",
+      "deg": 1,
+      "oct": 0,
+      "voice": "xiao",
+      "expr": "none",
+      "gain": 0.58
+    },
+    {
+      "line": 4,
+      "pos": 5,
+      "char": "乡",
+      "role": "rhyme",
+      "deg": 0,
+      "oct": 0,
+      "voice": "xiao",
+      "expr": "none",
+      "gain": 0.62,
+      "rhyme": true,
+      "note": "终止音＝宫（C5，主音）→ T3 释放"
+    }
+  ],
+  "散起": {
+    "char": "散起",
+    "at": 0.08,
+    "deg": 1,
+    "oct": -2,
+    "color": "san",
+    "expr": "none",
+    "drone": "guzheng",
+    "gain": 0.30,
+    "note": "空镜起兴的低音地基（商 · D3 = 146.8Hz）。用古筝素材的原生音，不再用古琴硬升 +17.2 半音（见 drone_fix_note）"
+  },
+  "breath_events": [
+    {
+      "at": 3.62,
+      "deg": 1,
+      "oct": -2,
+      "drone": "guzheng",
+      "gain": 0.30,
+      "ring": 1.1,
+      "note": "句 1→2 气口：低音贯入（商 · D3）"
+    },
+    {
+      "at": 7.57,
+      "deg": 1,
+      "oct": -2,
+      "drone": "guzheng",
+      "gain": 0.28,
+      "ring": 1.0,
+      "note": "句 2→3 气口（商 · D3）"
+    },
+    {
+      "at": 10.92,
+      "deg": 2,
+      "oct": -2,
+      "drone": "guzheng",
+      "gain": 0.30,
+      "ring": 1.6,
+      "note": "句 3→4 长气口（1.98s）：低音 + 前音余响贯入（角 · E3）"
+    },
+    {
+      "at": 16.7,
+      "deg": 1,
+      "oct": -2,
+      "drone": "guzheng",
+      "gain": 0.26,
+      "ring": 1.2,
+      "note": "尾声：低音贯入，与末句韵脚同收于曲末（商 · D3）"
+    }
+  ],
+  "guest_events": [
+    {
+      "at_line": 1,
+      "at_pos": 3,
+      "instrument": "guzheng",
+      "expr": "none",
+      "deg": 2,
+      "oct": 0,
+      "gain": 0.24,
+      "dur": 1.1,
+      "note": "「明月」筝轻点（角 · E5，素材原生）"
+    },
+    {
+      "at_line": 2,
+      "at_pos": 5,
+      "instrument": "guzheng",
+      "expr": "none",
+      "deg": 4,
+      "oct": -1,
+      "gain": 0.26,
+      "dur": 1.3,
+      "note": "「霜」筝轻点（羽 · A4，素材原生）"
+    },
+    {
+      "at_line": 3,
+      "at_pos": 4,
+      "instrument": "guzheng",
+      "expr": "none",
+      "deg": 2,
+      "oct": 0,
+      "gain": 0.24,
+      "dur": 1.1,
+      "note": "「明月」筝轻点（角 · E5，素材原生）"
+    },
+    {
+      "at_line": 4,
+      "at_pos": 5,
+      "instrument": "guzheng",
+      "expr": "dun",
+      "deg": 1,
+      "oct": 0,
+      "gain": 0.28,
+      "dur": 1.5,
+      "note": "「乡」筝止弦（商 · D5＝C 宫之徵，素材原生）"
+    }
+  ],
+  "guest_note": "筝的音级选择受素材调性约束：素材是一把 D 五声音阶古筝（音域 D2–A5），本曲是 C 宫调式，两者的五声音阶只共有 D / E / A 三个音级（C 宫为 C D E G A，D 调筝为 D E F# A B），故点弦只取商（D）、角（E）、羽（A）三处，落在素材的原生音高上（0 半音变调）。初版曾按 C D E G A 逐级取点，结果 G 与 C 调外，各需 +1 半音变调硬补——现由 GuzhengBank.snap 如实标出「⚠ 调外」，不再靠改调式去迁就素材。末点用 D5（商，即 C 宫的徵）。素材自带混响（作者 tags 含 reverb，构建时只做了截尾 + 递增低通，非真正干湿分离），故筝的 tau 取 1.6s，空间交给混响层。",
+  "drone_fix_note": "低音层（散起 + 气口）改用古筝素材原生音区，修掉「鬼叫」的真正根因。**此前误判**：先前几轮把「鬼片感」归因为亮度与混响，做了 A/B/C 三个候选版，但用户复听三次均无改善——因为真正的病灶在低音层，与亮度和混响无关。实测（_archive/_scratch_diag_2026-10-06/ghost_probe.py、drone_probe.py）：散起与气口走 sampler.Bank（古琴 GuqinSonGest），该库 san 池**全部**是 G2=96.87 Hz；而本曲低音区原写作 C4=261.6 Hz，于是每个低音都被硬升 +17.2 个半音（一个八度 + 一个五度）。更糟的是这两处调用没有传 max_semi，恰好绕过了 Bank.note 自带的护栏（其 docstring 明写「G2 散音升到 C4 以上，>4k/<0.8k 能量比升到 1.5–2.0，音色变尖」）。后果：① 60–160 Hz 能量占比实测 0.0012，低音地基根本没落地，「低散音贯入」是空话；② 一个八度以上的强变调把拨弦音色抽薄成一根尖啸的窄带信号；③ 其残留基频与主奏 C5 同音级、仅差八度，两层薄声叠在一起正是那种空洞的「鬼叫」。**修法**：散起与气口改标 drone=guzheng，音级取商（D）下移八度 = D3 = 146.8 Hz——古筝素材原生音，0 半音变调（实测取源 D3，变调 +0.00）；与主奏 C5 相隔 1.8 个八度而非同音级八度，空洞叠加随之消失。E3 用于第 3→4 句长气口，音级为角，仍在 D 五声音阶素材调内。**不改古琴默认**：江雪《江雪》写在 G2 区，正是古琴原生音区，故 drone 默认值保持 guqin，只有显式写 drone=guzheng 的声法表才切筝。",
+  "mix": {
+    "sr": 44100,
+    "reverb_tiers": [
+      {
+        "rt60": 1.1,
+        "predelay_ms": 18,
+        "wet": 0.16,
+        "lp_hz": 4500,
+        "note": "近场：中长混响（慢板宜润）"
+      },
+      {
+        "rt60": 3.2,
+        "predelay_ms": 50,
+        "wet": 0.05,
+        "lp_hz": 2200,
+        "note": "远场：低电平长混响 + 高频衰减，给「静夜」的空阔"
+      }
+    ],
+    "wet_damp_after_line_ms": 0,
+    "tail_fade_ms": 320,
+    "target_peak_dbfs": -3.0,
+    "soft_clip": 0.6,
+    "dynamic_narrow": "中动态：箫声 gain 0.58–0.64，筝轻点 0.24–0.28；soft_clip 0.6（中压）"
+  },
+  "checks": {
+    "duration_tolerance_samples": 2,
+    "gap_floor_dbfs": -40.0,
+    "max_gap_s": 0.3,
+    "peak_dbfs_range": [
+      -6.0,
+      -1.0
+    ],
+    "crest_factor_db_max": 22.0,
+    "check_note": "连续性口径：短时 RMS（100ms 窗）低于 −40 dBFS 视为静默，最长静默须 ≤0.30s（全曲连贯）。"
+  }
+}

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>数据底座路线图 —— 从诗与语境到画论与技法规则</title>
+<style>
+:root{
+  --paper:#F6F3EC; --paper2:#FBF9F4; --ink:#1C1C1C; --ink2:#3A362F; --ink3:#6E6A60;
+  --line:rgba(28,28,28,.14); --line2:rgba(28,28,28,.08);
+  --zhu:#A83A2C; --jin:#B8860B; --qing:#2F5D62; --lv:#3E6B3E;
+  --serif:"Noto Serif SC","Songti SC","Source Han Serif SC",serif;
+  --sans:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:56px 28px 90px}
+h1{font-family:var(--serif);font-size:31px;font-weight:600;letter-spacing:.02em;margin:0 0 8px}
+.sub{font-family:var(--serif);font-size:15px;color:var(--ink3);margin:0 0 14px;letter-spacing:.03em}
+.lead{color:var(--ink2);font-size:14.5px;line-height:1.8;margin:0 0 8px;max-width:86ch}
+.lead b{color:var(--ink)}
+.meta-line{font-size:12.5px;color:var(--ink3);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0;margin:22px 0 34px;letter-spacing:.02em;line-height:1.85}
+section{margin:0 0 50px}
+.sec-head{display:flex;align-items:baseline;gap:12px;margin:0 0 14px;border-bottom:1px solid var(--line);padding-bottom:8px}
+.sec-no{font-family:var(--serif);font-size:13px;color:var(--zhu);letter-spacing:.12em;white-space:nowrap}
+.sec-head h2{font-family:var(--serif);font-size:21px;font-weight:600;margin:0;letter-spacing:.02em}
+h4{font-family:var(--serif);font-size:16px;font-weight:600;margin:26px 0 10px;letter-spacing:.02em}
+p{font-size:13.5px;line-height:1.85;color:var(--ink2)}
+.sec-note{font-size:13px;line-height:1.85;color:var(--ink2);margin:0 0 14px;max-width:92ch}
+.sec-note b{color:var(--ink)}
+table{width:100%;border-collapse:collapse;font-size:12.8px;margin:6px 0 16px}
+th,td{border-bottom:1px solid var(--line2);padding:8px 10px;text-align:left;vertical-align:top;line-height:1.68}
+th{background:rgba(28,28,28,.025);font-weight:600;color:var(--ink3);font-family:var(--serif);font-size:12px;letter-spacing:.03em}
+td b{font-weight:600;color:var(--ink)}
+code{font-family:ui-monospace,Consolas,monospace;font-size:11.5px;background:rgba(28,28,28,.05);padding:1px 5px;border-radius:4px}
+.badge{display:inline-block;font-size:10.5px;letter-spacing:.04em;padding:1px 7px;border-radius:6px;white-space:nowrap;font-weight:600;vertical-align:middle}
+.b-ok{background:rgba(47,93,98,.12);color:var(--qing)}
+.b-part{background:rgba(184,134,11,.14);color:#8a6608}
+.b-gap{background:rgba(168,58,44,.12);color:var(--zhu)}
+.callout{background:var(--paper2);border:1px solid var(--line2);border-left:3px solid var(--jin);border-radius:8px;padding:14px 18px;font-size:13.3px;line-height:1.9;color:var(--ink2);margin:14px 0}
+.callout b{color:var(--ink)}
+.callout.z{border-left-color:var(--zhu)}
+.callout.q{border-left-color:var(--qing)}
+.waves{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:10px 0 16px}
+.wave{background:var(--paper2);border:1px solid var(--line2);border-radius:10px;padding:15px 18px}
+.wave .wn{font-family:var(--serif);font-size:11.5px;letter-spacing:.1em;color:var(--zhu);font-weight:600}
+.wave h5{font-family:var(--serif);font-size:15px;margin:3px 0 3px;font-weight:600}
+.wave .wsub{font-size:11.5px;color:var(--ink3);margin:0 0 10px;letter-spacing:.02em}
+.wave ul{margin:0;padding-left:17px}
+.wave li{font-size:12.8px;line-height:1.8;color:var(--ink2);margin:0 0 4px}
+.wave li b{color:var(--ink)}
+@media(max-width:820px){.waves{grid-template-columns:1fr}}
+figure{margin:8px 0 18px}
+figcaption{font-size:12.3px;color:var(--ink3);line-height:1.75;margin-top:8px}
+a{color:var(--zhu)}
+footer{font-size:12px;color:var(--ink3);border-top:1px solid var(--line);padding-top:16px;line-height:1.95}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>数据底座路线图</h1>
+<p class="sub">从「诗与语境」到「画论与技法规则」——全部数据资产的现状、缺口与建表顺序　<span style="font-size:12px;color:var(--zhu)">v1.7</span></p>
+<p class="lead">这条链要跑通，缺的从来不是模型，而是<b>喂给模型的数据</b>。本文把两侧的缺口合成一张总图：<b>输入端</b>（诗 → 意象 / 格律 / 情感，见《数据可得性与模型映射》）与<b>规则端</b>（画论 → 技法规则，见《生成控制整体架构》§2.1）。前者管「能不能从诗里读出来」，后者管「读出来之后按什么画论规则变成参数」。</p>
+<p class="lead">一句话：<b>桥接表已建成，画论规则（G1–G8）也已落地接线——「意象 → 技法」与「画论规则 → 约束」两半已齐；尚缺声法表、品格 12 算子（G9）与音频素材。</b>本文只做「合起来看、排顺序」这一件事，不重复定义任何资产。</p>
+<div class="meta-line">
+依据（均回到真实文件核对）：<code>data/source/d2_seed/d2_mapping_seed.json</code> · <code>data/source/d2_supplement.json</code> · <code>data/source/rhyme/pingshui_rhyme_dict.json</code> · <code>data/source/context/&lt;诗&gt;/context.json</code> · <code>data/source/o2_lexicon.json</code> · <code>data/source/scene/*.json</code> · <code>src/d2/d2_resolve.py</code><br>
+上游真源：<a href="图声要素的数据可得性与模型映射.md">数据可得性与模型映射.md</a>（输入端 D1–D4；D5 / D6 本文补编）· <a href="generation_control_architecture.html">生成控制整体架构.html</a> §2.1（规则端 G1–G14）· 日期：2026-10-04
+</div>
+
+<!-- ================= §0 ================= -->
+<section>
+  <div class="sec-head"><span class="sec-no">§0</span><h2>定位与真源边界</h2></div>
+  <p class="sec-note">本文是<b>索引 + 路线</b>层：只回答「底座现在长什么样、还缺什么、先补哪块」。资产的<b>定义、判据、schema</b> 一律归各自真源，本文不复述；两处真源若有冲突，以真源为准。</p>
+  <table>
+    <thead><tr><th style="width:300px">本文回答</th><th>不回答（归真源）</th><th style="width:210px">真源</th></tr></thead>
+    <tbody>
+      <tr><td>底座有几层、每层放什么</td><td>每个要素的定义与判据</td><td><a href="landscape_ink_elements.html">表达要素总纲</a></td></tr>
+      <tr><td>每个资产「已有 / 部分 / 缺」</td><td>可得性档（L0/L1/L2）的逐要素判定</td><td><a href="图声要素的数据可得性与模型映射.md">数据可得性与模型映射.md</a></td></tr>
+      <tr><td>缺口之间的依赖与建表顺序</td><td>规则端缺口的逐条实测与古典来源</td><td><a href="generation_control_architecture.html">生成控制整体架构.html</a> §2.1</td></tr>
+      <tr><td>资产 → 下游消费者的对应</td><td>控制链五段与 L1–L4 的定义</td><td><a href="generation_control_architecture.html">生成控制整体架构.html</a> §1 / §7</td></tr>
+    </tbody>
+  </table>
+  <div class="callout z"><b>一条纪律：本文只「合起来看」，不「另起一套编号」。</b>输入端沿用映射文档的 <b>D1 / D3 / D4</b>（D2 已建成，不再列；<b>D5 / D6</b> 为本文补编、映射文档未编号，真源见其 §5② / §6.1⑥），规则端沿用架构文档的 <b>G1–G14</b>。编号不变，才保证本文任一行都能回到真源逐条核对。</div>
+  <div class="callout q"><b>分层记号：本文用「底座 0–4」，不用「L」。</b>「L1–L4」已被《生成控制整体架构》声明为<b>生成可控性分层</b>的唯一真源（该文 §0.2），而「L0 / L1 / L2」又已被映射文档用作<b>可得性档</b>。本文的数据分层若再用 L，会同项目三义并行、互相误读。故本文一律写 <b>底座 0 / 底座 1 / 底座 2 / 底座 3 / 底座 4</b>（对应原料 / 抽取 / 桥接 / 规则 / 消费五层）。</div>
+</section>
+
+<!-- ================= §1 ================= -->
+<section>
+  <div class="sec-head"><span class="sec-no">§1</span><h2>底座全图：五层</h2></div>
+  <p class="sec-note">数据自下而上流过五层：<b>原料层</b>是外部输入，<b>抽取层</b>把诗变成结构化节点，<b>桥接层</b>把意象 / 情感映射成技法与声法，<b>规则层</b>是画论整理成的词表与调制器，<b>消费层</b>是求解器与落地（非数据，列作去向）。</p>
+
+  <figure>
+    <svg viewBox="0 0 780 480" role="img" aria-label="数据底座五层：原料层 → 抽取层 → 桥接层 → 规则层 → 消费层">
+      <defs>
+        <marker id="dfh" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto">
+          <path d="M0,0 L6.5,3 L0,6 z" fill="#6E6A60"></path>
+        </marker>
+      </defs>
+
+      <!-- L0 -->
+      <circle cx="40" cy="58" r="13" fill="rgba(28,28,28,.06)" stroke="#3A362F" stroke-width="1"></circle>
+      <text x="40" y="62" text-anchor="middle" font-size="12" fill="#3A362F">0</text>
+      <rect x="64" y="20" width="684" height="76" rx="9" fill="#FBF9F4" stroke="rgba(28,28,28,.16)"></rect>
+      <text x="84" y="48" font-family="'Noto Serif SC',serif" font-size="13.5" font-weight="600" fill="#1C1C1C">底座 0 · 原料层（外部数据）</text>
+      <text x="84" y="72" font-size="11.5" fill="#3A362F">诗文本 · 诗外背景 context.json · 平水韵字典 · 画论种子 d2_seed · 音频素材</text>
+      <text x="730" y="50" text-anchor="end" font-size="11" font-weight="600" fill="#8a6608">部分</text>
+
+      <path d="M406 96 L406 110" stroke="#6E6A60" stroke-width="1.2" marker-end="url(#dfh)"></path>
+
+      <!-- L1 -->
+      <circle cx="40" cy="150" r="13" fill="rgba(28,28,28,.06)" stroke="#3A362F" stroke-width="1"></circle>
+      <text x="40" y="154" text-anchor="middle" font-size="12" fill="#3A362F">1</text>
+      <rect x="64" y="112" width="684" height="76" rx="9" fill="#FBF9F4" stroke="rgba(28,28,28,.16)"></rect>
+      <text x="84" y="140" font-family="'Noto Serif SC',serif" font-size="13.5" font-weight="600" fill="#1C1C1C">底座 1 · 抽取层（诗 → 结构化）</text>
+      <text x="84" y="164" font-size="11.5" fill="#3A362F">o2_imagery · o2_lexicon · d1_rhyme · 卡约束 pipeline_implications</text>
+      <text x="730" y="142" text-anchor="end" font-size="11" font-weight="600" fill="#8a6608">部分</text>
+
+      <path d="M406 188 L406 202" stroke="#6E6A60" stroke-width="1.2" marker-end="url(#dfh)"></path>
+
+      <!-- L2 -->
+      <circle cx="40" cy="242" r="13" fill="rgba(47,93,98,.10)" stroke="#2F5D62" stroke-width="1"></circle>
+      <text x="40" y="246" text-anchor="middle" font-size="12" fill="#2F5D62">2</text>
+      <rect x="64" y="204" width="684" height="76" rx="9" fill="rgba(47,93,98,.045)" stroke="rgba(47,93,98,.28)"></rect>
+      <text x="84" y="232" font-family="'Noto Serif SC',serif" font-size="13.5" font-weight="600" fill="#1C1C1C">底座 2 · 桥接层（意象 / 情感 → 技法 / 声法）</text>
+      <text x="84" y="256" font-size="11.5" fill="#3A362F">意象—画法映射表（已建）· 极性归一（已建）· 意象—声法表（缺）· V/A/T（示意）· 12 算子（缺）</text>
+      <text x="730" y="234" text-anchor="end" font-size="11" font-weight="600" fill="#A83A2C">半建</text>
+
+      <path d="M406 280 L406 294" stroke="#6E6A60" stroke-width="1.2" marker-end="url(#dfh)"></path>
+
+      <!-- L3 -->
+      <circle cx="40" cy="334" r="13" fill="rgba(168,58,44,.10)" stroke="#A83A2C" stroke-width="1"></circle>
+      <text x="40" y="338" text-anchor="middle" font-size="12" fill="#A83A2C">3</text>
+      <rect x="64" y="296" width="684" height="76" rx="9" fill="rgba(168,58,44,.045)" stroke="rgba(168,58,44,.30)"></rect>
+      <text x="84" y="324" font-family="'Noto Serif SC',serif" font-size="13.5" font-weight="600" fill="#1C1C1C">底座 3 · 规则层（画论 → D2 参数）</text>
+      <text x="84" y="348" font-size="11.5" fill="#3A362F">vocab · class_defaults · modulators · rules（已建）｜ 构图 / 笔法质量 / 天候 / 时辰 / 材质 / 视点 / 钤印（已建）</text>
+      <text x="730" y="326" text-anchor="end" font-size="11" font-weight="600" fill="#2E5A2E">已建</text>
+
+      <path d="M406 372 L406 386" stroke="#6E6A60" stroke-width="1.2" marker-end="url(#dfh)"></path>
+
+      <!-- L4 -->
+      <circle cx="40" cy="426" r="13" fill="rgba(28,28,28,.06)" stroke="#3A362F" stroke-width="1"></circle>
+      <text x="40" y="430" text-anchor="middle" font-size="12" fill="#3A362F">4</text>
+      <rect x="64" y="388" width="684" height="76" rx="9" fill="#FBF9F4" stroke="rgba(28,28,28,.16)"></rect>
+      <text x="84" y="416" font-family="'Noto Serif SC',serif" font-size="13.5" font-weight="600" fill="#1C1C1C">底座 4 · 消费层（求解 / 落地，非数据资产）</text>
+      <text x="84" y="440" font-size="11.5" fill="#3A362F">卡5 构图 · 卡6 笔墨 · 卡7 时间轴 · scene.json —— 数据底座的「去向」，列此以闭合链路</text>
+      <text x="730" y="418" text-anchor="end" font-size="11" font-weight="600" fill="#2E5A2E">已有</text>
+    </svg>
+    <figcaption><b>图 1　数据底座五层。</b>底座 0→底座 3 是资产层（本文主体），底座 4 是消费层（列作去向）。右侧为整层状态：底座 0 部分（缺音频）、底座 1 部分（<b>D1 已通用化</b>）、<b>底座 2 半建</b>（画法表 / 极性归一已建、声法与算子缺），底座 3 已建（词表与画论规则齐备）。</figcaption>
+  </figure>
+
+  <div class="callout q"><b>为什么把「桥接层」单列。</b>因为它是本项目最关键的一层：<b>诗里没有「皴法 / 三远 / 留白率」，这些全是「意象 × 映射」的结果</b>。底座 2 建好了，底座 3 才有取值空间；底座 2 只建了一半（画法有了、声法没有），是当前最不对称的地方。</div>
+</section>
+
+<!-- ================= §2 ================= -->
+<section>
+  <div class="sec-head"><span class="sec-no">§2</span><h2>资产清单（全量 29 项）</h2></div>
+  <p class="sec-note">逐项列出底座现有资产及其状态。<span class="badge b-ok">已有</span> 5 项 · <span class="badge b-ok">已建</span> 19 项 · <span class="badge b-part">部分</span> 2 项 · <span class="badge b-gap">缺</span> 3 项（合计 29）。<b>「已有」</b>指外部或既有数据，<b>「已建」</b>指本项目已建成的表。状态栏均回到真实文件核对。</p>
+
+  <table>
+    <thead><tr><th style="width:250px">资产</th><th style="width:60px">层</th><th style="width:70px">状态</th><th style="width:200px">去向（消费者）</th><th>真源 / 依据</th></tr></thead>
+    <tbody>
+      <tr><td>诗文本 <code>context.text.base</code></td><td>底座 0</td><td><span class="badge b-ok">已有</span></td><td>O2 抽取 · D2 词票</td><td><code>context/&lt;诗&gt;/context.json</code></td></tr>
+      <tr><td>诗外背景 <code>context.json</code></td><td>底座 0</td><td><span class="badge b-ok">已建</span></td><td>卡约束（卡1–9）</td><td>三首样本 + <b>schema 已固化</b>（<code>schema.json</code> + <code>src/tools/context_schema_check.py</code>）<b>✓ D5</b></td></tr>
+      <tr><td>平水韵字典 <code>pingshui_rhyme_dict.json</code></td><td>底座 0</td><td><span class="badge b-ok">已有</span></td><td>D1 格律</td><td><code>data/source/rhyme/</code></td></tr>
+      <tr><td>画论种子 <code>d2_mapping_seed.json</code></td><td>底座 0</td><td><span class="badge b-ok">已建</span></td><td>D2 控制引擎</td><td><code>data/source/d2_seed/</code></td></tr>
+      <tr><td>音频素材库</td><td>底座 0</td><td><span class="badge b-gap">缺</span></td><td>声景 / 配器</td><td>映射文档 D3（0→1）</td></tr>
+      <tr><td><code>o2_imagery.json</code>（意象节点）</td><td>底座 1</td><td><span class="badge b-ok">已有</span></td><td>D2 主输入</td><td>替身（词典+规则）；真模型 <code>[PLUG]</code> 未接</td></tr>
+      <tr><td><code>o2_lexicon.json</code>（<code>conc</code>/<code>polarity</code>/<code>channel</code>）</td><td>底座 1</td><td><span class="badge b-part">部分</span></td><td>O2 门控 · 极性</td><td>管「文化极性 → 门控」；情感词表已另建（见下行）<b>✓ D6</b></td></tr>
+      <tr><td>情感词表 <code>emotion_lexicon.json</code></td><td>底座 1</td><td><span class="badge b-ok">已建</span></td><td>ρ / H 统计 · O2 门控</td><td>14 类（七情 + 五志）× 85 词（情语 65 / 景语 20）；<code>src/tools/emotion_lexicon_check.py</code><b>✓ D6</b></td></tr>
+      <tr><td><code>d1_rhyme.json</code>（逐字平仄）</td><td>底座 1</td><td><span class="badge b-ok">已建</span></td><td>语音链 · 入画链（间接）</td><td><code>d1_resolve.py</code> 通用解析（<code>d1_prosody.json</code>），新诗自动标平仄<b>✓ D1</b></td></tr>
+      <tr><td>卡约束 <code>pipeline_implications</code></td><td>底座 1</td><td><span class="badge b-ok">已有</span></td><td>卡1–9</td><td>三首手工（映射文档 §2.4）</td></tr>
+      <tr><td>虚实阈值（<code>conc</code> 校准）</td><td>底座 1</td><td><span class="badge b-ok">已建</span></td><td>O2 门控</td><td><code>o2_gate.json</code>（real 0.575 / blank 0.275，最大裕度中点）；<code>o2_imagery.mjs --check</code> 纳入 <code>verify.py</code> <b>✓ G13</b></td></tr>
+      <tr><td>意象—画法映射表</td><td>底座 2</td><td><span class="badge b-ok">已建</span></td><td>D2 引擎</td><td><code>d2_mapping_seed.json</code>（= 映射文档 D2）</td></tr>
+      <tr><td>意象—声法映射表</td><td>底座 2</td><td><span class="badge b-gap">缺</span></td><td>声景 / 配器</td><td>映射文档 D3</td></tr>
+      <tr><td>V/A/T 情感三元组 <code>POEM_CTX</code></td><td>底座 2</td><td><span class="badge b-part">部分</span></td><td><code>emotion</code> 调制器</td><td>示意值；缺 D4 锚定集</td></tr>
+      <tr><td>品格 12 算子表</td><td>底座 2</td><td><span class="badge b-gap">缺</span></td><td><code>style_grade</code> 闭环</td><td>G9；<a href="style_grade_measurability.html">可度量方法</a></td></tr>
+      <tr><td>极性归一表</td><td>底座 2</td><td><span class="badge b-ok">已建</span></td><td><code>polarity</code> 调制器 · 卡6 底色</td><td>8 规范键 + 22 条归一（自由文本 → 键）；<code>d2_resolve.py</code> 输出 <code>polarity</code> / <code>base_tone</code> 候选<b>✓ G12</b></td></tr>
+      <tr><td><code>vocab</code> / <code>class_defaults</code> / <code>modulators</code> / <code>rules</code></td><td>底座 3</td><td><span class="badge b-ok">已建</span></td><td>D2 引擎</td><td><code>data/derived/d2_techniques.json</code></td></tr>
+      <tr><td>皴法谱 <code>cun</code></td><td>底座 3</td><td><span class="badge b-ok">已建</span></td><td>卡6 笔墨</td><td>9 值（+ 雨点 / 折带 / 米点 / 干擦）；山石 <code>cun_alt</code> 池 6 值 <b>✓ G10</b></td></tr>
+      <tr><td>墨法（宿墨 / 焦墨）</td><td>底座 3</td><td><span class="badge b-ok">已建</span></td><td>卡6 笔墨</td><td><code>vocab.ink_method</code> 6 式（破 / 积 / 泼 / 宿 / 焦 / 飞白）各带 μ 区间；<b>卡6 消费端已接</b>（注入 STEP 6 · 6.5 墨法轴） <b>✓ G11</b></td></tr>
+      <tr><td>构图规则（边角 / 三叠两段 / 蹊径六则）</td><td>底座 3</td><td><span class="badge b-ok">已建</span></td><td>卡5 构图</td><td>G1；护栏 2（边角 / 三叠两段）+ 蹊径六则算子 6 + 规则 C1–C3；<b>卡5 消费端已接</b>（注入 STEP 5 · 5.3 构图规则）</td></tr>
+      <tr><td>笔法质量维（四势 / 五笔 / 二病）</td><td>底座 3</td><td><span class="badge b-ok">已建</span></td><td>卡6 笔墨</td><td>G2；9 维（荆浩四势 / 黄宾虹五笔）+ 5 病（郭若虚三病 / 荆浩二病）+ <code>by_stroke</code> 18 式；<b>卡6 消费端已接</b>（注入 STEP 6 · 6.7 笔法质量维）</td></tr>
+      <tr><td>设色范式档（青绿 / 浅绛 / 水墨 / 没骨）</td><td>底座 3</td><td><span class="badge b-ok">已建</span></td><td>卡6 笔墨</td><td>G3；四范式 + 定档规则 P1/P2/P3 + 色域投影；<b>卡6 消费端已接</b>（注入 STEP 6 · 6.4 设色范式）</td></tr>
+      <tr><td>天候调制器（晴 / 雨 / 雪 / 雾）</td><td>底座 3</td><td><span class="badge b-ok">已建</span></td><td>卡5 / 卡6</td><td>G4；四档 + σ / μ 乘子 + ρ 加成 + 皴法建议；<b>卡5 / 卡6 消费端已接</b>（注入 STEP 5 · 5.2 天候）</td></tr>
+      <tr><td>时辰调制器（晨 / 昼 / 暮 / 夜）</td><td>底座 3</td><td><span class="badge b-ok">已建</span></td><td>卡7 时间轴</td><td>G5；四档 + 段长乘子 / 墨偏 / 色偏；「月」由季节词迁来；<b>卡7 消费端已接</b>（注入 STEP 7 · 7.2 时辰）</td></tr>
+      <tr><td>材质系数（笔 / 墨 / 纸绢）</td><td>底座 3</td><td><span class="badge b-ok">已建</span></td><td>卡6 笔墨</td><td>G6；三类（纸绢 3 / 笔 3 / 墨 2）+ 默认档；<b>卡6 消费端已接</b>（注入 STEP 6 · 6.6 材质系数）</td></tr>
+      <tr><td>视点档（平 / 俯 / 仰）</td><td>底座 3</td><td><span class="badge b-ok">已建</span></td><td>卡5 构图</td><td>G7；三档（平 / 俯 / 仰）+ 地平线 / 纵比区间（俯视补沈括「以大观小」）；<b>卡5 消费端已接</b>（注入 STEP 5 · 5.1 视点档）</td></tr>
+      <tr><td>钤印规则</td><td>底座 3</td><td><span class="badge b-ok">已建</span></td><td>卡7 时间轴</td><td>G8；印位 5（随形制）+ 印面 2（随尺幅）；<b>卡7 消费端已接</b>（注入 STEP 7 · 7.3 钤印）</td></tr>
+      <tr><td>静默预算口径</td><td>底座 3</td><td><span class="badge b-ok">已建</span></td><td>卡7 时间轴</td><td>末句 T≥0.8 → T 档升一阶；jx 输出 0.26，与卡7 落地同源 <b>✓ G14</b></td></tr>
+      <tr><td>卡5 / 卡6 / 卡7 + <code>scene.json</code></td><td>底座 4</td><td><span class="badge b-ok">已有</span></td><td>（去向，非资产）</td><td><code>build/</code> · <code>data/source/scene/</code></td></tr>
+    </tbody>
+  </table>
+
+  <h4>2.1 接线缺口（已建未接）</h4>
+  <p class="sec-note">下列数据<b>已经建在表里</b>——除 <code>form.len</code> 已由 C 组 <code>seal</code>（G8）接入外，其余仍<b>缺下游消费者</b>。这不是「缺资产」，是「缺接线」。它们不属 §3 的建表缺口（无需新建），却同样卡住「换诗也能跑」，故单列。与《生成控制整体架构》§5.5 的「接线前置」同源：那里讲「接什么线」，这里讲「哪些线还没接」。全部字段回到 <code>d2_mapping_seed.json</code> 与 <code>src/d2/d2_resolve.py</code> 逐条核对。</p>
+  <table>
+    <thead><tr><th style="width:250px">已建字段</th><th style="width:210px">已建内容（实测）</th><th style="width:150px">本应供谁</th><th>真源</th></tr></thead>
+    <tbody>
+      <tr><td><code>season.&lt;季&gt;.color / ink_bias / tai / blank_bias</code></td><td>四季底色 / 墨偏 / 疏密 / 留白偏置（如「冬：素白 / +2 / 疏 / +2」）</td><td>卡6 底色 · <code>season_words</code></td><td><code>d2_mapping_seed.json</code> L107–110（现仅 <code>qi</code> 与 R10 被消费）</td></tr>
+      <tr><td><code>form.&lt;诗体&gt;.len</code></td><td>五言 20 / 七言 28 / 五律 40 / 七律 56</td><td>题跋 · 钤印布局</td><td><code>d2_mapping_seed.json</code> L382–385；<b>C 组 <code>seal</code> 已消费</b>（印面大小档，见架构 §4.3.11.7），<code>format_candidates</code> 另供印位</td></tr>
+      <tr><td><code>emotion.A[].motion</code></td><td>A1–A5 镜语（凝止 / 极缓 / 缓 / 缓推 / 快+拖尾）</td><td>卡7 时间轴 · 相机</td><td><code>d2_mapping_seed.json</code> L302–306（现取 <code>vocab.yuan[].motion</code>，非此表）</td></tr>
+      <tr><td><code>emotion.V[].gravity</code></td><td>V1–V5 重心（偏心·三七停 / 三分点）</td><td>卡5 构图求解器</td><td><code>d2_mapping_seed.json</code> L295–299（<code>ink_steps</code> 已接、<code>gravity</code> 未接）</td></tr>
+      <tr><td><code>emotion.T[].note</code></td><td>T5「悬置不释放 → 大留白 + 偏心」</td><td>卡7 静默预算</td><td><code>d2_mapping_seed.json</code> L309–313（<code>silence_ratio</code> 已接，<code>note</code> 未接）</td></tr>
+    </tbody>
+  </table>
+  <div class="callout q"><b>接线缺口 vs 建表缺口。</b>本节的五条<b>不需要建新表</b>，只需在 <code>d2_resolve.py</code> / 求解器侧把已存在的字段读进去（对应架构 §5.5 的 A / B / C 组工单）。§3 的 D / G 缺口才是「表还不存在、必须先建」的那一类。两者合起来，才是完整的「还缺什么」。</div>
+</section>
+
+<!-- ================= §3 ================= -->
+<section>
+  <div class="sec-head"><span class="sec-no">§3</span><h2>缺口总表（D + G 合一）</h2></div>
+  <p class="sec-note">把输入端（D）与规则端（G）的缺口放在一张表里，逐条标出<b>供谁用</b>与<b>建表前置</b>。注意「建表前置」与《生成控制整体架构》§5.5 的「<b>接线前置</b>」是两回事：前者管「这张表能不能建出来」，后者管「建好的表能不能接进求解器」——同一对 G3 / G11，建表时是 G11 先于 G3，接线时却是 G3 先于 G11，二者并不矛盾。这是路线图的「原料」——分波排序即由此推出。</p>
+
+  <table>
+    <thead><tr><th style="width:52px">编号</th><th style="width:270px">缺口</th><th style="width:56px">层</th><th style="width:180px">供谁</th><th style="width:150px">建表前置</th><th>真源</th></tr></thead>
+    <tbody>
+      <tr><td colspan="6" style="background:rgba(28,28,28,.03);font-weight:600">输入端（诗 → 意象 / 格律 / 情感）</td></tr>
+      <tr><td><b>D1</b></td><td>中古音韵书<b>通用化</b>（字 → 平 / 上 / 去 / 入 + 韵部） <span class="badge b-ok">已落地</span></td><td>底座 0 / 底座 1</td><td>语音链 · 可规模性（分词前置）</td><td>无</td><td>映射文档 D1</td></tr>
+      <tr><td><b>D3</b></td><td>意象—声法表 + 音源库</td><td>底座 2 / 底座 0</td><td>声景 / 配器 / 静默</td><td>D2 范式</td><td>映射文档 D3</td></tr>
+      <tr><td><b>D4</b></td><td>情感—韵味锚定集（V/A/T、24 品人工标注）</td><td>底座 2</td><td>卡3 / 卡4</td><td>度量闭环</td><td>映射文档 D4</td></tr>
+      <tr><td><b>D5</b></td><td><code>context.json</code> schema 固化（诗外背景 → 卡约束的规范） <span class="badge b-ok">已落地</span></td><td>底座 0 / 底座 1</td><td>卡1–9 · 可规模性</td><td>已有三首样本</td><td>映射文档 §5②</td></tr>
+      <tr><td><b>D6</b></td><td>情感词表扩充（ρ / 留白熵 H 的统计前提） <span class="badge b-ok">已落地</span></td><td>底座 1</td><td>ρ / H 统计 · O2 门控</td><td>无</td><td>映射文档 §6.1⑥</td></tr>
+      <tr><td colspan="6" style="background:rgba(28,28,28,.03);font-weight:600">规则端 · 甲 画论侧规则资产</td></tr>
+      <tr><td><b>G1</b></td><td>构图规则（边角 / 三叠两段 / 蹊径六则） <span class="badge b-ok">已落地</span></td><td>底座 3</td><td>卡5 构图</td><td>无（可并行）</td><td>架构 §2.1</td></tr>
+      <tr><td><b>G2</b></td><td>笔法质量维（四势 / 五笔 / 二病） <span class="badge b-ok">已落地</span></td><td>底座 3</td><td>卡6 笔墨</td><td>G10（词表）</td><td>架构 §2.1</td></tr>
+      <tr><td><b>G3</b></td><td>设色范式档（青绿 / 浅绛 / 水墨 / 没骨） <span class="badge b-ok">已落地</span></td><td>底座 3</td><td>卡6 笔墨</td><td>G11（墨法）</td><td>架构 §2.1</td></tr>
+      <tr><td><b>G4</b></td><td>天候调制器（晴 / 雨 / 雪 / 雾） <span class="badge b-ok">已落地</span></td><td>底座 3</td><td>卡5 / 卡6</td><td>无</td><td>架构 §2.1</td></tr>
+      <tr><td><b>G5</b></td><td>时辰调制器（晨 / 昼 / 暮 / 夜） <span class="badge b-ok">已落地</span></td><td>底座 3</td><td>卡7 时间轴</td><td>G4（天候）</td><td>架构 §2.1</td></tr>
+      <tr><td><b>G6</b></td><td>材质系数（笔 / 墨 / 纸绢） <span class="badge b-ok">已落地</span></td><td>底座 3</td><td>卡6 笔墨</td><td>无</td><td>架构 §2.1</td></tr>
+      <tr><td><b>G7</b></td><td>视点档（补俯视） <span class="badge b-ok">已落地</span></td><td>底座 3</td><td>卡5 构图</td><td>无（可并行）</td><td>架构 §2.1</td></tr>
+      <tr><td><b>G8</b></td><td>钤印规则 <span class="badge b-ok">已落地</span></td><td>底座 3</td><td>落地</td><td>无</td><td>架构 §2.1</td></tr>
+      <tr><td><b>G9</b></td><td>品格 12 算子实现 + 三带阈值</td><td>底座 2 / 底座 3</td><td><code>style_grade</code> 反控</td><td>G2 + G10</td><td>架构 §2.1 / 可度量方法</td></tr>
+      <tr><td colspan="6" style="background:rgba(28,28,28,.03);font-weight:600">规则端 · 乙 词表完整性</td></tr>
+      <tr><td><b>G10</b></td><td>皴法谱补齐（+ 雨点 / 折带 / 米点；+「干擦」） <span class="badge b-ok">已落地</span></td><td>底座 3</td><td>卡6 笔墨</td><td>无</td><td>架构 §2.1</td></tr>
+      <tr><td><b>G11</b></td><td>墨法独立（宿墨 / 焦墨） <span class="badge b-ok">已落地</span></td><td>底座 3</td><td>卡6 笔墨</td><td>无</td><td>架构 §2.1</td></tr>
+      <tr><td><b>G12</b></td><td>极性归一表（自由文本 → 8 键） <span class="badge b-ok">已落地</span></td><td>底座 2</td><td><code>polarity</code> 调制器 · 卡6 底色</td><td>无</td><td>架构 §2.1</td></tr>
+      <tr><td colspan="6" style="background:rgba(28,28,28,.03);font-weight:600">规则端 · 丙 口径缺口</td></tr>
+      <tr><td><b>G13</b></td><td>虚实阈值校准（<code>conc</code>） <span class="badge b-ok">已落地</span></td><td>底座 1</td><td>O2 门控</td><td>无</td><td>架构 §2.1</td></tr>
+      <tr><td><b>G14</b></td><td>静默预算口径统一 <span class="badge b-ok">已落地</span></td><td>底座 3</td><td>卡7 时间轴</td><td>无</td><td>架构 §2.1</td></tr>
+    </tbody>
+  </table>
+  <div class="callout q"><b>Wave 0 已落地（2026-10-04）。</b>D1 / D5 / D6 三条已不再是「缺口」：<code>src/d1/d1_resolve.py</code>（新诗自动标平仄 + 对账手工标注）、<code>src/tools/context_schema_check.py</code>（schema + 语义交叉核对）、<code>src/tools/emotion_lexicon_check.py</code>（词表结构 + 三首情感剖面）三项已实现，并纳入 <code>build/verify.py</code> 的「输入端护栏」。<br><b>Wave 1 · A 组 G12 已落地（2026-10-04）。</b><code>polarity</code> 归一表建成——8 规范键 + 22 条自由文本归一（来源：<code>context.json</code> 用典级、<code>o2_lexicon.json</code> 词级），<code>d2_resolve.py</code> 据此输出 <code>polarity</code>（规范键 + 墨偏区间 + 底色候选 + 出处）与 <code>base_tone</code>（季节色 + 极性色 → 卡6 底色候选），回归断言「极性归一无漏」三首全过（<code>unmapped=[]</code>）。D2 侧接线完成；<b>卡6 消费端已接</b>（Wave 2 · A 组底色通路：候选注入 STEP 6 · 6.3，三首已注入，含 <code>data-d2</code> 溯源）。<br><b>Wave 1 收口（2026-10-04）。</b>G10 / G11 / G12 / G13 / G14 五项全部落地：<b>G10</b> <code>vocab.cun</code> 补雨点 / 折带 / 米点并独立「干擦」（山石 <code>cun_alt</code> 池 6 值）；<b>G11</b> <code>vocab.ink_method</code> 立 6 式（破 / 积 / 泼 / 宿 / 焦 / 飞白）各带 μ 扩散区间，<code>d2_resolve.py</code> 按语境给建议、<code>d2_build.py</code> 校验 μ 有效；<b>G13</b> 建 <code>o2_gate.json</code> 阈值真源（real 0.575 / blank 0.275 = 最大裕度中点），<code>o2_imagery.mjs --check</code> 做「冻结=中点 / 落可行区间 / gold 全对 / 证伪」六项校验并入 <code>verify.py</code>；<b>G14</b> 末句 T≥0.8 时 T 档升一阶，jx 静默比 0.26 与卡7 同源。<br><b>Wave 2 · C 组（新算子 / 新调制器七器）已落地（2026-10-04）。</b>G1 / G2 / G4 / G5 / G6 / G7 / G8 七项全部建成并接线：<b>G1</b> 构图规则（护栏 2 + 蹊径六则算子 6 + 规则 C1–C3，注入 STEP 5 · 5.3）；<b>G2</b> 笔法质量维（9 维 + 5 病 + <code>by_stroke</code> 18 式，注入 STEP 6 · 6.7）；<b>G4</b> 天候（四档 + σ·μ 乘子 + ρ 加成，注入 STEP 5 · 5.2）；<b>G5</b> 时辰（四档 + 段长乘子 / 墨偏 / 色偏，注入 STEP 7 · 7.2）；<b>G6</b> 材质系数（纸绢 3 / 笔 3 / 墨 2 + 默认档，注入 STEP 6 · 6.6）；<b>G7</b> 视点档（平 / 俯 / 仰 + 地平线 / 纵比区间，注入 STEP 5 · 5.1）；<b>G8</b> 钤印规则（印位 5 + 印面 2，注入 STEP 7 · 7.3）。古典依据（郭熙三远 / 沈括以大观小 / 郭熙四时·朝暮 / 韩拙三远 / 荆浩四势·二病 / 郭若虚三病 / 黄宾虹五笔 / 马远夏圭边角 / 石涛三叠两段·蹊径六则 / 钤印通例）已入 <code>painting_theory.json</code>。此表甲组余项<b>仅剩 G9</b>（品格 12 算子 + 三带阈值，属 Wave 3 闭环）。</div>
+</section>
+
+<!-- ================= §4 ================= -->
+<section>
+  <div class="sec-head"><span class="sec-no">§4</span><h2>路线图：四波推进</h2></div>
+  <p class="sec-note">分波依据是<b>依赖关系，不是重要性</b>（此处「依赖」即 §3 的<b>建表前置</b>；求解器的<b>接线前置</b>另见架构 §5.5，两序不同）。第 0 波解锁「换诗也能跑」，第 1 波把已建的表补全并校准，第 2 波并行铺画论规则，第 3 波才做闭环与重资产。</p>
+
+  <div class="waves">
+    <div class="wave">
+      <div class="wn">WAVE 0 · 已落地</div>
+      <h5>解锁可规模性</h5>
+      <p class="wsub">前置 · 无依赖 · 决定「第 4 首能不能自动跑」</p>
+      <ul>
+        <li><b>D1 音韵书通用化</b> — 新诗进真链路的第 0 步（分词格律先验） <span class="badge b-ok">✓</span></li>
+        <li><b>D5 context.json schema 固化</b> — schema + 语义交叉核对 <span class="badge b-ok">✓</span></li>
+        <li><b>D6 情感词表扩充</b> — 反差度 ρ / 留白熵 H 的统计前提 <span class="badge b-ok">✓</span></li>
+      </ul>
+    </div>
+    <div class="wave">
+      <div class="wn">WAVE 1 · 已落地</div>
+      <h5>词表与归一</h5>
+      <p class="wsub">表已建、补值 · 是 Wave 2 部分项的前置</p>
+      <ul>
+        <li><b>G10</b> 皴法谱（雨点 / 折带 / 米点 + 干擦） <span class="badge b-ok">✓</span></li>
+        <li><b>G11</b> 墨法独立（宿墨 / 焦墨） <span class="badge b-ok">✓</span></li>
+        <li><b>G12</b> 极性归一表 <span class="badge b-ok">✓</span></li>
+        <li><b>G13</b> 虚实阈值校准 <span class="badge b-ok">✓</span> · <b>G14</b> 静默预算口径统一 <span class="badge b-ok">✓</span></li>
+      </ul>
+    </div>
+    <div class="wave">
+      <div class="wn">WAVE 2 · 已落地</div>
+      <h5>画论规则</h5>
+      <p class="wsub">可并行 · 「画论 → 表」的整理活</p>
+      <ul>
+        <li><b>G1</b> 构图规则 · <b>G2</b> 笔法质量维 · <b>G3</b> 设色范式 <span class="badge b-ok">✓</span></li>
+        <li><b>G4</b> 天候 · <b>G5</b> 时辰 · <b>G6</b> 材质 <span class="badge b-ok">✓</span></li>
+        <li><b>G7</b> 视点档 · <b>G8</b> 钤印规则 <span class="badge b-ok">✓</span></li>
+      </ul>
+    </div>
+    <div class="wave">
+      <div class="wn">WAVE 3</div>
+      <h5>闭环与重资产</h5>
+      <p class="wsub">依赖前波 · 属「天花板」与「从 0 到 1」</p>
+      <ul>
+        <li><b>G9</b> 品格 12 算子（依赖 G2 + G10）</li>
+        <li><b>D4</b> 情感—韵味锚定集（依赖 Wave 1 度量闭环）</li>
+        <li><b>D3</b> 声法表 + 音源库（依赖 D2 范式；0→1，最重）</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout"><b>为什么 D3 / D4 排到最后。</b>它们不是不重要，而是<b>被别的波卡住</b>：D4 是「天花板」（韵味 / 情感），要先有 Wave 1 的度量闭环才谈得上调；D3 是从 0 到 1 的音频资产建设，要先有 D2 桥接表的「意象 → 要素」范式可仿。先做它们，只会返工。</div>
+
+  <div class="callout q"><b>落点约定（不新增数据仓库）。</b>全部补建都落在既有目录内：词表与画论规则 → <code>data/source/d2_seed/</code>（人工整理层）+ <code>src/d2/</code>（实现层）；音韵书 → <code>data/source/rhyme/</code>；情感锚定 → <code>data/source/</code> 新增标注集；音频 → <code>data/source/</code> 新增素材目录。本文不产生新目录，只规定顺序。</div>
+</section>
+
+<!-- ================= §5 ================= -->
+<section>
+  <div class="sec-head"><span class="sec-no">§5</span><h2>现状快照与复核</h2></div>
+  <div class="callout z"><b>三首为什么能跑。</b>因为<b>手工给桥接层打了补丁</b>：格律手工标、极性手工裁、卡约束手工挂、V/A/T 给示意值。<b>Wave 0（D1 / D5 / D6）、Wave 1（G10–G14）与 Wave 2（G1–G8 画论规则）已全部落地</b>（词表补齐、阈值校准、口径统一、画论七器接线；G12 的 D2 侧接线完成、<b>卡6 消费端已接</b>）。<b>换第 4 首、第 40 首能不能跑，取决于 Wave 3 的 G9（品格 12 算子 + 三带阈值）与 D3 / D4 重资产是否落地。</b></div>
+  <table>
+    <thead><tr><th style="width:90px">层</th><th style="width:110px">状态</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>底座 0 原料层</td><td><span class="badge b-part">部分</span></td><td>诗 / 语境 / 韵书 / 画论种子齐；<b>缺音频素材</b></td></tr>
+      <tr><td>底座 1 抽取层</td><td><span class="badge b-part">部分</span></td><td>链路齐；<b>D1 已通用化</b>（新诗自动标平仄）；<b>虚实阈值已校准</b>（G13）；卡约束仍三首手工</td></tr>
+      <tr><td>底座 2 桥接层</td><td><span class="badge b-part">半建</span></td><td>画法表 / <b>极性归一已建</b>（G12，<b>卡6 消费端已接</b>）；<b>声法表 / 12 算子缺</b></td></tr>
+      <tr><td>底座 3 规则层</td><td><span class="badge b-ok">已建</span></td><td>四表已建；<b>词表已补</b>（G10 / G11）、<b>静默预算同源</b>（G14）；<b>画论规则已落地</b>（G1 / G2 / G3 / G4–G8 全部接线，注入 STEP 5 · 5.1–5.3 / STEP 6 · 6.4–6.7 / STEP 7 · 7.2–7.3）；余 <b>G9</b> 属 Wave 3</td></tr>
+      <tr><td>底座 4 消费层</td><td><span class="badge b-ok">已有</span></td><td>三器 + scene.json 已跑通，非数据资产</td></tr>
+    </tbody>
+  </table>
+
+  <h4>复核记录（2026-10-04）</h4>
+  <table>
+    <thead><tr><th style="width:220px">核对项</th><th>结果</th><th style="width:240px">依据</th></tr></thead>
+    <tbody>
+      <tr><td>画法映射表是否已建</td><td>✅ 已建（<code>d2_mapping_seed.json</code>，含 vocab / class_defaults / modulators / rules）</td><td>映射文档 D2 → 现状</td></tr>
+      <tr><td>皴法谱实际值数</td><td>✅ 9 值（披麻 / 小斧劈 / 大斧劈 / 卷云 / 雨点 / 折带 / 米点 / 干擦 / 无皴）；G10 已补齐</td><td><code>d2_mapping_seed.json</code> <code>vocab.cun</code></td></tr>
+      <tr><td>墨阶是否含焦 / 宿墨</td><td>✅ 含「焦」；「宿墨」已独立入 <code>vocab.ink_method</code>（含 μ）</td><td><code>d2_mapping_seed.json</code> <code>vocab.ink_method</code></td></tr>
+      <tr><td>视点是否含俯视</td><td>✅ 是（G7 已补：三档 平 / 俯 / 仰 + 地平线 / 纵比区间；俯视据沈括「以大观小」）</td><td><code>vocab.viewpoint</code> / <code>modulators.viewpoint</code></td></tr>
+      <tr><td>天候 / 时辰调制器是否存在</td><td>✅ 均已建（G4 天候 晴 / 雨 / 雪 / 雾 + σ·μ 乘子；G5 时辰 晨 / 昼 / 暮 / 夜 + 段长 / 墨偏）；<code>season_words</code>「月 → 秋」已修正为 <code>time_words</code>「月 → 夜」</td><td><code>d2_mapping_seed.json</code> <code>vocab.weather</code> / <code>vocab.time_of_day</code></td></tr>
+      <tr><td>既有 <code>gaps</code> 自述</td><td>✅ <code>d2_supplement.json</code> 已记 3 条（地貌→皴法 / 势无判据 / 疏密阈值）</td><td><code>d2_supplement.json</code> L38–42</td></tr>
+      <tr><td>静默预算两值</td><td>✅ 已同源：D2 末句 T≥0.8 升档后给 0.26，卡7 落地 26%</td><td><code>d2_resolve.py --poem jx</code> / 架构 §5.3</td></tr>
+    </tbody>
+  </table>
+  <div class="callout q"><b>本文与真源的关系。</b>任一行都能回到真源逐条核对：输入端编号（D1/D3/D4）见<a href="图声要素的数据可得性与模型映射.md">数据可得性与模型映射.md</a>；规则端编号（G1–G14）见<a href="generation_control_architecture.html">生成控制整体架构.html</a> §2.1。本文只改「编排」，不改「定义」。</div>
+</section>
+
+<!-- ================= §6 ================= -->
+<section>
+  <div class="sec-head"><span class="sec-no">§6</span><h2>变更记录</h2></div>
+  <table>
+    <thead><tr><th style="width:90px">版本</th><th style="width:110px">日期</th><th>变更</th></tr></thead>
+    <tbody>
+      <tr><td>v1.0</td><td>2026-10-04</td><td>首次成篇。合成输入端（D1 / D3 / D4）与规则端（G1–G14）两侧缺口：五层底座全图、28 项资产清单、D+G 合一缺口总表、四波推进路线、现状快照与复核记录。</td></tr>
+      <tr><td>v1.1</td><td>2026-10-04</td><td>与《生成控制整体架构》通盘复核后修订：① 数据分层记号「L0–L4」改为「<b>底座 0–4</b>」，消除与「生成可控性分层 L1–L4」「可得性档 L0/L1/L2」的三义冲突（§0 增说明）；② 补 <b>D5 / D6</b> 两条输入端缺口（<code>context.json</code> schema 固化 / 情感词表扩充）并标真源（映射文档 §5② / §6.1⑥）；③ 新增 <b>§2.1 接线缺口（已建未接）</b>——登记 <code>season.color</code> / <code>form.len</code> / <code>emotion.A[].motion</code> / <code>emotion.V[].gravity</code> / <code>emotion.T[].note</code> 五处「已建模未接线」；④ §3「依赖」列更名为「<b>建表前置</b>」，与架构 §5.5「接线前置」相区分，并说明 G3 / G11 的建表序与接线序并不矛盾；⑤ 资产表行序按底座归层（虚实阈值归底座 1）。</td></tr>
+      <tr><td>v1.2</td><td>2026-10-04</td><td><b>Wave 0 落地收口。</b>① §3 缺口总表为 <b>D1 / D5 / D6</b> 加「已落地」徽标，并补落地说明（三脚本 + 纳入 <code>build/verify.py</code> 输入端护栏）；② §4 Wave 0 卡改「已落地」并逐项打勾；③ §5 快照「底座 1」由「未通用化」改为「<b>D1 已通用化</b>」、图 1 注同步；④ §5 结语改为「Wave 0 已落地，取决于 Wave 1」。</td></tr>
+      <tr><td>v1.3</td><td>2026-10-04</td><td><b>Wave 1 · A 组 G12 落地收口。</b>① §2 资产表「极性归一表」由「缺」改「<b>已建</b>」（8 规范键 + 22 条归一；<code>d2_resolve.py</code> 输出 <code>polarity</code> / <code>base_tone</code>），计数同步（已建 6→7、缺 12→11）；② §3 缺口总表为 <b>G12</b> 加「已落地」徽标，并补落地说明；③ §4 Wave 1 卡 <b>G12</b> 打勾；④ §5 快照「底座 2」由「极性归一缺」改为「<b>极性归一已建</b>」、图 1 注与结语同步；⑤ §3 建表顺序注补「G12 已落地」。</td></tr>
+      <tr><td>v1.4</td><td>2026-10-04</td><td><b>Wave 1 收口（G10 / G11 / G13 / G14）。</b>① §2 资产表「皴法谱」由 5 值改 9 值、「墨法」标已建（<code>ink_method</code> 6 式）、「虚实阈值」由「缺」改「已建」（<code>o2_gate.json</code> real 0.575 / blank 0.275）、「静默预算口径」标已建（jx 0.26 同源）；② §3 缺口总表为 G10 / G11 / G13 / G14 加「已落地」徽标，Wave 1 收口说明并入；③ §4 Wave 1 卡改「已落地」并逐项打勾；④ §5 快照「底座 1 / 底座 3」与结语同步（Wave 1 全落地、下一关为 Wave 2 G1–G9），复核记录三项（皴法值数 / 墨阶 / 静默预算）更新为现状。</td></tr>
+      <tr><td>v1.5</td><td>2026-10-04</td><td><b>Wave 2 · A 组底色通路接线。</b>① §3 G12 落地说明由「D2 侧接线完成，卡6 消费待建」改「<b>卡6 消费端已接</b>」（候选注入 STEP 6 · 6.3 底色通路，三首已注入，含 <code>data-d2</code> 溯源）；② §5 结语与「底座 2 桥接层」快照同步标「<b>卡6 消费端已接</b>」；③ 与《生成控制整体架构》v1.9 对应（B 组设色范式 / 宿墨焦墨前置已解锁）。</td></tr>
+      <tr><td>v1.6</td><td>2026-10-04</td><td><b>Wave 2 · B 组（设色范式 + 宿墨焦墨）接线。</b>① §2 资产表「设色范式档」由「缺」改「<b>已建</b>」（四范式 + 定档规则 P1/P2/P3 + 色域投影；卡6 消费端已接）、「墨法」补卡6 消费端已接（注入 6.5 墨法轴）；② §3 缺口总表为 <b>G3</b> 加「已落地」徽标并补落地说明（B 组接线、注入 6.4 / 6.5），甲组余项改 G1–G2 / G4–G9；③ §4 Wave 2 卡 <b>G3</b> 打勾；④ §5 快照「底座 3 规则层」改「画论规则部分落地（G3 已接线）」、图 1 注去掉「设色范式」；⑤ 与《生成控制整体架构》v2.0 对应（新增 §4.3.10 <code>paradigm</code> 调制器）。</td></tr>
+      <tr><td>v1.7</td><td>2026-10-04</td><td><b>Wave 2 · C 组（新算子 / 新调制器七器）接线。</b>① §2 资产表新增七行——构图规则（G1）/ 笔法质量维（G2）/ 天候（G4）/ 时辰（G5）/ 材质系数（G6）/ 视点档（G7）/ 钤印规则（G8），状态 <span class="badge b-ok">已建</span> 并逐条标「消费端已接」；计数同步（已建 → 19、部分 → 2、缺 → 3）；② §3 缺口总表为 G1 / G2 / G4–G8 加「已落地」徽标，甲组余项收窄为<b>仅 G9</b>；③ §4 Wave 2 卡改「已落地」并逐项打勾；④ §5 快照「底座 3 规则层」改「<span class="badge b-ok">已建</span>」、图 1 注同步、结语改「取决于 Wave 3 的 G9 与 D3 / D4」；⑤ 复核记录两项更新（视点已含俯视 / 天候·时辰调制器已建，「月 → 秋」修正为「月 → 夜」）；⑥ 与《生成控制整体架构》v2.1 对应（新增 §4.3.11 C 组·新算子）。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<footer>
+数据底座路线图 ｜ v1.7 ｜ 2026-10-04<br>
+配套：<a href="图声要素的数据可得性与模型映射.md">数据可得性与模型映射</a> · <a href="generation_control_architecture.html">生成控制整体架构</a> · <a href="landscape_ink_elements.html">表达要素总纲</a> · <a href="style_grade_measurability.html">立意与品格的可度量方法</a> · <a href="图声表达要素补遗.md">图声表达要素补遗</a><br>
+一句话：<b>模型不是稀缺资源，把模型接进链路的数据底座才是。</b>
+</footer>
+
+</div>
+</body>
+</html>

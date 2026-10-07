@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>《静夜思》配音原型 · 路线 B（朗诵 TTS + 严格静默）</title>
+<style>
+  :root {
+    --paper: #F6F3EC;
+    --paper-2: #FFFFFF;
+    --ink: #1C1C1C;
+    --ink-2: #4A4640;
+    --ink-3: #8A8578;
+    --line: rgba(28, 28, 28, 0.14);
+    --line-2: rgba(28, 28, 28, 0.07);
+    --zhu: #A83A2C;
+    --zhu-soft: rgba(168, 58, 44, 0.10);
+    --qing: #3E5C76;
+    --qing-soft: rgba(62, 92, 118, 0.10);
+    --serif: "Songti SC", "STSong", "SimSun", "Noto Serif SC", Georgia, serif;
+    --sans: "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--sans); font-size: 14px; line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 48px 28px 88px; }
+
+  header { border-bottom: 1px solid var(--line); padding-bottom: 26px; margin-bottom: 34px; }
+  .eyebrow { font-size: 12px; letter-spacing: .22em; color: var(--ink-3); text-transform: uppercase; margin-bottom: 16px; }
+  h1 { font-family: var(--serif); font-size: 28px; font-weight: 600; margin: 0 0 8px; letter-spacing: .02em; }
+  .sub { color: var(--ink-3); font-size: 13px; margin: 0; }
+
+  section { margin-bottom: 36px; }
+  .sec-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 12px; }
+  .sec-no {
+    font-family: var(--mono); font-size: 12px; color: var(--zhu);
+    border: 1px solid rgba(168,58,44,.32); border-radius: 4px; padding: 1px 7px; flex: none;
+  }
+  h2 { font-family: var(--serif); font-size: 18px; font-weight: 600; margin: 0; }
+  .sec-note { color: var(--ink-3); font-size: 12.5px; margin: 0 0 14px; }
+
+  .card {
+    background: var(--paper-2); border: 1px solid var(--line-2);
+    border-radius: 10px; padding: 18px 20px; margin-bottom: 14px;
+  }
+
+  /* ---------- 声轨时间线 ---------- */
+  .rail { position: relative; height: 46px; background: rgba(28,28,28,.05); border-radius: 8px; margin: 6px 0 4px; }
+  .rail .seg { position: absolute; top: 6px; bottom: 6px; border-radius: 6px; }
+  .rail .seg.voice { background: var(--qing); opacity: .82; }
+  .rail .seg.silence { background: rgba(28,28,28,.10); }
+  .rail .label { position: absolute; width: 100%; text-align: center; font-size: 11px; color: #fff; line-height: 34px; letter-spacing: .08em; }
+  .rail .tick { position: absolute; bottom: -18px; font-size: 10.5px; color: var(--ink-3); font-family: var(--mono); transform: translateX(-50%); }
+
+  /* ---------- 句参数行 ---------- */
+  .row {
+    display: grid; grid-template-columns: 130px 1fr 120px;
+    gap: 14px; align-items: center; padding: 12px 14px;
+    border: 1px solid var(--line-2); border-radius: 9px; margin-bottom: 8px; background: var(--paper-2);
+  }
+  .row.active { border-color: var(--qing); box-shadow: 0 0 0 1px var(--qing) inset; }
+  .row .line { font-family: var(--serif); font-size: 18px; letter-spacing: .1em; }
+  .row .seg-tag { font-size: 11px; color: var(--ink-3); display: block; margin-bottom: 2px; letter-spacing: .12em; }
+  .row .emo { font-size: 11.5px; color: var(--ink-3); }
+  .sliders { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .sl { font-size: 11.5px; color: var(--ink-2); }
+  .sl .lab { display: flex; justify-content: space-between; margin-bottom: 2px; }
+  .sl .val { font-family: var(--mono); color: var(--zhu); }
+  .sl input[type=range] { width: 100%; accent-color: var(--qing); }
+  .pauses { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 11.5px; color: var(--ink-2); }
+  .pauses .val { font-family: var(--mono); color: var(--ink); font-size: 12px; }
+  .listen {
+    border: 1px solid var(--line); background: transparent; border-radius: 7px;
+    font-size: 12px; padding: 5px 12px; cursor: pointer; color: var(--ink-2); transition: .15s;
+  }
+  .listen:hover { border-color: var(--zhu); color: var(--zhu); }
+
+  /* ---------- 控制区 ---------- */
+  .ctrl { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .btn {
+    border: 1px solid var(--line); background: var(--paper-2); border-radius: 8px;
+    padding: 8px 18px; font-size: 13px; cursor: pointer; color: var(--ink); transition: .15s;
+  }
+  .btn:hover { border-color: var(--ink-3); }
+  .btn.primary { background: var(--qing); border-color: var(--qing); color: #fff; }
+  .btn.primary:hover { opacity: .88; }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+  select {
+    border: 1px solid var(--line); background: var(--paper-2); border-radius: 8px;
+    padding: 7px 10px; font-size: 12.5px; color: var(--ink); max-width: 320px;
+  }
+  .status { font-size: 12.5px; color: var(--ink-2); margin-left: auto; font-family: var(--mono); }
+  .now-line { font-family: var(--serif); font-size: 20px; letter-spacing: .14em; color: var(--zhu); min-height: 30px; margin-top: 8px; }
+
+  /* ---------- 说明 ---------- */
+  .note-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 760px) { .note-grid { grid-template-columns: 1fr; } .row { grid-template-columns: 1fr; } }
+  .note-card { background: var(--paper-2); border: 1px solid var(--line-2); border-radius: 9px; padding: 14px 16px; }
+  .note-card h3 { font-size: 13px; font-weight: 600; margin: 0 0 6px; }
+  .note-card p { font-size: 12.5px; color: var(--ink-2); margin: 0 0 6px; line-height: 1.7; }
+  .note-card b { color: var(--ink); }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line-2); }
+  th { font-weight: 600; font-size: 11.5px; color: var(--ink-3); }
+  tbody tr:last-child td { border-bottom: none; }
+  .badge {
+    display: inline-block; font-size: 11px; padding: 1px 8px; border-radius: 999px;
+    border: 1px solid var(--line); color: var(--ink-3); margin-right: 6px;
+  }
+  .badge.qing { color: var(--qing); border-color: rgba(62,92,118,.35); background: var(--qing-soft); }
+  .ok { color: var(--qing); font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Voice Prototype · 路线 B · 2026-10-02</div>
+  <h1>《静夜思》配音原型</h1>
+  <p class="sub">朗诵 TTS + 严格静默 · 参数化停顿/语速设计 · 基于研究报告「低唤醒情绪 → 低基频、慢语速、长停顿」的声学映射</p>
+</header>
+
+<section>
+  <div class="sec-head"><span class="sec-no">01</span><h2>声轨设计（对齐动画时间轴 22.0s）</h2></div>
+  <div class="card">
+    <div class="rail" id="rail"></div>
+    <p class="sec-note" style="margin:20px 0 0">深色段 = 人声朗读；浅色段 = 静默（含句间停顿与画面静默，不侵入）。总人声约 11s，静默约 50%，画面静默段（5.0–6.0 / 9.5–11.0 / 14.2–15.5 / 20.0–22.0）完全不被配音占用。</p>
+  </div>
+  <div class="card" style="padding-top:6px">
+    <table>
+      <thead><tr><th>段</th><th>诗句</th><th class="num">语速</th><th class="num">音高</th><th class="num">音量</th><th class="num">前导停顿</th><th class="num">尾静默</th><th>情绪设计</th></tr></thead>
+      <tbody>
+        <tr><td>起</td><td>床前明月光</td><td class="num">0.62</td><td class="num">0.90</td><td class="num">0.80</td><td class="num">0.3s</td><td class="num">1.0s</td><td>低音轻起，月光初亮</td></tr>
+        <tr><td>承</td><td>疑是地上霜</td><td class="num">0.58</td><td class="num">0.85</td><td class="num">0.70</td><td class="num">0.6s</td><td class="num">1.5s</td><td>「疑」前犹疑停顿，更慢更轻</td></tr>
+        <tr><td>转</td><td>举头望明月</td><td class="num">0.66</td><td class="num">1.00</td><td class="num">0.85</td><td class="num">0.4s</td><td class="num">1.3s</td><td>稍抬音高，随举头动作情绪微扬</td></tr>
+        <tr><td>合</td><td>低头思故乡</td><td class="num">0.52</td><td class="num">0.80</td><td class="num">0.75</td><td class="num">0.8s</td><td class="num">2.0s</td><td>最慢最低，低头怅惘，尾静默最长</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-no">02</span><h2>试听面板</h2></div>
+  <div class="card">
+    <div class="ctrl">
+      <button class="btn primary" id="btn-play">播放全部</button>
+      <button class="btn" id="btn-stop" disabled>停止</button>
+      <select id="voice-sel" title="选择语音"></select>
+      <span class="status" id="status">就绪</span>
+    </div>
+    <div class="now-line" id="now-line"></div>
+  </div>
+
+  <div class="sec-head" style="margin-top:26px"><span class="sec-no">03</span><h2>逐句参数（可调，改完点单句试听）</h2></div>
+  <div id="rows"></div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-no">04</span><h2>设计依据</h2></div>
+  <div class="note-grid">
+    <div class="note-card">
+      <h3>声学映射（研究报告 · CONFIRMED）</h3>
+      <p>思乡属<b>低唤醒情绪</b>：低基频（pitch ↓）、慢语速（rate ↓）、长停顿（pause ↑）、弱强度（volume ↓）。四句按「起—承—转—合」做一条极缓的抑扬弧：承句最低（疑），转句微扬（举头），合句跌回最低（低头怅惘）。</p>
+      <p>转句音高回到 1.0、合句降到 0.8——整体仍压在「低」区间，不做大起伏，守住「静夜」基调。</p>
+    </div>
+    <div class="note-card">
+      <h3>吟诵传统的参数化近似</h3>
+      <p>用「前导停顿 + 尾静默」近似吟诵的<b>句末拖腔</b>与<b>2+3 节奏</b>：句末字读完后留 1.0–2.0s 的余韵，比逐字均匀更接近「平长仄短」的听感。</p>
+      <p>这是<b>近似</b>而非真吟诵——Web Speech API 无拖腔/入声能力，原型验证「朗诵 + 严格静默」的可行性；若意境增益不足，再对照真人吟诵采样评估（路线 C）。</p>
+    </div>
+    <div class="note-card">
+      <h3>静默预算协同</h3>
+      <p>动画视觉静默段（5.0–6.0 / 9.5–11.0 / 14.2–15.5 / 20.0–22.0）全部<b>无声</b>；人声只在起/承/转/合的动作段出现。句间停顿自然落在句尾，不与画面运动冲突。</p>
+      <p>「留白当空间、不当噪声」——本原型默认人声结束后至少保留 1.0s 无声，可由尾静默参数控制。</p>
+    </div>
+    <div class="note-card">
+      <h3>可度量 · 可回归</h3>
+      <p>四句 ×（rate/pitch/volume/pre/post）共 20 个参数全部显式记录，与动画时间轴一一对应。若纳入 O1 评估链，可加判读项：「配音参数与情绪设计是否一致」「人声是否侵入静默段」。</p>
+      <p>当前语音质量依赖系统安装的中文语音包；如需稳定质量，后续可平移至 Azure SSML（同样参数体系，支持更细的 break/emphasis）。</p>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  var LINES = [
+    { seg: '起', text: '床前明月光', rate: 0.62, pitch: 0.90, vol: 0.80, pre: 0.3, post: 1.0 },
+    { seg: '承', text: '疑是地上霜', rate: 0.58, pitch: 0.85, vol: 0.70, pre: 0.6, post: 1.5 },
+    { seg: '转', text: '举头望明月', rate: 0.66, pitch: 1.00, vol: 0.85, pre: 0.4, post: 1.3 },
+    { seg: '合', text: '低头思故乡', rate: 0.52, pitch: 0.80, vol: 0.75, pre: 0.8, post: 2.0 }
+  ];
+
+  var voices = [];
+  var speaking = false;
+  var stopFlag = false;
+
+  var rail = document.getElementById('rail');
+  var voiceSel = document.getElementById('voice-sel');
+  var btnPlay = document.getElementById('btn-play');
+  var btnStop = document.getElementById('btn-stop');
+  var statusEl = document.getElementById('status');
+  var nowLine = document.getElementById('now-line');
+  var rowsEl = document.getElementById('rows');
+
+  /* ---------- 声轨时间线 ---------- */
+  var T = 22.0;
+  var startAt = [0, 6, 11, 15.5];
+  var SIL = [[5.0,6.0],[9.5,11.0],[14.2,15.5],[20.0,22.0]];
+  (function drawRail(){
+    SIL.forEach(function(s){
+      var d = document.createElement('div');
+      d.className = 'seg silence';
+      d.style.left = (s[0]/T*100) + '%';
+      d.style.width = ((s[1]-s[0])/T*100) + '%';
+      rail.appendChild(d);
+    });
+    LINES.forEach(function(l, i){
+      var d = document.createElement('div');
+      d.className = 'seg voice';
+      d.style.left = (startAt[i]/T*100) + '%';
+      d.style.width = ((6.0 - l.pre - l.post)/T*100) + '%';
+      d.title = l.seg + ' · ' + l.text;
+      var lb = document.createElement('span');
+      lb.className = 'label';
+      lb.textContent = l.text;
+      d.appendChild(lb);
+      rail.appendChild(d);
+    });
+    [0, 6, 11, 15.5, 22].forEach(function(t){
+      var tk = document.createElement('span');
+      tk.className = 'tick';
+      tk.style.left = (t/T*100) + '%';
+      tk.textContent = t + 's';
+      rail.appendChild(tk);
+    });
+  })();
+
+  /* ---------- 语音列表 ---------- */
+  function loadVoices(){
+    voices = speechSynthesis.getVoices().filter(function(v){
+      return /^zh/i.test(v.lang);
+    });
+    if (!voices.length) voices = speechSynthesis.getVoices();
+    voiceSel.innerHTML = '';
+    if (!voices.length){
+      voiceSel.innerHTML = '<option>未检测到可用语音</option>';
+      return;
+    }
+    voices.forEach(function(v){
+      var o = document.createElement('option');
+      o.value = v.name;
+      o.textContent = v.name + ' (' + v.lang + (v.localService ? ' · 本地' : '') + ')';
+      voiceSel.appendChild(o);
+    });
+  }
+  if ('speechSynthesis' in window){
+    loadVoices();
+    speechSynthesis.onvoiceschanged = loadVoices;
+  } else {
+    voiceSel.innerHTML = '<option>此浏览器不支持 Web Speech API</option>';
+    btnPlay.disabled = true;
+  }
+
+  /* ---------- 逐句参数行 ---------- */
+  function makeSlider(label, key, min, max, step, fmt){
+    var wrap = document.createElement('div');
+    wrap.className = 'sl';
+    var lab = document.createElement('div');
+    lab.className = 'lab';
+    lab.innerHTML = '<span>' + label + '</span><span class="val" data-k="' + key + '"></span>';
+    var input = document.createElement('input');
+    input.type = 'range';
+    input.min = min; input.max = max; input.step = step;
+    input.value = 0;
+    input.addEventListener('input', function(){ refreshVal(); });
+    wrap.appendChild(lab);
+    wrap.appendChild(input);
+    function refreshVal(){
+      wrap.querySelector('.val').textContent = fmt(input.value);
+    }
+    return { el: wrap, input: input, set: function(v){ input.value = v; refreshVal(); } };
+  }
+
+  function buildRow(line, idx){
+    var row = document.createElement('div');
+    row.className = 'row';
+    row.id = 'row-' + idx;
+
+    var head = document.createElement('div');
+    head.innerHTML = '<span class="seg-tag">' + line.seg + '段</span><span class="line">' + line.text + '</span><span class="emo">' +
+      ['低音轻起','犹疑·更轻','举头·微扬','低头·怅惘'][idx] + '</span>';
+    row.appendChild(head);
+
+    var sliders = document.createElement('div');
+    sliders.className = 'sliders';
+    var sRate = makeSlider('语速', 'rate', 0.4, 1.0, 0.01, function(v){ return Number(v).toFixed(2); });
+    var sPitch = makeSlider('音高', 'pitch', 0.5, 1.5, 0.01, function(v){ return Number(v).toFixed(2); });
+    var sVol = makeSlider('音量', 'vol', 0.2, 1.0, 0.05, function(v){ return Number(v).toFixed(2); });
+    sRate.set(line.rate); sPitch.set(line.pitch); sVol.set(line.vol);
+    sliders.appendChild(sRate.el);
+    sliders.appendChild(sPitch.el);
+    sliders.appendChild(sVol.el);
+    row.appendChild(sliders);
+
+    var right = document.createElement('div');
+    right.innerHTML =
+      '<div class="pauses">' +
+        '<div>前导停顿 <span class="val" data-k="pre"></span>s</div>' +
+        '<div>尾静默 <span class="val" data-k="post"></span>s</div>' +
+      '</div>' +
+      '<button class="listen" data-i="' + idx + '">单句试听</button>';
+    row.appendChild(right);
+
+    var preInput = document.createElement('input');
+    preInput.type = 'range'; preInput.min = 0; preInput.max = 3; preInput.step = 0.1; preInput.value = line.pre;
+    preInput.style.width = '0'; preInput.style.height = '0'; preInput.style.opacity = '0'; preInput.style.position = 'absolute';
+    right.querySelector('[data-k="pre"]').textContent = line.pre.toFixed(1);
+    right.querySelector('[data-k="post"]').textContent = line.post.toFixed(1);
+    row.appendChild(preInput);
+    var postInput = preInput.cloneNode();
+    postInput.value = line.post;
+    row.appendChild(postInput);
+
+    row._state = {
+      rate: sRate.input, pitch: sPitch.input, vol: sVol.input, pre: preInput, post: postInput
+    };
+
+    right.querySelector('.listen').addEventListener('click', function(){
+      if (!voices.length) return;
+      speakOne(idx);
+    });
+
+    return row;
+  }
+
+  LINES.forEach(function(l, i){ rowsEl.appendChild(buildRow(l, i)); });
+
+  function readLine(i){
+    var l = LINES[i];
+    var s = document.getElementById('row-' + i)._state;
+    l.rate = parseFloat(s.rate.value);
+    l.pitch = parseFloat(s.pitch.value);
+    l.vol = parseFloat(s.vol.value);
+    l.pre = parseFloat(s.pre.value);
+    l.post = parseFloat(s.post.value);
+    return l;
+  }
+
+  /* ---------- 播放 ---------- */
+  function setActive(i){
+    document.querySelectorAll('.row').forEach(function(r){ r.classList.remove('active'); });
+    if (i >= 0) document.getElementById('row-' + i).classList.add('active');
+  }
+
+  function speakLine(i){
+    if (stopFlag) return;
+    if (i >= LINES.length){
+      statusEl.textContent = '播放完成';
+      speaking = false;
+      setActive(-1);
+      nowLine.textContent = '';
+      btnPlay.disabled = false; btnStop.disabled = true;
+      return;
+    }
+    var l = readLine(i);
+    setActive(i);
+    nowLine.textContent = l.text;
+    statusEl.textContent = '朗读中 · ' + l.seg + '段';
+    var u = new SpeechSynthesisUtterance(l.text);
+    var v = voices[voiceSel.selectedIndex];
+    if (v) u.voice = v;
+    u.lang = v && v.lang ? v.lang : 'zh-CN';
+    u.rate = l.rate;
+    u.pitch = l.pitch;
+    u.volume = l.vol;
+    var preDelay = l.pre * 1000;
+    u.onend = function(){
+      var postDelay = l.post * 1000;
+      window.setTimeout(function(){ speakLine(i + 1); }, postDelay);
+    };
+    window.setTimeout(function(){
+      if (stopFlag) return;
+      speechSynthesis.speak(u);
+    }, preDelay);
+  }
+
+  btnPlay.addEventListener('click', function(){
+    if (speaking){ speechSynthesis.cancel(); }
+    stopFlag = false;
+    speaking = true;
+    btnPlay.disabled = true; btnStop.disabled = false;
+    statusEl.textContent = '启动';
+    window.setTimeout(function(){ speakLine(0); }, 300);
+  });
+
+  btnStop.addEventListener('click', function(){
+    stopFlag = true;
+    speaking = false;
+    speechSynthesis.cancel();
+    setActive(-1);
+    nowLine.textContent = '';
+    statusEl.textContent = '已停止';
+    btnPlay.disabled = false; btnStop.disabled = true;
+  });
+
+  function speakOne(i){
+    var l = readLine(i);
+    speechSynthesis.cancel();
+    setActive(i);
+    nowLine.textContent = l.text;
+    var u = new SpeechSynthesisUtterance(l.text);
+    var v = voices[voiceSel.selectedIndex];
+    if (v) u.voice = v;
+    u.lang = v && v.lang ? v.lang : 'zh-CN';
+    u.rate = l.rate;
+    u.pitch = l.pitch;
+    u.volume = l.vol;
+    u.onend = function(){ setActive(-1); nowLine.textContent = ''; };
+    speechSynthesis.speak(u);
+  }
+})();
+</script>
+</body>
+</html>

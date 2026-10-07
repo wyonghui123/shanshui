@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>诗文 → 水墨动画 · 第三轮深入研究：攻空白（跨域迁移）</title>
+<style>
+  :root {
+    --paper: #F6F3EC;
+    --paper-2: #FFFFFF;
+    --ink: #1C1C1C;
+    --ink-2: #4A4640;
+    --ink-3: #8A8578;
+    --line: rgba(28, 28, 28, 0.14);
+    --line-2: rgba(28, 28, 28, 0.07);
+    --zhu: #A83A2C;
+    --zhu-soft: rgba(168, 58, 44, 0.10);
+    --qing: #3E5C76;
+    --qing-soft: rgba(62, 92, 118, 0.10);
+    --jin: #B08430;
+    --jin-soft: rgba(176, 132, 48, 0.10);
+    --lv: #4E6B4A;
+    --lv-soft: rgba(78, 107, 74, 0.10);
+    --serif: "Songti SC", "STSong", "SimSun", "Noto Serif SC", Georgia, serif;
+    --sans: "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--sans); font-size: 14px; line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 52px 30px 96px; }
+
+  header { border-bottom: 1px solid var(--line); padding-bottom: 28px; margin-bottom: 36px; }
+  .eyebrow { font-size: 12px; letter-spacing: .22em; color: var(--ink-3); text-transform: uppercase; margin-bottom: 18px; }
+  h1 { font-family: var(--serif); font-size: 31px; font-weight: 600; margin: 0 0 10px; letter-spacing: .04em; }
+  .sub { color: var(--ink-3); font-size: 13px; max-width: 800px; }
+  .sub b { color: var(--ink-2); }
+
+  .chain { display: flex; gap: 8px; flex-wrap: wrap; margin: 18px 0 0; }
+  .chain .st {
+    font-size: 12px; font-family: var(--mono); padding: 4px 11px; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--paper-2); color: var(--ink-3);
+  }
+  .chain .st.now { color: var(--paper-2); background: var(--ink); border-color: var(--ink); }
+
+  h2 {
+    font-family: var(--serif); font-size: 20px; font-weight: 600;
+    margin: 52px 0 6px; letter-spacing: .03em;
+    display: flex; align-items: baseline; gap: 12px;
+  }
+  h2 .n {
+    font-family: var(--mono); font-size: 12px; color: var(--zhu);
+    border: 1px solid rgba(168,58,44,.32); border-radius: 4px; padding: 1px 7px;
+    flex: none;
+  }
+  .lede { color: var(--ink-3); font-size: 13px; margin: 0 0 20px; max-width: 800px; }
+
+  table.grid { width: 100%; border-collapse: collapse; font-size: 12.5px; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin: 6px 0 4px; }
+  table.grid th { background: rgba(28,28,28,.035); font-weight: 600; text-align: left; padding: 10px 13px; font-size: 12px; color: var(--ink-2); border-bottom: 1px solid var(--line); }
+  table.grid td { padding: 9px 13px; border-bottom: 1px solid var(--line-2); vertical-align: top; color: var(--ink-2); }
+  table.grid tr:last-child td { border-bottom: none; }
+  table.grid td.step { font-family: var(--mono); font-size: 11.5px; color: var(--zhu); white-space: nowrap; }
+  .ok { color: var(--lv); font-weight: 600; }
+  .bad { color: var(--zhu); font-weight: 600; }
+  .warn { color: var(--jin); font-weight: 600; }
+
+  .card { border: 1px solid var(--line); border-radius: 8px; background: var(--paper-2); padding: 15px 18px; margin-bottom: 12px; }
+  .card.borrow { border-left: 3px solid var(--qing); }
+  .card.fixed { border-left: 3px solid var(--jin); }
+  .card-h { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
+  .card-h .id { font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); flex: none; }
+  .card-h h3 { font-family: var(--serif); font-size: 16px; font-weight: 600; margin: 0; flex: none; }
+  .card-h .stars { font-family: var(--mono); font-size: 11px; color: var(--jin); }
+  .card dl { margin: 8px 0 0; display: grid; grid-template-columns: 78px 1fr; gap: 4px 14px; }
+  .card dt { font-size: 12px; color: var(--ink-3); padding-top: 1px; }
+  .card dd { margin: 0; font-size: 13px; color: var(--ink-2); }
+  .card dd.math { font-family: var(--mono); font-size: 12px; color: var(--qing); line-height: 1.7; }
+  .card dd.ev::before { content: "▸ "; color: var(--lv); }
+  .card dd.corr::before { content: "✕ "; color: var(--zhu); }
+  .card dd.corr { color: var(--zhu); }
+  .card dd.to-us::before { content: "→ "; color: var(--zhu); }
+  .card dd.limit::before { content: "⚠ "; color: var(--jin); }
+
+  .tag {
+    display: inline-block; font-family: var(--mono); font-size: 10.5px;
+    padding: 1px 6px; border-radius: 999px; border: 1px solid; vertical-align: 1px; margin-left: 6px;
+  }
+  .tag.ok   { color: var(--lv);  border-color: rgba(78,107,74,.36);  background: var(--lv-soft); }
+  .tag.pend { color: var(--jin); border-color: rgba(176,132,48,.40); background: var(--jin-soft); }
+  .tag.bad  { color: var(--zhu); border-color: rgba(168,58,44,.36);  background: var(--zhu-soft); }
+  .tag.fix  { color: var(--qing); border-color: rgba(62,92,118,.36); background: var(--qing-soft); }
+
+  .draft {
+    border: 1px dashed rgba(168,58,44,.42); border-radius: 8px;
+    background: rgba(168,58,44,.035); padding: 15px 18px; margin: 14px 0 6px;
+  }
+  .draft h4 { font-family: var(--serif); font-size: 14.5px; margin: 0 0 8px; color: var(--zhu); font-weight: 600; }
+  .draft p { margin: 0 0 8px; font-size: 13px; color: var(--ink-2); }
+  .draft p:last-child { margin-bottom: 0; }
+  .draft .eq {
+    font-family: var(--mono); font-size: 12px; color: var(--qing);
+    background: var(--paper-2); border: 1px solid var(--line-2); border-radius: 6px;
+    padding: 9px 12px; margin: 8px 0; line-height: 1.75; overflow-x: auto;
+  }
+
+  .verdict { border: 1px solid var(--line); border-left: 3px solid var(--zhu); border-radius: 8px; background: var(--paper-2); padding: 18px 20px; margin: 20px 0; }
+  .verdict h3 { font-family: var(--serif); font-size: 16px; margin: 0 0 8px; font-weight: 600; }
+  .verdict p { margin: 0 0 10px; font-size: 13.5px; color: var(--ink-2); }
+  .verdict p:last-child { margin-bottom: 0; }
+
+  a { color: var(--qing); text-decoration: none; border-bottom: 1px solid rgba(62,92,118,.28); }
+  a:hover { border-bottom-color: var(--qing); }
+
+  footer { margin-top: 64px; padding-top: 22px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--ink-3); }
+  footer ol { margin: 8px 0 0; padding-left: 20px; }
+  footer li { margin-bottom: 3px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Research Note · Third Pass · Cross-Domain Transfer</div>
+  <h1>诗文 → 水墨动画 · 第三轮深入研究</h1>
+  <div class="sub">
+    前两轮把「有哪些模型」摸了一遍、把「引用对不对」核了一遍。第三轮换个打法：<b>不再普查，而是专攻第二轮标记为「确认空白 / 无先例」的那几层</b>，去相邻领域（电影叙事、音乐张力、跨模态对齐、文本年代学）找<b>可迁移、可引用</b>的数学，把「空白」翻译成「待适配方案 + 迁移障碍 + 优先级」。
+  </div>
+  <div class="chain">
+    <span class="st">一轮 · 普查</span>
+    <span class="st">二轮 · 核验</span>
+    <span class="st now">三轮 · 攻空白</span>
+  </div>
+</header>
+
+<h2><span class="n">00</span>总览：四块硬骨头 → 借自何处</h2>
+<p class="lede">第二轮认定「没有先例」的层，大多在别的学科里早有成熟做法。本轮只做一件事：找到它们，并判断能不能搬过来。</p>
+<table class="grid">
+  <thead><tr><th style="width:20%">空白层（二轮结论）</th><th style="width:20%">相邻领域</th><th style="width:38%">代表方法</th><th>可迁移度</th></tr></thead>
+  <tbody>
+    <tr><td class="bad">情感轨迹连续建模（D2）</td><td>电影叙事 / 音乐</td><td>Reagan 六种情感弧线、Cutting 电影节奏实证、Dramatis 悬念模型、调性张力曲线</td><td><span class="ok">高</span>——形式直接对应「情感曲线 → 镜头时长」</td></tr>
+    <tr><td class="bad">诗意象 → 画面元素对齐（OT/图匹配）</td><td>文生图 / 图文检索</td><td>L2RM 最优传输重匹配、TextLap 文本到布局</td><td><span class="warn">中</span>——机制可用，代价函数需为「意象」重设计</td></tr>
+    <tr><td class="bad">共享隐变量 + 三模态对齐（E5）</td><td>多模态表示学习</td><td>InfoNCE/CPC、CLIP、Tune-A-Video 时序一致</td><td><span class="warn">中</span>——组件成熟，三模态组合仍属自建</td></tr>
+    <tr><td class="bad">编年 / 写作时间推断（F8）</td><td>古籍年代学</td><td>Enoch：碳十四 + 书写风格 + 贝叶斯岭回归</td><td><span class="warn">中低</span>——范式可搬，中文古诗缺「已知年代样本集」</td></tr>
+    <tr><td class="bad">因果「经历 → 风格」</td><td>因果 NLP</td><td>因果推断 NLP 框架（TACL 2022）</td><td><span class="warn">中低</span>——只能做准因果，混淆项难控</td></tr>
+    <tr><td class="bad">篇章结构 / 起承转合分段</td><td>语篇分析</td><td>GCDT 中文 RST 树库、TopWORDS-Poetry 格律先验</td><td><span class="ok">中高</span>——中文 RST 现成，可迁移</td></tr>
+    <tr><td class="bad">忠实度评估协议</td><td>视频生成评测</td><td>TIFA 问答式、FIFA 时空依赖图、T2V-CompBench 七维</td><td><span class="ok">高</span>——把「忠不忠实」变成可自动化的问答</td></tr>
+  </tbody>
+</table>
+
+<h2><span class="n">01</span>攻 D2：情感弧线 → 节拍表</h2>
+<p class="lede">这是全链路最薄弱的一层——动画引擎最依赖它，而中文古诗领域两轮都没找到先例。相邻领域其实有整套现成东西。</p>
+
+<div class="card fixed">
+  <div class="card-h"><span class="id">T1</span><h3>六种基本情感弧线</h3><span class="stars">★★☆</span><span class="tag ok">已核验</span><span class="tag fix">已修正</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">对 1,327 部作品用 Hedonometer 打情感分 → 得到情感曲线 → 聚类归纳出 6 种主导形状（rags-to-riches / tragedy / man-in-a-hole / icarus / cinderella / oedipus）</dd>
+    <dt>落地证据</dt><dd class="ev">Reagan, Mitchell, Kiley, Danforth &amp; Dodds (2016)，<b>The emotional arcs of stories are dominated by six basic shapes</b>，<i>EPJ Data Science</i> 5(1):31，<a href="https://www.semanticscholar.org/paper/f70eafb452554f1bedf2c0725b0d4299b3c53d34">Semantic Scholar</a></dd>
+    <dt>已修正</dt><dd class="corr">本轮子调研把它标成 <b>PLOS ONE</b>。核验后确认实际发表在 <b>EPJ Data Science</b>（作者本人主页 BibTeX 亦为 EPJ Data Science）。<b>这是第三轮抓到的第 1 处引用错误</b>——再次印证二轮的教训：二手转述会自己长出细节。</dd>
+    <dt>对我们的用处</dt><dd class="to-us">绝句只有 4 句、律诗 8 句，情感观测点极少，直接拟合曲线必然过拟合。<b>这六种形状正好当结构先验</b>：先判整首诗属于哪一型，再让观测值去「微调」先验形状。</dd>
+  </dl>
+</div>
+
+<div class="card fixed">
+  <div class="card-h"><span class="id">T2</span><h3>电影节奏的实证模型：叙事阶段 → 镜头长度</h3><span class="stars">★★★</span><span class="tag ok">已核验</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">统计 150 余部影片的镜头时长/运动/亮度随叙事进程的变化，并用多项式拟合「节奏曲线」</dd>
+    <dt>落地证据</dt><dd class="ev">Cutting (2016)，<b>The evolution of pace in popular movies</b>，<i>Cognitive Research: Principles and Implications</i> 1(30)，DOI 10.1186/s41235-016-0029-0，<a href="https://cognitiveresearchjournal.springeropen.com/articles/10.1186%2Fs41235-016-0029-0">SpringerOpen</a></dd>
+    <dt>提取到的经验规律</dt><dd>① setup 阶段：镜头变长、运动减少；② complication/development：画面变暗；③ climax 前半：镜头变短、运动增加；④ climax 末尾：镜头又变长、运动减少。</dd>
+    <dt>对我们的用处</dt><dd class="to-us">这几乎就是「起承转合」的影像学版本：<b>起≈setup（慢）、承≈complication（渐暗）、转≈climax 前半（快剪）、合≈climax 末尾（回缓）</b>。可以直接把四个阶段的经验系数拿来定镜头时长。</dd>
+    <dt>局限</dt><dd class="limit">样本是实拍电影，不是水墨动画。水墨讲究「留白」，镜头切换本身就是异质元素，系数只能借<b>相对比例</b>，不能照搬绝对值。</dd>
+  </dl>
+</div>
+
+<div class="card borrow">
+  <div class="card-h"><span class="id">T3</span><h3>Dramatis：把「张力」写成可计算量</h3><span class="stars">★★☆</span><span class="tag ok">已核验</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">悬念 ≈ f( 主角目标受威胁的程度 , 规避负面结局的成功概率 )。模型跟踪读者的故事状态，检索「规避失败」的计划网络，按计划的成功似然打分</dd>
+    <dt>落地证据</dt><dd class="ev">O'Neill &amp; Riedl (2014)，<b>Dramatis: A Computational Model of Suspense</b>，AAAI 2014，vol. 28(1), 944–950，<a href="https://faculty.cc.gatech.edu/~riedl/pubs/oneill-aaai14.pdf">AAAI 原文 PDF</a></dd>
+    <dt>对我们的用处</dt><dd class="to-us">我们此前用「情感曲线的曲率峰值 κ」定位「转」——那是个纯几何量，说不出<b>为什么</b>这里该转。Dramatis 给了一个语言学解释：<b>「转」= 目标受威胁的峰值</b>。κ 与悬念值可以互为交叉验证。</dd>
+    <dt>局限</dt><dd class="limit">它需要「主角 / 目标 / 计划」的结构化表示。抒情诗往往没有明确主角与计划（《江雪》里渔翁的目标是什么？），迁移时需先做一次「叙事化」解读。</dd>
+  </dl>
+</div>
+
+<div class="card borrow">
+  <div class="card-h"><span class="id">T4</span><h3>调性张力曲线：给「韵味」一个有量纲的类比</h3><span class="stars">★★☆</span><span class="tag ok">已核验</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">张力剖面 = 调性距离 + 不协和度 + 声部进行 + 层级张力，在「调性音程空间」里逐和弦计算，得到随时间的张力曲线</dd>
+    <dt>落地证据</dt><dd class="ev"><b>A Computational Model of Tonal Tension Profile of Chord Progressions in the Tonal Interval Space</b>，<i>Frontiers in Psychology</i>（<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7712964/">PMC7712964</a>）；思想源头为 Lerdahl 的 tonal tension 与 Herremans &amp; Chew 的 spiral array 模型</dd>
+    <dt>对我们的用处</dt><dd class="to-us">把「意象」当「和弦」：意象两两之间的距离 = 调性距离，意象并置的冲突 = 不协和度，意象的层级（大景/小景）= 层级张力。<b>于是「韵味」不再是形容词，而是一条可积分的曲线</b>。这与我们自建的「反差度 ρ」方向一致，且给了它更成熟的形式。</dd>
+    <dt>局限</dt><dd class="limit">音高系统有严格的代数结构（五度圈、音级集合），意象空间没有。借的是<b>「距离 + 不协和 + 层级」三件套</b>，不是具体公式。</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">T5</span><h3>张力的心理学机制模型</h3><span class="stars">★☆☆</span><span class="tag pend">待核验</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">把张力来源归纳为 conflict / instability / dissonance / uncertainty 四类，强调「预期」在张力体验中的核心地位（半定量模型，非目标函数）</dd>
+    <dt>落地证据</dt><dd class="ev">Lehne &amp; Koelsch (2015)，<b>Toward a general psychological model of tension and suspense</b>，<i>Frontiers in Psychology</i> 6:1189（子调研报告，<b>本轮未逐条核验</b>）</dd>
+    <dt>对我们的用处</dt><dd class="to-us">提供「张力四来源」的分类法，可作为设计意象张力的检查清单：这一句的不安来自冲突、失稳、不协和，还是不确定？</dd>
+    <dt>局限</dt><dd class="limit">偏心理学理论，无直接可计算形式。</dd>
+  </dl>
+</div>
+
+<div class="draft">
+  <h4>迁移草案 ①：情感曲线 → 节拍表（把三件东西接起来）</h4>
+  <p>把 T1 的结构先验、T2 的阶段系数、T3 的悬念值合成一条流水线：</p>
+  <div class="eq">
+    第 1 步 · 结构先验（解决短诗过拟合）<br>
+    Ê(t) = λ · E_prior(t | arc-type) + (1 − λ) · E_obs(t)<br>
+    　arc-type ∈ {rise, fall, man-in-a-hole, icarus, cinderella, oedipus}（T1）<br>
+    　λ 由句数决定：绝句 λ≈0.7，律诗 λ≈0.4（观测点越多越信观测）<br><br>
+    第 2 步 · 张力校正（让「转」有语义理由）<br>
+    Ê'(t) = Ê(t) + β · suspense(t)　　（suspense 由 T3 的「目标受威胁」给出）<br><br>
+    第 3 步 · 时长映射（阶段系数来自 T2）<br>
+    d_i = d_base · g(stage_i) · ( 1 + α · |κ_i| )<br>
+    　g(setup)=1.35, g(complication)=1.10, g(climax前半)=0.70, g(climax末尾)=1.25<br>
+    　κ_i = 情感曲线在第 i 句的曲率，|κ| 大 → 节奏加快<br><br>
+    第 4 步 · 硬约束（沿用现有设计）<br>
+    Σ silence_i ≤ S_max　（静默预算，不可突破）
+  </div>
+  <p><b>这一步的价值</b>：d_i 从「凭手感给」变成「有出处、可复核、可调参」。每个系数都能追到一篇论文，这正是我们区别于 Polaca / LivePoem 那种端到端黑箱的地方。</p>
+</div>
+
+<h2><span class="n">02</span>攻「诗意象 → 画面元素」：最优传输</h2>
+<p class="lede">第二轮判定「最优传输/图匹配用于诗文—画面元素对齐」为空白。通用图文领域已经把这套机制做得很成熟，可以直接借「机制」。</p>
+
+<div class="card fixed">
+  <div class="card-h"><span class="id">T6</span><h3>L2RM：用最优传输做跨模态「重匹配」</h3><span class="stars">★★☆</span><span class="tag ok">已核验</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">T* = argmin_T ⟨T, C⟩，s.t. 边际约束；用 Sinkhorn 求熵正则化解。代价 C 由自监督的相似度—代价映射学习得到；进一步建模为<b>部分最优传输</b>（允许一部分质量不被运输）</dd>
+    <dt>落地证据</dt><dd class="ev">Han, Zheng, Dai, Luo &amp; Wang (2024)，<b>Learning to Rematch Mismatched Pairs for Robust Cross-Modal Retrieval</b>，CVPR 2024，<a href="https://openaccess.thecvf.com/content/CVPR2024/papers/Han_Learning_to_Rematch_Mismatched_Pairs_for_Robust_Cross-Modal_Retrieval_CVPR_2024_paper.pdf">CVPR Open Access</a></dd>
+    <dt>对我们的用处</dt><dd class="to-us">这是本轮最漂亮的一次「对上了」。<b>「部分最优传输」里「不被运输的质量」，恰好就是我们说的「负节点」</b>——「千山鸟飞绝」的「鸟」在诗里存在、在画里不该出现。OT 天然能给这种「缺席」一个可计算的量：untransported mass。</dd>
+    <dt>局限</dt><dd class="limit">它的代价矩阵是学出来的，我们没那么多标注数据；需要先用 CLIP/意象向量算一个手工代价矩阵起步。</dd>
+  </dl>
+</div>
+
+<div class="card fixed">
+  <div class="card-h"><span class="id">T7</span><h3>TextLap：从文本直接规划「布局」</h3><span class="stars">★★☆</span><span class="tag ok">已核验</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">构建指令式布局数据集（InsLap），微调 LLM 理解 2D 空间关系，直接生成/修改元素的边界框坐标</dd>
+    <dt>落地证据</dt><dd class="ev">Chen, Zhang et al. (2024)，<b>TextLap: Customizing Language Models for Text-to-Layout Planning</b>，EMNLP 2024 Findings，<a href="https://arxiv.org/abs/2410.12844">arXiv 2410.12844</a> / <a href="https://aclanthology.org/anthology-files/anthology-files/pdf/findings/2024.findings-emnlp.833.pdf">2024.findings-emnlp.833</a></dd>
+    <dt>对我们的用处</dt><dd class="to-us">它与我们的「构图层」最接近：都是「文本 → 元素位置」。差异是它管的是海报版面，我们管的是水墨画面的景深与留白。<b>可以借它的「指令式布局」范式，把「孤舟在左下、远山在右上」写成布局指令</b>。</dd>
+    <dt>局限</dt><dd class="limit">输出是矩形框，不是水墨的「层次 + 留白 + 笔墨浓淡」；需要把框坐标再映射到「近景/中景/远景」三层。</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">T8</span><h3>部分最优传输（Partial OT）</h3><span class="stars">★☆☆</span><span class="tag bad">存疑</span></div>
+  <dl>
+    <dt>落地证据</dt><dd class="ev">子调研报了一条 <b>Learning Image-Text Matching with Optimal Partial Transport</b>，标 ICASSP 2025，却挂着 2026 年 3 月的 arXiv 编号（2603.14349）。<b>年份与 venue 时间线矛盾</b>，本轮无法确认，暂不采用。</dd>
+    <dt>说明</dt><dd class="limit">「部分最优传输」这一概念本身是成熟的（L2RM 也用了），我们借概念即可，不必依赖这条存疑引用。</dd>
+  </dl>
+</div>
+
+<div class="draft">
+  <h4>迁移草案 ②：意象 → 构图槽位（含负节点的量化）</h4>
+  <div class="eq">
+    意象集合 X = {x_1 … x_m}（含正节点与负节点）<br>
+    构图槽位 Y = {y_1 … y_n}（近景 / 中景 / 远景的可用位置）<br><br>
+    代价矩阵：C_ij = w₁·(1 − cos(e(x_i), e(y_j)))　语义不匹配<br>
+    　　　　　+ w₂·|depth(x_i) − depth(y_j)|　　景深不匹配<br>
+    　　　　　+ w₃·1[ x_i 是负节点 ∧ y_j 可见 ]　　负节点惩罚<br><br>
+    求解：T* = argmin_T ⟨T, C⟩　（Sinkhorn 近似）<br>
+    关键读数：untransported mass = 1 − Σ T*　→　<b>即「本诗刻意不画的东西」，负节点的可计算判据</b>
+  </div>
+  <p><b>这一步的价值</b>：第二轮我们靠「意象共现网络的低度节点」间接识别负节点（C3），现在有了第二条独立判据（OT 的未运输质量）。两条判据交叉验证，比人工标注可复核得多。</p>
+</div>
+
+<h2><span class="n">03</span>攻 E5：三模态共享隐变量</h2>
+<p class="lede">第二轮判定「共享隐变量 + 对比对齐」在古诗领域无先例。本轮确认：<b>组件全都成熟，缺的只是「三模态」这个组合</b>——所以这条路是「自建」而非「无据」。</p>
+
+<div class="card borrow">
+  <div class="card-h"><span class="id">T9</span><h3>InfoNCE 的出处：对比预测编码</h3><span class="stars">★★★</span><span class="tag pend">公认经典</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">L = − E[ log( exp(sim(z, c⁺)/τ) / Σ_j exp(sim(z, c_j)/τ) ) ]，最大化表示与正样本的互信息下界</dd>
+    <dt>落地证据</dt><dd class="ev">van den Oord, Li &amp; Vinyals (2018)，<b>Representation Learning with Contrastive Predictive Coding</b>，<a href="https://arxiv.org/pdf/1807.03748.pdf">arXiv 1807.03748</a>（通行引用，本轮未逐条核验）</dd>
+    <dt>对我们的用处</dt><dd class="to-us">这是我们「共享隐变量 + InfoNCE」架构的<b>理论出处</b>。第二轮说这条是「自建」，其实骨架有据，只是三模态的组合方式是我们自己的。</dd>
+  </dl>
+</div>
+
+<div class="card borrow">
+  <div class="card-h"><span class="id">T10</span><h3>CLIP：用自然语言监督视觉对齐</h3><span class="stars">★★★</span><span class="tag pend">公认经典</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">双编码器（图像 / 文本）+ 对称对比损失，在 batch 内构造正负对；温度 τ 可学习</dd>
+    <dt>落地证据</dt><dd class="ev">Radford et al. (2021)，<b>Learning Transferable Visual Models From Natural Language Supervision</b>，ICML 2021，<a href="https://arxiv.org/pdf/2103.00020.pdf">arXiv 2103.00020</a></dd>
+    <dt>对我们的用处</dt><dd class="to-us">CLIP 的嵌入可直接充当草案②里的 e(·)（意象/槽位的语义向量），也可充当「可画性评分」（第二轮 C5）的骨干。</dd>
+  </dl>
+</div>
+
+<div class="card borrow">
+  <div class="card-h"><span class="id">T11</span><h3>Tune-A-Video：单样本时序一致性</h3><span class="stars">★★☆</span><span class="tag pend">公认经典</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">在一对「文本—视频」样本上微调预训练文生图扩散模型，用时序注意力（temporal attention）保证帧间一致</dd>
+    <dt>落地证据</dt><dd class="ev">Wu et al. (2023)，<b>Tune-A-Video</b>，ICCV 2023，<a href="https://tuneavideo.github.io/">项目页</a></dd>
+    <dt>对我们的用处</dt><dd class="to-us">我们目前用「节拍表 + 手工镜头」解决帧间风格漂移，Tune-A-Video 用「少量样本微调」解决同一个问题。<b>两条路线的成本/可控性差异值得写进方法论</b>：手工路线可控但产能低，微调路线产能高但不可解释。</dd>
+    <dt>局限</dt><dd class="limit">需要视频样本与算力；且它的「一致」是像素级，水墨的「留白」在像素级反而可能是噪声。</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">T12</span><h3>运动先验 / 时序一致性（补充线索）</h3><span class="stars">★☆☆</span><span class="tag pend">待核验</span></div>
+  <dl>
+    <dt>落地证据</dt><dd class="ev">子调研另报 Control-A-Video（<a href="https://arxiv.org/html/2305.13840v3">arXiv 2305.13840</a>）的 flow/residual motion prior，以及 Video Diffusion 综述的时序注意力做法。<b>本轮未逐条核验，仅作线索。</b></dd>
+  </dl>
+</div>
+
+<div class="draft">
+  <h4>迁移草案 ③：三模态 InfoNCE（骨架有据，组合自建）</h4>
+  <div class="eq">
+    共享隐变量：z = f_enc(text) 与 z_v = f_v(img)、z_s = f_s(timeline) 对齐到同一空间<br><br>
+    L = L(t,v) + L(t,s) + L(v,s)　　（三对两两对齐）<br>
+    L(a,b) = − log [ exp(sim(z_a, z_b)/τ) / Σ_{b'} exp(sim(z_a, z_{b'})/τ) ]<br><br>
+    负样本构造（关键，也是我们唯一的新东西）：<br>
+    　hard negative = 同一诗人的<b>其他</b>诗句（用 Burrows' Delta 挑风格最近的，见二轮 F1）<br>
+    　→ 逼模型学「这一首」的独特性，而不是「李白风格」这个粗标签
+  </div>
+  <p><b>诚实标注</b>：骨架（InfoNCE + 双编码器）来自 T9/T10，有据；<b>三模态 + 「同诗人其他诗作作负样本」是本项目自建，无先例</b>。第二轮说它「无先例可比对」，本轮把它从「无据」改判为「有据的自建」，但评测仍需自造。</p>
+</div>
+
+<h2><span class="n">04</span>攻 F8 与篇章：年代 · 因果 · 结构</h2>
+<p class="lede">「作者写作背景与经历」是需求的第一条，也是数学模型最缺的一条。相邻学科给了两个可搬的范式。</p>
+
+<div class="card fixed">
+  <div class="card-h"><span class="id">T13</span><h3>Enoch：碳十四 + 书写风格 + 贝叶斯岭回归</h3><span class="stars">★★☆</span><span class="tag ok">已核验</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">以 ²⁴C 定年样本为标签，对「书写风格特征向量」做贝叶斯岭回归，输出年代<b>及其不确定度</b>（MAE 约 28–31 年）</dd>
+    <dt>落地证据</dt><dd class="ev"><b>Dating ancient manuscripts using radiocarbon and AI-based writing style analysis</b>，<a href="https://arxiv.org/pdf/2407.12013">arXiv 2407.12013</a>，发表于 PLOS ONE；模型名 Enoch，用于死海古卷</dd>
+    <dt>对我们的用处</dt><dd class="to-us">它证明「编年」可以从纯文献学变成「特征 + 回归 + 不确定度」。中文古诗的对应特征是：<b>用典的年代上限、唱和对象的生卒年、地名建制的年代、避讳字</b>。</dd>
+    <dt>关键判断</dt><dd class="limit">古诗没有碳十四那种「硬标签」。所以<b>不要做点估计，只做「年代区间约束满足」</b>——把用典上限、生卒、建制时间写成不等式约束，用 CSP 求可行区间。这是从「做不到」到「做得出一部分」的现实退让。</dd>
+  </dl>
+</div>
+
+<div class="card fixed">
+  <div class="card-h"><span class="id">T14</span><h3>GCDT：中文 RST 树库</h3><span class="stars">★★☆</span><span class="tag ok">已核验</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">修辞结构理论（RST）：把篇章解析成带「核心—卫星」标注的层级树，用与英文 RST 相同的关系集</dd>
+    <dt>落地证据</dt><dd class="ev">Peng, Liu &amp; Zeldes (2022)，<b>GCDT: A Chinese RST Treebank for Multigenre and Multilingual Discourse Parsing</b>，AACL 2022，pp. 382–391，<a href="https://arxiv.org/pdf/2210.10449.pdf">arXiv 2210.10449</a></dd>
+    <dt>对我们的用处</dt><dd class="to-us">第二轮说「RST 用于中文古诗篇章结构」是确认空白。GCDT 至少给了<b>中文的 RST 解析器与关系集</b>，可以迁移做「起承转合」的自动分段——把四段视为宏观关系的序列（承=Elaboration、转=Contrast、合=Conclusion）。</dd>
+    <dt>局限</dt><dd class="limit">GCDT 的语料是新闻/百科等五种现代文体，<b>不含诗歌</b>。迁移需要少量古诗标注做适配。</dd>
+  </dl>
+</div>
+
+<div class="card fixed">
+  <div class="card-h"><span class="id">T15</span><h3>TopWORDS-Poetry：格律当贝叶斯先验</h3><span class="stars">★★☆</span><span class="tag ok">已核验</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">从格律诗的两种基本句式出发，构造指导分词的<b>贝叶斯先验分布</b>，与无监督分词框架 TopWORDS 结合，同时完成分词与词语发现</dd>
+    <dt>落地证据</dt><dd class="ev">清华统计与数据科学系数字人文团队，<b>TopWORDS-Poetry</b>（ACL Anthology 收录；<a href="https://www.stat.tsinghua.edu.cn/info/1034/1067.htm">清华新闻页</a>）。可识别专名与文学典故，在《全唐诗》近体诗上验证</dd>
+    <dt>对我们的用处</dt><dd class="to-us">这条<b>直接补强我们 STEP 1/2</b>：它证明「格律信息」不只用于校验平仄，还能反过来<b>指导分词</b>——而准确分词是意象抽取（C1）与用典识别（B5）的前提。且它能识别「文学典故」，正对着第二轮的 B5 空白。</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">T16</span><h3>因果推断 NLP 框架</h3><span class="stars">★☆☆</span><span class="tag pend">待核验</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">用 DAG 显式写出「处理—结果—混淆」结构；区分观测/干预/反事实三层；在文本场景下用代理变量与去混淆估计</dd>
+    <dt>落地证据</dt><dd class="ev">Feder et al. (2022)，<b>Causal Inference in Natural Language Processing: Estimation, Prediction, Interpretation and Beyond</b>，TACL（子调研报告为 Computational Linguistics，<b>venue 待核验</b>）</dd>
+    <dt>对我们的用处</dt><dd class="to-us">它给了「经历 → 风格」一个<b>诚实的边界</b>。我们不能声称因果，只能画一张 DAG 说明混淆在哪：<b>时代 → 经历，时代 → 风格，体裁 → 风格</b>，三者纠缠。用它来写方法论的「局限」一节，比空口说「我们考虑了背景」扎实。</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">T17</span><h3>贝叶斯系统发育推断抄本传播史</h3><span class="stars">★☆☆</span><span class="tag pend">待核验</span></div>
+  <dl>
+    <dt>落地证据</dt><dd class="ev">子调研报 <b>Using Bayesian phylogenetics to infer manuscript transmission history</b>，<i>Digital Scholarship in the Humanities</i> 2023。<b>本轮未核验。</b></dd>
+    <dt>判断</dt><dd class="limit">它推断的是「抄本传承谱系」而非「写作时间」，与 F8 只是邻近而非直接可用。列此备查。</dd>
+  </dl>
+</div>
+
+<h2><span class="n">05</span>攻评估：动画到底忠不忠实</h2>
+<p class="lede">这是二轮完全没展开、但对我们最实用的一层：没有评估，「表达情感韵味」就永远只是宣称。</p>
+
+<div class="card fixed">
+  <div class="card-h"><span class="id">T18</span><h3>FIFA：用「时空语义依赖图」评忠实度</h3><span class="stars">★★☆</span><span class="tag ok">已核验</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">从文本中抽取「原子事实」与「事件级事实」（含时间幻觉），构建时空语义依赖图，再用 LLM 逐条判定生成内容是否支持这些事实</dd>
+    <dt>落地证据</dt><dd class="ev"><b>FIFA: Unified Faithfulness Evaluation Framework for Text-to-Video and Video-to-Text Generation</b>，ACL 2026 Findings，<a href="https://aclanthology.org/2026.findings-acl.555.pdf">2026.findings-acl.555</a>（arXiv 2507.06523）</dd>
+    <dt>对我们的用处</dt><dd class="to-us"><b>它的「时间幻觉」检测正对着我们的时序问题</b>：诗是「朝辞白帝 → 暮到江陵」，若动画把顺序画反了，就是一种时间幻觉。可以用它的框架检查「诗句顺序 → 画面顺序」是否忠实。</dd>
+  </dl>
+</div>
+
+<div class="card fixed">
+  <div class="card-h"><span class="id">T19</span><h3>TIFA：把忠实度变成「问答通过率」</h3><span class="stars">★★★</span><span class="tag ok">已核验</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">给定文本 → 自动生成若干问题 → 用 VQA 模型在生成图像上作答 → 忠实度 = 答对率。参考无关（reference-free）、细粒度、可解释</dd>
+    <dt>落地证据</dt><dd class="ev">Hu et al. (2023)，<b>TIFA: Accurate and Interpretable Text-to-Image Faithfulness Evaluation with Question Answering</b>，ICCV 2023（<a href="https://www.computer.org/csdl/proceedings-article/iccv/2023/071800u0349/1TJeQVjqGS4">IEEE CSDL</a>）</dd>
+    <dt>对我们的用处</dt><dd class="to-us"><b>这是本轮最高性价比的一条。</b>为每首诗自动生成一组问题——「画面里有孤舟吗？」「江面被雪覆盖了吗？」「有没有出现鸟？」「远山在画面中部还是上部？」——用 VQA 判对错，就得到一个<b>可自动化的忠实度分数</b>，而且错在哪一条一眼可见。</dd>
+  </dl>
+</div>
+
+<div class="card fixed">
+  <div class="card-h"><span class="id">T20</span><h3>T2V-CompBench：组合性七维</h3><span class="stars">★★☆</span><span class="tag ok">已核验</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">把「组合性」拆成 7 类（属性绑定、动态属性绑定、空间关系、运动绑定、动作绑定、物体交互、生成计数），配 MLLM/检测/跟踪三类指标</dd>
+    <dt>落地证据</dt><dd class="ev">Sun et al. (2024)，<b>T2V-CompBench</b>，<a href="https://arxiv.org/pdf/2407.14505.pdf">arXiv 2407.14505</a>，CVPR 2025，<a href="https://t2v-compbench.github.io/">项目页</a></dd>
+    <dt>对我们的用处</dt><dd class="to-us">七维可裁剪成「诗画版」：<b>属性绑定</b>（「孤舟」是否真的孤）、<b>空间关系</b>（远山与江面的上下关系）、<b>运动绑定</b>（「轻舟已过」是否表现为运动）。它给了评估一个现成的维度清单。</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">T21</span><h3>VBench-2.0：内在忠实度</h3><span class="stars">★☆☆</span><span class="tag ok">已核验</span></div>
+  <dl>
+    <dt>落地证据</dt><dd class="ev"><b>VBench-2.0: A Comprehensive Benchmark for Evaluating Intrinsic Faithfulness in Video Generation</b>，<a href="https://arxiv.org/pdf/2503.21755">arXiv 2503.21755</a>——把「内在忠实度」细分为逐帧质量、时序一致、提示遵循、组合创意、常识、物理真实等维度</dd>
+    <dt>对我们的用处</dt><dd class="to-us">「时序一致」与「组合创意」两维与水墨动画直接相关；可作为 T20 的补充维度表。</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">T22</span><h3>人评协议与创造力评测</h3><span class="stars">★☆☆</span><span class="tag pend">待核验</span></div>
+  <dl>
+    <dt>落地证据</dt><dd class="ev">子调研报 Pron vs Prompt（<a href="https://arxiv.org/abs/2407.01119">arXiv 2407.01119</a>）等，用文学专家盲评标题、风格、主题的原创性。<b>本轮未核验。</b></dd>
+    <dt>对我们的用处</dt><dd class="to-us">自动指标之外仍需人评。可设计「成对盲评」：同一首诗的两个动画版本，让评者二选一并说明理由，用 Bradley–Terry 模型汇总成偏好排序。</dd>
+  </dl>
+</div>
+
+<div class="draft">
+  <h4>迁移草案 ④：三层评估（自动 + 组合 + 人评）</h4>
+  <div class="eq">
+    L1 · 事实忠实度（TIFA 式）<br>
+    　Score_fact = (通过的问题数) / (问题总数)<br>
+    　问题由诗自动生成：意象存在性 / 属性 / 空间关系 / 时序<br><br>
+    L2 · 组合忠实度（T2V-CompBench 七维裁剪版）<br>
+    　Score_comp = Σ_k w_k · s_k，k ∈ {属性绑定, 空间关系, 运动绑定, …}<br><br>
+    L3 · 韵味人评（成对盲评 + Bradley–Terry）<br>
+    　P(i 胜 j) = σ(θ_i − θ_j)，θ 为各版本的能力参数
+  </div>
+  <p><b>这一步的价值</b>：把「表达情感韵味」从不可证伪的宣称，变成三层可报告的指标。L1 全自动、可回归测试；L2 半自动；L3 兜底主观性。<b>这是本项目从「作品」走向「可验证系统」的分水岭。</b></p>
+</div>
+
+<h2><span class="n">06</span>迁移映射与优先级</h2>
+<table class="grid">
+  <thead><tr><th style="width:22%">空白层</th><th style="width:26%">借用方法</th><th style="width:26%">迁移障碍</th><th>优先级</th></tr></thead>
+  <tbody>
+    <tr><td>忠实度评估</td><td>T19 TIFA 问答式 + T18 FIFA 时序</td><td>需为诗生成问题集；VQA 对水墨风格识别率待测</td><td><span class="ok">P0</span> 成本最低、收益最高</td></tr>
+    <tr><td>分词 / 意象 / 典故</td><td>T15 TopWORDS-Poetry 格律先验</td><td>需接入格律判定模块</td><td><span class="ok">P0</span> 直接补强现有 STEP 1/2</td></tr>
+    <tr><td>情感曲线（短诗过拟合）</td><td>T1 六弧型结构先验</td><td>弧型分类器需标注或零样本判定</td><td><span class="ok">P0</span> 缓解观测点不足</td></tr>
+    <tr><td>镜头时长 / 节奏</td><td>T2 Cutting 阶段系数</td><td>实拍系数只能借相对比例</td><td><span class="warn">P1</span></td></tr>
+    <tr><td>意象 → 构图（含负节点）</td><td>T6 L2RM 部分最优传输</td><td>代价矩阵无标注，需手工设计起步</td><td><span class="warn">P1</span> 概念极契合</td></tr>
+    <tr><td>「转」的语义解释</td><td>T3 Dramatis 悬念值</td><td>抒情诗缺「主角/目标」结构</td><td><span class="warn">P1</span></td></tr>
+    <tr><td>起承转合自动分段</td><td>T14 GCDT 中文 RST</td><td>语料不含诗歌，需少量适配标注</td><td><span class="warn">P1</span></td></tr>
+    <tr><td>三模态共享隐变量</td><td>T9/T10 InfoNCE + CLIP（组合自建）</td><td>无先例，评测需自造</td><td><span class="bad">P2</span> 研究性</td></tr>
+    <tr><td>编年 / 写作时间</td><td>T13 Enoch 范式 → 退让为区间约束</td><td>中文古诗无硬标签</td><td><span class="bad">P2</span> 只做区间，不做点估计</td></tr>
+    <tr><td>经历 → 风格因果</td><td>T16 因果 NLP 框架（写局限用）</td><td>混淆项无法消除</td><td><span class="bad">P2</span> 不作因果主张</td></tr>
+  </tbody>
+</table>
+
+<h2><span class="n">07</span>第三轮核验明细</h2>
+<p class="lede">本轮引用的核验结果。沿用二轮纪律：区分「已核验」「待核验」「存疑」，凡不能核到的一律标出。</p>
+<table class="grid">
+  <thead><tr><th style="width:56px">编号</th><th style="width:96px">核验结论</th><th>说明</th></tr></thead>
+  <tbody>
+    <tr><td>T1</td><td class="bad">已修正</td><td>子调研标 PLOS ONE，实际为 <b>EPJ Data Science</b> 5(1):31，2016（第三轮抓到的引用错误）</td></tr>
+    <tr><td>T2</td><td class="ok">已核验</td><td>Cutting 2016，Cognitive Research 1(30)，DOI 10.1186/s41235-016-0029-0</td></tr>
+    <tr><td>T3</td><td class="ok">已核验</td><td>O'Neill &amp; Riedl 2014，AAAI 28(1):944–950（子调研给的 gatech 链接实为另一篇 ACII 2011 论文，已换正确出处）</td></tr>
+    <tr><td>T4</td><td class="ok">已核验</td><td>调性张力剖面，Frontiers in Psychology（PMC7712964）</td></tr>
+    <tr><td>T5</td><td class="warn">待核验</td><td>Lehne &amp; Koelsch 2015，Frontiers in Psychology 6:1189</td></tr>
+    <tr><td>T6</td><td class="ok">已核验</td><td>L2RM，CVPR 2024，Han et al.（CVPR Open Access）</td></tr>
+    <tr><td>T7</td><td class="ok">已核验</td><td>TextLap，EMNLP 2024 Findings，Chen et al.</td></tr>
+    <tr><td>T8</td><td class="bad">存疑</td><td>标 ICASSP 2025 却挂 arXiv 2603.14349（2026-03），时间线矛盾，不采用</td></tr>
+    <tr><td>T9</td><td class="warn">公认经典</td><td>CPC / InfoNCE，van den Oord et al. 2018，arXiv 1807.03748</td></tr>
+    <tr><td>T10</td><td class="warn">公认经典</td><td>CLIP，Radford et al. 2021，ICML，arXiv 2103.00020</td></tr>
+    <tr><td>T11</td><td class="warn">公认经典</td><td>Tune-A-Video，ICCV 2023</td></tr>
+    <tr><td>T12</td><td class="warn">待核验</td><td>Control-A-Video 等，仅作线索</td></tr>
+    <tr><td>T13</td><td class="ok">已核验</td><td>Enoch 定年，arXiv 2407.12013，PLOS ONE，贝叶斯岭回归 MAE 约 28–31 年</td></tr>
+    <tr><td>T14</td><td class="ok">已核验</td><td>GCDT，AACL 2022，Peng, Liu &amp; Zeldes</td></tr>
+    <tr><td>T15</td><td class="ok">已核验</td><td>TopWORDS-Poetry，清华数字人文团队，ACL Anthology 收录</td></tr>
+    <tr><td>T16</td><td class="warn">venue 待核验</td><td>因果推断 NLP 综述，子调研标 Computational Linguistics，实为 TACL 2022 的可能性大</td></tr>
+    <tr><td>T17</td><td class="warn">待核验</td><td>贝叶斯系统发育推断抄本传播史，DSH 2023</td></tr>
+    <tr><td>T18</td><td class="ok">已核验</td><td>FIFA，ACL 2026 Findings（2026.findings-acl.555）</td></tr>
+    <tr><td>T19</td><td class="ok">已核验</td><td>TIFA，ICCV 2023，Hu et al.</td></tr>
+    <tr><td>T20</td><td class="ok">已核验</td><td>T2V-CompBench，arXiv 2407.14505，CVPR 2025</td></tr>
+    <tr><td>T21</td><td class="ok">已核验</td><td>VBench-2.0，arXiv 2503.21755</td></tr>
+    <tr><td>T22</td><td class="warn">待核验</td><td>创造力人评协议，仅作线索</td></tr>
+  </tbody>
+</table>
+
+<div class="verdict">
+  <h3>第三轮的三条结论</h3>
+  <p><b>一、「空白」多半不是没人做，而是没人用「诗」做。</b>二轮列的空白层，在相邻领域几乎都有成熟对应：情感弧线有 Reagan、镜头节奏有 Cutting、张力有 Dramatis、跨模态对齐有 OT、年代有 Enoch、忠实度有 TIFA。<b>我们要做的不是发明数学，而是做「跨域翻译」</b>——把电影/音乐/图文检索里现成的形式，翻译成诗的参数。</p>
+  <p><b>二、本轮最有价值的两条，都不是「模型」而是「判据」。</b>一是 <b>T6 部分最优传输</b>：它给「负节点」一个可计算的定义（未被运输的质量），与二轮 C3 的「低度节点」构成两条独立判据。二是 <b>T19 TIFA 问答式评估</b>：它把「是否忠实表达」从主观宣称变成可回归测试的分数——<b>没有它，整个项目永远停留在「作品」层面，成不了「可验证系统」</b>。</p>
+  <p><b>三、引用错误率没有因为「换领域」而下降。</b>本轮抽查即抓到两处问题：Reagan 的期刊被写成 PLOS ONE（实为 EPJ Data Science）、一条标 ICSSP 2025 的条目挂着 2026 年的 arXiv 编号。<b>结论很朴素：任何进入论据的引用，必须回到原始页面核对标题、作者、年份、venue 四项</b>——这条纪律从二轮延续到三轮，不能松。</p>
+</div>
+
+<footer>
+  <b>本轮定位与边界</b>
+  <p style="margin:8px 0 0">
+    第一轮普查「有哪些模型」，第二轮核验「引用对不对、漏了什么」，本轮（第三轮）只做一件事：<b>把二轮判定的「确认空白 / 无先例」逐条翻译成「可迁移方案 + 迁移障碍 + 优先级」</b>，来源限定在相邻学科的成熟工作。
+    「已核验」指本轮回到原始页面核到标题/作者/年份/venue；「待核验」指仅由子调研报告、本轮未复核；「存疑」指发现时间线或出处矛盾。凡「待核验」条目，进入正式论据前须再核一遍。
+  </p>
+  <p style="margin:8px 0 0">
+    与前序文档的关系：模型总目见 <a href="poetics_math_models.html">《诗文内容提取的数学模型 · 二轮复核版》</a>；两条链路的完整推演见 <a href="../../dist/pipelines/jiangxue_pipeline.html">《江雪》全链路</a> 与 <a href="../../dist/pipelines/baidicheng_pipeline.html">《早发白帝城》全链路</a>；动画实现见 <a href="../../dist/animation/ink_animations.html">水墨动画</a>。
+  </p>
+  <ol>
+    <li>Reagan, Mitchell, Kiley, Danforth &amp; Dodds (2016). The emotional arcs of stories are dominated by six basic shapes. <i>EPJ Data Science</i> 5(1):31</li>
+    <li>Cutting (2016). The evolution of pace in popular movies. <i>Cognitive Research: Principles and Implications</i> 1(30). DOI 10.1186/s41235-016-0029-0</li>
+    <li>O'Neill &amp; Riedl (2014). Dramatis: A Computational Model of Suspense. AAAI 28(1):944–950</li>
+    <li>A Computational Model of Tonal Tension Profile of Chord Progressions in the Tonal Interval Space. <i>Frontiers in Psychology</i>. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7712964/">PMC7712964</a></li>
+    <li>Lehne &amp; Koelsch (2015). Toward a general psychological model of tension and suspense. <i>Frontiers in Psychology</i> 6:1189（待核验）</li>
+    <li>Han, Zheng, Dai, Luo &amp; Wang (2024). Learning to Rematch Mismatched Pairs for Robust Cross-Modal Retrieval (L2RM). CVPR 2024</li>
+    <li>Chen, Zhang et al. (2024). TextLap: Customizing Language Models for Text-to-Layout Planning. EMNLP 2024 Findings. <a href="https://arxiv.org/abs/2410.12844">arXiv 2410.12844</a></li>
+    <li>van den Oord, Li &amp; Vinyals (2018). Representation Learning with Contrastive Predictive Coding. <a href="https://arxiv.org/pdf/1807.03748.pdf">arXiv 1807.03748</a></li>
+    <li>Radford et al. (2021). Learning Transferable Visual Models From Natural Language Supervision (CLIP). ICML 2021. <a href="https://arxiv.org/pdf/2103.00020.pdf">arXiv 2103.00020</a></li>
+    <li>Wu et al. (2023). Tune-A-Video. ICCV 2023. <a href="https://tuneavideo.github.io/">项目页</a></li>
+    <li>Dating ancient manuscripts using radiocarbon and AI-based writing style analysis (Enoch). <a href="https://arxiv.org/pdf/2407.12013">arXiv 2407.12013</a>, PLOS ONE</li>
+    <li>Peng, Liu &amp; Zeldes (2022). GCDT: A Chinese RST Treebank for Multigenre and Multilingual Discourse Parsing. AACL 2022. <a href="https://arxiv.org/pdf/2210.10449.pdf">arXiv 2210.10449</a></li>
+    <li>TopWORDS-Poetry: Simultaneous Text Segmentation and Word Discovery for Classical Chinese Poetry via Bayesian Inference. 清华数字人文团队. <a href="https://www.stat.tsinghua.edu.cn/info/1034/1067.htm">清华新闻页</a></li>
+    <li>Feder et al. (2022). Causal Inference in Natural Language Processing. TACL（venue 待核验）</li>
+    <li>FIFA: Unified Faithfulness Evaluation Framework for Text-to-Video and Video-to-Text Generation. ACL 2026 Findings. <a href="https://aclanthology.org/2026.findings-acl.555.pdf">2026.findings-acl.555</a></li>
+    <li>Hu et al. (2023). TIFA: Accurate and Interpretable Text-to-Image Faithfulness Evaluation with Question Answering. ICCV 2023</li>
+    <li>Sun et al. (2024). T2V-CompBench: A Comprehensive Benchmark for Compositional Text-to-video Generation. <a href="https://arxiv.org/pdf/2407.14505.pdf">arXiv 2407.14505</a>, CVPR 2025</li>
+    <li>VBench-2.0: A Comprehensive Benchmark for Evaluating Intrinsic Faithfulness in Video Generation. <a href="https://arxiv.org/pdf/2503.21755">arXiv 2503.21755</a></li>
+  </ol>
+</footer>
+
+</div>
+</body>
+</html>

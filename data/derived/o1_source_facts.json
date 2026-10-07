@@ -1,0 +1,2759 @@
+{
+  "meta": {
+    "source": "ink_animations.html",
+    "bytes": 74966,
+    "generated": "2026-10-05T01:01:10",
+    "note": "静态抽取：标签属性（含数值几何 cx/cy/rx/ry…）+ 滤镜/渐变定义 + 水纹行表。用于把散文证据换成可核对事实。path 的 d 不入库，需要时按字符串单比。"
+  },
+  "elements": {
+    "jx-cam": {
+      "tag": "g",
+      "filter": null,
+      "opacity": null,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "jx-far": {
+      "tag": "g",
+      "filter": "jxEdge",
+      "opacity": null,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "jx-waterline": {
+      "tag": "path",
+      "filter": "jxSoft",
+      "opacity": 0.16,
+      "strokeWidth": 1.6,
+      "classes": null,
+      "fill": "none",
+      "stroke": "#3A362F",
+      "geom": {}
+    },
+    "jx-path": {
+      "tag": "g",
+      "filter": "jxSoft",
+      "opacity": 0.2,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "jx-reed": {
+      "tag": "g",
+      "filter": "jxDry",
+      "opacity": 0.52,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": "none",
+      "stroke": "#2A2724",
+      "geom": {}
+    },
+    "jx-boat": {
+      "tag": "g",
+      "filter": "jxBoatInk",
+      "opacity": null,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "jx-line": {
+      "tag": "path",
+      "filter": "jxDry",
+      "opacity": 0.5,
+      "strokeWidth": 1.2,
+      "classes": null,
+      "fill": "none",
+      "stroke": "#1C1C1C",
+      "geom": {}
+    },
+    "jx-snow": {
+      "tag": "g",
+      "filter": null,
+      "opacity": null,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "jx-anno": {
+      "tag": "g",
+      "filter": null,
+      "opacity": 0,
+      "strokeWidth": null,
+      "classes": "anno",
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "jx-poemink": {
+      "tag": "g",
+      "filter": "jxInk",
+      "opacity": null,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "jx-seal": {
+      "tag": "g",
+      "filter": null,
+      "opacity": 0,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "bdRiverClip": {
+      "tag": "clipPath",
+      "filter": null,
+      "opacity": null,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "bd-cam": {
+      "tag": "g",
+      "filter": null,
+      "opacity": null,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "bd-cloud": {
+      "tag": "g",
+      "filter": "bdSoft",
+      "opacity": null,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "bd-city": {
+      "tag": "g",
+      "filter": "bdEdge",
+      "opacity": null,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "bd-far": {
+      "tag": "g",
+      "filter": "bdEdge",
+      "opacity": null,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "bd-cliff": {
+      "tag": "g",
+      "filter": "bdEdge",
+      "opacity": null,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "bd-cun": {
+      "tag": "g",
+      "filter": "bdDry",
+      "opacity": 0.3,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": "none",
+      "stroke": "#2A2724",
+      "geom": {}
+    },
+    "bd-mist": {
+      "tag": "g",
+      "filter": null,
+      "opacity": 0,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "bd-water": {
+      "tag": "g",
+      "filter": null,
+      "opacity": null,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": "none",
+      "stroke": "#3A362F",
+      "geom": {}
+    },
+    "bd-trail": {
+      "tag": "g",
+      "filter": null,
+      "opacity": null,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "bd-boat": {
+      "tag": "g",
+      "filter": "bdBoatInk",
+      "opacity": null,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "bd-bow": {
+      "tag": "path",
+      "filter": "bdDry",
+      "opacity": 0.32,
+      "strokeWidth": 1.4,
+      "classes": null,
+      "fill": "none",
+      "stroke": "#3A362F",
+      "geom": {}
+    },
+    "bd-anno": {
+      "tag": "g",
+      "filter": null,
+      "opacity": 0,
+      "strokeWidth": null,
+      "classes": "anno",
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "bd-poemink": {
+      "tag": "g",
+      "filter": "bdInk",
+      "opacity": null,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "bd-seal": {
+      "tag": "g",
+      "filter": null,
+      "opacity": 0,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "sy-cam": {
+      "tag": "g",
+      "filter": null,
+      "opacity": null,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "sy-night": {
+      "tag": "g",
+      "filter": null,
+      "opacity": 0,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "sy-moon": {
+      "tag": "g",
+      "filter": null,
+      "opacity": 0,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "sy-cloud": {
+      "tag": "g",
+      "filter": "sySoft",
+      "opacity": 0,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "sy-win": {
+      "tag": "g",
+      "filter": "syEdge",
+      "opacity": 0,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "sy-glint": {
+      "tag": "g",
+      "filter": "sySoft",
+      "opacity": 0,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "sy-bed": {
+      "tag": "g",
+      "filter": "syDry",
+      "opacity": 0,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "sy-frost": {
+      "tag": "g",
+      "filter": "sySoft",
+      "opacity": 0,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "sy-figure": {
+      "tag": "g",
+      "filter": "syFigInk",
+      "opacity": 0,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "sy-body": {
+      "tag": "g",
+      "filter": null,
+      "opacity": null,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "sy-head": {
+      "tag": "g",
+      "filter": null,
+      "opacity": null,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "sy-anno": {
+      "tag": "g",
+      "filter": null,
+      "opacity": 0,
+      "strokeWidth": null,
+      "classes": "anno",
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "sy-poemink": {
+      "tag": "g",
+      "filter": "syInk",
+      "opacity": null,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    },
+    "sy-seal": {
+      "tag": "g",
+      "filter": null,
+      "opacity": 0,
+      "strokeWidth": null,
+      "classes": null,
+      "fill": null,
+      "stroke": null,
+      "geom": {}
+    }
+  },
+  "filters": {
+    "jxEdge": {
+      "gaussianBlur": [],
+      "displacementScale": [
+        18
+      ],
+      "turbulence": [
+        {
+          "baseFrequency": 0.014,
+          "numOctaves": 4
+        }
+      ],
+      "feComposite": false,
+      "kind": "dry"
+    },
+    "jxSoft": {
+      "gaussianBlur": [
+        3.2
+      ],
+      "displacementScale": [
+        10
+      ],
+      "turbulence": [
+        {
+          "baseFrequency": 0.028,
+          "numOctaves": 3
+        }
+      ],
+      "feComposite": false,
+      "kind": "wet"
+    },
+    "jxGrain": {
+      "gaussianBlur": [],
+      "displacementScale": [],
+      "turbulence": [
+        {
+          "baseFrequency": 0.85,
+          "numOctaves": 2
+        }
+      ],
+      "feComposite": false,
+      "kind": "plain"
+    },
+    "jxDry": {
+      "gaussianBlur": [],
+      "displacementScale": [
+        6
+      ],
+      "turbulence": [
+        {
+          "baseFrequency": 0.09,
+          "numOctaves": 3
+        }
+      ],
+      "feComposite": false,
+      "kind": "dry"
+    },
+    "jxBoatInk": {
+      "gaussianBlur": [],
+      "displacementScale": [
+        18
+      ],
+      "turbulence": [
+        {
+          "baseFrequency": 0.014,
+          "numOctaves": 4
+        }
+      ],
+      "feComposite": false,
+      "kind": "dry"
+    },
+    "jxInk": {
+      "gaussianBlur": [],
+      "displacementScale": [
+        3.4
+      ],
+      "turbulence": [
+        {
+          "baseFrequency": 0.05,
+          "numOctaves": 3
+        },
+        {
+          "baseFrequency": 0.72,
+          "numOctaves": 2
+        }
+      ],
+      "feComposite": true,
+      "kind": "feibai"
+    },
+    "bdEdge": {
+      "gaussianBlur": [],
+      "displacementScale": [
+        16
+      ],
+      "turbulence": [
+        {
+          "baseFrequency": 0.016,
+          "numOctaves": 4
+        }
+      ],
+      "feComposite": false,
+      "kind": "dry"
+    },
+    "bdSoft": {
+      "gaussianBlur": [
+        4.2
+      ],
+      "displacementScale": [
+        12
+      ],
+      "turbulence": [
+        {
+          "baseFrequency": 0.03,
+          "numOctaves": 3
+        }
+      ],
+      "feComposite": false,
+      "kind": "wet"
+    },
+    "bdGrain": {
+      "gaussianBlur": [],
+      "displacementScale": [],
+      "turbulence": [
+        {
+          "baseFrequency": 0.85,
+          "numOctaves": 2
+        }
+      ],
+      "feComposite": false,
+      "kind": "plain"
+    },
+    "bdDry": {
+      "gaussianBlur": [],
+      "displacementScale": [
+        7
+      ],
+      "turbulence": [
+        {
+          "baseFrequency": 0.11,
+          "numOctaves": 3
+        }
+      ],
+      "feComposite": false,
+      "kind": "dry"
+    },
+    "bdBoatInk": {
+      "gaussianBlur": [],
+      "displacementScale": [
+        16
+      ],
+      "turbulence": [
+        {
+          "baseFrequency": 0.016,
+          "numOctaves": 4
+        }
+      ],
+      "feComposite": false,
+      "kind": "dry"
+    },
+    "bdInk": {
+      "gaussianBlur": [],
+      "displacementScale": [
+        3.2
+      ],
+      "turbulence": [
+        {
+          "baseFrequency": 0.052,
+          "numOctaves": 3
+        },
+        {
+          "baseFrequency": 0.7,
+          "numOctaves": 2
+        }
+      ],
+      "feComposite": true,
+      "kind": "feibai"
+    },
+    "syEdge": {
+      "gaussianBlur": [],
+      "displacementScale": [
+        14
+      ],
+      "turbulence": [
+        {
+          "baseFrequency": 0.015,
+          "numOctaves": 4
+        }
+      ],
+      "feComposite": false,
+      "kind": "dry"
+    },
+    "sySoft": {
+      "gaussianBlur": [
+        6
+      ],
+      "displacementScale": [
+        16
+      ],
+      "turbulence": [
+        {
+          "baseFrequency": 0.026,
+          "numOctaves": 3
+        }
+      ],
+      "feComposite": false,
+      "kind": "wet"
+    },
+    "syMoon": {
+      "gaussianBlur": [
+        3
+      ],
+      "displacementScale": [
+        8
+      ],
+      "turbulence": [
+        {
+          "baseFrequency": 0.02,
+          "numOctaves": 3
+        }
+      ],
+      "feComposite": false,
+      "kind": "wet"
+    },
+    "syGrain": {
+      "gaussianBlur": [],
+      "displacementScale": [],
+      "turbulence": [
+        {
+          "baseFrequency": 0.85,
+          "numOctaves": 2
+        }
+      ],
+      "feComposite": false,
+      "kind": "plain"
+    },
+    "syDry": {
+      "gaussianBlur": [],
+      "displacementScale": [
+        6
+      ],
+      "turbulence": [
+        {
+          "baseFrequency": 0.1,
+          "numOctaves": 3
+        }
+      ],
+      "feComposite": false,
+      "kind": "dry"
+    },
+    "syFigInk": {
+      "gaussianBlur": [],
+      "displacementScale": [
+        14
+      ],
+      "turbulence": [
+        {
+          "baseFrequency": 0.015,
+          "numOctaves": 4
+        }
+      ],
+      "feComposite": false,
+      "kind": "dry"
+    },
+    "syInk": {
+      "gaussianBlur": [],
+      "displacementScale": [
+        3
+      ],
+      "turbulence": [
+        {
+          "baseFrequency": 0.048,
+          "numOctaves": 3
+        },
+        {
+          "baseFrequency": 0.74,
+          "numOctaves": 2
+        }
+      ],
+      "feComposite": true,
+      "kind": "feibai"
+    }
+  },
+  "gradients": {
+    "bdCloudG": [
+      {
+        "offset": "0%",
+        "color": "#6E6A60",
+        "opacity": 0.22
+      },
+      {
+        "offset": "100%",
+        "color": "#6E6A60",
+        "opacity": 0
+      }
+    ],
+    "bdRiverG": [
+      {
+        "offset": "0%",
+        "color": "#6E6A60",
+        "opacity": 0.16
+      },
+      {
+        "offset": "22%",
+        "color": "#6E6A60",
+        "opacity": 0.05
+      },
+      {
+        "offset": "100%",
+        "color": "#6E6A60",
+        "opacity": 0.015
+      }
+    ],
+    "bdCliffL": [
+      {
+        "offset": "0%",
+        "color": "#4A4640",
+        "opacity": 0.13
+      },
+      {
+        "offset": "68%",
+        "color": "#4A4640",
+        "opacity": 0.3
+      },
+      {
+        "offset": "100%",
+        "color": "#2A2724",
+        "opacity": 0.46
+      }
+    ],
+    "bdCliffR": [
+      {
+        "offset": "0%",
+        "color": "#2A2724",
+        "opacity": 0.46
+      },
+      {
+        "offset": "32%",
+        "color": "#4A4640",
+        "opacity": 0.3
+      },
+      {
+        "offset": "100%",
+        "color": "#4A4640",
+        "opacity": 0.13
+      }
+    ],
+    "syNight": [
+      {
+        "offset": "0%",
+        "color": "#4A4640",
+        "opacity": 0.14
+      },
+      {
+        "offset": "45%",
+        "color": "#4A4640",
+        "opacity": 0.05
+      },
+      {
+        "offset": "100%",
+        "color": "#4A4640",
+        "opacity": 0.015
+      }
+    ],
+    "syGlow": [
+      {
+        "offset": "0%",
+        "color": "#8A8578",
+        "opacity": 0.1
+      },
+      {
+        "offset": "55%",
+        "color": "#8A8578",
+        "opacity": 0.04
+      },
+      {
+        "offset": "100%",
+        "color": "#8A8578",
+        "opacity": 0
+      }
+    ],
+    "syFrost": [
+      {
+        "offset": "0%",
+        "color": "#6E6A60",
+        "opacity": 0.11
+      },
+      {
+        "offset": "55%",
+        "color": "#6E6A60",
+        "opacity": 0.045
+      },
+      {
+        "offset": "100%",
+        "color": "#6E6A60",
+        "opacity": 0
+      }
+    ]
+  },
+  "waterRows": {
+    "declared": 5,
+    "rows": [
+      {
+        "y": 412,
+        "opacity": 0.13,
+        "strokes": 3,
+        "span": 300
+      },
+      {
+        "y": 462,
+        "opacity": 0.17,
+        "strokes": 3,
+        "span": 372
+      },
+      {
+        "y": 500,
+        "opacity": 0.21,
+        "strokes": 4,
+        "span": 442
+      },
+      {
+        "y": 548,
+        "opacity": 0.25,
+        "strokes": 4,
+        "span": 512
+      },
+      {
+        "y": 590,
+        "opacity": 0.27,
+        "strokes": 3,
+        "span": 580
+      }
+    ],
+    "perPoem": {
+      "jx": 0,
+      "bd": 5
+    }
+  },
+  "presence": {
+    "jx": {
+      "jx-cam": {
+        "present": true,
+        "filter": null,
+        "filterKind": null,
+        "opacity": null
+      },
+      "jx-far": {
+        "present": true,
+        "filter": "jxEdge",
+        "filterKind": "dry",
+        "opacity": null
+      },
+      "jx-waterline": {
+        "present": true,
+        "filter": "jxSoft",
+        "filterKind": "wet",
+        "opacity": 0.16
+      },
+      "jx-water": {
+        "present": false
+      },
+      "jx-path": {
+        "present": true,
+        "filter": "jxSoft",
+        "filterKind": "wet",
+        "opacity": 0.2
+      },
+      "jx-reed": {
+        "present": true,
+        "filter": "jxDry",
+        "filterKind": "dry",
+        "opacity": 0.52
+      },
+      "jx-boat": {
+        "present": true,
+        "filter": "jxBoatInk",
+        "filterKind": "dry",
+        "opacity": null
+      },
+      "jx-line": {
+        "present": true,
+        "filter": "jxDry",
+        "filterKind": "dry",
+        "opacity": 0.5
+      },
+      "jx-snow": {
+        "present": true,
+        "filter": null,
+        "filterKind": null,
+        "opacity": null
+      },
+      "jx-anno": {
+        "present": true,
+        "filter": null,
+        "filterKind": null,
+        "opacity": 0
+      },
+      "jx-poemink": {
+        "present": true,
+        "filter": "jxInk",
+        "filterKind": "feibai",
+        "opacity": null
+      },
+      "jx-seal": {
+        "present": true,
+        "filter": null,
+        "filterKind": null,
+        "opacity": 0
+      }
+    },
+    "bd": {
+      "bd-cam": {
+        "present": true,
+        "filter": null,
+        "filterKind": null,
+        "opacity": null
+      },
+      "bd-cloud": {
+        "present": true,
+        "filter": "bdSoft",
+        "filterKind": "wet",
+        "opacity": null
+      },
+      "bd-city": {
+        "present": true,
+        "filter": "bdEdge",
+        "filterKind": "dry",
+        "opacity": null
+      },
+      "bd-far": {
+        "present": true,
+        "filter": "bdEdge",
+        "filterKind": "dry",
+        "opacity": null
+      },
+      "bd-cliff": {
+        "present": true,
+        "filter": "bdEdge",
+        "filterKind": "dry",
+        "opacity": null
+      },
+      "bd-cun": {
+        "present": true,
+        "filter": "bdDry",
+        "filterKind": "dry",
+        "opacity": 0.3
+      },
+      "bd-mist": {
+        "present": true,
+        "filter": null,
+        "filterKind": null,
+        "opacity": 0
+      },
+      "bd-water": {
+        "present": true,
+        "filter": null,
+        "filterKind": null,
+        "opacity": null
+      },
+      "bd-trail": {
+        "present": true,
+        "filter": null,
+        "filterKind": null,
+        "opacity": null
+      },
+      "bd-boat": {
+        "present": true,
+        "filter": "bdBoatInk",
+        "filterKind": "dry",
+        "opacity": null
+      },
+      "bd-bow": {
+        "present": true,
+        "filter": "bdDry",
+        "filterKind": "dry",
+        "opacity": 0.32
+      },
+      "bd-anno": {
+        "present": true,
+        "filter": null,
+        "filterKind": null,
+        "opacity": 0
+      },
+      "bd-poemink": {
+        "present": true,
+        "filter": "bdInk",
+        "filterKind": "feibai",
+        "opacity": null
+      },
+      "bd-seal": {
+        "present": true,
+        "filter": null,
+        "filterKind": null,
+        "opacity": 0
+      }
+    }
+  },
+  "byFilter": {
+    "jxEdge": [
+      "jx-far"
+    ],
+    "jxSoft": [
+      "jx-waterline",
+      "jx-path"
+    ],
+    "jxDry": [
+      "jx-reed",
+      "jx-line"
+    ],
+    "jxBoatInk": [
+      "jx-boat"
+    ],
+    "jxInk": [
+      "jx-poemink"
+    ],
+    "bdSoft": [
+      "bd-cloud"
+    ],
+    "bdEdge": [
+      "bd-city",
+      "bd-far",
+      "bd-cliff"
+    ],
+    "bdDry": [
+      "bd-cun",
+      "bd-bow"
+    ],
+    "bdBoatInk": [
+      "bd-boat"
+    ],
+    "bdInk": [
+      "bd-poemink"
+    ],
+    "sySoft": [
+      "sy-cloud",
+      "sy-glint",
+      "sy-frost"
+    ],
+    "syEdge": [
+      "sy-win"
+    ],
+    "syDry": [
+      "sy-bed"
+    ],
+    "syFigInk": [
+      "sy-figure"
+    ],
+    "syInk": [
+      "sy-poemink"
+    ]
+  },
+  "paints": {
+    "jx-cam": [
+      {
+        "tag": "path",
+        "fill": "#6E6A60",
+        "stroke": null,
+        "opacity": 0.13,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "#5A564D",
+        "stroke": null,
+        "opacity": 0.17,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "#3A362F",
+        "stroke": null,
+        "opacity": 0.15,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#3A362F",
+        "opacity": 0.16,
+        "filter": "jxSoft",
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#5A564D",
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#5A564D",
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#5A564D",
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "#1C1C1C",
+        "stroke": null,
+        "opacity": 0.88,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "#1C1C1C",
+        "stroke": null,
+        "opacity": 0.92,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "#1C1C1C",
+        "stroke": null,
+        "opacity": 0.88,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#F6F3EC",
+        "opacity": 0.5,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#1C1C1C",
+        "opacity": 0.5,
+        "filter": "jxDry",
+        "geom": {}
+      },
+      {
+        "tag": "line",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "x1": 400,
+          "y1": 214,
+          "x2": 358,
+          "y2": 178
+        }
+      },
+      {
+        "tag": "circle",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 400,
+          "cy": 214,
+          "r": 2.4
+        }
+      },
+      {
+        "tag": "line",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "x1": 118,
+          "y1": 442,
+          "x2": 66,
+          "y2": 400
+        }
+      },
+      {
+        "tag": "circle",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 118,
+          "cy": 442,
+          "r": 2.4
+        }
+      },
+      {
+        "tag": "line",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "x1": 706,
+          "y1": 258,
+          "x2": 722,
+          "y2": 240
+        }
+      },
+      {
+        "tag": "circle",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 706,
+          "cy": 258,
+          "r": 2.4
+        }
+      },
+      {
+        "tag": "line",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "x1": 146,
+          "y1": 152,
+          "x2": 146,
+          "y2": 132
+        }
+      },
+      {
+        "tag": "circle",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 146,
+          "cy": 152,
+          "r": 2.4
+        }
+      },
+      {
+        "tag": "line",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "x1": 168,
+          "y1": 292,
+          "x2": 186,
+          "y2": 326
+        }
+      },
+      {
+        "tag": "circle",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 168,
+          "cy": 292,
+          "r": 2.4
+        }
+      },
+      {
+        "tag": "line",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "x1": 585,
+          "y1": 462,
+          "x2": 585,
+          "y2": 404
+        }
+      },
+      {
+        "tag": "circle",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 585,
+          "cy": 462,
+          "r": 2.4
+        }
+      },
+      {
+        "tag": "line",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "x1": 618,
+          "y1": 520,
+          "x2": 646,
+          "y2": 540
+        }
+      },
+      {
+        "tag": "circle",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 618,
+          "cy": 520,
+          "r": 2.4
+        }
+      }
+    ],
+    "jx-far": [
+      {
+        "tag": "path",
+        "fill": "#6E6A60",
+        "stroke": null,
+        "opacity": 0.13,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "#5A564D",
+        "stroke": null,
+        "opacity": 0.17,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "#3A362F",
+        "stroke": null,
+        "opacity": 0.15,
+        "filter": null,
+        "geom": {}
+      }
+    ],
+    "jx-waterline": [
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#3A362F",
+        "opacity": 0.16,
+        "filter": "jxSoft",
+        "geom": {}
+      }
+    ],
+    "jx-water": null,
+    "jx-path": [
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#5A564D",
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#5A564D",
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#5A564D",
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      }
+    ],
+    "jx-reed": [
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#2A2724",
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#2A2724",
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#2A2724",
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      }
+    ],
+    "jx-boat": [
+      {
+        "tag": "path",
+        "fill": "#1C1C1C",
+        "stroke": null,
+        "opacity": 0.88,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "#1C1C1C",
+        "stroke": null,
+        "opacity": 0.92,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "#1C1C1C",
+        "stroke": null,
+        "opacity": 0.88,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#F6F3EC",
+        "opacity": 0.5,
+        "filter": null,
+        "geom": {}
+      }
+    ],
+    "jx-line": [
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#1C1C1C",
+        "opacity": 0.5,
+        "filter": "jxDry",
+        "geom": {}
+      }
+    ],
+    "jx-snow": [],
+    "jx-anno": [
+      {
+        "tag": "line",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "x1": 400,
+          "y1": 214,
+          "x2": 358,
+          "y2": 178
+        }
+      },
+      {
+        "tag": "circle",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 400,
+          "cy": 214,
+          "r": 2.4
+        }
+      },
+      {
+        "tag": "line",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "x1": 118,
+          "y1": 442,
+          "x2": 66,
+          "y2": 400
+        }
+      },
+      {
+        "tag": "circle",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 118,
+          "cy": 442,
+          "r": 2.4
+        }
+      },
+      {
+        "tag": "line",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "x1": 706,
+          "y1": 258,
+          "x2": 722,
+          "y2": 240
+        }
+      },
+      {
+        "tag": "circle",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 706,
+          "cy": 258,
+          "r": 2.4
+        }
+      },
+      {
+        "tag": "line",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "x1": 146,
+          "y1": 152,
+          "x2": 146,
+          "y2": 132
+        }
+      },
+      {
+        "tag": "circle",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 146,
+          "cy": 152,
+          "r": 2.4
+        }
+      },
+      {
+        "tag": "line",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "x1": 168,
+          "y1": 292,
+          "x2": 186,
+          "y2": 326
+        }
+      },
+      {
+        "tag": "circle",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 168,
+          "cy": 292,
+          "r": 2.4
+        }
+      },
+      {
+        "tag": "line",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "x1": 585,
+          "y1": 462,
+          "x2": 585,
+          "y2": 404
+        }
+      },
+      {
+        "tag": "circle",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 585,
+          "cy": 462,
+          "r": 2.4
+        }
+      },
+      {
+        "tag": "line",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "x1": 618,
+          "y1": 520,
+          "x2": 646,
+          "y2": 540
+        }
+      },
+      {
+        "tag": "circle",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 618,
+          "cy": 520,
+          "r": 2.4
+        }
+      }
+    ],
+    "jx-poemink": [],
+    "jx-seal": [
+      {
+        "tag": "rect",
+        "fill": "#A83A2C",
+        "stroke": null,
+        "opacity": 0.86,
+        "filter": null,
+        "geom": {
+          "rx": 4,
+          "x": 830,
+          "y": 522,
+          "width": 26,
+          "height": 44
+        }
+      }
+    ],
+    "bd-cam": [
+      {
+        "tag": "ellipse",
+        "fill": "url(#bdCloudG)",
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 330,
+          "cy": 84,
+          "rx": 210,
+          "ry": 26
+        }
+      },
+      {
+        "tag": "ellipse",
+        "fill": "url(#bdCloudG)",
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 580,
+          "cy": 56,
+          "rx": 180,
+          "ry": 20
+        }
+      },
+      {
+        "tag": "ellipse",
+        "fill": "#8A8578",
+        "stroke": null,
+        "opacity": 0.06,
+        "filter": null,
+        "geom": {
+          "cx": 460,
+          "cy": 118,
+          "rx": 160,
+          "ry": 15
+        }
+      },
+      {
+        "tag": "path",
+        "fill": "#3A362F",
+        "stroke": null,
+        "opacity": 0.48,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "rect",
+        "fill": "#2A2724",
+        "stroke": null,
+        "opacity": 0.58,
+        "filter": null,
+        "geom": {
+          "x": 204,
+          "y": 74,
+          "width": 20,
+          "height": 16
+        }
+      },
+      {
+        "tag": "path",
+        "fill": null,
+        "stroke": "#2A2724",
+        "opacity": 0.55,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": null,
+        "stroke": "#2A2724",
+        "opacity": 0.32,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": null,
+        "stroke": "#2A2724",
+        "opacity": 0.22,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "#6E6A60",
+        "stroke": null,
+        "opacity": 0.09,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "#5A564D",
+        "stroke": null,
+        "opacity": 0.12,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "#3A362F",
+        "stroke": null,
+        "opacity": 0.14,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "#2A2724",
+        "stroke": null,
+        "opacity": 0.15,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "#FAF8F3",
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "url(#bdRiverG)",
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "url(#bdCliffL)",
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "url(#bdCliffR)",
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "ellipse",
+        "fill": "#F6F3EC",
+        "stroke": null,
+        "opacity": 0.8,
+        "filter": "bdSoft",
+        "geom": {
+          "cx": 486,
+          "cy": 318,
+          "rx": 180,
+          "ry": 26
+        }
+      },
+      {
+        "tag": "ellipse",
+        "fill": "#F6F3EC",
+        "stroke": null,
+        "opacity": 0.55,
+        "filter": "bdSoft",
+        "geom": {
+          "cx": 368,
+          "cy": 336,
+          "rx": 110,
+          "ry": 20
+        }
+      },
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#1C1C1C",
+        "opacity": 0.26,
+        "filter": "bdDry",
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#1C1C1C",
+        "opacity": 0.18,
+        "filter": "bdDry",
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "#1C1C1C",
+        "stroke": null,
+        "opacity": 0.9,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "#1C1C1C",
+        "stroke": null,
+        "opacity": 0.92,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": null,
+        "stroke": "#1C1C1C",
+        "opacity": 0.64,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#3A362F",
+        "opacity": 0.32,
+        "filter": "bdDry",
+        "geom": {}
+      },
+      {
+        "tag": "line",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "x1": 362,
+          "y1": 86,
+          "x2": 362,
+          "y2": 70
+        }
+      },
+      {
+        "tag": "circle",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 362,
+          "cy": 86,
+          "r": 2.4
+        }
+      },
+      {
+        "tag": "line",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "x1": 214,
+          "y1": 92,
+          "x2": 158,
+          "y2": 62
+        }
+      },
+      {
+        "tag": "circle",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 214,
+          "cy": 92,
+          "r": 2.4
+        }
+      },
+      {
+        "tag": "line",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "x1": 500,
+          "y1": 140,
+          "x2": 526,
+          "y2": 164
+        }
+      },
+      {
+        "tag": "circle",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 500,
+          "cy": 140,
+          "r": 2.4
+        }
+      },
+      {
+        "tag": "line",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "x1": 120,
+          "y1": 400,
+          "x2": 94,
+          "y2": 376
+        }
+      },
+      {
+        "tag": "circle",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 120,
+          "cy": 400,
+          "r": 2.4
+        }
+      },
+      {
+        "tag": "line",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "x1": 520,
+          "y1": 430,
+          "x2": 554,
+          "y2": 414
+        }
+      },
+      {
+        "tag": "circle",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 520,
+          "cy": 430,
+          "r": 2.4
+        }
+      },
+      {
+        "tag": "line",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "x1": 356,
+          "y1": 470,
+          "x2": 356,
+          "y2": 448
+        }
+      },
+      {
+        "tag": "circle",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 356,
+          "cy": 470,
+          "r": 2.4
+        }
+      }
+    ],
+    "bd-cloud": [
+      {
+        "tag": "ellipse",
+        "fill": "url(#bdCloudG)",
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 330,
+          "cy": 84,
+          "rx": 210,
+          "ry": 26
+        }
+      },
+      {
+        "tag": "ellipse",
+        "fill": "url(#bdCloudG)",
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 580,
+          "cy": 56,
+          "rx": 180,
+          "ry": 20
+        }
+      },
+      {
+        "tag": "ellipse",
+        "fill": "#8A8578",
+        "stroke": null,
+        "opacity": 0.06,
+        "filter": null,
+        "geom": {
+          "cx": 460,
+          "cy": 118,
+          "rx": 160,
+          "ry": 15
+        }
+      }
+    ],
+    "bd-city": [
+      {
+        "tag": "path",
+        "fill": "#3A362F",
+        "stroke": null,
+        "opacity": 0.48,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "rect",
+        "fill": "#2A2724",
+        "stroke": null,
+        "opacity": 0.58,
+        "filter": null,
+        "geom": {
+          "x": 204,
+          "y": 74,
+          "width": 20,
+          "height": 16
+        }
+      },
+      {
+        "tag": "path",
+        "fill": null,
+        "stroke": "#2A2724",
+        "opacity": 0.55,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": null,
+        "stroke": "#2A2724",
+        "opacity": 0.32,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": null,
+        "stroke": "#2A2724",
+        "opacity": 0.22,
+        "filter": null,
+        "geom": {}
+      }
+    ],
+    "bd-far": [
+      {
+        "tag": "path",
+        "fill": "#6E6A60",
+        "stroke": null,
+        "opacity": 0.09,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "#5A564D",
+        "stroke": null,
+        "opacity": 0.12,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "#3A362F",
+        "stroke": null,
+        "opacity": 0.14,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "#2A2724",
+        "stroke": null,
+        "opacity": 0.15,
+        "filter": null,
+        "geom": {}
+      }
+    ],
+    "bd-cliff": [
+      {
+        "tag": "path",
+        "fill": "url(#bdCliffL)",
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "url(#bdCliffR)",
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      }
+    ],
+    "bd-cun": [
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#2A2724",
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#2A2724",
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#2A2724",
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#2A2724",
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#2A2724",
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#2A2724",
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#2A2724",
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#2A2724",
+        "opacity": null,
+        "filter": null,
+        "geom": {}
+      }
+    ],
+    "bd-mist": [
+      {
+        "tag": "ellipse",
+        "fill": "#F6F3EC",
+        "stroke": null,
+        "opacity": 0.8,
+        "filter": "bdSoft",
+        "geom": {
+          "cx": 486,
+          "cy": 318,
+          "rx": 180,
+          "ry": 26
+        }
+      },
+      {
+        "tag": "ellipse",
+        "fill": "#F6F3EC",
+        "stroke": null,
+        "opacity": 0.55,
+        "filter": "bdSoft",
+        "geom": {
+          "cx": 368,
+          "cy": 336,
+          "rx": 110,
+          "ry": 20
+        }
+      }
+    ],
+    "bd-water": [],
+    "bd-trail": [
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#1C1C1C",
+        "opacity": 0.26,
+        "filter": "bdDry",
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#1C1C1C",
+        "opacity": 0.18,
+        "filter": "bdDry",
+        "geom": {}
+      }
+    ],
+    "bd-boat": [
+      {
+        "tag": "path",
+        "fill": "#1C1C1C",
+        "stroke": null,
+        "opacity": 0.9,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": "#1C1C1C",
+        "stroke": null,
+        "opacity": 0.92,
+        "filter": null,
+        "geom": {}
+      },
+      {
+        "tag": "path",
+        "fill": null,
+        "stroke": "#1C1C1C",
+        "opacity": 0.64,
+        "filter": null,
+        "geom": {}
+      }
+    ],
+    "bd-bow": [
+      {
+        "tag": "path",
+        "fill": "none",
+        "stroke": "#3A362F",
+        "opacity": 0.32,
+        "filter": "bdDry",
+        "geom": {}
+      }
+    ],
+    "bd-anno": [
+      {
+        "tag": "line",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "x1": 362,
+          "y1": 86,
+          "x2": 362,
+          "y2": 70
+        }
+      },
+      {
+        "tag": "circle",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 362,
+          "cy": 86,
+          "r": 2.4
+        }
+      },
+      {
+        "tag": "line",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "x1": 214,
+          "y1": 92,
+          "x2": 158,
+          "y2": 62
+        }
+      },
+      {
+        "tag": "circle",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 214,
+          "cy": 92,
+          "r": 2.4
+        }
+      },
+      {
+        "tag": "line",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "x1": 500,
+          "y1": 140,
+          "x2": 526,
+          "y2": 164
+        }
+      },
+      {
+        "tag": "circle",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 500,
+          "cy": 140,
+          "r": 2.4
+        }
+      },
+      {
+        "tag": "line",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "x1": 120,
+          "y1": 400,
+          "x2": 94,
+          "y2": 376
+        }
+      },
+      {
+        "tag": "circle",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 120,
+          "cy": 400,
+          "r": 2.4
+        }
+      },
+      {
+        "tag": "line",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "x1": 520,
+          "y1": 430,
+          "x2": 554,
+          "y2": 414
+        }
+      },
+      {
+        "tag": "circle",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 520,
+          "cy": 430,
+          "r": 2.4
+        }
+      },
+      {
+        "tag": "line",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "x1": 356,
+          "y1": 470,
+          "x2": 356,
+          "y2": 448
+        }
+      },
+      {
+        "tag": "circle",
+        "fill": null,
+        "stroke": null,
+        "opacity": null,
+        "filter": null,
+        "geom": {
+          "cx": 356,
+          "cy": 470,
+          "r": 2.4
+        }
+      }
+    ],
+    "bd-poemink": [],
+    "bd-seal": [
+      {
+        "tag": "rect",
+        "fill": "#A83A2C",
+        "stroke": null,
+        "opacity": 0.86,
+        "filter": null,
+        "geom": {
+          "rx": 4,
+          "x": 830,
+          "y": 522,
+          "width": 26,
+          "height": 44
+        }
+      }
+    ]
+  },
+  "filterUsage": {
+    "jxEdge": [
+      {
+        "el": "jx-far",
+        "scope": "self"
+      }
+    ],
+    "jxSoft": [
+      {
+        "el": "jx-waterline",
+        "scope": "self"
+      },
+      {
+        "el": "jx-path",
+        "scope": "self"
+      },
+      {
+        "el": "jx-cam",
+        "scope": "descendant"
+      },
+      {
+        "el": "jx-waterline",
+        "scope": "descendant"
+      }
+    ],
+    "jxDry": [
+      {
+        "el": "jx-reed",
+        "scope": "self"
+      },
+      {
+        "el": "jx-line",
+        "scope": "self"
+      },
+      {
+        "el": "jx-cam",
+        "scope": "descendant"
+      },
+      {
+        "el": "jx-line",
+        "scope": "descendant"
+      }
+    ],
+    "jxBoatInk": [
+      {
+        "el": "jx-boat",
+        "scope": "self"
+      }
+    ],
+    "jxInk": [
+      {
+        "el": "jx-poemink",
+        "scope": "self"
+      }
+    ],
+    "bdSoft": [
+      {
+        "el": "bd-cloud",
+        "scope": "self"
+      },
+      {
+        "el": "bd-cam",
+        "scope": "descendant"
+      },
+      {
+        "el": "bd-cam",
+        "scope": "descendant"
+      },
+      {
+        "el": "bd-mist",
+        "scope": "descendant"
+      },
+      {
+        "el": "bd-mist",
+        "scope": "descendant"
+      }
+    ],
+    "bdEdge": [
+      {
+        "el": "bd-city",
+        "scope": "self"
+      },
+      {
+        "el": "bd-far",
+        "scope": "self"
+      },
+      {
+        "el": "bd-cliff",
+        "scope": "self"
+      }
+    ],
+    "bdDry": [
+      {
+        "el": "bd-cun",
+        "scope": "self"
+      },
+      {
+        "el": "bd-bow",
+        "scope": "self"
+      },
+      {
+        "el": "bd-cam",
+        "scope": "descendant"
+      },
+      {
+        "el": "bd-cam",
+        "scope": "descendant"
+      },
+      {
+        "el": "bd-cam",
+        "scope": "descendant"
+      },
+      {
+        "el": "bd-trail",
+        "scope": "descendant"
+      },
+      {
+        "el": "bd-trail",
+        "scope": "descendant"
+      },
+      {
+        "el": "bd-bow",
+        "scope": "descendant"
+      }
+    ],
+    "bdBoatInk": [
+      {
+        "el": "bd-boat",
+        "scope": "self"
+      }
+    ],
+    "bdInk": [
+      {
+        "el": "bd-poemink",
+        "scope": "self"
+      }
+    ],
+    "sySoft": [
+      {
+        "el": "sy-cloud",
+        "scope": "self"
+      },
+      {
+        "el": "sy-glint",
+        "scope": "self"
+      },
+      {
+        "el": "sy-frost",
+        "scope": "self"
+      }
+    ],
+    "syEdge": [
+      {
+        "el": "sy-win",
+        "scope": "self"
+      }
+    ],
+    "syDry": [
+      {
+        "el": "sy-bed",
+        "scope": "self"
+      }
+    ],
+    "syFigInk": [
+      {
+        "el": "sy-figure",
+        "scope": "self"
+      }
+    ],
+    "syInk": [
+      {
+        "el": "sy-poemink",
+        "scope": "self"
+      }
+    ]
+  }
+}

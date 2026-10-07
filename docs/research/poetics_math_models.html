@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>诗文内容提取的数学模型 · 二轮复核版</title>
+<style>
+  :root {
+    --paper: #F6F3EC;
+    --paper-2: #FFFFFF;
+    --ink: #1C1C1C;
+    --ink-2: #4A4640;
+    --ink-3: #8A8578;
+    --line: rgba(28, 28, 28, 0.14);
+    --line-2: rgba(28, 28, 28, 0.07);
+    --zhu: #A83A2C;
+    --zhu-soft: rgba(168, 58, 44, 0.10);
+    --qing: #3E5C76;
+    --qing-soft: rgba(62, 92, 118, 0.10);
+    --jin: #B08430;
+    --jin-soft: rgba(176, 132, 48, 0.10);
+    --lv: #4E6B4A;
+    --lv-soft: rgba(78, 107, 74, 0.10);
+    --serif: "Songti SC", "STSong", "SimSun", "Noto Serif SC", Georgia, serif;
+    --sans: "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--sans); font-size: 14px; line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 52px 30px 96px; }
+
+  header { border-bottom: 1px solid var(--line); padding-bottom: 28px; margin-bottom: 40px; }
+  .eyebrow { font-size: 12px; letter-spacing: .22em; color: var(--ink-3); text-transform: uppercase; margin-bottom: 18px; }
+  h1 { font-family: var(--serif); font-size: 32px; font-weight: 600; margin: 0 0 10px; letter-spacing: .04em; }
+  .sub { color: var(--ink-3); font-size: 13px; max-width: 740px; }
+  .sub code { font-family: var(--mono); font-size: 12px; color: var(--ink-2); }
+
+  h2 {
+    font-family: var(--serif); font-size: 20px; font-weight: 600;
+    margin: 52px 0 6px; letter-spacing: .03em;
+    display: flex; align-items: baseline; gap: 12px;
+  }
+  h2 .n {
+    font-family: var(--mono); font-size: 12px; color: var(--zhu);
+    border: 1px solid rgba(168,58,44,.32); border-radius: 4px; padding: 1px 7px;
+    flex: none;
+  }
+  .lede { color: var(--ink-3); font-size: 13px; margin: 0 0 20px; max-width: 780px; }
+
+  /* ---------- 总览通道 ---------- */
+  .chans { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--paper-2); }
+  .chan { display: grid; grid-template-columns: 76px 1fr 240px; border-bottom: 1px solid var(--line-2); }
+  .chan:last-child { border-bottom: none; }
+  .chan > div { padding: 13px 16px; }
+  .chan .c-name {
+    font-family: var(--serif); font-size: 17px; font-weight: 600;
+    border-right: 1px solid var(--line-2); display: flex; align-items: center; justify-content: center;
+  }
+  .chan .c-body { font-size: 13px; color: var(--ink-2); }
+  .chan .c-body b { color: var(--ink); }
+  .chan .c-mat { font-size: 12px; color: var(--ink-3); font-family: var(--mono); border-left: 1px solid var(--line-2); line-height: 1.6; }
+  .chan .c-name.audio { color: var(--qing); }
+  .chan .c-name.syntax { color: var(--zhu); }
+  .chan .c-name.image { color: var(--lv); }
+  .chan .c-name.mood { color: var(--jin); }
+  .chan .c-name.comp { color: var(--qing); }
+  .chan .c-name.style { color: var(--ink-2); }
+
+  /* ---------- 模型卡 ---------- */
+  .card { border: 1px solid var(--line); border-radius: 8px; background: var(--paper-2); padding: 16px 18px; margin-bottom: 12px; }
+  .card.fixed { border-left: 3px solid var(--jin); }
+  .card.retracted { border-left: 3px solid var(--zhu); }
+  .card-h { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
+  .card-h .id { font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); flex: none; }
+  .card-h h3 { font-family: var(--serif); font-size: 16px; font-weight: 600; margin: 0; flex: none; }
+  .card-h .stars { font-family: var(--mono); font-size: 11px; color: var(--jin); letter-spacing: .06em; margin-left: auto; flex: none; }
+  .card dl { margin: 8px 0 0; display: grid; grid-template-columns: 72px 1fr; gap: 4px 14px; }
+  .card dt { font-size: 12px; color: var(--ink-3); padding-top: 1px; }
+  .card dd { margin: 0; font-size: 13px; color: var(--ink-2); }
+  .card dd.math { font-family: var(--mono); font-size: 12px; color: var(--qing); line-height: 1.65; }
+  .card dd.ev::before { content: "▸ "; color: var(--lv); }
+  .card dd.gap::before { content: "▸ "; color: var(--zhu); }
+  .card dd.corr::before { content: "✕ "; color: var(--zhu); }
+  .card dd.corr { color: var(--zhu); }
+  .card dd.corr b { color: var(--zhu); }
+
+  .tag {
+    display: inline-block; font-family: var(--mono); font-size: 10.5px;
+    padding: 1px 6px; border-radius: 999px; border: 1px solid; vertical-align: 1px; margin-left: 6px;
+  }
+  .tag.used { color: var(--qing); border-color: rgba(62,92,118,.36); background: var(--qing-soft); }
+  .tag.new  { color: var(--lv);  border-color: rgba(78,107,74,.36);  background: var(--lv-soft); }
+  .tag.gap  { color: var(--zhu); border-color: rgba(168,58,44,.36);  background: var(--zhu-soft); }
+  .tag.fix  { color: var(--jin); border-color: rgba(176,132,48,.40); background: var(--jin-soft); }
+
+  .verdict { border: 1px solid var(--line); border-left: 3px solid var(--zhu); border-radius: 8px; background: var(--paper-2); padding: 18px 20px; margin: 20px 0; }
+  .verdict h3 { font-family: var(--serif); font-size: 16px; margin: 0 0 8px; font-weight: 600; }
+  .verdict p { margin: 0 0 10px; font-size: 13.5px; color: var(--ink-2); }
+  .verdict p:last-child { margin-bottom: 0; }
+
+  table.grid { width: 100%; border-collapse: collapse; font-size: 13px; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  table.grid th { background: rgba(28,28,28,.035); font-weight: 600; text-align: left; padding: 10px 13px; font-size: 12.5px; color: var(--ink-2); border-bottom: 1px solid var(--line); }
+  table.grid td { padding: 9px 13px; border-bottom: 1px solid var(--line-2); vertical-align: top; color: var(--ink-2); font-size: 12.5px; }
+  table.grid tr:last-child td { border-bottom: none; }
+  table.grid td.step { font-family: var(--mono); font-size: 11.5px; color: var(--zhu); white-space: nowrap; }
+  .ok   { color: var(--lv); font-weight: 600; }
+  .bad  { color: var(--zhu); font-weight: 600; }
+  .warn { color: var(--jin); font-weight: 600; }
+
+  a { color: var(--qing); text-decoration: none; border-bottom: 1px solid rgba(62,92,118,.28); }
+  a:hover { border-bottom-color: var(--qing); }
+
+  footer { margin-top: 64px; padding-top: 22px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--ink-3); }
+  footer ol { margin: 8px 0 0; padding-left: 20px; }
+  footer li { margin-bottom: 3px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Research Note · Second Pass · Verified</div>
+  <h1>诗文内容提取的数学模型</h1>
+  <div class="sub">
+    按「音 / 句 / 象 / 情 / 构 / 风」六条通道整理诗文内容提取可用的数学模型。<b>本版为二轮复核版</b>：对第一轮的每一条引用做了逐条核验，并专门去证伪「空白区」的结论。
+    结果是<b>修正 6 处引用错误、撤回 1 条空白结论、补齐 18 个新增方向</b>。修正处标 <span class="tag fix">已修正</span>，被推翻处标 <span class="tag gap">已撤回</span>。
+    <br>后续：本版标记为「确认空白 / 无先例」的层，已在 <a href="poetics_math_models_round3.html">第三轮（攻空白 · 跨域迁移）</a> 中逐条翻译为可迁移方案。
+  </div>
+</header>
+
+<h2><span class="n">00</span>总览：六条提取通道</h2>
+<p class="lede">每一层从同一个文本里抽出不同性质的对象。下层成熟、上层空白，是两轮调研共同指向的结论。</p>
+<div class="chans">
+  <div class="chan">
+    <div class="c-name audio">音</div>
+    <div class="c-body"><b>平仄序列、韵部、音步</b><br>格律不是装饰，是一组硬约束——它决定哪些字能出现在哪个位置，后续时间轴的节拍直接由它推导。</div>
+    <div class="c-mat">CSP / DFA / 音韵变化检测 / 中古音 MIP</div>
+  </div>
+  <div class="chan">
+    <div class="c-name syntax">句</div>
+    <div class="c-body"><b>断句、词性、依存、对仗、用典、互文</b><br>古典汉语省略多、语序活，这一层负责把「谁对谁做了什么」补齐，尤其是典故与化用的溯源。</div>
+    <div class="c-mat">BiLSTM-CRF / 依存解析 / 文本复用对齐 / 实体链接</div>
+  </div>
+  <div class="chan">
+    <div class="c-name image">象</div>
+    <div class="c-body"><b>意象词、名物、共现关系、可画性</b><br>意象是诗与画之间唯一可通约的单位。抽准意象，跨模态才有落脚点。</div>
+    <div class="c-mat">NER / 义原词典 / 图中心性 / VCWE / 可画性评分</div>
+  </div>
+  <div class="chan">
+    <div class="c-name mood">情</div>
+    <div class="c-body"><b>情感极性、张力、变化轨迹、吟诵音高</b><br>从离散标签到连续曲线，这一层决定动画的镜头快慢与静默位置。</div>
+    <div class="c-mat">BERT+GAT / 熵与 surprisal / 力动态 / 声学 F0</div>
+  </div>
+  <div class="chan">
+    <div class="c-name comp">构</div>
+    <div class="c-body"><b>画面布局、镜头、节奏</b><br>把前四层的结构化结果翻译成空间与时间上的安排。</div>
+    <div class="c-mat">GAN / Latent Diffusion / InfoNCE / 能量最小化</div>
+  </div>
+  <div class="chan">
+    <div class="c-name style">风</div>
+    <div class="c-body"><b>作者指纹、编年、地理、交游</b><br>同一首诗放进诗人一生的坐标与关系网里，才读得出「为什么此刻这样写」。</div>
+    <div class="c-mat">Burrows' Delta / 压缩距离 / 网络分析 / GIS</div>
+  </div>
+</div>
+
+<h2><span class="n">01</span>音 · 音韵与格律</h2>
+<p class="lede">这一层最成熟：规则明确、可判定，几乎全部可以形式化。</p>
+
+<div class="card fixed">
+  <div class="card-h"><span class="id">A1</span><h3>中古音声母系统的混合整数规划重构</h3><span class="stars">★★☆</span><span class="tag fix">已修正</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">MIP：以「韵书—现代方言对应」为约束，把声母系统的重构写成混合整数优化，目标为对应关系最大化</dd>
+    <dt>提取什么</dt><dd>中古声母系统、韵类对应；韵书可转写为韵类层级与 IPA</dd>
+    <dt>落地证据</dt><dd class="ev">Luo &amp; Sun (2025)，<b>Phonetic Reconstruction of the Consonant System of Middle Chinese via Mixed Integer Optimization</b>，<a href="https://arxiv.org/abs/2502.04625">arXiv 2502.04625</a></dd>
+    <dt>已修正</dt><dd class="corr">第一轮把标题写成 "Multi-Dialectal Representation Learning of Sinitic Phonology"，<b>属张冠李戴</b>——那是另一篇关于 Sinitic 音韵多方言表示学习的独立工作。两篇已拆开。</dd>
+    <dt>局限</dt><dd>偏声母系统重建，不直接给出平水韵的格律标签；要落到格律还需再套一层韵书映射</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">A2</span><h3>格律校验：约束满足 / 确定有限自动机</h3><span class="stars">★★★</span><span class="tag used">已在用</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">CSP：变量 = 各字位，值域 = {平, 仄, 各韵部}，约束 = 平仄格式 ∧ 押韵位置 ∧ 句长<br>DFA：把格律写成确定性自动机，线性扫描即判定合法</dd>
+    <dt>提取什么</dt><dd>平仄序列、押韵合法性、句式结构；也用于生成时的候选过滤</dd>
+    <dt>落地证据</dt><dd class="ev">游维（2007）厦门大学硕士论文《<b>基于遗传算法的宋词自动生成研究</b>》——遗传算法生成候选</dd>
+    <dt>已修正</dt><dd class="corr">第一轮称该论文包含「DFA 过滤 + 互信息算语义相关」，<b>论文摘要中并无此描述</b>。实际只有遗传算法生成，语义评价手段较弱。DFA 校验格律是通行工程做法，但不宜挂在这篇论文上。</dd>
+    <dt>局限</dt><dd>CSP 擅长判定、不擅长打分；DFA 只能覆盖规则化格律，拗救等变体需另加层</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">A3</span><h3>Jiuge-Tuiqiao：可解释的诗歌润色系统</h3><span class="stars">★★☆</span><span class="tag new">新增候选</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">人在回路的可解释框架：模型给出修改建议并附理由，用户逐条采纳/否决</dd>
+    <dt>提取什么</dt><dd>诗句层面的可解释修改建议（格律、用词、语义）</dd>
+    <dt>落地证据</dt><dd class="ev">Han, Deng, Kong, Li, Cong, Bai, Luo &amp; Sun (2026)，<b>Jiuge-Tuiqiao: An Interpretable Human-AI System for Classical Chinese Poetry Refinement</b>，<a href="https://arxiv.org/abs/2608.23098">arXiv 2608.23098</a></dd>
+    <dt>对我们的用处</dt><dd>它把「可解释」当成一等目标，和我们这条链路的取向一致，可以作为方法论上的同类参照</dd>
+  </dl>
+</div>
+
+<div class="card fixed">
+  <div class="card-h"><span class="id">A4</span><h3>中文押韵语料的音韵变化自动检测</h3><span class="stars">★★☆</span><span class="tag fix">已修正</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">在押韵语料上建立韵脚对应关系，用统计/序列比对方法自动识别音韵系统随时间的变化</dd>
+    <dt>提取什么</dt><dd>韵部对应关系、音韵演变证据、韵脚共现结构</dd>
+    <dt>落地证据</dt><dd class="ev">Julien Baley，<b>Automatic detection of phonological change in Chinese rhymed corpora</b>，<i>Language and Linguistics</i> 26(4), 2025，DOI 10.1075/lali.00246.bal</dd>
+    <dt>已修正</dt><dd class="corr">第一轮写成「List (2016) 对《诗经》韵脚图做社区检测」，<b>属张冠李戴</b>：作者、年份、期刊、研究对象、方法全部不符。同时把「韵脚网络 + 社区检测」的成熟度从 ★★☆ 下调为 <b>★☆☆</b>——该路线在历史语言学中有方法论基础，但本轮<b>未能核到它在中文古诗上的具体应用</b>。</dd>
+    <dt>对我们的用处</dt><dd>可给「选韵 = 选情绪底色」提供依据：统计同一韵部高频共现的情感词，得到「韵部 → 情绪」先验表。但此表需要自建，无现成结果可引</dd>
+  </dl>
+</div>
+
+<div class="card fixed">
+  <div class="card-h"><span class="id">A5</span><h3>生成韵律学（Halle–Keyser 式节律规则）</h3><span class="stars">★☆☆</span><span class="tag fix">已修正</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">把音步、轻重/长短、跨句法边界的约束写成形式化规则；英语抑扬格五音步用 "stress maximum" 规则限定允许的变体</dd>
+    <dt>提取什么</dt><dd>音步边界、重音位置、格律变体的可接受范围</dd>
+    <dt>落地证据</dt><dd class="ev">Halle, M. &amp; Keyser, S. J. (1971)，<b>English Stress: Its Form, Its Growth, and Its Role in Verse</b>，New York: Harper &amp; Row；早期论文 Halle &amp; Keyser (1966)，"Chaucer and the Study of Prosody"，<i>College English</i> 28(3), 197–215</dd>
+    <dt>已修正</dt><dd class="corr">第一轮引用了一个二手汇编网站作为出处，<b>权威性不足</b>，已替换为原始专著与论文。</dd>
+    <dt>局限</dt><dd><b>为英语/欧洲格律而建</b>。中文古诗靠声调对立（平/仄）而非重音，这套规则只能借「约束形式化」的思路，不能搬规则本身</dd>
+  </dl>
+</div>
+
+<h2><span class="n">02</span>句 · 句法、典故与互文</h2>
+<p class="lede">工具链齐备，但都服务于「读懂」；直接输出结构关系的工作偏少。</p>
+
+<div class="card">
+  <div class="card-h"><span class="id">B1</span><h3>断句 / 分词 / 词性：BiLSTM-CRF 与远程监督</h3><span class="stars">★★★</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">P(Y|X) = exp(Σ_j ψ_j(y_{j−1}, y_j, x)) / Z(x)　—— CRF 层显式建模标签转移<br>远程监督：用平行语料自动产弱标签，再训练标注模型</dd>
+    <dt>提取什么</dt><dd>断句边界、词边界、词性标签</dd>
+    <dt>落地证据</dt><dd class="ev">古汉语断句与词法一体化（<a href="http://cips-cl.org/static/anthology/CCL-2019/CCL-19-041.pdf">CCL 2019</a>）；<a href="https://arxiv.org/html/2303.01912v2">Ancient Chinese Word Segmentation and POS Tagging Using Distant Supervision</a></dd>
+    <dt>局限</dt><dd>古文缺大规模标注；远程监督引入的噪声会顺着标签传下去</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">B2</span><h3>依存句法：可直接调用的文言工具</h3><span class="stars">★★☆</span><span class="tag new">新增候选</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">依存树 D = (V, A)，顶点为字/词，边为依存关系；打分通常为图上的最大生成树或转移式解析</dd>
+    <dt>提取什么</dt><dd>依存树、成分结构、语义角色</dd>
+    <dt>落地证据</dt><dd class="ev"><a href="https://koichiyasuoka.github.io/UD-Kanbun/">UD-Kanbun</a>（汉文 Universal Dependencies，基于 MeCab + UDPipe，提供 tokenizer/POS/依存解析）；<a href="https://pypi.org/project/guwencombo/">guwencombo</a>（基于 COMBO-pytorch，同样三项齐备）；<a href="https://arxiv.org/html/2504.20609v1">WenyanGPT</a>。三个均已核验存在。</dd>
+    <dt>局限</dt><dd>面向现代汉语的 PCFG/依存工具迁移到古汉语时，省略与倒装是主要失分点</dd>
+    <dt>对我们的用处</dt><dd>「孤舟蓑笠翁」是「孤舟上的蓑笠翁」还是「孤舟、蓑笠翁」两个并列意象——这正是构图层需要的输入，靠人读会争，靠依存树能给出可复核的判据</dd>
+  </dl>
+</div>
+
+<div class="card fixed">
+  <div class="card-h"><span class="id">B3</span><h3>对仗检测：符号网络 + 序列分类器</h3><span class="stars">★★☆</span><span class="tag new">新增候选</span><span class="tag fix">已修正</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">符号网络：先建句内字符对齐网络，用 <b>Louvain 社区检测</b>过滤训练样本，再以 SikuBERT 微调<br>序列分类：把上下句拼成 [CLS] A [SEP] B [SEP]，取 [CLS] 表征过分类头</dd>
+    <dt>提取什么</dt><dd>上下句对应位置的词性、语义类别、结构关系</dd>
+    <dt>落地证据</dt><dd class="ev">Kurzynski, Xu &amp; Feng (2025)，<b>The Game of Keys and Queries: Enhancing Parallelism Detection in Classical Chinese Poetry with Symbolic Networks</b>，NLP4DH 2025（<a href="https://zenodo.org/records/14584657">Zenodo 14584657</a>）；Kurzynski (2026)，<b>From Character to Poem: Nested Contexts and Scalar Limits of Parallelism Detection in Classical Chinese Poetry</b>，<i>Journal of Open Humanities Data</i> 12(1)</dd>
+    <dt>已修正</dt><dd class="corr">第一轮标题只写了后半截，已补全；并确认「符号网络 + Louvain」这条路线<b>确实成立</b>——是本轮少数被强化的结论。</dd>
+    <dt>对我们的用处</dt><dd>对仗是「镜头对称」的依据。《江雪》「千山鸟飞绝 / 万径人踪灭」工对 → 两个镜头应等长、镜像；若某联只是宽对，镜头就不该强行对称</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">B4</span><h3>互文 / 化用检测：文本复用对齐</h3><span class="stars">★★☆</span><span class="tag new">新增候选</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">字符串/序列复用检测：Smith-Waterman 一类局部对齐找最长公共子串与近似复用；较新做法用 LLM 标注精确字符区间并做多类归因</dd>
+    <dt>提取什么</dt><dd>诗与诗之间的引用、化用、集句、复用关系</dd>
+    <dt>落地证据</dt><dd class="ev">Vierthaler 关于明清文献互文引用的数字方法；ACL 2026 <b>Beyond Similarity</b> 讨论古典中文历史文本的互文性（<a href="https://arxiv.org/html/2607.27595">arXiv 2607.27595</a>）</dd>
+    <dt>局限</dt><dd>文本复用检测本身较成熟，但古诗「化用」的自动标注仍需人工语料；第一轮遗漏了这个方向</dd>
+    <dt>对我们的用处</dt><dd>李白的「朝辞白帝彩云间」化用《水经注》「朝发白帝，暮到江陵」——这类关系若能量化，「背景经历 → 文本」的链条就有了可计算的一环</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">B5</span><h3>用典识别：实体链接 + 知识图谱</h3><span class="stars">★☆☆</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">从候选典故实体集 C 中选出与上下文最匹配者，并计算跨文本引用证据；形式上是实体链接 + 关系检索</dd>
+    <dt>提取什么</dt><dd>典故实体、出处文本、引用证据链</dd>
+    <dt>落地证据</dt><dd class="ev">古诗词知识图谱构建（中科院 ICT，分层含「时间/地点/景物/人」）</dd>
+    <dt>局限</dt><dd><b>没有面向古诗典故溯源的专门标注数据集</b>。目前只能靠通用实体链接硬套，误报率会很高</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">B6</span><h3>省略与倒装：零代词恢复</h3><span class="stars">★☆☆</span><span class="tag gap">空白</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">用上下文主语、动词论元、语义角色与依存结构联合推断被省略的成分</dd>
+    <dt>落地证据</dt><dd class="gap">中文零代词恢复的研究集中在<b>现代汉语</b>，古典诗歌方向没有成熟工作（二轮复核仍为空白）</dd>
+    <dt>局限</dt><dd>而恰恰是古诗省略最狠：「独钓寒江雪」的主语要靠上一句补，「轻舟已过万重山」的主语是舟不是人</dd>
+  </dl>
+</div>
+
+<h2><span class="n">03</span>象 · 意象、主题与可画性</h2>
+<p class="lede">这一层是「中文古诗 + 现代 NLP」结合得最实的地方。</p>
+
+<div class="card fixed">
+  <div class="card-h"><span class="id">C1</span><h3>意象抽取：Albert-BiLSTM-MHA-CRF</h3><span class="stars">★★☆</span><span class="tag new">新增候选</span><span class="tag fix">已修正</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">序列标注（BIO/BIOES）；ALBERT 出上下文表征 → BiLSTM 建模时序 → 多头注意力 → CRF 约束标签转移</dd>
+    <dt>提取什么</dt><dd>古诗中的物象/名物术语（名词实体）</dd>
+    <dt>落地证据</dt><dd class="ev">Zhou, Wang &amp; Wang (2022)，<b>Named Entity Recognition of Ancient Poems Based on Albert-BiLSTM-MHA-CRF Model</b>，<i>Wireless Communications and Mobile Computing</i>（<a href="https://onlinelibrary.wiley.com/doi/10.1155/2022/6507719">DOI 10.1155/2022/6507719</a>）——模型缩写与标题完全吻合</dd>
+    <dt>已修正</dt><dd class="corr">第一轮漏了作者与期刊，已补全。</dd>
+    <dt>局限</dt><dd>古名物与现代语义体系存在映射断层</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">C2</span><h3>概念词典映射：义原与同义词词林</h3><span class="stars">★★☆</span><span class="tag new">新增候选</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">义原（sememe）体系 + 同义词词林树，把物象词映射到概念空间，再用义原相似度算意象距离</dd>
+    <dt>提取什么</dt><dd>意象的概念类别、意象之间的语义距离</dd>
+    <dt>落地证据</dt><dd class="ev"><a href="https://openhownet.thunlp.org/about_hownet">OpenHowNet</a>（董振东、董强设计，清华维护；提供义原查询与基于义原的词相似度——已核验）；<a href="http://jcip.cipsc.org.cn/cn/article/id/4b21d7d9-07e9-45eb-a993-e896cb36a823">中国古典诗歌主题与情感多标签联合分类</a> 用词林构建主题词典</dd>
+    <dt>局限</dt><dd>词林/义原对生僻名物覆盖不足；「寒江」「孤舟」这类复合意象需先切分再映射</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">C3</span><h3>意象共现网络：中心性 + 社区检测</h3><span class="stars">★★☆</span><span class="tag used">已在用</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">共现矩阵 → 网络 → degree / betweenness / eigenvector 中心性 → 社区检测聚类</dd>
+    <dt>提取什么</dt><dd>意象之间的共现强度、枢纽意象、意象群</dd>
+    <dt>落地证据</dt><dd class="ev"><a href="https://crad.ict.ac.cn/fileJSJYJYFZ/journal/article/jsjyjyfz/HTML/2020-6-1252.shtml">古诗词图谱的构建及分析</a>（中科院 ICT）；<a href="https://www.rddl.com.cn/EN/10.13284/j.cnki.rddl.003753">三峡古诗人文景观语义网络</a>（ROST-CM6 + Ucinet，聚出 6 类簇）</dd>
+    <dt>局限</dt><dd>二元共现丢方向；聚类结果对词典与参数敏感</dd>
+    <dt>对我们的用处</dt><dd>《江雪》的意象网络里，孤舟/寒江/雪是强连通三角，而「鸟」「人踪」的度极低——<b>负节点在网络指标上本来就表现为低度节点</b>，这给「负节点」提供了可计算的判据，不必靠人标</dd>
+  </dl>
+</div>
+
+<div class="card fixed">
+  <div class="card-h"><span class="id">C4</span><h3>词嵌入：VCWE 视觉字形增强</h3><span class="stars">★★☆</span><span class="tag new">新增候选</span><span class="tag fix">已修正</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">在 Skip-gram 目标里加入汉字的<b>视觉字形特征</b>（笔画/结构），专为古诗语料训练</dd>
+    <dt>提取什么</dt><dd>字/词向量；对低频字与未见字更稳</dd>
+    <dt>落地证据</dt><dd class="ev">Sun, Qiu &amp; Huang (2019)，<b>VCWE: Visual Character-Enhanced Word Embeddings</b>，NAACL 2019（<a href="https://arxiv.org/html/1902.08795v2">arXiv 1902.08795</a>）。评测任务为词相似度、情感分析、命名实体识别、词性标注</dd>
+    <dt>已修正</dt><dd class="corr">第一轮称「覆盖 6 类语料」，<b>摘要中未出现该数字</b>，无法确认，已改为如实描述评测任务。</dd>
+    <dt>局限</dt><dd>字形相似 ≠ 语义相似，会引入「形近义远」的噪声；仍需古文语料微调</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">C5</span><h3>可画性评分：一句诗能不能被画出来</h3><span class="stars">★★☆</span><span class="tag new">新增候选</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">CLIPScore / BLIPScore / VQAScore：衡量文本与生成图像的对齐度，间接度量文本的「视觉可及性」</dd>
+    <dt>提取什么</dt><dd>文本的 imageability（意象具体程度）、可视觉化程度</dd>
+    <dt>落地证据</dt><dd class="ev"><b>TangPoetryBench</b>（<a href="https://arxiv.org/html/2608.11452">arXiv 2608.11452</a>）：1,280 张唐诗意象图像的多维基准，评测 4 个文生图模型；<b>Composition and Deformance: Measuring Imageability with a Text-to-Image Model</b>（<a href="https://arxiv.org/pdf/2306.03168v1.pdf">arXiv 2306.03168</a>）用 355 首英文诗评估 imageability</dd>
+    <dt>对我们的用处</dt><dd>这是第一轮<b>完全漏掉</b>但对我们最关键的一环：构图层最怕的就是「这句诗根本画不出来」。「千山鸟飞绝」可画性高，「此情可待成追忆」可画性极低——需要一个指标来提前分流</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">C6</span><h3>主题模型：LDA</h3><span class="stars">★★☆</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">p(z|d) ~ Dir(α)，p(w|z) ~ Dir(β)；文档—主题—词三层贝叶斯</dd>
+    <dt>提取什么</dt><dd>诗作集合的隐含主题分布</dd>
+    <dt>落地证据</dt><dd class="ev">《基于 LDA 模型的中国古典诗词在不同历史时期的主题发现》（<a href="https://d.wanfangdata.com.cn/thesis/D02448876">万方学位论文</a>）：738,881 首，划时期，得 46 个有效主题。<span class="warn">注：语料规模为论文自述，本轮未取得全文核对。</span></dd>
+    <dt>局限</dt><dd>词袋假设丢掉语序；绝句/律诗太短，主题分布不稳</dd>
+    <dt>空白</dt><dd class="gap">BTM / ProdLDA / ETM / DETM 在古典诗词上<b>未找到明确应用</b></dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">C7</span><h3>词频分布律：Zipf 与 Heaps</h3><span class="stars">★★☆</span><span class="tag new">新增候选</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">Zipf：Z(r) ∝ r^(−α)；Heaps：V(n) ∝ n^β；熵率 H 刻画单位长度的信息量</dd>
+    <dt>提取什么</dt><dd>体裁与时代的统计指纹、词汇丰富度</dd>
+    <dt>落地证据</dt><dd class="ev"><b>Character Distributions of Classical Chinese Literary Texts: Zipf's Law, Genres, and Epochs</b>（<a href="https://arxiv.org/pdf/1709.05587v1">arXiv 1709.05587</a>）——直接在中文古典文学语料上做</dd>
+    <dt>对我们的用处</dt><dd>成本极低的一个基线：用 Zipf 指数与熵率区分诗/词/曲，或区分时代，可作为「风格距离」的廉价替代</dd>
+  </dl>
+</div>
+
+<h2><span class="n">04</span>情 · 情感、韵味与声学</h2>
+<p class="lede">离散情感分类成熟；<b>连续的情感轨迹建模仍是空白</b>——而这正是动画引擎最依赖的一层。本轮补上了「吟诵声学」这条被漏掉的实证路径。</p>
+
+<div class="card">
+  <div class="card-h"><span class="id">D1</span><h3>情感分类：BERT + 图注意力 + 情感词典</h3><span class="stars">★★☆</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">BERT 出上下文嵌入 → GAT 在词间图上做消息传递 → 融合情感词典（如 NTUSD）特征 → 分类</dd>
+    <dt>提取什么</dt><dd>情感极性、细粒度情感标签</dd>
+    <dt>落地证据</dt><dd class="ev"><a href="https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0330919&amp;type=printable">Sentiment analysis of classical Chinese literature（PLOS ONE）</a>；<a href="http://xbna.pku.edu.cn/CN/10.13209/j.0479-8023.2025.002">融合显性知识与隐性知识的古诗情感分析</a>（SACAP）；<a href="https://dl.acm.org/doi/pdf/10.1145/3772726.3772865">多模块 Transformer 的古典诗词情感迁移</a></dd>
+    <dt>局限</dt><dd>借景抒情导致极性标注困难；缺大规模高质量标注集</dd>
+    <dt>空白</dt><dd class="gap">Valence–Arousal–Dominance 连续情感空间、SO-PMI 词典扩展在中文古诗上<b>仍未找到成熟应用</b>（二轮复核确认）</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">D2</span><h3>情感轨迹：HMM / 高斯过程 / 变点检测</h3><span class="stars">★☆☆</span><span class="tag used">已在用</span><span class="tag gap">基本空白</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">HMM：隐情感状态 + 转移概率；CRF：给整条轨迹打分；<br>高斯过程回归：把情感当连续函数拟合，直接给不确定度；<br>PELT：在序列上做精确变点检测，找「转」的位置</dd>
+    <dt>提取什么</dt><dd>情感随句/联的变化曲线、转折点、不确定度</dd>
+    <dt>落地证据</dt><dd class="gap"><b>两轮检索均未找到</b>用 HMM / CRF / 高斯过程 / FDA / PELT 专门建模中文古典诗词情感弧线的工作。我们的「曲率峰值定位转句」属自建方法，<b>无外部基线可比对</b></dd>
+    <dt>对我们的意义</dt><dd>这是两轮调研最重要的发现之一：这一层没有可引用的先例，也就没有现成的验证基线。下一步要么自造评测，要么退回到可验证的代理指标</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">D3</span><h3>力动态（Talmy Force-Dynamics）</h3><span class="stars">★☆☆</span><span class="tag new">新增候选</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">认知语言学的「力—阻力」图式：把意象间的张力（施力者、受力者、阻力强弱）写成有向关系图，情感变迁 = 图上力的重新平衡</dd>
+    <dt>提取什么</dt><dd>意象间的张力结构、张力如何驱动情感迁移</dd>
+    <dt>落地证据</dt><dd class="ev"><a href="http://hbdldxxbskb.ncepujournal.com/cn/article/pdf/preview/3d76c53d-b930-4750-8683-d19d94f247ef.pdf">中国古典诗词意象张力与情感变迁互动探析：力动态视角</a></dd>
+    <dt>局限</dt><dd>偏定性/半定量，未给出可计算的目标函数</dd>
+    <dt>对我们的用处</dt><dd>几乎是唯一把「意象张力 → 情感变迁」形式化的中文古诗研究，方向与我们「反差度 ρ」一致。可借它的图式给 ρ 一个语言学解释，而不只是统计量</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">D4</span><h3>吟诵声学：平仄 → 音高曲线的实证</h3><span class="stars">★★☆</span><span class="tag new">新增候选</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">基频(F0)检测（SIFT 等）→ 提取吟诵的基频曲线；用时长比例、音高轮廓对齐平仄序列</dd>
+    <dt>提取什么</dt><dd>平仄 → 音高/时长的映射关系；「平长仄短」这类韵律规律</dd>
+    <dt>落地证据</dt><dd class="ev">五绝吟诵韵律的声学分析（以叶嘉莹吟诵实践为对象，<a href="https://pdf.hanspub.org/ml_2915682.pdf">hanspub ml_2915682</a>）——给出平长仄短、句末字时长等实证；<b>Automatic Composing Based on Pitch Detection of Chinese Poetry Recitation</b>（用 SIFT 检测吟诵音高）</dd>
+    <dt>对我们的用处</dt><dd>第一轮把「音」只当成约束（平仄合法性），漏掉了它<b>本身就是一条可测量的曲线</b>。吟诵的 F0 曲线可以直接驱动动画的音高/节奏，也是「韵味」目前唯一有物理量纲的抓手</dd>
+  </dl>
+</div>
+
+<div class="card fixed">
+  <div class="card-h"><span class="id">D5</span><h3>信息论指标：熵、困惑度与 surprisal</h3><span class="stars">★★☆</span><span class="tag used">已在用</span><span class="tag fix">已修正</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">H = −Σ p(x) log₂ p(x)；Perplexity = exp(H)；Surprisal = −log P(w | context)</dd>
+    <dt>提取什么</dt><dd>语言结构的离散程度、预测不确定性、单个词的预期偏离</dd>
+    <dt>落地证据</dt><dd class="ev"><a href="https://pdf.hanspub.org/ml_2915867.pdf">隐逸诗的语言结构性反转的计量学研究</a>（用信息熵度量词汇分布离散度）；Ma, Yao &amp; Haensch，<b>Capabilities and Evaluation Biases of LLMs in Classical Chinese Poetry Generation: A Case Study on Tang Poetry</b>，ACL 2026 Findings（<a href="https://arxiv.org/abs/2510.15313">arXiv 2510.15313</a> = <a href="https://aclanthology.org/2026.findings-acl.836.pdf">2026.findings-acl.836</a>，两处为同一篇，已核验）</dd>
+    <dt>已修正</dt><dd class="corr">第一轮漏了作者与完整标题；surprisal 一项此前混在熵里，现已单列——它在心理语言学中有独立地位，但<b>中文古诗上未找到实证</b>。</dd>
+    <dt>空白</dt><dd class="gap">KL / JS 散度用于「留白」「反差」的度量，<b>未见成熟论文</b>——我们的用法属于借用，需自己论证合理性</dd>
+  </dl>
+</div>
+
+<h2><span class="n">05</span>构 · 跨模态与构图</h2>
+<p class="lede">2022–2025 年这条线进展最快，已有人做「诗 → 画面 → 动画」的完整链路，可以直接对标。</p>
+
+<div class="card fixed">
+  <div class="card-h"><span class="id">E1</span><h3>Polaca：诗 → 山水画 → 书法 → 合成</h3><span class="stars">★★☆</span><span class="tag fix">已修正</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">生成对抗网络；三个模块级联：text-to-image → image-to-image → image fusion</dd>
+    <dt>提取什么</dt><dd>从诗中生成带书法的水墨风格画作</dd>
+    <dt>落地证据</dt><dd class="ev">Yuan, Dai, Yan, Liu, Chen, Chen, Qiu &amp; He，<b>Learning to Generate Poetic Chinese Landscape Painting with Calligraphy</b>（<a href="https://arxiv.org/abs/2305.04719">arXiv 2305.04719</a>）</dd>
+    <dt>已修正</dt><dd class="corr">第一轮称其为「Polaca，IJCAI 2022」。真实标题不含 "Polaca" 字样；arXiv 页面标注 "Accepted by IJCAI 2022"，但 <b>arXiv 提交日期为 2023 年 5 月，与 IJCAI 2022（2022 年 7 月）时间线矛盾</b>，年份存疑，已改为按 arXiv 编号标注。</dd>
+    <dt>对我们的意义</dt><dd>它与我们做的事最接近，但<b>是端到端黑箱，我们是可解释链路</b>——差异在于我们能回答「为什么这个镜头 3.5 秒」</dd>
+  </dl>
+</div>
+
+<div class="card fixed">
+  <div class="card-h"><span class="id">E2</span><h3>CCLAP：可控中国山水画生成（Latent Diffusion）</h3><span class="stars">★★☆</span><span class="tag fix">已修正</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">潜在扩散模型（LDM）：在 VAE 潜空间做去噪扩散；两级级联——content generator + style aggregator</dd>
+    <dt>提取什么</dt><dd>可控属性的山水画（内容与风格可分别控制）</dd>
+    <dt>落地证据</dt><dd class="ev">Wang, Zhang, Ji, Bai &amp; Shan，<b>CCLAP: Controllable Chinese Landscape Painting Generation via Latent Diffusion Model</b>，ICME 2023（<a href="https://arxiv.org/abs/2304.04156">arXiv 2304.04156</a>）</dd>
+    <dt>已修正</dt><dd class="corr">第一轮漏了作者、期刊与「content generator + style aggregator」这一关键结构，已补全。</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">E3</span><h3>ConCLVD：山水画风格视频（扩散 + 潜空间对比学习）</h3><span class="stars">★★☆</span><span class="tag new">新增候选</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">Stable Diffusion + motion module（双注意力）保证时序一致；noise adapter 在潜空间做无监督对比学习</dd>
+    <dt>提取什么</dt><dd>中国山水画风格的<b>视频</b>（非单帧）</dd>
+    <dt>落地证据</dt><dd class="ev">Liu, Li, Zhou, Liang, Hong, Chao &amp; Ji，<b>ConCLVD: Controllable Chinese Landscape Video Generation via Diffusion Model</b>（<a href="https://arxiv.org/abs/2404.12903">arXiv 2404.12903</a>）</dd>
+    <dt>对我们的用处</dt><dd>它解决「帧间风格漂移」，我们用节拍表 + 手工镜头解决同一问题。两条路线的成本/可控性差异值得写进方法论</dd>
+  </dl>
+</div>
+
+<div class="card fixed">
+  <div class="card-h"><span class="id">E4</span><h3>LivePoem：诗 → 音乐故事板</h3><span class="stars">★★☆</span><span class="tag fix">已修正</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">预训练扩散模型生成故事板；Transformer 做诗 → 旋律生成</dd>
+    <dt>提取什么</dt><dd>多镜头故事板 + 配乐</dd>
+    <dt>落地证据</dt><dd class="ev">Liang, Ma, Hopkins &amp; Wang，<b>LivePoem: Improving the Learning Experience of Classical Chinese Poetry with AI-Generated Musical Storyboards</b>，IJCAI 2025（<a href="https://www.ijcai.org/proceedings/2025/1145.pdf">proceedings/2025/1145</a>）</dd>
+    <dt>已修正</dt><dd class="corr">第一轮称它「画面按诗句边界对齐」，并据此说它与我们节拍表「同源」。<b>该细节在摘要中并无记载，属过度解读。</b> 已降级为如实描述。它与我们的真正共性只有一条：都做「诗 → 多镜头 + 音乐」。</dd>
+    <dt>对我们的意义</dt><dd>它是目前最接近「诗 → 时序化视觉 + 听觉」的公开工作，值得作为对照，但不宜当作我们设计的印证</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">E5</span><h3>共享隐变量 + 对比学习（InfoNCE）</h3><span class="stars">★☆☆</span><span class="tag used">已在用</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">共享隐变量 z 同时生成文本/画面/时间轴三模态；InfoNCE 损失把匹配的正样本对拉近、负样本推远</dd>
+    <dt>落地证据</dt><dd class="gap">检索到的跨模态古诗工作（Polaca / CCLAP / ConCLVD / LivePoem）<b>都不是共享隐变量 + 对比对齐的架构</b>，我们这套属于自建</dd>
+    <dt>局限</dt><dd>无先例可对标，评测需自建</dd>
+  </dl>
+</div>
+
+<h2><span class="n">06</span>风 · 风格、作者与背景</h2>
+<p class="lede">这一层本轮补得最多：压缩距离、交游网络、地理统计都是第一轮漏掉的。</p>
+
+<div class="card fixed">
+  <div class="card-h"><span class="id">F1</span><h3>Burrows' Delta：作者指纹</h3><span class="stars">★★☆</span><span class="tag new">新增候选</span><span class="tag fix">已修正</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">Δ = (1/n) Σ |z(x_i) − z(y_i)|，其中 z 为各高频功能词的 z-score</dd>
+    <dt>提取什么</dt><dd>作者风格向量；用于作者归属与聚类</dd>
+    <dt>落地证据</dt><dd class="ev">Boris Orekhov，<b>How does Burrows' Delta work on medieval Chinese poetic texts?</b>（<a href="https://arxiv.org/abs/2407.08099">arXiv 2407.08099</a>）。摘要确认：基于互文距离的聚类「worked flawlessly」，且「Delta never confused different poets」</dd>
+    <dt>已修正</dt><dd class="corr">第一轮称「2537 位诗人」「100 token 即可准确聚类」。<b>这两个具体数字在摘要中均未出现，本轮无法确认</b>，已改为只保留可核验的两条结论。成熟度由 ★★★ 下调为 ★★☆。</dd>
+    <dt>对我们的用处</dt><dd>《江雪》与《早发白帝城》的对比目前靠人读；用 Delta 可以把「柳宗元的冷」与「李白的快」算成一个可复核的距离</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">F2</span><h3>压缩距离文体学：NCD / gzip 距离</h3><span class="stars">★★☆</span><span class="tag new">新增候选</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">NCD(x, y) = C(xy) − min(C(x), C(y)) / max(C(x), C(y))，其中 C 为压缩器长度；工程上直接用 gzip 近似 Kolmogorov 复杂度</dd>
+    <dt>提取什么</dt><dd>无需训练的风格/作者距离</dd>
+    <dt>落地证据</dt><dd class="ev">方法本身在 NLP 中成熟（NCD 与 Burrows' Delta 同属文体计量）；<b>本轮未找到中文古诗上的直接应用，属「方法可迁移」而非「已有古诗应用」</b></dd>
+    <dt>对我们的用处</dt><dd>零训练成本、零语料依赖。作为风格距离的<b>廉价基线</b>很合适——先用 NCD 跑一遍，再看 Burrows' Delta 是否带来增益</dd>
+  </dl>
+</div>
+
+<div class="card fixed">
+  <div class="card-h"><span class="id">F3</span><h3>作者归属的统计检验：《红楼梦》前八十回之争</h3><span class="stars">★★☆</span><span class="tag fix">已修正</span></div>
+  <dl>
+    <dt>提取什么</dt><dd>同一文本内部是否存在多个作者</dd>
+    <dt>落地证据</dt><dd class="ev">Hu, Wang &amp; Wu (2014)，<b>Multiple Authors Detection: A Quantitative Analysis of Dream of the Red Chamber</b>，<i>Advances in Adaptive Data Analysis</i>，Article ID 1450012（<a href="https://arxiv.org/abs/1412.6211">arXiv 1412.6211</a>）。原文措辞为「convincing if not irrefutable evidence that the first 80 chapters and the last 40 chapters were written by two different authors」</dd>
+    <dt>已修正</dt><dd class="corr">第一轮漏了作者与期刊，并转述为「支持前后作者不同」。已恢复原文的审慎措辞——<b>统计证据 ≠ 文献学定论</b>，这点值得写进方法论。</dd>
+  </dl>
+</div>
+
+<div class="card fixed">
+  <div class="card-h"><span class="id">F4</span><h3>地理语言指纹：从诗风反推籍贯</h3><span class="stars">★★☆</span><span class="tag new">新增候选</span><span class="tag fix">已修正</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">n-gram TF-IDF + 意象特征 + 季节特征 + 典故特征 → 分类器预测南北</dd>
+    <dt>提取什么</dt><dd>诗人籍贯/地域属性</dd>
+    <dt>落地证据</dt><dd class="ev">Chen &amp; Liu (2026)，<b>Predicting Poets' Origins from Verse: A Computational Analysis of Regional Linguistic Fingerprints in the Complete Tang Poems</b>（<a href="https://arxiv.org/abs/2606.24093">arXiv 2606.24093</a>）——南北二分类准确率 <b>0.69</b>，基线 0.53，已核验</dd>
+    <dt>对我们的用处</dt><dd>说明「生平/背景」确实可被特征化。但 0.69 也说明：<b>从文本反推经历，信噪比并不高</b>，不能当硬约束用</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">F5</span><h3>诗人交游网络：唱和与赠答关系</h3><span class="stars">★★☆</span><span class="tag new">新增候选</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">社交网络 G = (V, E)，V = 诗人，E = 唱和/赠答/提及关系；用 degree / betweenness 找核心人物，社区检测找流派</dd>
+    <dt>提取什么</dt><dd>诗人之间的社会结构、文学群体、影响力路径</dd>
+    <dt>落地证据</dt><dd class="ev">Harvard CBDB，<b>Networks of Exchange Poetry in Late Medieval China</b>（已出网络图）；Complete Tang Poems 相关研究用诗人提及关系构建唐代诗人网络（<a href="https://arxiv.org/pdf/1511.01559.pdf">arXiv 1511.01559</a>）</dd>
+    <dt>对我们的用处</dt><dd>「作者背景」不只在他个人生平里，也在他的关系网里。柳宗元与韩愈、刘禹锡的贬谪唱和，本身就是解读《江雪》的上下文</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">F6</span><h3>GIS 与文学地理：诗人行迹的空间统计</h3><span class="stars">★★☆</span><span class="tag new">新增候选</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">核密度估计（KDE）刻画创作地分布；Jenks 自然断裂点法分级；最近邻指数检验聚集性；HDBSCAN 做空间聚类</dd>
+    <dt>提取什么</dt><dd>诗人行迹轨迹、创作空间分布、文学地理格局</dd>
+    <dt>落地证据</dt><dd class="ev">《地球信息科学学报》2014 用 KDE + Jenks 做古诗空间信息可视化；PLOS ONE 宋代诗人地理分布研究（<a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0319244">10.1371/journal.pone.0319244</a>）；Heritage Science 唐代诗歌之路文化景观（<a href="https://heritagesciencejournal.springeropen.com/articles/10.1186/s40494-022-00761-y">s40494-022-00761-y</a>）</dd>
+    <dt>对我们的用处</dt><dd>《早发白帝城》是地理诗：白帝城 → 江陵，一千二百里。KDE 可以把这个空间跨度量化，直接喂给「镜头推进速度」</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">F7</span><h3>历时语义演变：意象的语义漂移</h3><span class="stars">★★☆</span><span class="tag new">新增候选</span><span class="tag gap">已撤回</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">按朝代切分子语料分别训练词向量，做向量空间对齐（Procrustes）后度量同一词的位移；或用 BERT + UMAP 观察轨迹</dd>
+    <dt>提取什么</dt><dd>同一意象/词汇在不同时代的语义偏移量</dd>
+    <dt>落地证据</dt><dd class="ev"><b>Sentiment Analysis of Classical Chinese Poetry Using NLP: Multimodal Fusion and Diachronic Semantic Alignment</b>（按朝代训练 BERT 子语料并量化语义偏移）；IEEE <b>Quantifying Stylistic Evolution in Classical Chinese Literature Using Word Embeddings and Trajectory Analysis</b>（word2vec/BERT + UMAP 分析唐宋明清风格演变）；<b>Flower Across Time and Media</b>（追踪唐宋诗中花卉意象的情感变化）</dd>
+    <dt>已撤回</dt><dd class="corr">第一轮把「历时词向量对齐」列入<b>空白区</b>，本轮<b>找到至少三篇反例，该空白结论已撤回</b>。这是二轮复核中唯一被推翻的空白项。</dd>
+    <dt>对我们的用处</dt><dd>「雪」「江」「舟」在唐诗里的含义与六朝不同。做跨时代对比时，若不先对齐语义，Delta 距离会混入语义漂移的干扰</dd>
+  </dl>
+</div>
+
+<div class="card">
+  <div class="card-h"><span class="id">F8</span><h3>编年 / 写作时间推断</h3><span class="stars">★☆☆</span><span class="tag gap">仍无成熟方案</span></div>
+  <dl>
+    <dt>数学形式</dt><dd class="math">候选：状态空间模型 + 卡尔曼滤波；贝叶斯时间戳推断</dd>
+    <dt>落地证据</dt><dd class="ev gap"><b>状态空间模型 / 卡尔曼滤波 / 贝叶斯时间戳用于中文古诗写作时间推断，两轮均未找到可核查工作。</b> 但找到两条邻近线索：唐宋诗词汇分析用 XGBoost + 网络结构特征做<b>朝代</b>分类；TopWORDS-Poetry 用贝叶斯推断做古典诗歌文本分段与词发现——都不是时间推断</dd>
+    <dt>对我们的意义</dt><dd>「作者写作背景与经历」是用户最初需求的第一条，而这一层<b>恰恰没有现成数学模型</b>。目前只能靠文献学编年（人工），无法计算化</dd>
+  </dl>
+</div>
+
+<h2><span class="n">07</span>二轮复核：空白区（修正后）</h2>
+<p class="lede">第一轮列了 11 条「空白」，本轮另补查 1 条，共 12 条。专程去证伪的结果：<b>6 条确认空白，1 条被推翻，5 条降级为「部分相关」</b>。</p>
+<table class="grid">
+  <thead><tr><th style="width:44%">方向</th><th style="width:74px">一轮结论</th><th>二轮复核结果</th></tr></thead>
+  <tbody>
+    <tr><td>RST / 中心理论用于中文古诗篇章结构</td><td class="bad">空白</td><td><span class="ok">确认空白。</span> 仅有 SDRT 用于宋词<b>英译分析</b>的间接工作，不是中文古诗自身的结构分析</td></tr>
+    <tr><td>TDA / 持续同调用于中文古诗</td><td class="bad">空白</td><td><span class="ok">确认空白。</span> 唯一实证仍是波斯诗歌（Elyasi &amp; Hosseini Moghadam, 2019，<a href="https://arxiv.org/pdf/1906.01726v1.pdf">arXiv 1906.01726</a>，标题已核验）</td></tr>
+    <tr><td>信息瓶颈 / 最小描述长度</td><td class="bad">空白</td><td><span class="ok">确认空白。</span> 检索到的都是通用语言模型压缩工作</td></tr>
+    <tr><td>张量分解（CP / Tucker）用于「诗人×意象×时期」</td><td class="bad">空白</td><td><span class="ok">确认空白。</span> 方法本身成熟，但无诗歌三维数据的应用</td></tr>
+    <tr><td>因果推断用于「诗人经历 → 作品风格」</td><td class="bad">空白</td><td><span class="ok">确认空白。</span> 只有一般性的结构方程模型教材资料</td></tr>
+    <tr><td>分形 / MF-DFA 用于中文古诗</td><td>—</td><td><span class="ok">确认空白</span>（本轮新增查证）。有 Blake 诗作、《易经》的研究，无中文古诗</td></tr>
+    <tr><td>历时词向量对齐追踪意象语义漂移</td><td class="bad">空白</td><td><span class="bad">已推翻。</span> 找到至少三篇中文古典诗歌的历时语义/风格演变研究（见 F7），<b>该空白结论撤回</b></td></tr>
+    <tr><td>最优传输 / 图匹配用于诗文—画面元素对齐</td><td class="bad">空白</td><td><span class="warn">降级为部分相关。</span> 有句法/文本对齐与图像关键点匹配的工作，<b>但没有诗文与画面的对齐</b>，我们的方向仍属空白</td></tr>
+    <tr><td>MDP / 强化学习用于构图、镜头、节奏决策</td><td class="bad">空白</td><td><span class="warn">降级为部分相关。</span> 有 RL 用于 VR 景观构图、绘画生成、乐谱跟随，<b>但没有用于诗歌的视觉呈现决策</b></td></tr>
+    <tr><td>「意境」「神韵」的量化；中文古诗 VAD 连续情感空间</td><td class="bad">空白</td><td><span class="warn">降级为部分相关。</span> 有 PoEmotion（书法表达诗词情感）、《Sentiment-Controllable Chinese Poetry Generation》（五类情感标注）、宋词情感时空特征分析；<b>但明确的「意境/神韵」量化模型与 VAD 连续空间仍未找到</b></td></tr>
+    <tr><td>「起承转合」的自动分段算法</td><td class="bad">空白</td><td><span class="warn">降级为部分相关。</span> 清华有基于《文心雕龙》「意脉」的诗歌结构数学建模，但<b>不是针对四段式的自动分段</b></td></tr>
+    <tr><td>中文古诗写作时间推断 / 编年</td><td class="bad">空白</td><td><span class="warn">降级为部分相关。</span> 有朝代分类（XGBoost）与 TopWORDS-Poetry（贝叶斯分段/词发现），<b>状态空间模型 / 卡尔曼滤波仍无</b></td></tr>
+  </tbody>
+</table>
+
+<div class="verdict">
+  <h3>二轮复核的三条结论</h3>
+  <p><b>一、倒金字塔的结论成立，但边界要重新划。</b>底层（断句、分词、NER、格律校验）成熟；上层（情感轨迹、篇章结构、跨模态对齐）空白——这一点两轮一致。但「空白」清单本身有水分：12 条里真正铁板一块的只有 6 条，另有 1 条被反例推翻、5 条只是「没有直接针对本任务的工作」。<b>写「空白」时必须区分「完全没人碰」和「没人为这个任务做过」</b>，第一轮混为一谈了。</p>
+  <p><b>二、引用核验暴露了 6 处实质错误，以「张冠李戴」和「过度解读」两类最典型。</b>最严重的是 A4：把 Baley 的中文押韵语料音韵变化检测，写成了「List (2016) 对《诗经》韵脚图做社区检测」，作者、年份、期刊、对象、方法五项全错。其次是 E4：把 LivePoem 说成「按诗句边界对齐」并据此宣称我们的节拍表「有外部印证」——<b>该细节摘要里根本没有</b>。教训很直接：二手转述会自己长出细节，凡是支撑核心论点的引用必须回到原文摘要。</p>
+  <p><b>三、本轮新增的 18 个方向里，有两条对我们最要紧。</b>一是 <b>C5 可画性评分</b>：构图层最怕「这句诗根本画不出来」，「千山鸟飞绝」可画性高、「此情可待成追忆」极低，需要一个指标提前分流——唐诗意象已有现成基准（TangPoetryBench，1,280 张图）。二是 <b>D4 吟诵声学</b>：第一轮把「音」只当成约束（平仄合法性），漏掉了它<b>本身就是一条可测的 F0 曲线</b>，而这是「韵味」目前唯一有物理量纲的抓手。</p>
+</div>
+
+<h2><span class="n">08</span>核验明细</h2>
+<p class="lede">第一轮 19 条引用逐条核验的结果。此表只记录事实，不作评价。</p>
+<table class="grid">
+  <thead><tr><th style="width:52px">编号</th><th style="width:96px">核验结论</th><th>说明</th></tr></thead>
+  <tbody>
+    <tr><td>A1</td><td class="bad">部分有误</td><td>标题张冠李戴，实际为 "Phonetic Reconstruction of the Consonant System of Middle Chinese via Mixed Integer Optimization"</td></tr>
+    <tr><td>A2 宋词生成</td><td class="bad">部分有误</td><td>游维 2007 硕士论文，摘要中无「DFA 过滤 + 互信息」描述</td></tr>
+    <tr><td>A2 Jiuge</td><td class="ok">确认</td><td>arXiv 2608.23098，标题作者均吻合</td></tr>
+    <tr><td>A4 韵脚网络</td><td class="bad">查无此文</td><td>该 DOI 实为 Baley (2025) 的中文押韵语料音韵变化检测；作者/年份/期刊/对象/方法五项全错</td></tr>
+    <tr><td>A5 Halle-Keyser</td><td class="warn">来源不权威</td><td>原引二手汇编网站，已替换为 1971 年专著与 1966 年论文</td></tr>
+    <tr><td>B2 文言工具</td><td class="ok">确认</td><td>UD-Kanbun 与 guwencombo 均真实，三项功能齐备</td></tr>
+    <tr><td>B3 对仗</td><td class="warn">标题不完整</td><td>已补全；并确认「符号网络 + Louvain」路线成立</td></tr>
+    <tr><td>C1 NER</td><td class="ok">确认</td><td>Zhou, Wang &amp; Wang 2022，模型缩写完全吻合</td></tr>
+    <tr><td>C2 OpenHowNet</td><td class="ok">确认</td><td>义原查询与相似度功能均存在</td></tr>
+    <tr><td>C4 VCWE</td><td class="warn">数字无法确认</td><td>「6 类语料」摘要未载，已改为如实列评测任务</td></tr>
+    <tr><td>D4 LLM 评估</td><td class="ok">确认</td><td>arXiv 2510.15313 与 ACL 2026 Findings 为同一篇</td></tr>
+    <tr><td>E1 Polaca</td><td class="bad">年份矛盾</td><td>真实标题不含 "Polaca"；页面标 IJCAI 2022 但 arXiv 提交于 2023-05</td></tr>
+    <tr><td>E2 CCLAP</td><td class="ok">确认</td><td>ICME 2023，作者与结构已补全</td></tr>
+    <tr><td>E3 ConCLVD</td><td class="ok">确认</td><td>arXiv 2404.12903，作者与模块描述吻合</td></tr>
+    <tr><td>E4 LivePoem</td><td class="bad">过度解读</td><td>「按诗句边界对齐」摘要未载，已撤回该论断</td></tr>
+    <tr><td>F1 Burrows' Delta</td><td class="warn">数字无法确认</td><td>「2537 位诗人」「100 token」摘要未载；两条定性结论确认</td></tr>
+    <tr><td>F3 红楼梦</td><td class="ok">确认</td><td>Hu, Wang &amp; Wu 2014，已恢复原文审慎措辞</td></tr>
+    <tr><td>F4 地理指纹</td><td class="ok">确认</td><td>准确率 0.69、基线 0.53 均属实</td></tr>
+    <tr><td>TDA 波斯诗</td><td class="ok">确认</td><td>Elyasi &amp; Hosseini Moghadam 2019</td></tr>
+  </tbody>
+</table>
+
+<h2><span class="n">09</span>回接：插进现有链路的哪一步</h2>
+<table class="grid">
+  <thead><tr><th style="width:78px">STEP</th><th style="width:140px">现有做法</th><th>可补强的模型（二轮修正后）</th></tr></thead>
+  <tbody>
+    <tr><td class="step">STEP 1<br>格律</td><td>CSP 校验平仄韵</td><td>A4 音韵变化检测 → 若要建「韵部→情绪」先验表，需自建，无现成结果可引；A1 中古音重构 → 若需标注中古读音</td></tr>
+    <tr><td class="step">STEP 2<br>意象</td><td>人工抽正/负节点</td><td>C1 NER 自动抽意象；C3 网络低度节点自动识别负节点；C2 义原映射算意象距离；<b>C5 可画性评分做前置分流</b>；B5 用典识别补「解典」缺口</td></tr>
+    <tr><td class="step">STEP 3<br>韵味</td><td>二十四诗品稀疏画像、反差度 ρ、留白熵 H</td><td><b>D4 吟诵 F0 曲线给「韵味」一个有物理量纲的抓手</b>；D3 力动态给 ρ 一个语言学解释；D5 已有熵/困惑度的实证可引用</td></tr>
+    <tr><td class="step">STEP 4<br>句法</td><td>无（靠人读）</td><td>B2 依存解析（UD-Kanbun / guwencombo）解决「孤舟蓑笠翁」这类歧义；B3 对仗检测决定镜头是否该对称；B4 互文检测接「背景经历 → 文本」</td></tr>
+    <tr><td class="step">STEP 5<br>情感轨迹</td><td>曲率峰值定位「转」</td><td>D2 高斯过程回归给轨迹加不确定度；PELT 变点检测与曲率法互为交叉验证。<b>注意：此层两轮均无外部基线</b></td></tr>
+    <tr><td class="step">STEP 6<br>构图</td><td>能量函数最小化</td><td>E2 CCLAP 的可控生成思路可借；最优传输/图匹配仍为空白，需自建</td></tr>
+    <tr><td class="step">STEP 7<br>时间轴</td><td>节拍表 + 静默预算</td><td>E3 ConCLVD 的帧间一致性方案可作对照；<b>E4 LivePoem 已不能作为「按诗句边界对齐」的印证</b>（该说法已撤回）</td></tr>
+    <tr><td class="step">作者层</td><td>人工撰写背景</td><td>F1 Burrows' Delta + F2 NCD 算风格距离（建议先跑 NCD 作廉价基线）；F5 交游网络、F6 地理统计补上下文；F7 历时语义对齐去除时代干扰；<b>F8 编年仍无方案</b></td></tr>
+  </tbody>
+</table>
+
+<footer>
+  <b>复核方法与边界</b>
+  <p style="margin:8px 0 0">
+    本版对第一轮的每条引用做了逐条回溯，优先核对论文标题、作者、年份、venue 与摘要原文。凡标注「确认」者，指标题与核心描述均可核到；凡标注「无法确认」者，指关键数字或细节在可获取的摘要中找不到，<b>不等于该论文有误</b>，只说明不能作为论据使用。
+    「空白」的含义已在本版收紧为：<b>完全没有人碰过</b>；若只是「没人为这个任务做过」，一律标为「部分相关」。
+    成熟度记号：★★★ 有大量实证 · ★★☆ 有人做过、需适配 · ★☆☆ 仅零星单一工作 · ☆☆☆ 未发现。
+  </p>
+  <ol>
+    <li>Luo &amp; Sun (2025). Phonetic Reconstruction of the Consonant System of Middle Chinese via Mixed Integer Optimization. <a href="https://arxiv.org/abs/2502.04625">arXiv 2502.04625</a></li>
+    <li>游维 (2007). 基于遗传算法的宋词自动生成研究. 厦门大学硕士学位论文</li>
+    <li>Han et al. (2026). Jiuge-Tuiqiao: An Interpretable Human-AI System for Classical Chinese Poetry Refinement. <a href="https://arxiv.org/abs/2608.23098">arXiv 2608.23098</a></li>
+    <li>Baley, J. (2025). Automatic detection of phonological change in Chinese rhymed corpora. <i>Language and Linguistics</i> 26(4). DOI 10.1075/lali.00246.bal</li>
+    <li>Halle, M. &amp; Keyser, S. J. (1971). English Stress: Its Form, Its Growth, and Its Role in Verse. Harper &amp; Row</li>
+    <li>Kurzynski, Xu &amp; Feng (2025). The Game of Keys and Queries: Enhancing Parallelism Detection in Classical Chinese Poetry with Symbolic Networks. NLP4DH. <a href="https://zenodo.org/records/14584657">Zenodo 14584657</a></li>
+    <li>Kurzynski (2026). From Character to Poem: Nested Contexts and Scalar Limits of Parallelism Detection in Classical Chinese Poetry. <i>Journal of Open Humanities Data</i> 12(1)</li>
+    <li>Beyond Similarity（古典中文历史文本互文性）. <a href="https://arxiv.org/html/2607.27595">arXiv 2607.27595</a></li>
+    <li>Zhou, Wang &amp; Wang (2022). Named Entity Recognition of Ancient Poems Based on Albert-BiLSTM-MHA-CRF Model. <i>Wireless Communications and Mobile Computing</i></li>
+    <li>OpenHowNet. <a href="https://openhownet.thunlp.org/about_hownet">openhownet.thunlp.org</a></li>
+    <li>古诗词图谱的构建及分析研究. 中科院 ICT. <a href="https://crad.ict.ac.cn/fileJSJYJYFZ/journal/article/jsjyjyfz/HTML/2020-6-1252.shtml">计算机研究与发展</a></li>
+    <li>Sun, Qiu &amp; Huang (2019). VCWE: Visual Character-Enhanced Word Embeddings. NAACL 2019. <a href="https://arxiv.org/html/1902.08795v2">arXiv 1902.08795</a></li>
+    <li>TangPoetryBench（唐诗意象图像基准）. <a href="https://arxiv.org/html/2608.11452">arXiv 2608.11452</a></li>
+    <li>Character Distributions of Classical Chinese Literary Texts: Zipf's Law, Genres, and Epochs. <a href="https://arxiv.org/pdf/1709.05587v1">arXiv 1709.05587</a></li>
+    <li>Sentiment analysis of classical Chinese literature（PLOS ONE）</li>
+    <li>融合显性知识和隐性知识的古诗情感分析. 北京大学学报</li>
+    <li>中国古典诗词意象张力与情感变迁互动探析：力动态视角</li>
+    <li>五绝吟诵韵律声学分析. <a href="https://pdf.hanspub.org/ml_2915682.pdf">hanspub ml_2915682</a></li>
+    <li>Ma, Yao &amp; Haensch. Capabilities and Evaluation Biases of LLMs in Classical Chinese Poetry Generation. ACL 2026 Findings. <a href="https://arxiv.org/abs/2510.15313">arXiv 2510.15313</a></li>
+    <li>Yuan et al. Learning to Generate Poetic Chinese Landscape Painting with Calligraphy. <a href="https://arxiv.org/abs/2305.04719">arXiv 2305.04719</a></li>
+    <li>Wang et al. (2023). CCLAP: Controllable Chinese Landscape Painting Generation via Latent Diffusion Model. ICME 2023. <a href="https://arxiv.org/abs/2304.04156">arXiv 2304.04156</a></li>
+    <li>Liu et al. (2024). ConCLVD: Controllable Chinese Landscape Video Generation via Diffusion Model. <a href="https://arxiv.org/abs/2404.12903">arXiv 2404.12903</a></li>
+    <li>Liang, Ma, Hopkins &amp; Wang (2025). LivePoem. IJCAI 2025. <a href="https://www.ijcai.org/proceedings/2025/1145.pdf">proceedings/2025/1145</a></li>
+    <li>Orekhov, B. (2024). How does Burrows' Delta work on medieval Chinese poetic texts? <a href="https://arxiv.org/abs/2407.08099">arXiv 2407.08099</a></li>
+    <li>Hu, Wang &amp; Wu (2014). Multiple Authors Detection: A Quantitative Analysis of Dream of the Red Chamber. <i>Advances in Adaptive Data Analysis</i>. <a href="https://arxiv.org/abs/1412.6211">arXiv 1412.6211</a></li>
+    <li>Chen &amp; Liu (2026). Predicting Poets' Origins from Verse. <a href="https://arxiv.org/abs/2606.24093">arXiv 2606.24093</a></li>
+    <li>Harvard CBDB. Networks of Exchange Poetry in Late Medieval China</li>
+    <li>Elyasi &amp; Hosseini Moghadam (2019). TDA for Persian Poetry Classification. <a href="https://arxiv.org/pdf/1906.01726v1.pdf">arXiv 1906.01726</a></li>
+  </ol>
+</footer>
+
+</div>
+</body>
+</html>

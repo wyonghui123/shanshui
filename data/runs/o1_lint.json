@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "generated": "2026-10-05T01:01:35",
+    "qset": "o1_qset.json @ v1.3",
+    "facts": "ink_animations.html",
+    "note": "只核对「可静态核对」的证据栏：滤镜归属 / 水纹道数 / 元素存在性。墨色亮度、位置等由 src/o1/o1_judge.mjs 的自动层计算。"
+  },
+  "counts": {
+    "error": 0,
+    "warn": 0
+  },
+  "findings": []
+}

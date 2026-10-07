@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三轮研究综合 · 高价值优化路线图</title>
+<style>
+  :root {
+    --paper: #F6F3EC;
+    --paper-2: #FFFFFF;
+    --ink: #1C1C1C;
+    --ink-2: #4A4640;
+    --ink-3: #8A8578;
+    --line: rgba(28, 28, 28, 0.14);
+    --line-2: rgba(28, 28, 28, 0.07);
+    --zhu: #A83A2C;
+    --zhu-soft: rgba(168, 58, 44, 0.10);
+    --qing: #3E5C76;
+    --qing-soft: rgba(62, 92, 118, 0.10);
+    --jin: #B08430;
+    --jin-soft: rgba(176, 132, 48, 0.10);
+    --lv: #4E6B4A;
+    --lv-soft: rgba(78, 107, 74, 0.10);
+    --serif: "Songti SC", "STSong", "SimSun", "Noto Serif SC", Georgia, serif;
+    --sans: "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--sans); font-size: 14px; line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 52px 30px 96px; }
+
+  header { border-bottom: 1px solid var(--line); padding-bottom: 28px; margin-bottom: 34px; }
+  .eyebrow { font-size: 12px; letter-spacing: .22em; color: var(--ink-3); text-transform: uppercase; margin-bottom: 18px; }
+  h1 { font-family: var(--serif); font-size: 31px; font-weight: 600; margin: 0 0 10px; letter-spacing: .04em; }
+  .sub { color: var(--ink-3); font-size: 13px; max-width: 800px; }
+  .sub b { color: var(--ink-2); }
+  .chain { display: flex; gap: 8px; flex-wrap: wrap; margin: 18px 0 0; }
+  .chain .st { font-size: 12px; font-family: var(--mono); padding: 4px 11px; border-radius: 999px; border: 1px solid var(--line); background: var(--paper-2); color: var(--ink-3); }
+  .chain .st.now { color: var(--paper-2); background: var(--ink); border-color: var(--ink); }
+
+  h2 { font-family: var(--serif); font-size: 20px; font-weight: 600; margin: 50px 0 6px; letter-spacing: .03em; display: flex; align-items: baseline; gap: 12px; }
+  h2 .n { font-family: var(--mono); font-size: 12px; color: var(--zhu); border: 1px solid rgba(168,58,44,.32); border-radius: 4px; padding: 1px 7px; flex: none; }
+  .lede { color: var(--ink-3); font-size: 13px; margin: 0 0 20px; max-width: 800px; }
+
+  table.grid { width: 100%; border-collapse: collapse; font-size: 12.5px; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin: 6px 0 4px; }
+  table.grid th { background: rgba(28,28,28,.035); font-weight: 600; text-align: left; padding: 10px 13px; font-size: 12px; color: var(--ink-2); border-bottom: 1px solid var(--line); }
+  table.grid td { padding: 9px 13px; border-bottom: 1px solid var(--line-2); vertical-align: top; color: var(--ink-2); }
+  table.grid tr:last-child td { border-bottom: none; }
+  table.grid td.id { font-family: var(--mono); font-size: 11.5px; color: var(--zhu); white-space: nowrap; }
+  .ok { color: var(--lv); font-weight: 600; }
+  .bad { color: var(--zhu); font-weight: 600; }
+  .warn { color: var(--jin); font-weight: 600; }
+  .mut { color: var(--ink-3); }
+
+  .kpi { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 18px 0 6px; }
+  .kpi .box { border: 1px solid var(--line); border-radius: 8px; background: var(--paper-2); padding: 14px 16px; }
+  .kpi .box .v { font-family: var(--serif); font-size: 26px; font-weight: 600; line-height: 1.2; }
+  .kpi .box .v.zhu { color: var(--zhu); }
+  .kpi .box .v.lv { color: var(--lv); }
+  .kpi .box .v.jin { color: var(--jin); }
+  .kpi .box .k { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+
+  .card { border: 1px solid var(--line); border-radius: 8px; background: var(--paper-2); padding: 15px 18px; margin-bottom: 12px; }
+  .card.p0 { border-left: 3px solid var(--lv); }
+  .card.p1 { border-left: 3px solid var(--jin); }
+  .card.p2 { border-left: 3px solid var(--ink-3); }
+  .card-h { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
+  .card-h .id { font-family: var(--mono); font-size: 11.5px; color: var(--ink-3); flex: none; }
+  .card-h h3 { font-family: var(--serif); font-size: 16px; font-weight: 600; margin: 0; flex: none; }
+  .card dl { margin: 8px 0 0; display: grid; grid-template-columns: 82px 1fr; gap: 4px 14px; }
+  .card dt { font-size: 12px; color: var(--ink-3); padding-top: 1px; }
+  .card dd { margin: 0; font-size: 13px; color: var(--ink-2); }
+  .card dd.how { font-family: var(--mono); font-size: 12px; color: var(--qing); line-height: 1.7; }
+  .card dd.to-us::before { content: "→ "; color: var(--zhu); }
+  .card dd.limit::before { content: "⚠ "; color: var(--jin); }
+
+  .tag { display: inline-block; font-family: var(--mono); font-size: 10.5px; padding: 1px 6px; border-radius: 999px; border: 1px solid; vertical-align: 1px; margin-left: 6px; }
+  .tag.p0 { color: var(--lv); border-color: rgba(78,107,74,.36); background: var(--lv-soft); }
+  .tag.p1 { color: var(--jin); border-color: rgba(176,132,48,.40); background: var(--jin-soft); }
+  .tag.p2 { color: var(--ink-3); border-color: var(--line); background: rgba(28,28,28,.04); }
+  .tag.src { color: var(--qing); border-color: rgba(62,92,118,.36); background: var(--qing-soft); }
+
+  .phase { border: 1px solid var(--line); border-radius: 8px; background: var(--paper-2); padding: 16px 18px; margin-bottom: 12px; }
+  .phase .ph-h { display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
+  .phase .ph-n { font-family: var(--mono); font-size: 11.5px; color: var(--paper-2); background: var(--ink); border-radius: 4px; padding: 2px 9px; }
+  .phase h3 { font-family: var(--serif); font-size: 16px; margin: 0; font-weight: 600; }
+  .phase .goal { font-size: 12.5px; color: var(--ink-3); margin: 0 0 10px; }
+  .phase ul { margin: 0; padding-left: 18px; font-size: 13px; color: var(--ink-2); }
+  .phase li { margin-bottom: 4px; }
+  .phase li b { color: var(--ink); }
+
+  .matrix { display: grid; grid-template-columns: 34px 1fr 1fr; grid-template-rows: 26px 1fr 1fr; gap: 8px; margin: 18px 0 6px; }
+  .matrix .ax { font-size: 11px; color: var(--ink-3); font-family: var(--mono); display: flex; align-items: center; justify-content: center; }
+  .matrix .cell { border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; background: var(--paper-2); min-height: 96px; }
+  .matrix .cell .t { font-size: 12px; font-weight: 600; margin-bottom: 6px; }
+  .matrix .cell .b { font-size: 12px; color: var(--ink-2); }
+  .matrix .cell.do { border-left: 3px solid var(--lv); }
+  .matrix .cell.later { border-left: 3px solid var(--jin); }
+  .matrix .cell.no { border-left: 3px solid var(--zhu); }
+
+  .verdict { border: 1px solid var(--line); border-left: 3px solid var(--zhu); border-radius: 8px; background: var(--paper-2); padding: 18px 20px; margin: 20px 0; }
+  .verdict h3 { font-family: var(--serif); font-size: 16px; margin: 0 0 8px; font-weight: 600; }
+  .verdict p { margin: 0 0 10px; font-size: 13.5px; color: var(--ink-2); }
+  .verdict p:last-child { margin-bottom: 0; }
+  .verdict ol { margin: 0; padding-left: 20px; }
+  .verdict li { margin-bottom: 8px; font-size: 13.5px; color: var(--ink-2); }
+
+  a { color: var(--qing); text-decoration: none; border-bottom: 1px solid rgba(62,92,118,.28); }
+  a:hover { border-bottom-color: var(--qing); }
+  footer { margin-top: 60px; padding-top: 22px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--ink-3); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Synthesis · Three Rounds → Actionable Roadmap</div>
+  <h1>三轮研究综合 · 高价值优化路线图</h1>
+  <div class="sub">
+    把三轮调研（普查 → 核验 → 攻空白）的产出收敛成一张可执行的优化清单：<b>每项都标明解决什么根因、依据哪条模型、成本多少、怎么验证</b>。核心结论一句话：<b>高价值优化不在「再加模型」，而在补齐三个洞——不可度量、不可规模、判据不硬</b>。
+  </div>
+  <div class="chain">
+    <span class="st">一轮 · 普查</span>
+    <span class="st">二轮 · 核验</span>
+    <span class="st">三轮 · 攻空白</span>
+    <span class="st now">综合 · 路线图</span>
+  </div>
+</header>
+
+<h2><span class="n">00</span>诊断：真正的瓶颈不是「模型不够」</h2>
+<p class="lede">先摆三个数字。它们决定了优化的方向。</p>
+
+<div class="kpi">
+  <div class="box"><div class="v">58</div><div class="k">三轮梳理出的数学模型总数<br>（二轮 36 + 三轮 22）</div></div>
+  <div class="box"><div class="v zhu">&lt;5</div><div class="k">真正进入现有链路的模型<br>（格律 CSP、意象网络、熵、共享隐变量）</div></div>
+  <div class="box"><div class="v jin">2</div><div class="k">目前能产出的成品动画数量<br>且全靠手工</div></div>
+</div>
+
+<p class="lede">这个落差说明：<b>模型不是稀缺资源，把模型接进链路的能力才是</b>。而接不进去的原因不是懒，是三个结构性障碍：</p>
+
+<table class="grid">
+  <thead><tr><th style="width:16%">瓶颈</th><th style="width:26%">具体表现</th><th style="width:30%">根因</th><th>三轮里对应的解法</th></tr></thead>
+  <tbody>
+    <tr>
+      <td class="bad">不可度量</td>
+      <td>「这个动画好不好」只能靠人看；用户曾反馈<b>「没有看懂这个画」</b>，我们却无法定位是构图、意象还是节奏出的问题</td>
+      <td>项目没有任何评估层。改进全靠手感，改了也无法判断是变好还是变坏</td>
+      <td>T19 TIFA 问答式忠实度 + T18 FIFA 时序检查 + 成对盲评</td>
+    </tr>
+    <tr>
+      <td class="bad">不可规模</td>
+      <td>每首诗都要人工抽正/负节点、手工排构图。做到第 3 首就会崩</td>
+      <td>STEP 2 意象层是纯人工；STEP 6 构图是手工调参</td>
+      <td>T15 TopWORDS-Poetry 格律先验 + C1 NER + C5 可画性门控 + T6 最优传输构图</td>
+    </tr>
+    <tr>
+      <td class="bad">判据不硬</td>
+      <td>「负节点」靠人标；镜头时长凭手感；「转」的位置只有一个几何量（曲率）</td>
+      <td>关键决策缺少可复核、可交叉验证的量化判据</td>
+      <td>C3 低度节点 + T6 未运输质量（负节点双判据）；T2 Cutting 阶段系数（节奏）；T3 Dramatis 悬念值（转）</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="verdict">
+  <h3>由此得到本路线图的第一原则</h3>
+  <p><b>先做「让一切可比较」的事，再做「让质量变高」的事。</b>没有评估基线，后面所有优化都无法验证——这正是三轮研究攒了 58 个模型却只用了 5 个的根本原因：<b>不是不想接，是接上去也不知道有没有变好</b>。</p>
+</div>
+
+<h2><span class="n">01</span>优化清单（按价值排序）</h2>
+<p class="lede">8 项优化，按「收益 × 可行性 × 是否解锁后续」排序。每项都能追到具体的模型编号。</p>
+
+<div class="card p0">
+  <div class="card-h"><span class="id">O1</span><h3>评估闭环：给项目装上仪表盘</h3><span class="tag p0">P0</span><span class="tag src">T19 / T18 / T20</span></div>
+  <dl>
+    <dt>解决根因</dt><dd class="to-us">不可度量。直接回应「没有看懂这个画」——把「看不懂」拆成可定位的失败项（哪个意象没画出来、哪个空间关系反了、哪句顺序错了）。</dd>
+    <dt>做法</dt><dd class="how">① 为每首诗自动生成问题集（意象存在性 / 属性 / 空间关系 / 时序）；<br>② 用 VQA 在动画关键帧上作答，得分 = 通过率；<br>③ 时序维度用 FIFA 的「时间幻觉」检查（「朝辞白帝 → 暮到江陵」顺序是否画反）；<br>④ 主观维度用成对盲评 + Bradley–Terry 汇总。</dd>
+    <dt>成本</dt><dd>低。无需训练，现成 VQA/LLM 即可；主要工作量在「问题集模板」的设计。</dd>
+    <dt>验证</dt><dd>用现有两首动画跑一遍，看分数是否与你的直觉一致。<b>若一致，说明指标有效，可以开始用它指导优化</b>；若不一致，说明问题集需要修——这本身就是有价值的发现。</dd>
+    <dt>风险</dt><dd class="limit">VQA 对水墨风格（留白、淡墨）的识别率未测；需先做一次小规模校准。</dd>
+  </dl>
+</div>
+
+<div class="card p0">
+  <div class="card-h"><span class="id">O2</span><h3>意象抽取半自动化：把「人工抽节点」降级为「人工复核」</h3><span class="tag p0">P0</span><span class="tag src">T15 / C1 / C5 / B2</span></div>
+  <dl>
+    <dt>解决根因</dt><dd class="to-us">不可规模。这是「只能做两首」的第一道卡口。</dd>
+    <dt>做法</dt><dd class="how">① 分词用 TopWORDS-Poetry 的<b>格律先验</b>（比通用分词准，还能识别典故）；<br>② 意象用 C1 的 Albert-BiLSTM-MHA-CRF 抽名词实体；<br>③ 歧义用 B2 依存解析消解（「孤舟蓑笠翁」到底是一个还是两个意象）；<br>④ <b>可画性门控</b>（C5）前置分流：可画性低的句子直接标记「此句不宜实写，应留白/虚写」。</dd>
+    <dt>成本</dt><dd>中。TopWORDS-Poetry 需接入格律模块；依存解析有现成工具（UD-Kanbun / guwencombo）。</dd>
+    <dt>验证</dt><dd>拿《江雪》《早发白帝城》当测试集，比对自动结果与人工标注，算准召率。<b>目标不是全自动，是把人工工作量压到「复核」级别</b>。</dd>
+  </dl>
+</div>
+
+<div class="card p0">
+  <div class="card-h"><span class="id">O3</span><h3>负节点双判据：把「留白」从手感变成判据</h3><span class="tag p0">P0</span><span class="tag src">C3 + T6</span></div>
+  <dl>
+    <dt>解决根因</dt><dd class="to-us">判据不硬。负节点（「千山鸟飞绝」的鸟、缺席的人踪）是我们水墨美学的核心，但目前靠人标，无法复核、无法复现。</dd>
+    <dt>做法</dt><dd class="how">判据一（网络）：意象共现网络中的<b>低度节点</b>——出现但几乎不与画面元素相连。<br>判据二（传输）：构图 OT 求解后<b>未被运输的质量</b>（untransported mass）——被诗提及却不该被画出的意象。<br>两条独立判据交叉验证，一致才判定为负节点。</dd>
+    <dt>成本</dt><dd>低。判据一基于已有的 C3 网络；判据二是 O4 的副产品。</dd>
+    <dt>验证</dt><dd>在《江雪》上跑，看是否自动标出「鸟」「人踪」，且不误伤「孤舟」「寒江」。</dd>
+    <dt>为什么排 P0</dt><dd class="to-us"><b>这是本项目最有辨识度的一点</b>——把「留白」这个最玄的审美概念，变成两条可计算的判据。它是区别于 Polaca / LivePoem 那种端到端黑箱的核心资产。</dd>
+  </dl>
+</div>
+
+<div class="card p1">
+  <div class="card-h"><span class="id">O4</span><h3>构图求解器：用最优传输替掉手工调参</h3><span class="tag p1">P1</span><span class="tag src">T6 / T7</span></div>
+  <dl>
+    <dt>解决根因</dt><dd class="to-us">不可规模 + 判据不硬。用户反馈「空间上很乱」，根因是构图靠手工试错，没有可求解的目标函数。</dd>
+    <dt>做法</dt><dd class="how">意象集合 X → 构图槽位 Y（近景/中景/远景三层）的部分最优传输：<br>T* = argmin⟨T, C⟩，C = w₁·语义不匹配 + w₂·景深不匹配 + w₃·负节点惩罚<br>用 Sinkhorn 求熵正则化解；输出每个意象的落位 + 未运输质量。</dd>
+    <dt>成本</dt><dd>中。代价矩阵起步阶段用 CLIP 嵌入手工设计，无需标注。</dd>
+    <dt>验证</dt><dd>与现有手工构图对比，看是否消除「空间混乱」；并把未运输质量与 O3 的判据一交叉验证。</dd>
+    <dt>风险</dt><dd class="limit">水墨的「留白」是主动构图语言，OT 的边际约束要显式允许「空槽位」，否则会把画面填满。</dd>
+  </dl>
+</div>
+
+<div class="card p1">
+  <div class="card-h"><span class="id">O5</span><h3>节奏实证系数：让镜头时长可解释</h3><span class="tag p1">P1</span><span class="tag src">T2 / T1 / T3</span></div>
+  <dl>
+    <dt>解决根因</dt><dd class="to-us">判据不硬。目前镜头时长凭手感，无法回答「为什么这个镜头 3.5 秒」——而这恰恰是我们宣称优于黑箱的地方。</dd>
+    <dt>做法</dt><dd class="how">① 六弧型结构先验（T1）解决绝句观测点过少导致的过拟合：Ê = λ·E_prior + (1−λ)·E_obs；<br>② 阶段系数（T2）把起承转合映射到 setup/complication/climax：d_i = d_base·g(stage_i)·(1+α|κ_i|)；<br>③ 悬念值（T3）给「转」一个语义理由，与曲率 κ 交叉验证。</dd>
+    <dt>成本</dt><dd>低。纯参数调整，无需新模型训练。</dd>
+    <dt>验证</dt><dd>把当前两首动画的镜头时长代入公式，看回算值是否接近现有人工值。<b>接近 → 说明公式捕捉到了你的直觉，可固化；偏差大 → 说明你的直觉里有公式没有的东西，值得深挖。</b></dd>
+  </dl>
+</div>
+
+<div class="card p1">
+  <div class="card-h"><span class="id">O6</span><h3>句法消歧：补上 STEP 4 的空缺</h3><span class="tag p1">P1</span><span class="tag src">B2</span></div>
+  <dl>
+    <dt>解决根因</dt><dd class="to-us">判据不硬。STEP 4 目前完全空缺（靠人读），而句法歧义直接决定构图元素的数量与关系。</dd>
+    <dt>做法</dt><dd class="how">接入 UD-Kanbun / guwencombo 做依存解析，输出可复核的依存树。</dd>
+    <dt>成本</dt><dd>低。工具现成，是 O2 的顺带产出。</dd>
+    <dt>验证</dt><dd>「孤舟蓑笠翁」这类歧义句，看解析器给的是「孤舟上的蓑笠翁」还是两个并列意象，与你的判断比对。</dd>
+  </dl>
+</div>
+
+<div class="card p2">
+  <div class="card-h"><span class="id">O7</span><h3>三模态共享隐变量（研究轨）</h3><span class="tag p2">P2</span><span class="tag src">T9 / T10 / T11</span></div>
+  <dl>
+    <dt>判断</dt><dd class="limit"><b>现在不做端到端训练。</b>三轮确认它「骨架有据、组合自建、无先例可比对」。在没有 O1 评估基线之前启动，会把项目拖进无法判断好坏的调参黑洞。</dd>
+    <dt>启动条件</dt><dd>O1 跑通且稳定（有可复现的分数）；有至少 20 首诗的标注数据；否则一律不碰。</dd>
+    <dt>如果启动</dt><dd class="how">InfoNCE 三对两两对齐；负样本用「同诗人其他诗作」（Burrows' Delta 挑最像的）逼模型学单首诗的独特性，而非「李白风格」这种粗标签。</dd>
+  </dl>
+</div>
+
+<div class="card p2">
+  <div class="card-h"><span class="id">O8</span><h3>编年与作者背景（研究轨，且要退让）</h3><span class="tag p2">P2</span><span class="tag src">T13 / T16</span></div>
+  <dl>
+    <dt>判断</dt><dd class="limit">「作者写作背景与经历」是需求第一条，但也是最没有数学模型的一条。</dd>
+    <dt>做法</dt><dd class="how">借 Enoch 的范式（特征 + 回归 + 不确定度），但<b>不做年代点估计</b>——中文古诗没有碳十四那种硬标签。退让为<b>「年代区间约束满足」</b>：把用典年代上限、唱和对象生卒、地名建制时间写成不等式，用 CSP 求可行区间。<br>因果部分只画一张 DAG 写清混淆项（时代、体裁、交游），<b>明确不作因果主张</b>。</dd>
+    <dt>价值</dt><dd class="to-us">诚实比准确更值钱：给出「这首诗作于公元 X–Y 年之间」并说明约束来源，比给一个假精确的年份可信得多。</dd>
+  </dl>
+</div>
+
+<h2><span class="n">02</span>三阶段实施顺序</h2>
+<p class="lede">顺序不是按优先级简单排列，而是按<b>依赖关系</b>：后一阶段依赖前一阶段的产出。</p>
+
+<div class="phase">
+  <div class="ph-h"><span class="ph-n">阶段一</span><h3>可度量</h3></div>
+  <p class="goal">目标：让「变好还是变坏」可判断。这是所有后续工作的前置条件。</p>
+  <ul>
+    <li><b>O1 评估闭环</b> —— 先给现有两首动画建基线分数</li>
+    <li>产出：问题集模板 + 自动评分脚本 + 两首动画的基线报告</li>
+  </ul>
+</div>
+
+<div class="phase">
+  <div class="ph-h"><span class="ph-n">阶段二</span><h3>可规模</h3></div>
+  <p class="goal">目标：把「人工抽节点、手工构图」变成「自动 + 复核」，从 2 首走向 20 首。</p>
+  <ul>
+    <li><b>O2 意象半自动化</b>（含 O6 句法消歧，是顺带产出）</li>
+    <li><b>O3 负节点双判据</b> —— 依赖 O2 的意象输出</li>
+    <li>产出：一条「输入诗 → 意象表 + 正负节点标注」的自动流水线，人工只做复核</li>
+  </ul>
+</div>
+
+<div class="phase">
+  <div class="ph-h"><span class="ph-n">阶段三</span><h3>可调优</h3></div>
+  <p class="goal">目标：把构图与节奏从「手感」升级为「可求解、可解释」。此时 O1 的分数才能验证优化是否有效。</p>
+  <ul>
+    <li><b>O4 构图求解器</b> —— 同时产出 O3 的判据二</li>
+    <li><b>O5 节奏实证系数</b></li>
+    <li>产出：用 O1 的分数对比「优化前 / 优化后」，形成可复现的改进记录</li>
+  </ul>
+</div>
+
+<div class="phase">
+  <div class="ph-h"><span class="ph-n">研究轨</span><h3>O7 / O8</h3></div>
+  <p class="goal">与主线并行，但<b>不占用主线资源</b>，且各自有明确的启动条件。</p>
+  <ul>
+    <li>O7 启动条件：O1 稳定 + 20 首标注数据</li>
+    <li>O8 启动条件：仅当「作者背景」叙事成为用户可感知的短板时</li>
+  </ul>
+</div>
+
+<h2><span class="n">03</span>成本—收益矩阵</h2>
+<div class="matrix">
+  <div class="ax"></div>
+  <div class="ax">低成本</div>
+  <div class="ax">高成本</div>
+
+  <div class="ax">高收益</div>
+  <div class="cell do">
+    <div class="t ok">立即做（甜点区）</div>
+    <div class="b"><b>O1</b> 评估闭环<br><b>O3</b> 负节点双判据<br><b>O5</b> 节奏实证系数<br><b>O6</b> 句法消歧</div>
+  </div>
+  <div class="cell later">
+    <div class="t warn">规划做</div>
+    <div class="b"><b>O2</b> 意象半自动化<br><b>O4</b> 构图求解器</div>
+  </div>
+
+  <div class="ax">低收益</div>
+  <div class="cell later">
+    <div class="t warn">顺手做</div>
+    <div class="b">参数调优、文档补全</div>
+  </div>
+  <div class="cell no">
+    <div class="t bad">不做（陷阱区）</div>
+    <div class="b"><b>O7</b> 端到端三模态训练<br><b>O8</b> 年代点估计<br>因果主张</div>
+  </div>
+</div>
+
+<h2><span class="n">04</span>明确不做（反推荐）</h2>
+<p class="lede">三轮研究最大的价值，一半在于告诉我们「该做什么」，另一半在于告诉我们「什么不能碰」。</p>
+<table class="grid">
+  <thead><tr><th style="width:26%">不要做</th><th>理由</th></tr></thead>
+  <tbody>
+    <tr><td class="bad">现在做端到端三模态生成</td><td>没有评估基线、没有数据、不可解释。<b>会把项目从「可解释链路」变成又一个黑箱</b>——而「能回答为什么这个镜头 3.5 秒」正是我们唯一的差异点。</td></tr>
+    <tr><td class="bad">做年代点估计</td><td>中文古诗没有硬标签，任何点估计都是假精确。退让为「区间约束」才有意义。</td></tr>
+    <tr><td class="bad">声称「经历 → 风格」的因果</td><td>时代、体裁、交游三重混淆无法消除。只能做准因果描述，并在论文/文档里写明局限。</td></tr>
+    <tr><td class="bad">盲目追 SOTA 生成模型</td><td>Polaca / CCLAP / ConCLVD / LivePoem 都能生成，但都是黑箱。追它们的画质等于放弃我们的核心优势。</td></tr>
+    <tr><td class="bad">把「留白」当噪声去掉</td><td>像素级的「时序一致性」（如 Tune-A-Video 的思路）会把留白当成不一致而抹平。<b>留白是构图语言，不是缺陷。</b></td></tr>
+  </tbody>
+</table>
+
+<h2><span class="n">05</span>如果只做三件事</h2>
+<div class="verdict">
+  <h3>收敛：三个最高杠杆点</h3>
+  <ol>
+    <li><b>O1 评估闭环</b> —— 它是唯一的「元优化」：让其余所有优化从「凭感觉」变成「可验证」。<b>不做它，后面全是玄学。</b></li>
+    <li><b>O2 意象半自动化</b> —— 它是从「作品」到「工具」的唯一通道。没有它，项目永远停在两首手工动画。</li>
+    <li><b>O3 负节点双判据</b> —— 它是把「留白」这个最玄的审美概念变成可计算资产的唯一路径，也是本项目区别于所有黑箱方案的核心。</li>
+  </ol>
+  <p>这三件事的共同点：<b>都不需要训练新模型，都能在现有两首动画上立即验证，且互为前置</b>。做完这三件，项目就从「一个漂亮的 demo」变成「一个可测量、可扩展、有独特判据的系统」——这时再谈 O4/O5/O7 才有意义。</p>
+</div>
+
+<footer>
+  <b>本文与前序文档的关系</b>
+  <p style="margin:8px 0 0">
+    三轮调研原文：<a href="poetics_math_models.html">《诗文内容提取的数学模型 · 二轮复核版》</a>（36 个模型 + 核验明细）、<a href="poetics_math_models_round3.html">《第三轮 · 攻空白（跨域迁移）》</a>（22 个跨域方法 + 四份迁移草案）。
+    链路推演：<a href="../../dist/pipelines/jiangxue_pipeline.html">《江雪》全链路</a>、<a href="../../dist/pipelines/baidicheng_pipeline.html">《早发白帝城》全链路</a>。实现：<a href="../../dist/animation/ink_animations.html">水墨动画</a>。
+  </p>
+  <p style="margin:8px 0 0">
+    本文只做综合与排序，不引入新引用；所有依据均指向上述三轮文档中已核验的条目（O1→T19/T18、O2→T15/C1/C5/B2、O3→C3/T6、O4→T6/T7、O5→T1/T2/T3、O6→B2、O7→T9/T10/T11、O8→T13/T16）。
+  </p>
+</footer>
+
+</div>
+</body>
+</html>

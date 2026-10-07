@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>绝句配音样音 · 盲听裁决（静夜思 / 江雪 / 早发白帝城）</title>
+<style>
+  :root {
+    --paper: #F6F3EC;
+    --paper-2: #FFFFFF;
+    --ink: #1C1C1C;
+    --ink-2: #4A4640;
+    --ink-3: #8A8578;
+    --line: rgba(28, 28, 28, 0.14);
+    --line-2: rgba(28, 28, 28, 0.07);
+    --zhu: #A83A2C;
+    --zhu-soft: rgba(168, 58, 44, 0.10);
+    --qing: #3E5C76;
+    --qing-soft: rgba(62, 92, 118, 0.10);
+    --jin: #B08430;
+    --jin-soft: rgba(176, 132, 48, 0.10);
+    --serif: "Songti SC", "STSong", "SimSun", "Noto Serif SC", Georgia, serif;
+    --sans: "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--sans); font-size: 14px; line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 52px 28px 96px; }
+
+  header { border-bottom: 1px solid var(--line); padding-bottom: 26px; margin-bottom: 40px; }
+  .eyebrow { font-size: 12px; letter-spacing: .22em; color: var(--ink-3); text-transform: uppercase; margin-bottom: 16px; }
+  h1 { font-family: var(--serif); font-size: 30px; font-weight: 600; margin: 0 0 8px; letter-spacing: .04em; }
+  .sub { color: var(--ink-3); font-size: 13px; }
+
+  .poem { text-align: center; font-family: var(--serif); font-size: 22px; line-height: 2.1; letter-spacing: .12em;
+          padding: 22px 0; color: var(--ink); }
+  .poem small { display: block; font-size: 12px; color: var(--ink-3); letter-spacing: .3em; margin-bottom: 10px; }
+
+  .card {
+    background: var(--paper-2); border: 1px solid var(--line-2);
+    border-radius: 12px; padding: 20px 24px; margin-bottom: 16px;
+  }
+  .card .c-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; flex-wrap: wrap; }
+  .card h2 { font-family: var(--serif); font-size: 18px; font-weight: 600; margin: 0; }
+  .badge { font-size: 11px; padding: 1px 9px; border-radius: 999px; font-family: var(--mono); }
+  .badge.a { color: var(--qing); border: 1px solid rgba(62,92,118,.4); background: var(--qing-soft); }
+  .badge.b { color: var(--jin); border: 1px solid rgba(176,132,48,.45); background: var(--jin-soft); }
+  .badge.c { color: var(--zhu); border: 1px solid rgba(168,58,44,.4); background: var(--zhu-soft); }
+
+  .audio-row { display: flex; align-items: center; gap: 14px; margin: 12px 0 4px; }
+  audio { width: 100%; height: 40px; }
+  .meta { color: var(--ink-3); font-size: 12px; }
+  .meta b { color: var(--ink-2); font-weight: 600; }
+
+  .params { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; }
+  .params th { font-size: 11px; color: var(--ink-3); font-weight: 600; text-align: left; padding: 6px 10px;
+               border-bottom: 1px solid var(--line); }
+  .params td { padding: 6px 10px; border-bottom: 1px solid var(--line-2); font-family: var(--mono); font-size: 11.5px; }
+  .params tbody tr:last-child td { border-bottom: none; }
+  .params td.seg { font-family: var(--sans); }
+
+  .verdict {
+    display: flex; gap: 12px; align-items: flex-start;
+    background: var(--paper-2); border: 1px solid var(--line-2);
+    border-left: 3px solid var(--qing); border-radius: 8px; padding: 14px 18px; margin: 14px 0;
+  }
+  .verdict .v-label { font-family: var(--mono); font-size: 11px; color: var(--qing); flex: none; padding-top: 3px; white-space: nowrap; }
+  .verdict p { margin: 0; font-size: 13.5px; }
+
+  .score-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+  .score-table th { text-align: left; font-size: 11.5px; color: var(--ink-3); padding: 8px 10px; border-bottom: 1px solid var(--line); }
+  .score-table td { padding: 10px; border-bottom: 1px solid var(--line-2); vertical-align: top; }
+  .score-table tr:last-child td { border-bottom: none; }
+  input[type=radio] { accent-color: var(--qing); margin-right: 5px; }
+  .stars { color: var(--jin); letter-spacing: 2px; }
+  textarea { width: 100%; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font-family: var(--sans);
+             font-size: 13px; background: var(--paper); min-height: 64px; resize: vertical; }
+  button { border: 1px solid var(--qing); background: var(--qing); color: #fff; font-family: var(--sans);
+           font-size: 13px; padding: 8px 22px; border-radius: 8px; cursor: pointer; }
+  button:hover { opacity: .9; }
+  .out { font-family: var(--mono); font-size: 12px; color: var(--qing); white-space: pre-wrap; margin-top: 10px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Voice Samples · 三首绝句 · 2026-10-02</div>
+  <h1>绝句配音样音 · 盲听裁决</h1>
+  <p class="sub">三首诗的整首样音（edge-tts 逐句合成 + 停顿预算拼接）。每版下方为<b>三段对照</b>：平读 → 吟诵（平长仄短）→ 情感（按诗意定制的情感层）。后处理版已叠满四项「句间衔接」修复：分句渐弱差异化 · 句首滑音 · <b>句间气口</b> · <b>自适应停顿预算</b>。</p>
+  <nav style="margin-top:18px;display:flex;gap:8px;flex-wrap:wrap">
+    <a href="#jys" style="text-decoration:none;font-size:12.5px;padding:4px 14px;border-radius:999px;border:1px solid var(--line);color:var(--qing);background:var(--qing-soft)">静夜思</a>
+    <a href="#jx" style="text-decoration:none;font-size:12.5px;padding:4px 14px;border-radius:999px;border:1px solid var(--line);color:var(--qing);background:var(--qing-soft)">江雪</a>
+    <a href="#bd" style="text-decoration:none;font-size:12.5px;padding:4px 14px;border-radius:999px;border:1px solid var(--line);color:var(--qing);background:var(--qing-soft)">早发白帝城</a>
+  </nav>
+</header>
+
+<a id="jys"></a>
+<header style="border-bottom:none;padding-bottom:0;margin-bottom:6px">
+  <div class="eyebrow">Voice Samples · 静夜思 · 2026-10-02</div>
+  <h1>《静夜思》配音样音</h1>
+  <p class="sub">情感预设「悲伤·思念」：放慢 1.11x · 降调 0.93x · 音域压缩 0.72x · 颤音 5.2Hz · 气声 2–6kHz。</p>
+</header>
+
+<div class="poem">
+  <small>静夜思 · 李白</small>
+  床前明月光，疑是地上霜。<br>
+  举头望明月，低头思故乡。
+</div>
+
+<div class="card">
+  <div class="c-head"><h2>样音 A · 云健（沉稳男声）</h2><span class="badge a">zh-CN-YunjianNeural</span><span class="meta">22.0s</span></div>
+  <p class="meta">气质：<b>沉稳、偏中年</b>，最接近「李白夜思」的定位。</p>
+  <div class="audio-row"><audio controls preload="metadata" src="../../dist/audio/voice/jys_edge_zh-CN-YunjianNeural_quatrain.mp3"></audio></div>
+  <table class="params">
+    <thead><tr><th>句</th><th>文本</th><th>语速 rate</th><th>音高 pitch</th><th>音量</th><th>前停</th><th>后停</th></tr></thead>
+    <tbody>
+      <tr><td class="seg">起</td><td>床前明月光</td><td>-38%</td><td>-12Hz</td><td>-20%</td><td>0.3s</td><td>1.0s</td></tr>
+      <tr><td class="seg">承</td><td>疑是地上霜</td><td>-42%</td><td>-16Hz</td><td>-30%</td><td>0.6s</td><td>1.5s</td></tr>
+      <tr><td class="seg">转</td><td>举头望明月</td><td>-34%</td><td>0Hz</td><td>-15%</td><td>0.4s</td><td>1.3s</td></tr>
+      <tr><td class="seg">合</td><td>低头思故乡</td><td>-48%</td><td>-16Hz</td><td>-25%</td><td>0.8s</td><td>2.0s</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <div class="c-head"><h2>样音 B · 云希（清朗男声）</h2><span class="badge b">zh-CN-YunxiNeural</span><span class="meta">22.1s</span></div>
+  <p class="meta">气质：<b>年轻、清朗</b>，可对比「少壮诗人」的读法。</p>
+  <div class="audio-row"><audio controls preload="metadata" src="../../dist/audio/voice/jys_edge_zh-CN-YunxiNeural_quatrain.mp3"></audio></div>
+  <table class="params">
+    <thead><tr><th>句</th><th>文本</th><th>语速 rate</th><th>音高 pitch</th><th>音量</th><th>前停</th><th>后停</th></tr></thead>
+    <tbody>
+      <tr><td class="seg">起</td><td>床前明月光</td><td>-38%</td><td>-12Hz</td><td>-20%</td><td>0.3s</td><td>1.0s</td></tr>
+      <tr><td class="seg">承</td><td>疑是地上霜</td><td>-42%</td><td>-16Hz</td><td>-30%</td><td>0.6s</td><td>1.5s</td></tr>
+      <tr><td class="seg">转</td><td>举头望明月</td><td>-34%</td><td>0Hz</td><td>-15%</td><td>0.4s</td><td>1.3s</td></tr>
+      <tr><td class="seg">合</td><td>低头思故乡</td><td>-48%</td><td>-16Hz</td><td>-25%</td><td>0.8s</td><td>2.0s</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <div class="c-head"><h2>样音 C · 云扬（播音男声）</h2><span class="badge c">zh-CN-YunyangNeural</span><span class="meta">19.4s</span></div>
+  <p class="meta">气质：<b>播音腔、偏正式</b>，对照「朗诵会」读法。</p>
+  <div class="audio-row"><audio controls preload="metadata" src="../../dist/audio/voice/jys_edge_zh-CN-YunyangNeural_quatrain.mp3"></audio></div>
+  <table class="params">
+    <thead><tr><th>句</th><th>文本</th><th>语速 rate</th><th>音高 pitch</th><th>音量</th><th>前停</th><th>后停</th></tr></thead>
+    <tbody>
+      <tr><td class="seg">起</td><td>床前明月光</td><td>-38%</td><td>-12Hz</td><td>-20%</td><td>0.3s</td><td>1.0s</td></tr>
+      <tr><td class="seg">承</td><td>疑是地上霜</td><td>-42%</td><td>-16Hz</td><td>-30%</td><td>0.6s</td><td>1.5s</td></tr>
+      <tr><td class="seg">转</td><td>举头望明月</td><td>-34%</td><td>0Hz</td><td>-15%</td><td>0.4s</td><td>1.3s</td></tr>
+      <tr><td class="seg">合</td><td>低头思故乡</td><td>-48%</td><td>-16Hz</td><td>-25%</td><td>0.8s</td><td>2.0s</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <div class="c-head"><h2>三段对照 A · 云健（沉稳男声）</h2><span class="badge a">平读 22.0s → 吟诵 17.2s → 情感 18.2s</span></div>
+  <p class="meta">链路：<b>平长仄短</b>（平 1.35x / 仄 0.85x / 入 0.65x / 韵脚 1.65x）→ <b>句调曲线</b>（起中平微降 · 承低抑 · 转上扬 · 合深降渐弱）→ <b>句间衔接</b>（分句渐弱：起 0 / 承 0.15 / 转 0 / 合 0.55，只收合句 · 句首滑音 250ms，跳进压缩至 ±2 半音 · <b>句间气口</b> 170ms 吸气声，收于下句起音前 90ms · <b>自适应停顿</b> 1.32 / 1.10 / 2.00s）→ <b>情感层</b>（放慢 1.11x · 降调 0.93x · 音域压缩 0.72x · 颤音 5.2Hz · 气声 2–6kHz）。</p>
+  <div class="audio-row"><span class="meta" style="flex:none">平读</span><audio controls preload="metadata" src="../../dist/audio/voice/jys_edge_zh-CN-YunjianNeural_quatrain.mp3"></audio></div>
+  <div class="audio-row"><span class="meta" style="flex:none">吟诵</span><audio controls preload="metadata" src="../../dist/audio/voice/jys_prosody_zh-CN-YunjianNeural.wav"></audio></div>
+  <div class="audio-row"><span class="meta" style="flex:none">情感</span><audio controls preload="metadata" src="../../dist/audio/voice/jys_emotion_sad_zh-CN-YunjianNeural.wav"></audio></div>
+</div>
+
+<div class="card">
+  <div class="c-head"><h2>三段对照 B · 云希（清朗男声）</h2><span class="badge b">平读 22.1s → 吟诵 17.2s → 情感 18.2s</span></div>
+  <p class="meta">同一套参数，听<b>音色差异</b>：清朗声在长音上是否显单薄。</p>
+  <div class="audio-row"><span class="meta" style="flex:none">平读</span><audio controls preload="metadata" src="../../dist/audio/voice/jys_edge_zh-CN-YunxiNeural_quatrain.mp3"></audio></div>
+  <div class="audio-row"><span class="meta" style="flex:none">吟诵</span><audio controls preload="metadata" src="../../dist/audio/voice/jys_prosody_zh-CN-YunxiNeural.wav"></audio></div>
+  <div class="audio-row"><span class="meta" style="flex:none">情感</span><audio controls preload="metadata" src="../../dist/audio/voice/jys_emotion_sad_zh-CN-YunxiNeural.wav"></audio></div>
+</div>
+
+<div class="card">
+  <div class="c-head"><h2>三段对照 C · 云扬（播音男声）</h2><span class="badge c">平读 19.4s → 吟诵 16.7s → 情感 17.7s</span></div>
+  <p class="meta">播音腔 + 吟诵腔是否打架，对照「朗诵会」读法。</p>
+  <div class="audio-row"><span class="meta" style="flex:none">平读</span><audio controls preload="metadata" src="../../dist/audio/voice/jys_edge_zh-CN-YunyangNeural_quatrain.mp3"></audio></div>
+  <div class="audio-row"><span class="meta" style="flex:none">吟诵</span><audio controls preload="metadata" src="../../dist/audio/voice/jys_prosody_zh-CN-YunyangNeural.wav"></audio></div>
+  <div class="audio-row"><span class="meta" style="flex:none">情感</span><audio controls preload="metadata" src="../../dist/audio/voice/jys_emotion_sad_zh-CN-YunyangNeural.wav"></audio></div>
+</div>
+
+<div class="card">
+  <h2>《静夜思》· 句间气口 · 自适应停顿预算</h2>
+  <p class="meta" style="margin:4px 0 10px">停顿不再沿用 TTS 自带的固定留白，而是按<b>上一句韵脚的实际时长</b>反推：韵脚拖得越长（平声韵），本身已留足余地，停顿就短；韵脚越短促（入声），越需要补留白收束。公式 <code>p = 基础值 + 0.6 × (700ms − 韵脚时长) / 1000</code>，钳制在 [0.70, 2.40]s。气口为 400–3000Hz 带通吸气噪声，时长 170ms，收于下句起音前 90ms，峰值 ≈ 相邻句 RMS 的 30%（相对语音峰值约 −30dB）。</p>
+  <table class="params">
+    <thead><tr><th>句间</th><th>韵脚</th><th>韵脚属性</th><th>云健 A</th><th>云希 B</th><th>云扬 C</th></tr></thead>
+    <tbody>
+      <tr><td class="seg">起 → 承</td><td>光</td><td class="seg">平声韵 1.65x</td><td>1.32s</td><td>1.46s</td><td>1.48s</td></tr>
+      <tr><td class="seg">承 → 转</td><td>霜</td><td class="seg">平声韵 1.65x</td><td>1.10s</td><td>0.97s</td><td>1.08s</td></tr>
+      <tr><td class="seg">转 → 合</td><td>月</td><td class="seg">入声 0.65x（短促）</td><td>2.00s</td><td>2.01s</td><td>2.01s</td></tr>
+    </tbody>
+  </table>
+  <p class="meta" style="margin-top:10px">实测印证结构：<b>转 → 合最长（≈2.0s）</b>——「明月」的「月」是入声，短促收尾，需要最多留白；<b>承 → 转最短（≈1.0s）</b>——「霜」为平声韵，已拖长。三音色趋势一致，差异仅来自各自韵脚帧长的细微不同。情感版因整体放慢 1.11x、韵脚更长，停顿相应略短（云健 1.27 / 1.06 / 1.98s）。</p>
+  <p class="meta" style="margin-top:8px">注：整首时长由 22.0s 降至 17.2s，并非裁掉了语音——原 edge-tts 输出中约 58% 是自带留白（逐句前停/后停合计 7.9s + 内部停顿），现被上述校准停顿替换。实测合成时间轴 23.58s 中保留 10.95s 语音块，与「输入语音 9.3s × 平均伸缩 1.175」吻合，语音无丢失。</p>
+</div>
+
+<div class="card">
+  <h2>《静夜思》· 盲听裁决</h2>
+  <p class="meta" style="margin:4px 0 12px">听完三版后填写（仅供参考，可跳过直接给结论）。</p>
+  <table class="score-table">
+    <thead><tr><th>维度</th><th>A 云健</th><th>B 云希</th><th>C 云扬</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>最贴合「李白夜思」气质</td>
+        <td><label><input type="radio" name="fit" value="A">A</label></td>
+        <td><label><input type="radio" name="fit" value="B">B</label></td>
+        <td><label><input type="radio" name="fit" value="C">C</label></td>
+      </tr>
+      <tr>
+        <td>「抑扬顿挫」听感最好</td>
+        <td><label><input type="radio" name="cadence" value="A">A</label></td>
+        <td><label><input type="radio" name="cadence" value="B">B</label></td>
+        <td><label><input type="radio" name="cadence" value="C">C</label></td>
+      </tr>
+      <tr>
+        <td>「孤独 / 思念」情感最到位</td>
+        <td><label><input type="radio" name="mood" value="A">A</label></td>
+        <td><label><input type="radio" name="mood" value="B">B</label></td>
+        <td><label><input type="radio" name="mood" value="C">C</label></td>
+      </tr>
+      <tr>
+        <td>「吟诵版」最好的音色</td>
+        <td><label><input type="radio" name="prosody" value="A">A</label></td>
+        <td><label><input type="radio" name="prosody" value="B">B</label></td>
+        <td><label><input type="radio" name="prosody" value="C">C</label></td>
+      </tr>
+      <tr>
+        <td>吟诵版 vs 平读（整体倾向）</td>
+        <td><label><input type="radio" name="prosody_win" value="A">A 吟诵胜</label></td>
+        <td><label><input type="radio" name="prosody_win" value="B">B 吟诵胜</label></td>
+        <td><label><input type="radio" name="prosody_win" value="N">均不如平读</label></td>
+      </tr>
+      <tr>
+        <td>「情感版」最好的音色</td>
+        <td><label><input type="radio" name="emo" value="A">A</label></td>
+        <td><label><input type="radio" name="emo" value="B">B</label></td>
+        <td><label><input type="radio" name="emo" value="C">C</label></td>
+      </tr>
+      <tr>
+        <td>情感版 vs 吟诵（是否更动人）</td>
+        <td><label><input type="radio" name="emo_win" value="Y">更动人</label></td>
+        <td><label><input type="radio" name="emo_win" value="S">差不多</label></td>
+        <td><label><input type="radio" name="emo_win" value="N">反而更差</label></td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="meta" style="margin:12px 0 6px"><b>补充意见</b>（音色 / 语速 / 停顿 / 想试的方向，例如「叠火山擎苍 2.0 悲伤版」「叠 Azure poet」）：</p>
+  <textarea id="notes" placeholder="填写你的听感与下一步方向…"></textarea>
+  <div style="margin-top:12px"><button onclick="exportResult()">导出裁决结果</button></div>
+  <div class="out" id="out"></div>
+</div>
+
+<div class="verdict"><span class="v-label">说明</span><p><b>情感版</b>基于云健偏好音色，叠加韵律后处理得到（放慢 1.11x · 降调 0.93x · 音域压缩 0.72x · 颤音 5.2Hz · 气声 2–6kHz），六轴均已实测生效。<b>四项「句间衔接」修复已全部落地</b>：① 分句渐弱差异化——只在合句（0.55）与承句（0.15）收，起/转不渐弱以保留推进感，实测起/承/转句末较原统一渐弱响 0.6–2.1dB；② 句首滑音衔接——250ms 对数滑音从前句尾音滑入本句目标音高，跳进压缩至 ±2 半音（残差源于「起高承低」的句调设计，被句间停顿掩蔽）；③ <b>句间气口</b>——170ms 带通吸气噪声，峰值≈语音 RMS 30%，收于下句起音前 90ms；④ <b>自适应停顿预算</b>——按韵脚时长反推，转→合（入声短韵脚）最长 ≈2.0s、承→转最短 ≈1.0s，三音色趋势一致。四者同属「结构规则」，与情感无关，恒定生效。这是<b>无需任何 Key 的模拟路径</b>；下一步若要真实商用情感模型（火山擎苍 2.0 悲伤 / Azure Yunyi poet / 阿里 CosyVoice 李白 <code>libai_v2</code>），需先提供对应凭据。</p></div>
+
+<hr style="border:none;border-top:1px dashed var(--line);margin:52px 0 36px">
+
+<a id="jx"></a>
+<header style="border-bottom:none;padding-bottom:0;margin-bottom:6px">
+  <div class="eyebrow">Voice Samples · 江雪 · 2026-10-02</div>
+  <h1>《江雪》配音样音</h1>
+  <p class="sub">情感预设「清冷·孤寂」：放慢 1.16x · 降调 0.90x · 音域压缩 0.66x · 颤音 4.6Hz · 气声加重（2–6kHz）。全篇低抑，转句（孤舟蓑笠翁）只略提，合句（独钓寒江雪）深收。四项句间衔接修复恒定生效。</p>
+</header>
+
+<div class="poem">
+  <small>江雪 · 柳宗元</small>
+  千山鸟飞绝，万径人踪灭。<br>
+  孤舟蓑笠翁，独钓寒江雪。
+</div>
+
+<div class="card">
+  <div class="c-head"><h2>样音 A · 云健（沉稳男声）</h2><span class="badge a">zh-CN-YunjianNeural</span><span class="meta">平读 23.6s</span></div>
+  <p class="meta">气质：<b>沉稳、偏中年</b>，低抑底色最贴合寒江独钓。</p>
+  <div class="audio-row"><audio controls preload="metadata" src="../../dist/audio/voice/jx_edge_zh-CN-YunjianNeural_quatrain.mp3"></audio></div>
+  <table class="params">
+    <thead><tr><th>句</th><th>文本</th><th>语速 rate</th><th>音高 pitch</th><th>音量</th><th>前停</th><th>后停</th></tr></thead>
+    <tbody>
+      <tr><td class="seg">起</td><td>千山鸟飞绝</td><td>-44%</td><td>-14Hz</td><td>-28%</td><td>0.4s</td><td>1.2s</td></tr>
+      <tr><td class="seg">承</td><td>万径人踪灭</td><td>-46%</td><td>-16Hz</td><td>-32%</td><td>0.5s</td><td>1.4s</td></tr>
+      <tr><td class="seg">转</td><td>孤舟蓑笠翁</td><td>-42%</td><td>-11Hz</td><td>-22%</td><td>0.4s</td><td>1.2s</td></tr>
+      <tr><td class="seg">合</td><td>独钓寒江雪</td><td>-50%</td><td>-18Hz</td><td>-26%</td><td>0.7s</td><td>1.8s</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <div class="c-head"><h2>样音 B · 云希（清朗男声）</h2><span class="badge b">zh-CN-YunxiNeural</span><span class="meta">平读 23.8s</span></div>
+  <p class="meta">气质：<b>年轻、清朗</b>，对照「清冷」是否被读成「清亮」。</p>
+  <div class="audio-row"><audio controls preload="metadata" src="../../dist/audio/voice/jx_edge_zh-CN-YunxiNeural_quatrain.mp3"></audio></div>
+  <table class="params">
+    <thead><tr><th>句</th><th>文本</th><th>语速 rate</th><th>音高 pitch</th><th>音量</th><th>前停</th><th>后停</th></tr></thead>
+    <tbody>
+      <tr><td class="seg">起</td><td>千山鸟飞绝</td><td>-44%</td><td>-14Hz</td><td>-28%</td><td>0.4s</td><td>1.2s</td></tr>
+      <tr><td class="seg">承</td><td>万径人踪灭</td><td>-46%</td><td>-16Hz</td><td>-32%</td><td>0.5s</td><td>1.4s</td></tr>
+      <tr><td class="seg">转</td><td>孤舟蓑笠翁</td><td>-42%</td><td>-11Hz</td><td>-22%</td><td>0.4s</td><td>1.2s</td></tr>
+      <tr><td class="seg">合</td><td>独钓寒江雪</td><td>-50%</td><td>-18Hz</td><td>-26%</td><td>0.7s</td><td>1.8s</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <div class="c-head"><h2>样音 C · 云扬（播音男声）</h2><span class="badge c">zh-CN-YunyangNeural</span><span class="meta">平读 20.3s</span></div>
+  <p class="meta">气质：<b>播音腔、偏正式</b>，对照「朗诵会」读法。</p>
+  <div class="audio-row"><audio controls preload="metadata" src="../../dist/audio/voice/jx_edge_zh-CN-YunyangNeural_quatrain.mp3"></audio></div>
+  <table class="params">
+    <thead><tr><th>句</th><th>文本</th><th>语速 rate</th><th>音高 pitch</th><th>音量</th><th>前停</th><th>后停</th></tr></thead>
+    <tbody>
+      <tr><td class="seg">起</td><td>千山鸟飞绝</td><td>-44%</td><td>-14Hz</td><td>-28%</td><td>0.4s</td><td>1.2s</td></tr>
+      <tr><td class="seg">承</td><td>万径人踪灭</td><td>-46%</td><td>-16Hz</td><td>-32%</td><td>0.5s</td><td>1.4s</td></tr>
+      <tr><td class="seg">转</td><td>孤舟蓑笠翁</td><td>-42%</td><td>-11Hz</td><td>-22%</td><td>0.4s</td><td>1.2s</td></tr>
+      <tr><td class="seg">合</td><td>独钓寒江雪</td><td>-50%</td><td>-18Hz</td><td>-26%</td><td>0.7s</td><td>1.8s</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <div class="c-head"><h2>三段对照 A · 云健（沉稳男声）</h2><span class="badge a">平读 23.6s → 吟诵 17.9s → 情感 19.6s</span></div>
+  <p class="meta">链路：<b>平长仄短</b>（平 1.35x / 仄 0.85x / 入 0.65x / 韵脚 1.65x）→ <b>句调</b>（起 0.99×/−0.6 · 承 0.95×/−1.4 · 转 0.97×/−0.2 · 合 0.89×/−1.3 %/s，全篇低抑）→ <b>句间衔接</b>（渐弱 起0 / 承0.15 / 转0 / 合0.55 · 句首滑音 250ms · 气口 170ms · 自适应停顿 1.52 / 1.44 / 1.20s）→ <b>情感层</b>（清冷·孤寂）。</p>
+  <div class="audio-row"><span class="meta" style="flex:none">平读</span><audio controls preload="metadata" src="../../dist/audio/voice/jx_edge_zh-CN-YunjianNeural_quatrain.mp3"></audio></div>
+  <div class="audio-row"><span class="meta" style="flex:none">吟诵</span><audio controls preload="metadata" src="../../dist/audio/voice/jx_prosody_zh-CN-YunjianNeural.wav"></audio></div>
+  <div class="audio-row"><span class="meta" style="flex:none">情感</span><audio controls preload="metadata" src="../../dist/audio/voice/jx_emotion_cold_zh-CN-YunjianNeural.wav"></audio></div>
+</div>
+
+<div class="card">
+  <div class="c-head"><h2>三段对照 B · 云希（清朗男声）</h2><span class="badge b">平读 23.8s → 吟诵 18.1s → 情感 19.8s</span></div>
+  <p class="meta">同一套参数，听<b>音色差异</b>：清朗声在低抑长音上是否显单薄。</p>
+  <div class="audio-row"><span class="meta" style="flex:none">平读</span><audio controls preload="metadata" src="../../dist/audio/voice/jx_edge_zh-CN-YunxiNeural_quatrain.mp3"></audio></div>
+  <div class="audio-row"><span class="meta" style="flex:none">吟诵</span><audio controls preload="metadata" src="../../dist/audio/voice/jx_prosody_zh-CN-YunxiNeural.wav"></audio></div>
+  <div class="audio-row"><span class="meta" style="flex:none">情感</span><audio controls preload="metadata" src="../../dist/audio/voice/jx_emotion_cold_zh-CN-YunxiNeural.wav"></audio></div>
+</div>
+
+<div class="card">
+  <div class="c-head"><h2>三段对照 C · 云扬（播音男声）</h2><span class="badge c">平读 20.3s → 吟诵 16.7s → 情感 18.1s</span></div>
+  <p class="meta">播音腔 + 吟诵腔是否打架，对照「朗诵会」读法。</p>
+  <div class="audio-row"><span class="meta" style="flex:none">平读</span><audio controls preload="metadata" src="../../dist/audio/voice/jx_edge_zh-CN-YunyangNeural_quatrain.mp3"></audio></div>
+  <div class="audio-row"><span class="meta" style="flex:none">吟诵</span><audio controls preload="metadata" src="../../dist/audio/voice/jx_prosody_zh-CN-YunyangNeural.wav"></audio></div>
+  <div class="audio-row"><span class="meta" style="flex:none">情感</span><audio controls preload="metadata" src="../../dist/audio/voice/jx_emotion_cold_zh-CN-YunyangNeural.wav"></audio></div>
+</div>
+
+<div class="card">
+  <h2>《江雪》· 句间气口 · 自适应停顿预算</h2>
+  <p class="meta" style="margin:4px 0 10px">同一套结构规则（气口 170ms · 收于下句起音前 90ms · 自适应停顿按韵脚时长反推）。江雪为<b>入声屑韵、折腰体</b>：起/承/合三句均以入声收（绝 / 灭 / 雪），第三句「翁」为平声且不押韵。</p>
+  <table class="params">
+    <thead><tr><th>句间</th><th>韵脚</th><th>韵脚属性</th><th>云健 A</th><th>云希 B</th><th>云扬 C</th></tr></thead>
+    <tbody>
+      <tr><td class="seg">起 → 承</td><td>绝</td><td class="seg">入声 0.65x（短促）</td><td>1.52s</td><td>1.54s</td><td>1.52s</td></tr>
+      <tr><td class="seg">承 → 转</td><td>灭</td><td class="seg">入声 0.65x（短促）</td><td>1.44s</td><td>1.43s</td><td>1.47s</td></tr>
+      <tr><td class="seg">转 → 合</td><td>翁</td><td class="seg">平声（折腰体不押韵）</td><td>1.20s</td><td>1.23s</td><td>1.25s</td></tr>
+    </tbody>
+  </table>
+  <p class="meta" style="margin-top:10px">实测印证：入声短韵脚「绝 / 灭」补最长停顿（≈1.5s），平声「翁」本身已拖长，停顿最短（≈1.2s）。三音色趋势一致。情感版整体放慢 1.16x，韵脚更长，停顿相应略短（云健 1.49 / 1.41 / 1.14s）。</p>
+</div>
+
+<hr style="border:none;border-top:1px dashed var(--line);margin:52px 0 36px">
+
+<a id="bd"></a>
+<header style="border-bottom:none;padding-bottom:0;margin-bottom:6px">
+  <div class="eyebrow">Voice Samples · 早发白帝城 · 2026-10-02</div>
+  <h1>《早发白帝城》配音样音</h1>
+  <p class="sub">情感预设「轻快·畅意」：略快 0.94x · 略高 1.06x · 音域展宽 1.12x · 颤音 6.0Hz · 气声很轻（明亮）。全篇上行、句幅放开，合句（轻舟已过万重山）开阔不收。四项句间衔接修复恒定生效。</p>
+</header>
+
+<div class="poem">
+  <small>早发白帝城 · 李白</small>
+  朝辞白帝彩云间，千里江陵一日还。<br>
+  两岸猿声啼不住，轻舟已过万重山。
+</div>
+
+<div class="card">
+  <div class="c-head"><h2>样音 A · 云健（沉稳男声）</h2><span class="badge a">zh-CN-YunjianNeural</span><span class="meta">平读 17.7s</span></div>
+  <p class="meta">气质：<b>沉稳、偏中年</b>，对照「千里江陵一日还」的畅快是否被压住。</p>
+  <div class="audio-row"><audio controls preload="metadata" src="../../dist/audio/voice/bd_edge_zh-CN-YunjianNeural_quatrain.mp3"></audio></div>
+  <table class="params">
+    <thead><tr><th>句</th><th>文本</th><th>语速 rate</th><th>音高 pitch</th><th>音量</th><th>前停</th><th>后停</th></tr></thead>
+    <tbody>
+      <tr><td class="seg">起</td><td>朝辞白帝彩云间</td><td>-20%</td><td>+2Hz</td><td>-14%</td><td>0.3s</td><td>0.8s</td></tr>
+      <tr><td class="seg">承</td><td>千里江陵一日还</td><td>-18%</td><td>+3Hz</td><td>-14%</td><td>0.4s</td><td>0.9s</td></tr>
+      <tr><td class="seg">转</td><td>两岸猿声啼不住</td><td>-16%</td><td>+5Hz</td><td>-10%</td><td>0.3s</td><td>0.9s</td></tr>
+      <tr><td class="seg">合</td><td>轻舟已过万重山</td><td>-14%</td><td>+5Hz</td><td>-10%</td><td>0.4s</td><td>1.4s</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <div class="c-head"><h2>样音 B · 云希（清朗男声）</h2><span class="badge b">zh-CN-YunxiNeural</span><span class="meta">平读 17.5s</span></div>
+  <p class="meta">气质：<b>年轻、清朗</b>，最贴近「轻舟已过」的畅意。</p>
+  <div class="audio-row"><audio controls preload="metadata" src="../../dist/audio/voice/bd_edge_zh-CN-YunxiNeural_quatrain.mp3"></audio></div>
+  <table class="params">
+    <thead><tr><th>句</th><th>文本</th><th>语速 rate</th><th>音高 pitch</th><th>音量</th><th>前停</th><th>后停</th></tr></thead>
+    <tbody>
+      <tr><td class="seg">起</td><td>朝辞白帝彩云间</td><td>-20%</td><td>+2Hz</td><td>-14%</td><td>0.3s</td><td>0.8s</td></tr>
+      <tr><td class="seg">承</td><td>千里江陵一日还</td><td>-18%</td><td>+3Hz</td><td>-14%</td><td>0.4s</td><td>0.9s</td></tr>
+      <tr><td class="seg">转</td><td>两岸猿声啼不住</td><td>-16%</td><td>+5Hz</td><td>-10%</td><td>0.3s</td><td>0.9s</td></tr>
+      <tr><td class="seg">合</td><td>轻舟已过万重山</td><td>-14%</td><td>+5Hz</td><td>-10%</td><td>0.4s</td><td>1.4s</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <div class="c-head"><h2>样音 C · 云扬（播音男声）</h2><span class="badge c">zh-CN-YunyangNeural</span><span class="meta">平读 15.4s</span></div>
+  <p class="meta">气质：<b>播音腔、偏正式</b>，速度最快，对照是否过于「播报」。</p>
+  <div class="audio-row"><audio controls preload="metadata" src="../../dist/audio/voice/bd_edge_zh-CN-YunyangNeural_quatrain.mp3"></audio></div>
+  <table class="params">
+    <thead><tr><th>句</th><th>文本</th><th>语速 rate</th><th>音高 pitch</th><th>音量</th><th>前停</th><th>后停</th></tr></thead>
+    <tbody>
+      <tr><td class="seg">起</td><td>朝辞白帝彩云间</td><td>-20%</td><td>+2Hz</td><td>-14%</td><td>0.3s</td><td>0.8s</td></tr>
+      <tr><td class="seg">承</td><td>千里江陵一日还</td><td>-18%</td><td>+3Hz</td><td>-14%</td><td>0.4s</td><td>0.9s</td></tr>
+      <tr><td class="seg">转</td><td>两岸猿声啼不住</td><td>-16%</td><td>+5Hz</td><td>-10%</td><td>0.3s</td><td>0.9s</td></tr>
+      <tr><td class="seg">合</td><td>轻舟已过万重山</td><td>-14%</td><td>+5Hz</td><td>-10%</td><td>0.4s</td><td>1.4s</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <div class="c-head"><h2>三段对照 A · 云健（沉稳男声）</h2><span class="badge a">平读 17.7s → 吟诵 14.2s → 情感 13.7s</span></div>
+  <p class="meta">链路：<b>平长仄短</b>（平 1.35x / 仄 0.85x / 入 0.65x / 韵脚 1.65x）→ <b>句调</b>（起 1.02×/+0.2 · 承 1.04×/+0.4 · 转 1.06×/+0.8 · 合 1.08×/+0.5 %/s，全篇上行）→ <b>句间衔接</b>（渐弱 仅合句 0.12，起承转不收 · 句首滑音 250ms · 气口 170ms · 自适应停顿 0.87 / 0.93 / 1.01s）→ <b>情感层</b>（轻快·畅意）。</p>
+  <div class="audio-row"><span class="meta" style="flex:none">平读</span><audio controls preload="metadata" src="../../dist/audio/voice/bd_edge_zh-CN-YunjianNeural_quatrain.mp3"></audio></div>
+  <div class="audio-row"><span class="meta" style="flex:none">吟诵</span><audio controls preload="metadata" src="../../dist/audio/voice/bd_prosody_zh-CN-YunjianNeural.wav"></audio></div>
+  <div class="audio-row"><span class="meta" style="flex:none">情感</span><audio controls preload="metadata" src="../../dist/audio/voice/bd_emotion_joy_zh-CN-YunjianNeural.wav"></audio></div>
+</div>
+
+<div class="card">
+  <div class="c-head"><h2>三段对照 B · 云希（清朗男声）</h2><span class="badge b">平读 17.5s → 吟诵 14.0s → 情感 13.5s</span></div>
+  <p class="meta">同一套参数，听<b>音色差异</b>：清朗声 + 上行句调是否最显轻快。</p>
+  <div class="audio-row"><span class="meta" style="flex:none">平读</span><audio controls preload="metadata" src="../../dist/audio/voice/bd_edge_zh-CN-YunxiNeural_quatrain.mp3"></audio></div>
+  <div class="audio-row"><span class="meta" style="flex:none">吟诵</span><audio controls preload="metadata" src="../../dist/audio/voice/bd_prosody_zh-CN-YunxiNeural.wav"></audio></div>
+  <div class="audio-row"><span class="meta" style="flex:none">情感</span><audio controls preload="metadata" src="../../dist/audio/voice/bd_emotion_joy_zh-CN-YunxiNeural.wav"></audio></div>
+</div>
+
+<div class="card">
+  <div class="c-head"><h2>三段对照 C · 云扬（播音男声）</h2><span class="badge c">平读 15.4s → 吟诵 13.4s → 情感 12.9s</span></div>
+  <p class="meta">播音腔本身偏快，叠加上行句调后是否过赶。</p>
+  <div class="audio-row"><span class="meta" style="flex:none">平读</span><audio controls preload="metadata" src="../../dist/audio/voice/bd_edge_zh-CN-YunyangNeural_quatrain.mp3"></audio></div>
+  <div class="audio-row"><span class="meta" style="flex:none">吟诵</span><audio controls preload="metadata" src="../../dist/audio/voice/bd_prosody_zh-CN-YunyangNeural.wav"></audio></div>
+  <div class="audio-row"><span class="meta" style="flex:none">情感</span><audio controls preload="metadata" src="../../dist/audio/voice/bd_emotion_joy_zh-CN-YunyangNeural.wav"></audio></div>
+</div>
+
+<div class="card">
+  <h2>《早发白帝城》· 句间气口 · 自适应停顿预算</h2>
+  <p class="meta" style="margin:4px 0 10px">同一套结构规则。本诗为上平十五删平韵：起/承/合均以平声收（间 / 还 / 山），第三句「住」为仄声不押韵。因平声韵脚本身拖长，全诗停顿整体短于江雪，配合轻快预设。</p>
+  <table class="params">
+    <thead><tr><th>句间</th><th>韵脚</th><th>韵脚属性</th><th>云健 A</th><th>云希 B</th><th>云扬 C</th></tr></thead>
+    <tbody>
+      <tr><td class="seg">起 → 承</td><td>间</td><td class="seg">平声韵 1.65x（拖长）</td><td>0.87s</td><td>0.90s</td><td>0.99s</td></tr>
+      <tr><td class="seg">承 → 转</td><td>还</td><td class="seg">平声韵 1.65x（拖长）</td><td>0.93s</td><td>0.93s</td><td>0.94s</td></tr>
+      <tr><td class="seg">转 → 合</td><td>住</td><td class="seg">仄声（第三句不押韵）</td><td>1.01s</td><td>1.01s</td><td>1.03s</td></tr>
+    </tbody>
+  </table>
+  <p class="meta" style="margin-top:10px">实测印证：平声韵脚「间 / 还」已拖长，停顿最短（≈0.9s）；第三句仄声「住」略长（≈1.0s）。与《江雪》的入声短韵脚（≈1.5s）形成鲜明对照——<b>韵脚越短促，补的停顿越长</b>，三音色趋势一致。情感版因整体加快 0.94x，停顿略有微调（云健 0.89 / 0.94 / 1.02s）。</p>
+</div>
+
+<script>
+function exportResult() {
+  const q = name => (document.querySelector(`input[name=${name}]:checked`) || {}).value || "—";
+  const notes = document.getElementById("notes").value || "（无）";
+  const out = `裁决结果
+气质最贴合: ${q("fit")}
+抑扬顿挫最好: ${q("cadence")}
+情感最到位: ${q("mood")}
+吟诵版最好音色: ${q("prosody")}
+吟诵版vs平读: ${q("prosody_win")}
+情感版最好音色: ${q("emo")}
+情感版vs吟诵: ${q("emo_win")}
+补充意见: ${notes}`;
+  document.getElementById("out").textContent = out;
+}
+</script>
+
+</div>
+</body>
+</html>

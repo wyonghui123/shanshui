@@ -1,0 +1,123 @@
+{
+  "meta": {
+    "name": "d3_music_jx",
+    "version": "0.1",
+    "generated": "2026-10-05",
+    "status": "demo",
+    "role": "D3 声法表（示范 · 江雪）。音乐层的单一真源：调式 / 配器 / 板式 / 结构 / 静默 + 逐字音事件。渲染器 src/music/music_render.py 只读本表，不自行编曲。",
+    "basis": "docs/research/music_expression_elements.html §2（六轴）· §3（情感→音乐映射）· §6（D3）",
+    "boundary": "本表只提供「与画面同调」的音乐参数；依嵇康《声无哀乐论》「和声无象」，不宣称音乐直出情感。",
+    "timbre_note": "散音 / 泛音 / 按音 为音色类别（长散音 / 钟磬式泛音 / 按弦短音），按调式取音，非严格对应空弦定弦。"
+  },
+  "poem": {
+    "pid": "jx",
+    "title": "江雪",
+    "author": "柳宗元",
+    "lines": ["千山鸟飞绝", "万径人踪灭", "孤舟蓑笠翁", "独钓寒江雪"]
+  },
+  "anchor": {
+    "timing_authority": "dist/animation/ink_animations.html 的 JX 配置（画面与配音共用的实测行时序）",
+    "voice_json": "dist/audio/voice/jx_emotion_cold_zh-CN-YunjianNeural.json",
+    "voice_asset": "dist/audio/voice/jx_emotion_cold_zh-CN-YunjianNeural.wav",
+    "T": 19.578,
+    "line_windows": [[0.35, 3.735], [5.224, 8.354], [9.768, 13.038], [14.183, 17.778]],
+    "breath_windows": [[3.735, 5.224], [8.354, 9.768], [13.038, 14.183], [17.778, 19.578]],
+    "breath_note": "配音的行间气口。音乐不再随之留白——由前音余响贯入（见 rules.ring_max_s / note_overlap_s）。",
+    "char_onset_source": "voice_json syllables[].frames 作权重，线性分配到各行窗口",
+    "drift_tolerance_ms": 15
+  },
+  "mode": {
+    "name": "羽调式",
+    "tonic": "D",
+    "tonic_hz": 293.66,
+    "tonic_note": "本曲记谱音区：羽 = D4（oct 0）",
+    "degrees": { "羽": 0, "宫": 3, "商": 5, "角": 7, "徵": 10 },
+    "scale_semitones": [0, 3, 5, 7, 10],
+    "tuning_pattern": "古琴正调（F 调）定弦关系：徵 羽 宫 商 角 徵 羽",
+    "classical_basis": "《素问·阴阳应象大论》羽→水/北/冬→肾→志为恐（在声为呻）；《礼记·月令》仲冬之月律中黄钟。",
+    "V_A_T": { "V": "V2 孤冷", "A": "A1–A2 凝止—极缓", "T": "T5 高 · 不释放" }
+  },
+  "instrument": {
+    "lead": "guqin",
+    "timbre": ["散音", "泛音", "按音"],
+    "guest": [{ "name": "xiao", "count": 2, "note": "偶入：仅第 3、4 句各一声，慢起、气声" }]
+  },
+  "meter": {
+    "name": "散板",
+    "rule": "无板无眼；入声处顿（短促释放，为音色手法非留白）；句间连贯——音随下一次起音收，行间气口由余响贯入，不设长静默"
+  },
+  "structure": [
+    { "seg": "散起", "t": [0.0, 0.35], "note": "空镜起兴：一声低散音（羽 · D3），余响贯入第 1 句" },
+    { "seg": "入调", "t": [0.35, 13.038], "note": "第 1–3 句" },
+    { "seg": "入慢", "t": [13.038, 14.183], "note": "句 3 后气口：前音余响贯入（不静默）" },
+    { "seg": "复起", "t": [14.183, 17.778], "note": "第 4 句" },
+    { "seg": "尾声", "t": [17.778, 19.578], "note": "末句韵脚长泛音余响贯至曲末；终止音落徵（不上主音羽）→ T5 不释放" }
+  ],
+  "rules": {
+    "平声": { "color": "散音", "gain": 0.60, "decay_tau": 2.2, "expr": "吟（轻）" },
+    "仄声": { "color": "按音", "gain": 0.53, "decay_tau": 1.15, "expr": "猱 或 注" },
+    "入声": { "color": "泛音", "gain": 0.57, "decay_tau": 1.9, "expr": "顿" },
+    "韵脚": { "color": "泛音", "gain": 0.61, "decay_tau": 2.0, "expr": "顿（句末须顿）" },
+    "ring_max_s": 3.0,
+    "ring_min_s": 0.35,
+    "note_overlap_s": 0.25,
+    "note_release_ms": 120,
+    "ring_note": "每个音「响到下一次起音 + overlap」，末音贯至曲末；行间气口由余响填满，全曲无长静默。"
+  },
+  "events": [
+    { "line": 1, "pos": 1, "char": "千", "role": "level",    "deg": 3, "oct": 0,  "color": "san", "expr": "none", "gain": 0.62 },
+    { "line": 1, "pos": 2, "char": "山", "role": "level",    "deg": 2, "oct": 0,  "color": "san", "expr": "yin",  "gain": 0.60 },
+    { "line": 1, "pos": 3, "char": "鸟", "role": "oblique",  "deg": 1, "oct": 0,  "color": "an",  "expr": "zhu",  "gain": 0.54 },
+    { "line": 1, "pos": 4, "char": "飞", "role": "level",    "deg": 2, "oct": 0,  "color": "san", "expr": "none", "gain": 0.58 },
+    { "line": 1, "pos": 5, "char": "绝", "role": "entering", "deg": 0, "oct": 0,  "color": "fan", "expr": "dun",  "gain": 0.60, "rhyme": true },
+
+    { "line": 2, "pos": 1, "char": "万", "role": "oblique",  "deg": 2, "oct": 0,  "color": "an",  "expr": "nao",  "gain": 0.54 },
+    { "line": 2, "pos": 2, "char": "径", "role": "oblique",  "deg": 1, "oct": 0,  "color": "an",  "expr": "nao",  "gain": 0.52 },
+    { "line": 2, "pos": 3, "char": "人", "role": "level",    "deg": 2, "oct": 0,  "color": "san", "expr": "none", "gain": 0.58 },
+    { "line": 2, "pos": 4, "char": "踪", "role": "level",    "deg": 3, "oct": 0,  "color": "san", "expr": "yin",  "gain": 0.60 },
+    { "line": 2, "pos": 5, "char": "灭", "role": "entering", "deg": 0, "oct": 0,  "color": "fan", "expr": "dun",  "gain": 0.60, "rhyme": true },
+
+    { "line": 3, "pos": 1, "char": "孤", "role": "level",    "deg": 0, "oct": -1, "color": "san", "expr": "none", "gain": 0.66 },
+    { "line": 3, "pos": 2, "char": "舟", "role": "level",    "deg": 1, "oct": 0,  "color": "san", "expr": "chuo", "gain": 0.58 },
+    { "line": 3, "pos": 3, "char": "蓑", "role": "level",    "deg": 2, "oct": 0,  "color": "san", "expr": "none", "gain": 0.56 },
+    { "line": 3, "pos": 4, "char": "笠", "role": "entering", "deg": 1, "oct": 0,  "color": "fan", "expr": "dun",  "gain": 0.56 },
+    { "line": 3, "pos": 5, "char": "翁", "role": "level",    "deg": 2, "oct": 0,  "color": "an",  "expr": "yin",  "gain": 0.56, "line_end": true },
+
+    { "line": 4, "pos": 1, "char": "独", "role": "entering", "deg": 3, "oct": 0,  "color": "fan", "expr": "dun",  "gain": 0.58 },
+    { "line": 4, "pos": 2, "char": "钓", "role": "oblique",  "deg": 2, "oct": 0,  "color": "an",  "expr": "zhu",  "gain": 0.54 },
+    { "line": 4, "pos": 3, "char": "寒", "role": "level",    "deg": 1, "oct": 0,  "color": "san", "expr": "yin",  "gain": 0.60 },
+    { "line": 4, "pos": 4, "char": "江", "role": "level",    "deg": 2, "oct": 0,  "color": "san", "expr": "none", "gain": 0.58 },
+    { "line": 4, "pos": 5, "char": "雪", "role": "entering", "deg": 4, "oct": -1, "color": "fan", "expr": "dun",  "gain": 0.62, "rhyme": true,
+      "note": "终止音＝徵（C4），不上主音羽 → T5 不释放" }
+  ],
+  "散起": { "char": "散起", "at": 0.06, "deg": 0, "oct": -1, "color": "san", "expr": "none", "gain": 0.50, "note": "空镜起兴的低散音" },
+  "breath_events": [
+    { "at": 3.80,  "deg": 0, "oct": -1, "gain": 0.30, "ring": 1.7, "note": "句 1→2 气口：低散音贯入（替代原静默段）" },
+    { "at": 8.42,  "deg": 1, "oct": -1, "gain": 0.28, "ring": 1.6, "note": "句 2→3 气口" },
+    { "at": 13.10, "deg": 0, "oct": -1, "gain": 0.30, "ring": 1.4, "note": "句 3→4 气口（原「入慢」静默段）" },
+    { "at": 17.95, "deg": 4, "oct": -1, "gain": 0.26, "ring": 1.6, "note": "尾声：低徵贯入，与末句韵脚余响同收于曲末（不上主音羽）" }
+  ],
+  "guest_events": [
+    { "at_line": 3, "at_pos": 1, "instrument": "xiao", "deg": 2, "oct": 0, "gain": 0.30, "dur": 1.6, "note": "人（翁）出现处" },
+    { "at_line": 4, "at_pos": 3, "instrument": "xiao", "deg": 1, "oct": 0, "gain": 0.28, "dur": 1.8, "note": "寒江" }
+  ],
+  "mix": {
+    "sr": 44100,
+    "reverb_tiers": [
+      { "rt60": 0.9, "predelay_ms": 16, "wet": 0.15, "lp_hz": 5000, "note": "近场：琴室空间（低湿量——清冷·孤寂宜干，且给静默段留 ≥3dB 余量）" },
+      { "rt60": 3.0, "predelay_ms": 45, "wet": 0.04, "lp_hz": 2500, "note": "远场：低电平长混响 + 高频衰减，给「空阔」" }
+    ],
+    "wet_damp_after_line_ms": 0,
+    "tail_fade_ms": 300,
+    "target_peak_dbfs": -3.0,
+    "dynamic_narrow": "各音 gain 收在 0.50–0.66 窄带，整体做软限幅（极窄动态）"
+  },
+  "checks": {
+    "duration_tolerance_samples": 2,
+    "gap_floor_dbfs": -40.0,
+    "max_gap_s": 0.30,
+    "peak_dbfs_range": [-6.0, -1.0],
+    "crest_factor_db_max": 22.0,
+    "check_note": "连续性口径：短时 RMS（100ms 窗）低于 −40 dBFS 视为静默，最长静默须 ≤0.30s（全曲连贯）。"
+  }
+}

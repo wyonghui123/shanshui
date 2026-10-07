@@ -1,0 +1,231 @@
+{
+  "schema": "poem-context/v1",
+  "id": "bd",
+  "poem": "早发白帝城",
+  "aliases": ["白帝下江陵", "下江陵"],
+  "author": "李白",
+  "author_lifespan": "701-762",
+  "genre": "七言绝句",
+  "fetched_at": "2026-10-03",
+  "evidence_grade_scale": {
+    "1": "诗内字词、格律",
+    "2": "同人同期作品",
+    "3": "史料编年",
+    "4": "历代权威注",
+    "5": "现代学术解读（仅限解读/韵味字段，须标注）",
+    "6": "大众网站（仅作线索，不得进 evidence）"
+  },
+  "text": {
+    "base": [
+      "朝辞白帝彩云间",
+      "千里江陵一日还",
+      "两岸猿声啼不住",
+      "轻舟已过万重山"
+    ],
+    "version_chosen": "通行本（两岸猿声啼不住）",
+    "version_reason": "现代语文教材、《唐诗三百首》系统与多数选本一致作「啼不住」；但现存宋本均作「啼不尽」，「不住」系明人（高棅《唐诗品汇》起）审美改字，无版本依据。故采用通行本，但须标注此分歧",
+    "variants": [
+      {
+        "line": 3,
+        "chosen": "两岸猿声啼不住",
+        "alt": "两岸猿声啼不尽",
+        "grade": 4,
+        "note": "现存宋本均作「啼不尽」；明高棅《唐诗品汇》始见「啼不住」",
+        "source_ids": ["S3", "S4"]
+      },
+      {
+        "line": 1,
+        "chosen": "朝辞白帝彩云间",
+        "alt": "朝辞白帝绛云间",
+        "grade": 6,
+        "note": "乾隆临摹赵孟頫本",
+        "source_ids": ["S8"]
+      },
+      {
+        "line": 2,
+        "chosen": "千里江陵一日还",
+        "alt": "千里江陵一夕还",
+        "grade": 6,
+        "source_ids": ["S8"]
+      },
+      {
+        "line": 4,
+        "chosen": "轻舟已过万重山",
+        "alt": "扁舟已过万重山",
+        "grade": 6,
+        "source_ids": ["S8"]
+      }
+    ]
+  },
+  "dating": {
+    "year": "唐肃宗乾元二年（759）春",
+    "place": "白帝城（今重庆奉节）东下江陵途中",
+    "certainty": "fairly_certain",
+    "note": "主流系于759遇赦东下；另有725初出夔门说（旧说）、郭沫若「到荆州后追忆」说、丁启阵「船上即兴」说。作于何时/何地有四说，但「759遇赦」为共识",
+    "age_at_composition": "虚岁59（701年生）",
+    "grade": 5,
+    "source_ids": ["S5", "S6", "S7"]
+  },
+  "biography": [
+    {
+      "event": "入永王李璘幕，作《永王东巡歌》",
+      "year": "757",
+      "grade": 3,
+      "source_ids": ["S5", "S7"]
+    },
+    {
+      "event": "永王兵败被杀，李白以「附逆」罪论死，后改判长流夜郎",
+      "year": "757-758",
+      "grade": 3,
+      "source_ids": ["S5", "S7"]
+    },
+    {
+      "event": "流放途中逆水入三峡，过黄牛滩作《上三峡》（「三朝上黄牛，三暮行太迟」）",
+      "year": "759 二月",
+      "grade": 5,
+      "source_ids": ["S2", "S7"]
+    },
+    {
+      "event": "肃宗因关中大旱大赦：「以旱降死罪，流以下原之」（《新唐书·肃宗纪》），李白获赦",
+      "year": "759 三月",
+      "grade": 3,
+      "source_ids": ["S7", "S2"]
+    },
+    {
+      "event": "行至白帝城获释，旋即东下江陵，作《早发白帝城》",
+      "year": "759 春",
+      "grade": 5,
+      "source_ids": ["S5", "S6"]
+    }
+  ],
+  "glossary": [
+    { "term": "白帝", "gloss": "白帝城，在今重庆奉节，城踞白帝山，地势高峻", "grade": 5, "source_ids": ["S5"] },
+    { "term": "彩云间", "gloss": "（白帝城）在五彩云霞之间；既写地势之高，又有喜庆祥瑞意味", "grade": 5, "source_ids": ["S2"] },
+    { "term": "江陵", "gloss": "今湖北荆州，诗中「一日还」之目的地", "grade": 5, "source_ids": ["S5"] },
+    { "term": "还", "gloss": "返回、到达；可解为实写，也可解为设想之词", "grade": 5, "source_ids": ["S7"] },
+    { "term": "猿声", "gloss": "三峡两岸猿啼；在《水经注》传统中本为悲声", "grade": 4, "source_ids": ["S2", "S7"] },
+    { "term": "万重山", "gloss": "重重叠叠的群山（三峡险山）", "grade": 6, "source_ids": ["S1"] }
+  ],
+  "allusion_chains": [
+    {
+      "surface": "千里江陵一日还",
+      "polarity": "中性（化用地理典故）",
+      "polarity_note": "前两句脱胎于盛弘之《荆州记》/郦道元《水经注》「朝发白帝，暮宿江陵，其间千二百里，虽乘奔御风，不以疾也」；是典故化用，非单纯写景",
+      "chain": ["盛弘之《荆州记》", "郦道元《水经注·江水》"],
+      "grade": 4,
+      "source_ids": ["S2", "S7"]
+    },
+    {
+      "surface": "两岸猿声啼不住",
+      "polarity": "悲声（文化代码）",
+      "polarity_note": "《水经注》「常有高猿长啸，属引凄异，空谷传响，哀转久绝……猿鸣三声泪沾裳」；猿声在文化传统中本为悲声。先写「千里江陵一日还」延续朝发暮至传统，再写猿声，对猿声之悲有唤醒功能。这是普通文生图拿不到的信息",
+      "chain": ["《水经注·江水》", "渔者歌「巴东三峡巫峡长，猿鸣三声泪沾裳」", "李白《上三峡》《自巴东舟行经瞿塘峡登巫山最高峰晚还题壁》"],
+      "grade": 4,
+      "source_ids": ["S2", "S7"]
+    }
+  ],
+  "sibling_works": {
+    "grade": 2,
+    "note": "同人同期作品，用于交叉验证情绪（尤其「猿声是否含悲」）",
+    "items": [
+      "《上三峡》——流放途中「慢」诗，沉重滞涩，与本诗「一慢一快」对照",
+      "《自巴东舟行经瞿塘峡登巫山最高峰晚还题壁》——「辞山不忍听，挥策还孤舟」，以猿悲作结",
+      "《留别郑判官》——「二年吟泽畔，憔悴几时回」，流放愁怀",
+      "《永王东巡歌》——入幕之作，本案之由起"
+    ],
+    "source_ids": ["S2", "S7"]
+  },
+  "interpretations": [
+    {
+      "name": "大欢喜说（主流）",
+      "claim": "遇赦东下，通篇洋溢喜悦轻快",
+      "proponents": ["康震", "历代选本通说"],
+      "grade": 5,
+      "source_ids": ["S6"]
+    },
+    {
+      "name": "大欢喜与小悲鸣说",
+      "claim": "在通篇喜悦基调中加入猿的悲鸣，情感层次才真正丰富复杂；第三句的婉转力量正来自「悲」",
+      "proponents": ["詹丹（上海师范大学）"],
+      "grade": 5,
+      "source_ids": ["S2"]
+    },
+    {
+      "name": "猿声=美景/欢乐之景说",
+      "claim": "「啼不住」代表三峡景色之美，是喜获自由却来不及赏景的遗憾",
+      "proponents": ["袁行霈", "孙绍振（多层次说）"],
+      "grade": 5,
+      "source_ids": ["S2"]
+    },
+    {
+      "name": "回忆说（作于到荆州后）",
+      "claim": "「还」「已过」坐实理解，是安全抵达江陵后的追忆之作",
+      "proponents": ["郭沫若《李白与杜甫》"],
+      "grade": 5,
+      "source_ids": ["S7"]
+    },
+    {
+      "name": "船上即兴说",
+      "claim": "当场即兴吟咏更合「敏捷诗千首」的李白，「还」「已过」可为设想之词",
+      "proponents": ["丁启阵"],
+      "grade": 5,
+      "source_ids": ["S7"]
+    }
+  ],
+  "interpretation_consensus": {
+    "verdict": "系年较确定（759遇赦）；但「猿声性质」与「作于何地」有分歧",
+    "composite": "喜悦轻快为基调 + 猿声引入「小悲鸣」的复杂层次",
+    "confidence_penalty": false,
+    "blank_ratio_uplift": false,
+    "note": "与《江雪》《静夜思》不同：本诗系年较定，留白率不必因分歧上调；但情绪层不得单一化"
+  },
+  "prosody": {
+    "form": "七言绝句",
+    "style": "平起首句入韵式",
+    "rhyme_group": "删韵（平声·十五删）",
+    "rhyme_feet": ["间", "还", "山"],
+    "rusheng_chars": ["白", "一", "日", "不"],
+    "rusheng_ratio": 0.143,
+    "ze_ratio": 0.5,
+    "pingze": [
+      { "line": 1, "text": "朝辞白帝彩云间", "pattern": "平平仄仄仄平平" },
+      { "line": 2, "text": "千里江陵一日还", "pattern": "仄仄平平仄仄平" },
+      { "line": 3, "text": "两岸猿声啼不住", "pattern": "仄仄平平平仄仄" },
+      { "line": 4, "text": "轻舟已过万重山", "pattern": "平平仄仄仄平平" }
+    ],
+    "form_dispute": {
+      "status": "consistent",
+      "note": "各格律工具标注基本一致；「还」句首字「千」可平可仄，不影响判定"
+    },
+    "constraints": ["可舒缓", "可明快", "忌拖沓收束"]
+  },
+  "pipeline_implications": {
+    "card_1_prosody": "七绝平起首句入韵、平声删韵 → 与《江雪》入声基调相反，格律层面支持「明快、流畅」；忌拖沓",
+    "card_2_imagery": "猿声为「悲声」文化代码；「千里江陵一日还」是典故化用 → 不得直出「快」的图解（速度线、夸张飞舟）；若入画猿声须注意文化极性",
+    "card_3_style": "基调「轻快·畅意」，但须保留猿声引入的「小悲鸣」层次，不收敛为单一欢快",
+    "card_4_emotion": "V 正区（喜悦）；A 高（快船快水快人）；T 低（遇赦解脱）。关键判据：A 高 ≠ 情绪单一",
+    "card_5_composition": "白帝城（高）→ 江陵（下游），有明确空间位移，构图纵深可交代「由高而下」；系年较定 → 留白率不必上调",
+    "card_7_timeline": "平声删韵 + 首句入韵 → 可舒缓可明快；末句「已过万重山」宜顺势收束，忌渐隐拖沓",
+    "card_9_selfcheck": "地理（白帝城/江陵）与用典（《水经注》）须挂源；文本异文「啼不住/啼不尽」须标注"
+  },
+  "sources": [
+    { "id": "S1", "title": "汉典诗词《早发白帝城》", "type": "古籍类网站", "grade": 6, "url": "https://sc.zdic.net/tang/0802/03/19919f927ab4b8c1d6ed81a9fd2bcb8a.html" },
+    { "id": "S2", "title": "詹丹《〈早发白帝城〉的大欢喜与小悲鸣》，光明网 2022-07-14（苏州图书馆转载）", "type": "学术媒体", "grade": 5, "url": "http://www.sylib.org.cn/zxzx/xxzh_29434/202208/W020220830566352830875.pdf" },
+    { "id": "S3", "title": "光明网《后人对李白诗歌的删改》2024-04-15", "type": "学术媒体", "grade": 5, "url": "https://m.gmw.cn/toutiao/2024-04/15/content_37262656.htm" },
+    { "id": "S4", "title": "《文本流变中的信仰与权力》，高等教育出版社期刊", "type": "学术论文", "grade": 5, "url": "https://cjournal.hep.com.cn/1000-9639/CN/10.11714/jsysu.sse.202601003" },
+    { "id": "S5", "title": "重庆市地方志办公室《朝发白帝城》", "type": "政府网站", "grade": 5, "url": "https://dfz.cq.gov.cn/zqlswh/ldmr/202502/t20250220_14324316.html" },
+    { "id": "S6", "title": "中国作家网《康震古诗词81课》", "type": "学术转载", "grade": 5, "url": "http://www.chinawriter.com.cn/n1/2021/0518/c404067-32106396.html" },
+    { "id": "S7", "title": "丁启阵《你真的读懂李白〈早发白帝城〉了吗？》，岳阳网转新浪文化 2017-08-10", "type": "学术评论", "grade": 5, "url": "http://www.803.com.cn/cultural/content/201708/10/c55560.html" },
+    { "id": "S8", "title": "凌泽欣《长江（三峡）古诗词赏析》，中新网重庆 2023-10-12", "type": "媒体", "grade": 6, "url": "http://www.cq.chinanews.com.cn/fgs/2023/1012/16-5240.html" },
+    { "id": "S9", "title": "中国华文教育网《早发白帝城》", "type": "教育网站", "grade": 6, "url": "http://old.hwjyw.com/zhwh/traditional_culture/zgwx/classic_poems/libai/200803/t20080313_14017.shtml" },
+    { "id": "S10", "title": "学习强国《下江陵》", "type": "媒体", "grade": 6, "url": "https://article.xuexi.cn/html/8686039721295022416.html" },
+    { "id": "S11", "title": "百科《七言绝句》格律例诗", "type": "大众网站", "grade": 6, "url": "https://m.baike.com/wiki/七言绝句/2589546" },
+    { "id": "S12", "title": "《谈李白「早发白帝城」》，core.ac.uk 收录", "type": "学术论文", "grade": 5, "url": "https://core.ac.uk/download/pdf/41341581.pdf" },
+    { "id": "S13", "title": "诗词志《近体诗平仄规则》", "type": "大众网站", "grade": 6, "url": "https://shicizhi.com/Article/Detail/SHI-CI-GE-LU-JIN-TI-SHI-PING-ZE-GUI-ZE" }
+  ],
+  "gaps": [
+    "未找到可靠来源：遇赦诏令对李白个人的直接文书（现据《新唐书·肃宗纪》通赦条款推得）",
+    "未找到可靠来源：「江夏说」（李白遇赦后回江夏而非江陵）的专文完整论证",
+    "未获取：中华书局/上海古籍《李太白全集》王琦注的具体页码（需接入中华经典古籍库）"
+  ]
+}
