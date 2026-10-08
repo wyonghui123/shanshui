@@ -1,0 +1,61 @@
+{
+  "instrument": "flute_boehm",
+  "source": "Versilian Studios Chamber Orchestra 2: Community Edition",
+  "mirror": "https://github.com/sgossner/VSCO-2-CE",
+  "author": "Recorded by Sam Gossner & Simon Dalzell",
+  "license": "CC0 1.0 (public domain)",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "url": "https://vis.versilstudios.com/vsco-community.html",
+  "f0_method": "谐波求和 + 防子频校验 + 受约束自相关(±10半音)三证一致；文件名音名与实测不符，一律以f0_hz 为准",
+  "known": "该库 Flute 仅含 C/E/A 三音名族，无 D/F/G/B",
+  "samples": [
+    {
+      "file": "LDFlute_susNV_E4_v1_1.wav",
+      "f0": 329.1,
+      "note": "E4",
+      "dur": 9.79,
+      "subtype": "PCM_24",
+      "sr": 44100
+    },
+    {
+      "file": "LDFlute_susNV_A4_v1_1.wav",
+      "f0": 441.0,
+      "note": "A4",
+      "dur": 13.08,
+      "subtype": "PCM_24",
+      "sr": 44100
+    },
+    {
+      "file": "LDFlute_susNV_C5_v1_1.wav",
+      "f0": 525.0,
+      "note": "C5",
+      "dur": 9.41,
+      "subtype": "PCM_24",
+      "sr": 44100
+    },
+    {
+      "file": "LDFlute_susNV_A5_v1_1.wav",
+      "f0": 882.0,
+      "note": "A5",
+      "dur": 10.9,
+      "subtype": "PCM_24",
+      "sr": 44100
+    },
+    {
+      "file": "LDFlute_susNV_C6_v1_1.wav",
+      "f0": 1050.0,
+      "note": "C6",
+      "dur": 6.11,
+      "subtype": "PCM_24",
+      "sr": 44100
+    },
+    {
+      "file": "LDFlute_susNV_E5_v1_1.wav",
+      "f0": 1336.36,
+      "note": "E6",
+      "dur": 11.17,
+      "subtype": "PCM_24",
+      "sr": 44100
+    }
+  ]
+}
