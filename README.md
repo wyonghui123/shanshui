@@ -82,7 +82,7 @@ python build/assemble.py --check    # 只校验交付包与 canonical 是否同�
 python build/font_subset.py --check # 校验题诗字体子集（覆盖字符集 + 被动画引用）
 python build/stroke_data.py --fetch # 改动用字后：重取笔顺 / 中线并冻结到 data/source/strokes/
 python build/stroke_data.py --check # 校验逐笔数据（strokes.js 与字体/源同步 + 笔锋带覆盖）
-python src/d2/d2_resolve.py         # D2 回归（81 项）
+python src/d2/d2_resolve.py         # D2 回归（83 项）
 python src/d2/d2_inject.py --check  # 校验 pipeline 内嵌 D2 快照
 node src/o1/o1_source_facts.mjs     # 重抽动画事实（含数值几何）
 node src/o2/o2_imagery.mjs --check  # O2 虚实阈值校验（G13：冻结=中点 / 落可行区间 / gold 全对 / 证伪）
