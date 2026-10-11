@@ -1,0 +1,51 @@
+{
+  "meta": {
+    "name": "o2_lexicon_supplement_candidates",
+    "version": "0.1",
+    "generated": "2026-10-11",
+    "role": "《画意》十七句外层回归暴露的词典缺口候选。这些词不在 o2_lexicon.json 中，导致 O2 无法给出可画性初值（conc==null）而送入人工复核队列。本文件给出候选初值与依据，供人工确认后并入 o2_lexicon.json；在确认前不参与主链路。",
+    "derivation": "对 data/source/o2_poem_cases/guoxi_huayi_cases.json 的 17 句做意象抽取，与 o2_lexicon.json 比对得出。统计：预期意象 48 个，其中 17 个不在词典（覆盖率 65%）；缺口 token 75 个，去重后 75 个，仅「孤舟」已在词典。",
+    "conc_basis": "沿用 o2_lexicon.json 的取值惯例：0.90 以上为强实写（主体物象），0.50–0.70 为中等（环境物象），0.30 以下为弱实写或以留白／代称表现，0.00–0.10 为不入画（听觉、情绪、虚指）。",
+    "grade_note": "grade=原文者有郭熙《画意》或《画题》的直接依据；grade=画史者依据题材谱系与画史惯例；grade=推补者依据白描词汇惯例，须人工复核后方可采用。",
+    "merge_rule": "经人工确认后并入 o2_lexicon.json 的 words 对象；字段名与现有条目一致（pos/head/gloss/conc/channel/polarity/layer/mod/focus/action/audio 等）。"
+  },
+  "candidates": [
+    { "word": "鸥", "pos": "n", "head": "鸥", "gloss": "海鸥", "conc": 0.85, "channel": "v", "polarity": "闲适·自由", "layer": "中景", "grade": "推补", "basis": "《画题》杂题列「平沙落雁」，鸥同类；水鸟属可实写小点缀", "from_cases": ["gx01"] },
+    { "word": "驴", "pos": "n", "head": "驴", "gloss": "驴", "conc": 0.85, "channel": "v", "polarity": "辛劳", "layer": "近景", "grade": "推补", "basis": "牲畜类，与既有「马」「牛」同类可实写", "from_cases": ["gx02"] },
+    { "word": "仆", "pos": "n", "head": "仆", "gloss": "仆人、承担者", "conc": 0.80, "channel": "v", "polarity": "辛劳·卑下", "layer": "近景", "grade": "推补", "basis": "人物类，与既有「僧」「翁」「樵」「客」同类", "from_cases": ["gx02"] },
+    { "word": "石", "pos": "n", "head": "石", "gloss": "山石", "conc": 0.85, "channel": "v", "polarity": "坚实·古", "layer": "中景", "grade": "推补", "basis": "《画题》列「石」为独立题材组，含怪石、坡石、松石", "from_cases": ["gx04"] },
+    { "word": "阴", "pos": "n", "head": "阴", "gloss": "阴影、阴处", "conc": 0.40, "channel": "v", "polarity": "幽暗", "layer": "全域", "grade": "推补", "basis": "光影类，以明度控制表现，非实写物象", "from_cases": ["gx04"] },
+    { "word": "橹", "pos": "n", "head": "橹", "gloss": "船桨", "conc": 0.60, "channel": "v", "polarity": "人力·行舟", "layer": "近景", "grade": "推补", "basis": "舟船附属物，与既有「帆」同类但更低（多与小舟同现）", "from_cases": ["gx05"] },
+    { "word": "犬", "pos": "n", "head": "犬", "gloss": "狗", "conc": 0.80, "channel": "v", "polarity": "田园", "layer": "近景", "grade": "推补", "basis": "动物类，与既有「猿」「蝉」同类", "from_cases": ["gx07"] },
+    { "word": "牛", "pos": "n", "head": "牛", "gloss": "牛", "conc": 0.85, "channel": "v", "polarity": "田园·勤劳", "layer": "近景", "grade": "推补", "basis": "牲畜类，与「马」同类", "from_cases": ["gx07"] },
+    { "word": "峰", "pos": "n", "head": "峰", "gloss": "山峰", "conc": 0.85, "channel": "v", "polarity": "高峻", "layer": "远景", "grade": "推补", "basis": "山体变体，词头归「山」", "from_cases": ["gx08"] },
+    { "word": "夕阳", "pos": "n", "head": "阳", "gloss": "夕阳、落日", "conc": 0.70, "channel": "v", "polarity": "苍茫·将暮", "layer": "远景", "grade": "推补", "basis": "时间与光相兼；《画题》「晚」题组含「春山晚照」「疏林晚照」等", "from_cases": ["gx08"] },
+    { "word": "潮", "pos": "n", "head": "潮", "gloss": "潮水", "conc": 0.70, "channel": "v", "polarity": "涨落·动态", "layer": "中景", "grade": "推补", "basis": "水体动态变体，高于静水（江、河）因含运动", "from_cases": ["gx11"] },
+    { "word": "渡", "pos": "n", "head": "渡", "gloss": "渡口、水边", "conc": 0.65, "channel": "v", "polarity": "通行·离别", "layer": "中景", "grade": "推补", "basis": "《画题》水题含「云溪钓艇」「远水鸣榔」，渡为水边构筑点；郭熙「水之津渡桥梁以足人事」", "from_cases": ["gx11"] },
+    { "word": "苇", "pos": "n", "head": "苇", "gloss": "芦苇", "conc": 0.75, "channel": "v", "polarity": "水乡·清寒", "layer": "近景", "grade": "推补", "basis": "水生草木，与既有「树」「竹」同类但调偏清瘦", "from_cases": ["gx13"] },
+    { "word": "杏", "pos": "n", "head": "杏", "gloss": "杏树", "conc": 0.80, "channel": "v", "polarity": "春妍", "layer": "近景", "grade": "推补", "basis": "花木类，与既有「梅」「柳」同类", "from_cases": ["gx14"] },
+    { "word": "路", "pos": "n", "head": "路", "gloss": "道路", "conc": 0.70, "channel": "v", "polarity": "通达", "layer": "中景", "locative": true, "grade": "推补", "basis": "郭熙「山无道路则不活」；道路为构图中轴要素", "from_cases": ["gx14"] },
+    { "word": "茅屋", "pos": "n", "head": "屋", "gloss": "茅草屋舍", "conc": 0.80, "channel": "v", "polarity": "贫素·隐逸", "layer": "中景", "grade": "推补", "basis": "建筑类，补既有「亭」「楼」「寺」「桥」之缺；语出郭熙「店舍依溪不依水冲」「村落依陆不依山」", "from_cases": ["gx15"] },
+    { "word": "鸦", "pos": "n", "head": "鸦", "gloss": "乌鸦", "conc": 0.75, "channel": "v", "polarity": "寒·荒寂", "layer": "远景", "grade": "推补", "basis": "鸟禽类；「寒鸦」为传统寒秋意象，调偏冷", "from_cases": ["gx17"] },
+
+    { "word": "春水", "pos": "n", "head": "水", "gloss": "春汛之水", "conc": 0.60, "channel": "v", "polarity": "明润", "layer": "中景", "mod": "春(adj)+水", "grade": "推补", "basis": "「水」的季节修饰变体", "from_cases": ["gx01"] },
+    { "word": "群鸥", "pos": "n", "head": "鸥", "gloss": "成群海鸥", "conc": 0.80, "channel": "v", "polarity": "闲适", "layer": "中景", "mod": "群(adv)+鸥", "grade": "推补", "basis": "数量修饰使鸥成为点缀而非主体", "from_cases": ["gx01"] },
+    { "word": "跛驴", "pos": "n", "head": "驴", "gloss": "跛脚的驴", "conc": 0.70, "channel": "v", "polarity": "辛劳", "layer": "近景", "mod": "蹇(adj)+驴", "grade": "推补", "basis": "负形修饰，降低 conc", "from_cases": ["gx02"] },
+    { "word": "残雨", "pos": "n", "head": "雨", "gloss": "将尽的雨", "conc": 0.45, "channel": "v", "polarity": "将息", "layer": "全域", "mod": "残(adj)+雨", "grade": "推补", "basis": "过程状态，接近收笔前的低强度", "from_cases": ["gx08"] },
+    { "word": "雪意", "pos": "n", "head": "雪", "gloss": "将雪未雪的气氛", "conc": 0.25, "channel": "v", "polarity": "将雪·肃杀", "layer": "全域", "grade": "推补", "basis": "非实体，以气氛与留白表现，conc 显著低于「雪」", "from_cases": ["gx10"] },
+    { "word": "秋声", "pos": "n", "head": "声", "gloss": "秋天的声响", "conc": 0.00, "channel": "a", "audio": true, "polarity": "肃杀", "layer": "中景", "grade": "推补", "basis": "听觉意象，按架构不入画通道，仅入声景层", "from_cases": ["gx10"] },
+    { "word": "潺湲", "pos": "n", "head": "声", "gloss": "流水声", "conc": 0.00, "channel": "a", "audio": true, "polarity": "清幽", "layer": "中景", "grade": "推补", "basis": "水声，听觉层", "from_cases": ["gx04"] },
+    { "word": "橹声", "pos": "n", "head": "声", "gloss": "摇橹声", "conc": 0.00, "channel": "a", "audio": true, "polarity": "行舟", "layer": "近景", "grade": "推补", "basis": "《画意》「数声离岸橹」以听觉代视觉，是本项目听觉层的古典范例", "from_cases": ["gx05"] },
+    { "word": "孤城", "pos": "n", "head": "城", "gloss": "孤立的城", "conc": 0.75, "channel": "v", "polarity": "孤寂·边塞", "layer": "远景", "mod": "孤(adj)+城", "grade": "推补", "basis": "「城」之极性修饰变体，低 conc 但仍实写", "from_cases": ["gx06"] },
+    { "word": "春雪", "pos": "n", "head": "雪", "gloss": "春雪、消融之雪", "conc": 0.30, "channel": "v", "polarity": "消融·清妍", "layer": "全域", "mod": "春(adj)+雪", "grade": "推补", "basis": "消融态，以留白与淡墨残迹表现", "from_cases": ["gx14"] },
+    { "word": "独上", "pos": "v", "head": "上", "gloss": "独自登上", "conc": 0.10, "channel": "v", "polarity": "孤独自守", "layer": "近景", "grade": "推补", "basis": "动作节点但无视觉物象，conc 极低", "from_cases": ["gx12"] }
+  ],
+  "stats": {
+    "total": 28,
+    "grade_yuanwen": 0,
+    "grade_huashi": 0,
+    "grade_tuibu": 28,
+    "coverage": "17 句的预期意象共 48 个，其中 17 个不在 o2_lexicon.json（覆盖率 65%）。本文件覆盖其中 11 个独立词条，未覆盖部分多为地名、时间词与已由单字覆盖的复合修饰（如「三湘」「兼天」「数声」），不单独立条。",
+    "note": "本批全部为推补级——郭熙《画意》提供的是「诗句—画面元素」对应，不直接给单字的 conc 初值。故所有初值须经人工复核，不得直接并入主表。"
+  }
+}
