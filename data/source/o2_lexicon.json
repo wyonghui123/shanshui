@@ -15,7 +15,8 @@
       "neg": "否定性谓词（绝/灭/不住），用于缺席型负节点判定",
       "focus": "词典认定的视觉焦点候选",
       "action": "动作节点（动词意象）",
-      "d2_class": "指向 d2_mapping_seed.json 的 classes 键，供 O2→D2 直连，省去二次归类"
+      "d2_class": "指向 d2_mapping_seed.json 的 classes 键，供 O2→D2 直连，省去二次归类",
+      "non_visual": "非视觉意象标记：时间单位、量度等虽有pos 字段但不应进入画面者。由 isImagery 排除。例：月份词「六月」之「月」为时间单位而非天体。"
     },
     "supplemented_at": "2026-10-11",
     "supplement_note": "经《画意》十七句外层回归复核后补入 24 条（复核前候选 28 条，剔除 5 条：阴、独上、跛驴正名为蹇驴、雪意、残雨）。复核依据：①字段惯例——现有 88 词中 39 条高可画性单字物象不带 polarity／layer，故新补单字词亦不带，改设 d2_class 字段直连 D2 的 classes；head 为语义中心字，单字物象的自指 head 属冗余已删，但听觉词 head=声与既有「猿声」一致故保留。②取值校准——单字物象对齐既有同类（禽兽 0.75–0.85、舟桥 0.60–0.85），复合修饰词一律低于母词 0.05–0.30。③职责边界——氛围与状态词（雪意、残雨）不进本表，其语义由 D2 的 weather_composite 与 early_spring 承担。复核后十七句预期意象覆盖率由 65% 升至 98%（47/48）。复核明细见 data/source/o2_poem_cases/lexicon_supplement_final.json。"
@@ -839,6 +840,158 @@
       "polarity": "肃杀",
       "layer": "中景",
       "basis": "与既有「猿声」同处置。刘勰《物色》「岁有其物，物有其容」可为四时之声配义的通则依据"
+    },
+    "一月": {
+      "pos": "nq",
+      "head": "月",
+      "gloss": "月份",
+      "temporal": true,
+      "non_visual": true,
+      "note": "月份词组。「月」在此为时间单位而非天体，故设 non_visual 以免被 isImagery 收为视觉意象（外层回归 gx04「六月杖藜来石路」实测发现）。"
+    },
+    "二月": {
+      "pos": "nq",
+      "head": "月",
+      "gloss": "月份",
+      "temporal": true,
+      "non_visual": true,
+      "note": "月份词组。「月」在此为时间单位而非天体，故设 non_visual 以免被 isImagery 收为视觉意象（外层回归 gx04「六月杖藜来石路」实测发现）。"
+    },
+    "三月": {
+      "pos": "nq",
+      "head": "月",
+      "gloss": "月份",
+      "temporal": true,
+      "non_visual": true,
+      "note": "月份词组。「月」在此为时间单位而非天体，故设 non_visual 以免被 isImagery 收为视觉意象（外层回归 gx04「六月杖藜来石路」实测发现）。"
+    },
+    "四月": {
+      "pos": "nq",
+      "head": "月",
+      "gloss": "月份",
+      "temporal": true,
+      "non_visual": true,
+      "note": "月份词组。「月」在此为时间单位而非天体，故设 non_visual 以免被 isImagery 收为视觉意象（外层回归 gx04「六月杖藜来石路」实测发现）。"
+    },
+    "五月": {
+      "pos": "nq",
+      "head": "月",
+      "gloss": "月份",
+      "temporal": true,
+      "non_visual": true,
+      "note": "月份词组。「月」在此为时间单位而非天体，故设 non_visual 以免被 isImagery 收为视觉意象（外层回归 gx04「六月杖藜来石路」实测发现）。"
+    },
+    "六月": {
+      "pos": "nq",
+      "head": "月",
+      "gloss": "月份",
+      "temporal": true,
+      "non_visual": true,
+      "note": "月份词组。「月」在此为时间单位而非天体，故设 non_visual 以免被 isImagery 收为视觉意象（外层回归 gx04「六月杖藜来石路」实测发现）。"
+    },
+    "七月": {
+      "pos": "nq",
+      "head": "月",
+      "gloss": "月份",
+      "temporal": true,
+      "non_visual": true,
+      "note": "月份词组。「月」在此为时间单位而非天体，故设 non_visual 以免被 isImagery 收为视觉意象（外层回归 gx04「六月杖藜来石路」实测发现）。"
+    },
+    "八月": {
+      "pos": "nq",
+      "head": "月",
+      "gloss": "月份",
+      "temporal": true,
+      "non_visual": true,
+      "note": "月份词组。「月」在此为时间单位而非天体，故设 non_visual 以免被 isImagery 收为视觉意象（外层回归 gx04「六月杖藜来石路」实测发现）。"
+    },
+    "九月": {
+      "pos": "nq",
+      "head": "月",
+      "gloss": "月份",
+      "temporal": true,
+      "non_visual": true,
+      "note": "月份词组。「月」在此为时间单位而非天体，故设 non_visual 以免被 isImagery 收为视觉意象（外层回归 gx04「六月杖藜来石路」实测发现）。"
+    },
+    "十月": {
+      "pos": "nq",
+      "head": "月",
+      "gloss": "月份",
+      "temporal": true,
+      "non_visual": true,
+      "note": "月份词组。「月」在此为时间单位而非天体，故设 non_visual 以免被 isImagery 收为视觉意象（外层回归 gx04「六月杖藜来石路」实测发现）。"
+    },
+    "冬月": {
+      "pos": "nq",
+      "head": "月",
+      "gloss": "月份",
+      "temporal": true,
+      "non_visual": true,
+      "note": "月份词组。「月」在此为时间单位而非天体，故设 non_visual 以免被 isImagery 收为视觉意象（外层回归 gx04「六月杖藜来石路」实测发现）。"
+    },
+    "腊月": {
+      "pos": "nq",
+      "head": "月",
+      "gloss": "月份",
+      "temporal": true,
+      "non_visual": true,
+      "note": "月份词组。「月」在此为时间单位而非天体，故设 non_visual 以免被 isImagery 收为视觉意象（外层回归 gx04「六月杖藜来石路」实测发现）。"
+    },
+    "春月": {
+      "pos": "nq",
+      "head": "月",
+      "gloss": "春月",
+      "temporal": true,
+      "non_visual": true,
+      "note": "时令词组，非视觉意象。"
+    },
+    "夏月": {
+      "pos": "nq",
+      "head": "月",
+      "gloss": "夏月",
+      "temporal": true,
+      "non_visual": true,
+      "note": "时令词组，非视觉意象。"
+    },
+    "秋月": {
+      "pos": "nq",
+      "head": "月",
+      "gloss": "秋月",
+      "temporal": true,
+      "non_visual": true,
+      "note": "时令词组，非视觉意象。"
+    },
+    "初夏": {
+      "pos": "nq",
+      "head": "夏",
+      "gloss": "初夏",
+      "temporal": true,
+      "non_visual": true,
+      "note": "时令词组，非视觉意象。"
+    },
+    "孟春": {
+      "pos": "nq",
+      "head": "春",
+      "gloss": "孟春",
+      "temporal": true,
+      "non_visual": true,
+      "note": "时令词组，非视觉意象。"
+    },
+    "仲春": {
+      "pos": "nq",
+      "head": "春",
+      "gloss": "仲春",
+      "temporal": true,
+      "non_visual": true,
+      "note": "时令词组，非视觉意象。"
+    },
+    "季春": {
+      "pos": "nq",
+      "head": "春",
+      "gloss": "季春",
+      "temporal": true,
+      "non_visual": true,
+      "note": "时令词组，非视觉意象。"
     }
   }
 }

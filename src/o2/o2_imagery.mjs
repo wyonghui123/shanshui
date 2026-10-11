@@ -70,7 +70,9 @@ function segment(line, form) {
 }
 
 /* ================= ② 名词意象抽取 [PLUG] ================= */
-const isImagery = t => t.pos === 'n' || t.pos === 'nq';
+/* non_visual 者虽有 pos 字段但不入画：月份词「六月」之「月」为时间单位而非天体
+   （外层回归 gx04 实测发现）。排除在词典层标记，不在代码里写特例。 */
+const isImagery = t => (t.pos === 'n' || t.pos === 'nq') && !(t.e && t.e.non_visual);
 const isAction = t => t.pos === 'v' && t.e && t.e.action;
 const canonOf = t => (t.e && t.e.canonical) || t.w;
 

@@ -102,6 +102,8 @@ def main():
     fails += run("D5 语境 schema", [PY, os.path.join("src", "tools", "context_schema_check.py")])
     fails += run("D6 情感词表", [PY, os.path.join("src", "tools", "emotion_lexicon_check.py")])
     fails += run("O2 虚实阈值 G13", [NODE, os.path.join("src", "o2", "o2_imagery.mjs"), "--check"], tail=8)
+    # 外层回归：郭熙《画意》十七句。标注独立于本项目，检验方法有效性而非代码正确性。
+    fails += run("O2 外层回归（郭熙十七句）", [NODE, os.path.join("src", "o2", "o2_outer.mjs")], tail=3)
 
     print("── 控制链与交付")
     fails += run("D2 回归", [PY, os.path.join("src", "d2", "d2_resolve.py")], tail=2)

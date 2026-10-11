@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated": "2026-10-11T03:28:29",
+    "generated": "2026-10-11T03:34:31",
     "lexicon": "o2_lexicon.json @ v1.1",
     "gold": "o2_gold.json @ v1.1",
     "gate": "o2_gate.json @ v1.0 · real=0.575 blank=0.275",
