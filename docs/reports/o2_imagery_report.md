@@ -1,6 +1,6 @@
 # O2 意象抽取 · 报告
 
-- 生成：2026-10-11T03:34:31
+- 生成：2026-10-11T04:16:18
 - 词典：o2_lexicon.json @ v1.1　gold：o2_gold.json @ v1.1
 - 模型状态：词典 + 规则替身（模型未接入）；接口固定，替换 [PLUG] 函数即可
 - 可插拔接口：①分词=T15 TopWORDS-Poetry 格律先验　②意象=C1 Albert-BiLSTM-MHA-CRF　③消歧=B2 UD-Kanbun / guwencombo

@@ -617,7 +617,7 @@ def drop_banner(html):
             depth -= 1
             if depth == 0:
                 end = html.find('>', m.start()) + 1
-                return (html[:i] + html[end:]).replace('</header>\n\n\n', '</header>\n\n', 1)
+                return html[:i] + html[end:]
         else:
             depth += 1
         pos = m.end()
@@ -646,7 +646,9 @@ def put_banner(html, pid, r, spec):
         '  </div>\n'
         '</div>'
     )
-    return html.replace('</header>', '</header>\n\n' + banner, 1)
+    # 先消除既有横幅残留的空白，再按固定间距重新插入，保证重跑字节级幂等。
+    html = re.sub(r'</header>\s*', '</header>\n\n', html, count=1)
+    return html.replace('</header>\n\n', '</header>\n\n' + banner + '\n\n', 1)
 
 
 

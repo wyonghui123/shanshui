@@ -142,7 +142,30 @@ PIVOT_ROLES = {"焦点"}
 
 def load(path):
     with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
+        return _derive_head_class(json.load(f))
+
+
+def _derive_head_class(t):
+    """由 classes.*.keywords 派生 head_class（字 → 类）。
+
+    head_class 与 classes.*.keywords 是同一信息的两种索引，若各自手工维护必然漂移。
+    实测漂移证据：'犬'、'牛'、'杏' 等 39 字在 keywords 中却不在 head_class，
+    致其 classify() 落空、class=None、最终被判「不画」——
+    如 gx07「犬眠花影地」之「犬」c=0.80 实写，却因字表缺「犬」而整句无实点。
+
+    故 head_class 改为派生：以 keywords 为准，seed 中显式写出的条目作覆盖保留
+    （用于少数需人工裁定的字）。这样单一真源为 keywords，新增物象只需改一处。
+    """
+    derived = {}
+    for cls, d in t.get("classes", {}).items():
+        for kw in d.get("keywords", []):
+            if len(kw) == 1:
+                derived[kw] = cls
+    # seed 显式条目优先（人工裁定），未被覆盖者由 keywords 补齐
+    merged = dict(derived)
+    merged.update(t.get("head_class", {}))
+    t["head_class"] = merged
+    return t
 
 
 # ---------------------------------------------------------------- 分类
@@ -220,6 +243,13 @@ def resolve_node(t, node, ctx):
 
     layer = node.get("layer_hint") or d["layer"]
 
+    # R12：郭熙「远山无皴」——山石入远景/极远则减笔，不露石理。
+    # 与 R10（雪覆山体）分轴：R10 因天候覆盖，R12 因距离减笔。
+    # 依据《林泉高致·山水训》「远山无皴，远水无波，远人无目。非无也，如无耳」。
+    # 词覆盖优先（如「万重山」已显式指定无皴）。
+    if cls == "山石" and layer in ("远景", "极远") and "cun" not in ov:
+        d["cun"] = "无皴"
+
     # 调制器 layer_technique：按「类别 × 层」给含水/笔法（远山细化的泛化）。
     # 词覆盖优先——已被 word_override 显式指定的键不被调制器覆盖。
     lt = t["modulators"].get("layer_technique", {}).get(cls, {}).get(layer, {})
@@ -262,6 +292,7 @@ def resolve_node(t, node, ctx):
         "class_by": how,
         "role": role,
         "yuan_candidates": d.get("yuan", []),
+        "yuan_w": d.get("yuan_w", []),
         "cun": d["cun"],
         "ink_grade": ink_grade,
         "ink_c_range": t["vocab"]["ink"][ink_grade]["c"],
@@ -597,9 +628,12 @@ def resolve_poem(t, pid, imagery):
     space_scores = {}
     if has_landscape:
         for b in bundles:
-            d = t["class_defaults"].get(b["class"], {})
-            w = d.get("weight", 1.0)
-            for y, yw in zip(b["yuan_candidates"], d.get("yuan_w", [])):
+            # 用节点自身的 yuan_w / weight（word_override 可覆盖），不回取 class_defaults——
+            # 否则词级三远（如「两岸」override 的高远/深远）会被静默丢弃：
+            # yuan_candidates 取自 override，而 yuan_w/weight 若取自类默认则二者口径不一，
+            # 实测使《早发白帝城》「两岸」的高远票被水体类默认顶替，bd 三远由「高远+深远」漂为「平远+深远」。
+            w = b["weight"]
+            for y, yw in zip(b["yuan_candidates"], b["yuan_w"]):
                 scores[y] = scores.get(y, 0.0) + yw * w
         # 空间词票（原文明示，不被类默认累积压过）
         text = ctx0["text"]
@@ -623,12 +657,14 @@ def resolve_poem(t, pid, imagery):
     cun = set()
     for b in bundles:
         if b["role"] in ("主体", "地标", "焦点", "点缀"):
+            c = b["cun"]
             if b["class"] == "山石" and season == "冬":
-                cun.add("无皴")          # R10：雪覆山体不露石理
-            elif b["cun"] != "无皴":
-                cun.add(b["cun"])
+                c = "无皴"          # R10：雪覆山体不露石理（近景山石亦减笔）
+            if c != "无皴":
+                cun.add(c)
+    # 山石全为无皴（R12 远山无皴 / R10 雪覆）时 cun 会空，补回无皴档。
     if not cun and any(b["class"] == "山石" for b in bundles):
-        cun.add("无皴" if season == "冬" else "披麻皴")
+        cun.add("无皴")
 
     # --- 留白率区间 ---
     br = t["modulators"]["blank_rules"]
