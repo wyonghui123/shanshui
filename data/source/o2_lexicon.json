@@ -1,7 +1,7 @@
 {
   "meta": {
     "name": "o2_lexicon",
-    "version": "1.0",
+    "version": "1.1",
     "generated": "2026-10-02",
     "role": "O2 意象抽取的「词典替身」。真实链路里 ①分词=T15 TopWORDS-Poetry 格律先验、②意象=C1 Albert-BiLSTM-MHA-CRF、③消歧=B2 依存解析；本文件用可复核的词典+规则先跑通同一接口，模型接入后只替换 src/o2/o2_imagery.mjs 里标了 [PLUG] 的三处，输出 schema 不变。",
     "fields": {
@@ -14,98 +14,831 @@
       "layer": "景深提示（仅供复核参考，正式层级由 O4 构图求解器定）",
       "neg": "否定性谓词（绝/灭/不住），用于缺席型负节点判定",
       "focus": "词典认定的视觉焦点候选",
-      "action": "动作节点（动词意象）"
-    }
+      "action": "动作节点（动词意象）",
+      "d2_class": "指向 d2_mapping_seed.json 的 classes 键，供 O2→D2 直连，省去二次归类"
+    },
+    "supplemented_at": "2026-10-11",
+    "supplement_note": "经《画意》十七句外层回归复核后补入 24 条（复核前候选 28 条，剔除 5 条：阴、独上、跛驴正名为蹇驴、雪意、残雨）。复核依据：①字段惯例——现有 88 词中 39 条高可画性单字物象不带 polarity／layer，故新补单字词亦不带，改设 d2_class 字段直连 D2 的 classes；head 为语义中心字，单字物象的自指 head 属冗余已删，但听觉词 head=声与既有「猿声」一致故保留。②取值校准——单字物象对齐既有同类（禽兽 0.75–0.85、舟桥 0.60–0.85），复合修饰词一律低于母词 0.05–0.30。③职责边界——氛围与状态词（雪意、残雨）不进本表，其语义由 D2 的 weather_composite 与 early_spring 承担。复核后十七句预期意象覆盖率由 65% 升至 98%（47/48）。复核明细见 data/source/o2_poem_cases/lexicon_supplement_final.json。"
   },
   "words": {
-    "千山": { "pos": "n", "head": "山", "gloss": "重重山峦", "conc": 0.90, "channel": "v", "polarity": "壮阔·冷寂", "layer": "远景", "mod": "千(num)+山" },
-    "万径": { "pos": "n", "head": "径", "gloss": "众多小路", "conc": 0.60, "channel": "v", "polarity": "人世·荒芜", "layer": "中景", "mod": "万(num)+径", "note": "实而近乎虚写" },
-    "人踪": { "pos": "n", "head": "踪", "gloss": "人的足迹", "conc": 0.30, "channel": "v", "polarity": "人事", "layer": "中景", "mod": "人+踪" },
-    "孤舟": { "pos": "n", "head": "舟", "gloss": "孤零小船", "conc": 0.95, "channel": "v", "polarity": "漂泊·孤立", "layer": "近景", "mod": "孤(adj)+舟", "focus": true },
-    "蓑笠翁": { "pos": "n", "head": "翁", "gloss": "披蓑戴笠的老翁", "conc": 0.90, "channel": "v", "polarity": "隐逸·渔樵", "layer": "近景", "mod": "蓑笠+翁", "focus": true },
-    "寒江": { "pos": "n", "head": "江", "gloss": "寒冷的江面", "conc": 0.45, "channel": "v", "polarity": "冷寂·静", "layer": "中景", "mod": "寒(adj)+江" },
-    "鸟": { "pos": "n", "gloss": "飞鸟", "conc": 0.90, "channel": "v", "polarity": "生机", "layer": "远景" },
-    "雪": { "pos": "n", "gloss": "雪", "conc": 0.35, "channel": "v", "polarity": "洁净·覆盖", "layer": "全域" },
-    "独钓": { "pos": "v", "head": "钓", "gloss": "独自垂钓", "conc": 0.70, "channel": "v", "polarity": "孤守·不屈", "layer": "近景", "action": true, "mod": "独(adv)+钓" },
-    "飞绝": { "pos": "v", "head": "绝", "gloss": "飞尽、断绝", "neg": true },
-    "灭": { "pos": "v", "gloss": "消失、湮灭", "neg": true },
-    "朝": { "pos": "adv", "gloss": "早晨", "temporal": true },
-    "辞": { "pos": "v", "gloss": "辞别、离开" },
-    "白帝": { "pos": "n", "canonical": "白帝城", "head": "城", "gloss": "白帝（城）", "conc": 0.85, "channel": "v", "polarity": "高峻·起点", "layer": "远景" },
-    "彩云": { "pos": "n", "head": "云", "gloss": "绚丽的云霞", "conc": 0.55, "channel": "v", "polarity": "明丽·祥瑞", "layer": "远景", "mod": "彩(adj)+云" },
-    "间": { "pos": "postp", "gloss": "……之间", "locative": true },
-    "千里": { "pos": "nq", "head": "里", "gloss": "千里之遥", "conc": 0.15, "channel": "v", "polarity": "遥远·辽廓", "layer": "全域", "quantity": true },
-    "江陵": { "pos": "n", "gloss": "江陵（地名）", "conc": 0.20, "channel": "v", "polarity": "归处·目标", "layer": "极远" },
-    "一日": { "pos": "nq", "head": "日", "gloss": "一天之内", "conc": 0.10, "channel": "v", "polarity": "迅疾·时间压缩", "layer": "全域", "temporal": true },
-    "两岸": { "pos": "n", "head": "岸", "gloss": "江流两岸", "conc": 0.80, "channel": "v", "polarity": "夹峙·峡谷", "layer": "中景", "mod": "两(num)+岸", "locative": true },
-    "猿声": { "pos": "n", "head": "声", "gloss": "猿的啼声", "conc": 0.00, "channel": "a", "polarity": "悲（原典）→被超越", "layer": "中景", "mod": "猿+声", "audio": true },
-    "轻舟": { "pos": "n", "head": "舟", "gloss": "轻快的小船", "conc": 0.95, "channel": "v", "polarity": "轻快·自由", "layer": "近景", "mod": "轻(adj)+舟", "focus": true },
-    "万重山": { "pos": "n", "head": "山", "gloss": "层叠万重山", "conc": 0.85, "channel": "v", "polarity": "险阻→被越过", "layer": "远景", "mod": "万重(num)+山" },
-    "还": { "pos": "v", "gloss": "回返、到达" },
-    "啼": { "pos": "v", "gloss": "啼叫", "audio": true },
-    "不住": { "pos": "v", "head": "住", "gloss": "不停（持续义，非否定存在）" },
-    "已": { "pos": "adv", "gloss": "已经" },
-    "过": { "pos": "v", "gloss": "越过" },
-
-    "山": { "pos": "n", "gloss": "山", "conc": 0.85, "channel": "v" },
-    "水": { "pos": "n", "gloss": "水", "conc": 0.50, "channel": "v" },
-    "江": { "pos": "n", "gloss": "江", "conc": 0.50, "channel": "v" },
-    "河": { "pos": "n", "gloss": "河", "conc": 0.50, "channel": "v" },
-    "湖": { "pos": "n", "gloss": "湖", "conc": 0.50, "channel": "v" },
-    "海": { "pos": "n", "gloss": "海", "conc": 0.60, "channel": "v" },
-    "月": { "pos": "n", "gloss": "月", "conc": 0.80, "channel": "v" },
-    "星": { "pos": "n", "gloss": "星", "conc": 0.70, "channel": "v" },
-    "风": { "pos": "n", "gloss": "风", "conc": 0.30, "channel": "v" },
-    "雨": { "pos": "n", "gloss": "雨", "conc": 0.50, "channel": "v" },
-    "云": { "pos": "n", "gloss": "云", "conc": 0.55, "channel": "v" },
-    "雾": { "pos": "n", "gloss": "雾", "conc": 0.45, "channel": "v" },
-    "霜": { "pos": "n", "gloss": "霜", "conc": 0.35, "channel": "v" },
-    "烟": { "pos": "n", "gloss": "烟", "conc": 0.40, "channel": "v" },
-    "花": { "pos": "n", "gloss": "花", "conc": 0.85, "channel": "v" },
-    "草": { "pos": "n", "gloss": "草", "conc": 0.80, "channel": "v" },
-    "树": { "pos": "n", "gloss": "树", "conc": 0.85, "channel": "v" },
-    "松": { "pos": "n", "gloss": "松", "conc": 0.85, "channel": "v" },
-    "竹": { "pos": "n", "gloss": "竹", "conc": 0.85, "channel": "v" },
-    "梅": { "pos": "n", "gloss": "梅", "conc": 0.85, "channel": "v" },
-    "柳": { "pos": "n", "gloss": "柳", "conc": 0.85, "channel": "v" },
-    "雁": { "pos": "n", "gloss": "大雁", "conc": 0.85, "channel": "v" },
-    "鹤": { "pos": "n", "gloss": "鹤", "conc": 0.85, "channel": "v" },
-    "猿": { "pos": "n", "gloss": "猿", "conc": 0.85, "channel": "v" },
-    "蝉": { "pos": "n", "gloss": "蝉", "conc": 0.80, "channel": "v" },
-    "鱼": { "pos": "n", "gloss": "鱼", "conc": 0.80, "channel": "v" },
-    "舟": { "pos": "n", "gloss": "舟船", "conc": 0.90, "channel": "v" },
-    "帆": { "pos": "n", "gloss": "帆", "conc": 0.85, "channel": "v" },
-    "桥": { "pos": "n", "gloss": "桥", "conc": 0.85, "channel": "v" },
-    "亭": { "pos": "n", "gloss": "亭", "conc": 0.85, "channel": "v" },
-    "楼": { "pos": "n", "gloss": "楼", "conc": 0.85, "channel": "v" },
-    "寺": { "pos": "n", "gloss": "寺", "conc": 0.85, "channel": "v" },
-    "钟": { "pos": "n", "gloss": "钟", "conc": 0.80, "channel": "v" },
-    "鼓": { "pos": "n", "gloss": "鼓", "conc": 0.80, "channel": "v" },
-    "灯": { "pos": "n", "gloss": "灯", "conc": 0.75, "channel": "v" },
-    "酒": { "pos": "n", "gloss": "酒", "conc": 0.60, "channel": "v" },
-    "剑": { "pos": "n", "gloss": "剑", "conc": 0.85, "channel": "v" },
-    "琴": { "pos": "n", "gloss": "琴", "conc": 0.85, "channel": "v" },
-    "笛": { "pos": "n", "gloss": "笛", "conc": 0.85, "channel": "v" },
-    "村": { "pos": "n", "gloss": "村", "conc": 0.80, "channel": "v" },
-    "城": { "pos": "n", "gloss": "城", "conc": 0.85, "channel": "v" },
-    "关": { "pos": "n", "gloss": "关隘", "conc": 0.80, "channel": "v" },
-    "岸": { "pos": "n", "gloss": "岸", "conc": 0.80, "channel": "v", "locative": true },
-    "洲": { "pos": "n", "gloss": "沙洲", "conc": 0.75, "channel": "v", "locative": true },
-    "汀": { "pos": "n", "gloss": "水汀", "conc": 0.70, "channel": "v", "locative": true },
-    "窗": { "pos": "n", "gloss": "窗", "conc": 0.80, "channel": "v" },
-    "帘": { "pos": "n", "gloss": "帘", "conc": 0.80, "channel": "v" },
-    "苔": { "pos": "n", "gloss": "苔", "conc": 0.70, "channel": "v" },
-    "僧": { "pos": "n", "gloss": "僧人", "conc": 0.85, "channel": "v" },
-    "翁": { "pos": "n", "gloss": "老翁", "conc": 0.85, "channel": "v" },
-    "渔": { "pos": "n", "gloss": "渔人", "conc": 0.85, "channel": "v" },
-    "樵": { "pos": "n", "gloss": "樵夫", "conc": 0.85, "channel": "v" },
-    "客": { "pos": "n", "gloss": "旅人", "conc": 0.85, "channel": "v" },
-    "马": { "pos": "n", "gloss": "马", "conc": 0.85, "channel": "v" },
-    "声": { "pos": "n", "gloss": "声音", "conc": 0.00, "channel": "a", "audio": true },
-    "影": { "pos": "n", "gloss": "影", "conc": 0.30, "channel": "v" },
-    "梦": { "pos": "n", "gloss": "梦", "conc": 0.05, "channel": "v" },
-    "愁": { "pos": "n", "gloss": "愁绪", "conc": 0.05, "channel": "v" },
-    "恨": { "pos": "n", "gloss": "恨", "conc": 0.05, "channel": "v" },
-    "思": { "pos": "n", "gloss": "思念", "conc": 0.05, "channel": "v" }
+    "千山": {
+      "pos": "n",
+      "head": "山",
+      "gloss": "重重山峦",
+      "conc": 0.9,
+      "channel": "v",
+      "polarity": "壮阔·冷寂",
+      "layer": "远景",
+      "mod": "千(num)+山"
+    },
+    "万径": {
+      "pos": "n",
+      "head": "径",
+      "gloss": "众多小路",
+      "conc": 0.6,
+      "channel": "v",
+      "polarity": "人世·荒芜",
+      "layer": "中景",
+      "mod": "万(num)+径",
+      "note": "实而近乎虚写"
+    },
+    "人踪": {
+      "pos": "n",
+      "head": "踪",
+      "gloss": "人的足迹",
+      "conc": 0.3,
+      "channel": "v",
+      "polarity": "人事",
+      "layer": "中景",
+      "mod": "人+踪"
+    },
+    "孤舟": {
+      "pos": "n",
+      "head": "舟",
+      "gloss": "孤零小船",
+      "conc": 0.95,
+      "channel": "v",
+      "polarity": "漂泊·孤立",
+      "layer": "近景",
+      "mod": "孤(adj)+舟",
+      "focus": true
+    },
+    "蓑笠翁": {
+      "pos": "n",
+      "head": "翁",
+      "gloss": "披蓑戴笠的老翁",
+      "conc": 0.9,
+      "channel": "v",
+      "polarity": "隐逸·渔樵",
+      "layer": "近景",
+      "mod": "蓑笠+翁",
+      "focus": true
+    },
+    "寒江": {
+      "pos": "n",
+      "head": "江",
+      "gloss": "寒冷的江面",
+      "conc": 0.45,
+      "channel": "v",
+      "polarity": "冷寂·静",
+      "layer": "中景",
+      "mod": "寒(adj)+江"
+    },
+    "鸟": {
+      "pos": "n",
+      "gloss": "飞鸟",
+      "conc": 0.9,
+      "channel": "v",
+      "polarity": "生机",
+      "layer": "远景"
+    },
+    "雪": {
+      "pos": "n",
+      "gloss": "雪",
+      "conc": 0.35,
+      "channel": "v",
+      "polarity": "洁净·覆盖",
+      "layer": "全域"
+    },
+    "独钓": {
+      "pos": "v",
+      "head": "钓",
+      "gloss": "独自垂钓",
+      "conc": 0.7,
+      "channel": "v",
+      "polarity": "孤守·不屈",
+      "layer": "近景",
+      "action": true,
+      "mod": "独(adv)+钓"
+    },
+    "飞绝": {
+      "pos": "v",
+      "head": "绝",
+      "gloss": "飞尽、断绝",
+      "neg": true
+    },
+    "灭": {
+      "pos": "v",
+      "gloss": "消失、湮灭",
+      "neg": true
+    },
+    "朝": {
+      "pos": "adv",
+      "gloss": "早晨",
+      "temporal": true
+    },
+    "辞": {
+      "pos": "v",
+      "gloss": "辞别、离开"
+    },
+    "白帝": {
+      "pos": "n",
+      "canonical": "白帝城",
+      "head": "城",
+      "gloss": "白帝（城）",
+      "conc": 0.85,
+      "channel": "v",
+      "polarity": "高峻·起点",
+      "layer": "远景"
+    },
+    "彩云": {
+      "pos": "n",
+      "head": "云",
+      "gloss": "绚丽的云霞",
+      "conc": 0.55,
+      "channel": "v",
+      "polarity": "明丽·祥瑞",
+      "layer": "远景",
+      "mod": "彩(adj)+云"
+    },
+    "间": {
+      "pos": "postp",
+      "gloss": "……之间",
+      "locative": true
+    },
+    "千里": {
+      "pos": "nq",
+      "head": "里",
+      "gloss": "千里之遥",
+      "conc": 0.15,
+      "channel": "v",
+      "polarity": "遥远·辽廓",
+      "layer": "全域",
+      "quantity": true
+    },
+    "江陵": {
+      "pos": "n",
+      "gloss": "江陵（地名）",
+      "conc": 0.2,
+      "channel": "v",
+      "polarity": "归处·目标",
+      "layer": "极远"
+    },
+    "一日": {
+      "pos": "nq",
+      "head": "日",
+      "gloss": "一天之内",
+      "conc": 0.1,
+      "channel": "v",
+      "polarity": "迅疾·时间压缩",
+      "layer": "全域",
+      "temporal": true
+    },
+    "两岸": {
+      "pos": "n",
+      "head": "岸",
+      "gloss": "江流两岸",
+      "conc": 0.8,
+      "channel": "v",
+      "polarity": "夹峙·峡谷",
+      "layer": "中景",
+      "mod": "两(num)+岸",
+      "locative": true
+    },
+    "猿声": {
+      "pos": "n",
+      "head": "声",
+      "gloss": "猿的啼声",
+      "conc": 0.0,
+      "channel": "a",
+      "polarity": "悲（原典）→被超越",
+      "layer": "中景",
+      "mod": "猿+声",
+      "audio": true
+    },
+    "轻舟": {
+      "pos": "n",
+      "head": "舟",
+      "gloss": "轻快的小船",
+      "conc": 0.95,
+      "channel": "v",
+      "polarity": "轻快·自由",
+      "layer": "近景",
+      "mod": "轻(adj)+舟",
+      "focus": true
+    },
+    "万重山": {
+      "pos": "n",
+      "head": "山",
+      "gloss": "层叠万重山",
+      "conc": 0.85,
+      "channel": "v",
+      "polarity": "险阻→被越过",
+      "layer": "远景",
+      "mod": "万重(num)+山"
+    },
+    "还": {
+      "pos": "v",
+      "gloss": "回返、到达"
+    },
+    "啼": {
+      "pos": "v",
+      "gloss": "啼叫",
+      "audio": true
+    },
+    "不住": {
+      "pos": "v",
+      "head": "住",
+      "gloss": "不停（持续义，非否定存在）"
+    },
+    "已": {
+      "pos": "adv",
+      "gloss": "已经"
+    },
+    "过": {
+      "pos": "v",
+      "gloss": "越过"
+    },
+    "山": {
+      "pos": "n",
+      "gloss": "山",
+      "conc": 0.85,
+      "channel": "v"
+    },
+    "水": {
+      "pos": "n",
+      "gloss": "水",
+      "conc": 0.5,
+      "channel": "v"
+    },
+    "江": {
+      "pos": "n",
+      "gloss": "江",
+      "conc": 0.5,
+      "channel": "v"
+    },
+    "河": {
+      "pos": "n",
+      "gloss": "河",
+      "conc": 0.5,
+      "channel": "v"
+    },
+    "湖": {
+      "pos": "n",
+      "gloss": "湖",
+      "conc": 0.5,
+      "channel": "v"
+    },
+    "海": {
+      "pos": "n",
+      "gloss": "海",
+      "conc": 0.6,
+      "channel": "v"
+    },
+    "月": {
+      "pos": "n",
+      "gloss": "月",
+      "conc": 0.8,
+      "channel": "v"
+    },
+    "星": {
+      "pos": "n",
+      "gloss": "星",
+      "conc": 0.7,
+      "channel": "v"
+    },
+    "风": {
+      "pos": "n",
+      "gloss": "风",
+      "conc": 0.3,
+      "channel": "v"
+    },
+    "雨": {
+      "pos": "n",
+      "gloss": "雨",
+      "conc": 0.5,
+      "channel": "v"
+    },
+    "云": {
+      "pos": "n",
+      "gloss": "云",
+      "conc": 0.55,
+      "channel": "v"
+    },
+    "雾": {
+      "pos": "n",
+      "gloss": "雾",
+      "conc": 0.45,
+      "channel": "v"
+    },
+    "霜": {
+      "pos": "n",
+      "gloss": "霜",
+      "conc": 0.35,
+      "channel": "v"
+    },
+    "烟": {
+      "pos": "n",
+      "gloss": "烟",
+      "conc": 0.4,
+      "channel": "v"
+    },
+    "花": {
+      "pos": "n",
+      "gloss": "花",
+      "conc": 0.85,
+      "channel": "v"
+    },
+    "草": {
+      "pos": "n",
+      "gloss": "草",
+      "conc": 0.8,
+      "channel": "v"
+    },
+    "树": {
+      "pos": "n",
+      "gloss": "树",
+      "conc": 0.85,
+      "channel": "v"
+    },
+    "松": {
+      "pos": "n",
+      "gloss": "松",
+      "conc": 0.85,
+      "channel": "v"
+    },
+    "竹": {
+      "pos": "n",
+      "gloss": "竹",
+      "conc": 0.85,
+      "channel": "v"
+    },
+    "梅": {
+      "pos": "n",
+      "gloss": "梅",
+      "conc": 0.85,
+      "channel": "v"
+    },
+    "柳": {
+      "pos": "n",
+      "gloss": "柳",
+      "conc": 0.85,
+      "channel": "v"
+    },
+    "雁": {
+      "pos": "n",
+      "gloss": "大雁",
+      "conc": 0.85,
+      "channel": "v"
+    },
+    "鹤": {
+      "pos": "n",
+      "gloss": "鹤",
+      "conc": 0.85,
+      "channel": "v"
+    },
+    "猿": {
+      "pos": "n",
+      "gloss": "猿",
+      "conc": 0.85,
+      "channel": "v"
+    },
+    "蝉": {
+      "pos": "n",
+      "gloss": "蝉",
+      "conc": 0.8,
+      "channel": "v"
+    },
+    "鱼": {
+      "pos": "n",
+      "gloss": "鱼",
+      "conc": 0.8,
+      "channel": "v"
+    },
+    "舟": {
+      "pos": "n",
+      "gloss": "舟船",
+      "conc": 0.9,
+      "channel": "v"
+    },
+    "帆": {
+      "pos": "n",
+      "gloss": "帆",
+      "conc": 0.85,
+      "channel": "v"
+    },
+    "桥": {
+      "pos": "n",
+      "gloss": "桥",
+      "conc": 0.85,
+      "channel": "v"
+    },
+    "亭": {
+      "pos": "n",
+      "gloss": "亭",
+      "conc": 0.85,
+      "channel": "v"
+    },
+    "楼": {
+      "pos": "n",
+      "gloss": "楼",
+      "conc": 0.85,
+      "channel": "v"
+    },
+    "寺": {
+      "pos": "n",
+      "gloss": "寺",
+      "conc": 0.85,
+      "channel": "v"
+    },
+    "钟": {
+      "pos": "n",
+      "gloss": "钟",
+      "conc": 0.8,
+      "channel": "v"
+    },
+    "鼓": {
+      "pos": "n",
+      "gloss": "鼓",
+      "conc": 0.8,
+      "channel": "v"
+    },
+    "灯": {
+      "pos": "n",
+      "gloss": "灯",
+      "conc": 0.75,
+      "channel": "v"
+    },
+    "酒": {
+      "pos": "n",
+      "gloss": "酒",
+      "conc": 0.6,
+      "channel": "v"
+    },
+    "剑": {
+      "pos": "n",
+      "gloss": "剑",
+      "conc": 0.85,
+      "channel": "v"
+    },
+    "琴": {
+      "pos": "n",
+      "gloss": "琴",
+      "conc": 0.85,
+      "channel": "v"
+    },
+    "笛": {
+      "pos": "n",
+      "gloss": "笛",
+      "conc": 0.85,
+      "channel": "v"
+    },
+    "村": {
+      "pos": "n",
+      "gloss": "村",
+      "conc": 0.8,
+      "channel": "v"
+    },
+    "城": {
+      "pos": "n",
+      "gloss": "城",
+      "conc": 0.85,
+      "channel": "v"
+    },
+    "关": {
+      "pos": "n",
+      "gloss": "关隘",
+      "conc": 0.8,
+      "channel": "v"
+    },
+    "岸": {
+      "pos": "n",
+      "gloss": "岸",
+      "conc": 0.8,
+      "channel": "v",
+      "locative": true
+    },
+    "洲": {
+      "pos": "n",
+      "gloss": "沙洲",
+      "conc": 0.75,
+      "channel": "v",
+      "locative": true
+    },
+    "汀": {
+      "pos": "n",
+      "gloss": "水汀",
+      "conc": 0.7,
+      "channel": "v",
+      "locative": true
+    },
+    "窗": {
+      "pos": "n",
+      "gloss": "窗",
+      "conc": 0.8,
+      "channel": "v"
+    },
+    "帘": {
+      "pos": "n",
+      "gloss": "帘",
+      "conc": 0.8,
+      "channel": "v"
+    },
+    "苔": {
+      "pos": "n",
+      "gloss": "苔",
+      "conc": 0.7,
+      "channel": "v"
+    },
+    "僧": {
+      "pos": "n",
+      "gloss": "僧人",
+      "conc": 0.85,
+      "channel": "v"
+    },
+    "翁": {
+      "pos": "n",
+      "gloss": "老翁",
+      "conc": 0.85,
+      "channel": "v"
+    },
+    "渔": {
+      "pos": "n",
+      "gloss": "渔人",
+      "conc": 0.85,
+      "channel": "v"
+    },
+    "樵": {
+      "pos": "n",
+      "gloss": "樵夫",
+      "conc": 0.85,
+      "channel": "v"
+    },
+    "客": {
+      "pos": "n",
+      "gloss": "旅人",
+      "conc": 0.85,
+      "channel": "v"
+    },
+    "马": {
+      "pos": "n",
+      "gloss": "马",
+      "conc": 0.85,
+      "channel": "v"
+    },
+    "声": {
+      "pos": "n",
+      "gloss": "声音",
+      "conc": 0.0,
+      "channel": "a",
+      "audio": true
+    },
+    "影": {
+      "pos": "n",
+      "gloss": "影",
+      "conc": 0.3,
+      "channel": "v"
+    },
+    "梦": {
+      "pos": "n",
+      "gloss": "梦",
+      "conc": 0.05,
+      "channel": "v"
+    },
+    "愁": {
+      "pos": "n",
+      "gloss": "愁绪",
+      "conc": 0.05,
+      "channel": "v"
+    },
+    "恨": {
+      "pos": "n",
+      "gloss": "恨",
+      "conc": 0.05,
+      "channel": "v"
+    },
+    "思": {
+      "pos": "n",
+      "gloss": "思念",
+      "conc": 0.05,
+      "channel": "v"
+    },
+    "鸥": {
+      "pos": "n",
+      "gloss": "海鸥",
+      "conc": 0.85,
+      "channel": "v",
+      "d2_class": "禽兽",
+      "basis": "《画题》杂题列「平沙落雁」，鸥与雁同类水鸟；可实写小点缀"
+    },
+    "鸦": {
+      "pos": "n",
+      "gloss": "乌鸦",
+      "conc": 0.75,
+      "channel": "v",
+      "d2_class": "禽兽",
+      "basis": "既已有「鸦」于 D2 禽兽类；「寒鸦」为传统寒秋意象，故略低于雁之 0.85"
+    },
+    "犬": {
+      "pos": "n",
+      "gloss": "狗",
+      "conc": 0.8,
+      "channel": "v",
+      "d2_class": "禽兽",
+      "basis": "与既有「猿」「蝉」同为动物类，同为 0.80"
+    },
+    "牛": {
+      "pos": "n",
+      "gloss": "牛",
+      "conc": 0.85,
+      "channel": "v",
+      "d2_class": "禽兽",
+      "basis": "牲畜类，与既有「马」同为 0.85"
+    },
+    "驴": {
+      "pos": "n",
+      "gloss": "驴",
+      "conc": 0.85,
+      "channel": "v",
+      "d2_class": "禽兽",
+      "basis": "牲畜类，与「马」同类。⚠️ 《画意》原文作「蹇驴」，「蹇」为跛义，见 gx02「渡水蹇驴只耳直」"
+    },
+    "仆": {
+      "pos": "n",
+      "gloss": "仆人、承担者",
+      "conc": 0.8,
+      "channel": "v",
+      "d2_class": "人物",
+      "basis": "与既有「僧」「翁」「樵」「客」同类人物，惟身份为劳动者，故 0.80"
+    },
+    "石": {
+      "pos": "n",
+      "gloss": "山石",
+      "conc": 0.85,
+      "channel": "v",
+      "d2_class": "山石",
+      "basis": "《画题》石组为独立题材组（怪石、坡石、松石），与「山」同为 0.85"
+    },
+    "峰": {
+      "pos": "n",
+      "gloss": "山峰",
+      "conc": 0.85,
+      "channel": "v",
+      "d2_class": "山石",
+      "basis": "与「山」同为 0.85；《画题》「高峰留夕阳」为常见构图元素"
+    },
+    "茅屋": {
+      "pos": "n",
+      "head": "屋",
+      "gloss": "茅草屋舍",
+      "conc": 0.8,
+      "channel": "v",
+      "d2_class": "建筑",
+      "mod": "茅(adj)+屋",
+      "basis": "建筑类，补既有「亭楼寺庙桥村」之缺；郭熙《画诀》「店舍依溪不依水冲」「村落依陆不依山」为民居之画理依据。conc 0.80 对齐「村」"
+    },
+    "潮": {
+      "pos": "n",
+      "gloss": "潮水",
+      "conc": 0.7,
+      "channel": "v",
+      "d2_class": "水体",
+      "basis": "《画题》水组八例中六例为瀑布（动态水），潮含运动故高于静水；但无专属皴法，取 0.70 中值"
+    },
+    "渡": {
+      "pos": "n",
+      "gloss": "渡口、水边",
+      "conc": 0.65,
+      "channel": "v",
+      "d2_class": "舟桥",
+      "locative": true,
+      "basis": "郭熙《山水训》「水之津渡桥梁以足人事」，渡为水边构筑点；较「桥」（0.85）低，因渡口多以暗示而非实体建筑入画"
+    },
+    "苇": {
+      "pos": "n",
+      "gloss": "芦苇",
+      "conc": 0.75,
+      "channel": "v",
+      "d2_class": "草木",
+      "basis": "水生草木，线条细长清瘦，故略低于「树」（0.85）；《画意》「钓罢孤舟系苇梢」为典型"
+    },
+    "杏": {
+      "pos": "n",
+      "gloss": "杏树",
+      "conc": 0.8,
+      "channel": "v",
+      "d2_class": "草木",
+      "basis": "花木类，与既有「梅」「柳」同类；「路傍仙杏发柔条」见 gx14"
+    },
+    "夕阳": {
+      "pos": "n",
+      "head": "阳",
+      "gloss": "夕阳、落日",
+      "conc": 0.7,
+      "channel": "v",
+      "d2_class": "天象",
+      "mod": "夕(adj)+阳",
+      "basis": "《画题》晚组九项中五项含「晚照」，晚景视觉特征为返照。conc 0.70 而非 0.85：夕阳为光相非实体，与「雪」（0.35）同类逻辑"
+    },
+    "橹": {
+      "pos": "n",
+      "gloss": "船桨",
+      "conc": 0.6,
+      "channel": "v",
+      "d2_class": "舟桥",
+      "basis": "舟之附属物。较母词「舟」（0.90）低 0.30，因橹多与小舟同现且常以听觉入画（《画意》「数声离岸橹」）；复核确认此差异成立"
+    },
+    "路": {
+      "pos": "n",
+      "gloss": "道路",
+      "conc": 0.7,
+      "channel": "v",
+      "d2_class": "径路",
+      "locative": true,
+      "basis": "郭熙《山水训》「山无道路则不活」，道路为构图中轴要素；但道路本身少有实体刻画，多作曲径暗示，故 0.70"
+    },
+    "春水": {
+      "pos": "n",
+      "head": "水",
+      "gloss": "春汛之水",
+      "conc": 0.6,
+      "channel": "v",
+      "d2_class": "水体",
+      "mod": "春(adj)+水",
+      "polarity": "明润",
+      "layer": "中景",
+      "basis": "「水」之季节修饰变体；较母词低 0.25，因季节限定已由 D2 的 early_spring 档承担，词典不再重复承载"
+    },
+    "群鸥": {
+      "pos": "n",
+      "head": "鸥",
+      "gloss": "成群海鸥",
+      "conc": 0.8,
+      "channel": "v",
+      "d2_class": "禽兽",
+      "mod": "群(adv)+鸥",
+      "polarity": "闲适",
+      "layer": "中景",
+      "basis": "数量修饰使鸥由主体转为点缀，故低于「鸥」（0.85）"
+    },
+    "蹇驴": {
+      "pos": "n",
+      "head": "驴",
+      "gloss": "跛脚的驴",
+      "conc": 0.7,
+      "channel": "v",
+      "d2_class": "禽兽",
+      "mod": "蹇(adj)+驴",
+      "polarity": "辛劳",
+      "layer": "近景",
+      "basis": "原文作「渡水蹇驴只耳直」，《画意》作「蹇驴」非「跛驴」，此处正名。负形修饰降低 conc 0.15"
+    },
+    "孤城": {
+      "pos": "n",
+      "head": "城",
+      "gloss": "孤立的城",
+      "conc": 0.75,
+      "channel": "v",
+      "d2_class": "建筑",
+      "mod": "孤(adj)+城",
+      "polarity": "孤寂·边塞",
+      "layer": "远景",
+      "basis": "「城」之极性修饰变体；较母词低 0.10。杜甫「孤城隐雾深」为原典例"
+    },
+    "春雪": {
+      "pos": "n",
+      "head": "雪",
+      "gloss": "春雪、消融之雪",
+      "conc": 0.3,
+      "channel": "v",
+      "d2_class": "天象",
+      "mod": "春(adj)+雪",
+      "polarity": "消融·清妍",
+      "layer": "全域",
+      "basis": "较母词「雪」（0.35）低 0.05：消融态以留白与淡墨残迹表现，强度略减而清妍意增。复核确认差异幅度合理"
+    },
+    "潺湲": {
+      "pos": "n",
+      "head": "声",
+      "gloss": "流水声",
+      "conc": 0.0,
+      "channel": "a",
+      "audio": true,
+      "polarity": "清幽",
+      "layer": "中景",
+      "basis": "郭熙《山水训》「水不潺湲，则谓之死水」——以可闻之声判水之死活，是听觉参与画法判定的直接依据"
+    },
+    "橹声": {
+      "pos": "n",
+      "head": "声",
+      "gloss": "摇橹声",
+      "conc": 0.0,
+      "channel": "a",
+      "audio": true,
+      "polarity": "行舟",
+      "layer": "近景",
+      "basis": "《画意》「数声离岸橹，几点别州山」以听觉代视觉，与本项目听觉层「猿声」的处置方式一致"
+    },
+    "秋声": {
+      "pos": "n",
+      "head": "声",
+      "gloss": "秋天的声响",
+      "conc": 0.0,
+      "channel": "a",
+      "audio": true,
+      "polarity": "肃杀",
+      "layer": "中景",
+      "basis": "与既有「猿声」同处置。刘勰《物色》「岁有其物，物有其容」可为四时之声配义的通则依据"
+    }
   }
 }

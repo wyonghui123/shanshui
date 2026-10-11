@@ -1,7 +1,7 @@
 {
   "meta": {
-    "generated": "2026-10-06T11:03:31",
-    "lexicon": "o2_lexicon.json @ v1.0",
+    "generated": "2026-10-11T03:28:29",
+    "lexicon": "o2_lexicon.json @ v1.1",
     "gold": "o2_gold.json @ v1.1",
     "gate": "o2_gate.json @ v1.0 · real=0.575 blank=0.275",
     "pluggable": {
