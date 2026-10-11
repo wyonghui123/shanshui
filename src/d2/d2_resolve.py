@@ -587,19 +587,32 @@ def resolve_poem(t, pid, imagery):
     bundles = [resolve_node(t, n, ctx) for n in nodes]
 
     # --- 三远投票 ---
+    # 分两轮：先记类默认票（无空间词时的兜底），再记空间词票（原文对景深的明示判断）。
+    # 空间票权重高于任一类默认单项，且不加权累积，以体现「原文明示 > 类默认推断」——
+    # 否则「江阔去帆孤」之「阔」会被累积的山石／水体默认票压过而误判为平远。
+    # 依据：郭熙三远以「自山下而仰／自山前而窥／自近山而望」定之，皆为观照位置的判断，
+    # 诗句中明写的空间词即是该判断的直接表达。
     has_landscape = any(b["class"] in ("山石", "水体") for b in bundles)
     scores = {}
+    space_scores = {}
     if has_landscape:
         for b in bundles:
             d = t["class_defaults"].get(b["class"], {})
             w = d.get("weight", 1.0)
             for y, yw in zip(b["yuan_candidates"], d.get("yuan_w", [])):
                 scores[y] = scores.get(y, 0.0) + yw * w
-        # 空间词票
+        # 空间词票（原文明示，不被类默认累积压过）
         text = ctx0["text"]
         for sw, sv in t["modulators"]["space"].items():
             if sw in text:
-                scores[sv["yuan"]] = scores.get(sv["yuan"], 0.0) + sv["w"] * 1.5
+                space_scores[sv["yuan"]] = space_scores.get(sv["yuan"], 0.0) + sv["w"]
+    # 合并：空间票为加成项，不替换类默认票。
+    # 依据：诗句中的空间词是原文明示的景深判断，故权重须高于任一类默认单项（2.0）；
+    # 但类默认仍保留——「千山」之平远、「万径」之深远由物象类别给出，
+    # 不应因句中出现单个空间词（如《江雪》之「绝」→幽远）而被抹去。
+    if space_scores:
+        for y, v in space_scores.items():
+            scores[y] = scores.get(y, 0.0) + v * 2.0
     yuan = [y for y, _ in sorted(scores.items(), key=lambda kv: -kv[1])[:2]] if scores else []
 
     # --- 皴法（主体/地标）---

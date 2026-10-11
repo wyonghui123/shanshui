@@ -1,0 +1,111 @@
+{
+  "checks": [
+    {
+      "poem": "gx06",
+      "text": "远水兼天净，孤城隐雾深",
+      "check": "三远",
+      "pass": true,
+      "got": [
+        "平远",
+        "迷远"
+      ],
+      "want": [
+        "平远"
+      ]
+    },
+    {
+      "poem": "gx06",
+      "text": "远水兼天净，孤城隐雾深",
+      "check": "虚写留白 水",
+      "pass": true,
+      "got": "留白",
+      "want": "留白"
+    },
+    {
+      "poem": "gx06",
+      "text": "远水兼天净，孤城隐雾深",
+      "check": "天候档",
+      "pass": true,
+      "got": "雾",
+      "want": [
+        "雾"
+      ]
+    },
+    {
+      "poem": "gx05",
+      "text": "数声离岸橹，几点别州山",
+      "check": "三远",
+      "pass": true,
+      "got": [
+        "平远",
+        "深远"
+      ],
+      "want": [
+        "平远"
+      ]
+    },
+    {
+      "poem": "gx05",
+      "text": "数声离岸橹，几点别州山",
+      "check": "不画 橹",
+      "pass": true,
+      "got": "不画",
+      "want": "不画"
+    },
+    {
+      "poem": "gx10",
+      "text": "雪意未成云著地，秋声不断雁连天",
+      "check": "虚写留白 雪",
+      "pass": true,
+      "got": "留白",
+      "want": "留白"
+    },
+    {
+      "poem": "gx10",
+      "text": "雪意未成云著地，秋声不断雁连天",
+      "check": "不画 秋声",
+      "pass": true,
+      "got": "不画",
+      "want": "不画"
+    },
+    {
+      "poem": "gx10",
+      "text": "雪意未成云著地，秋声不断雁连天",
+      "check": "天候档",
+      "pass": true,
+      "got": "雪",
+      "want": [
+        "雪"
+      ]
+    },
+    {
+      "poem": "gx03",
+      "text": "行到水穷处，坐看云起时",
+      "check": "虚写留白 云",
+      "pass": true,
+      "got": "留白",
+      "want": "留白"
+    },
+    {
+      "poem": "gx09",
+      "text": "天遥来雁小，江阔去帆孤",
+      "check": "三远（任一）",
+      "pass": true,
+      "got": [
+        "平远",
+        "阔远"
+      ],
+      "want": [
+        "平远",
+        "阔远"
+      ]
+    }
+  ],
+  "summary": {
+    "cases": 5,
+    "total": 10,
+    "passed": 10,
+    "all_pass": true,
+    "pass_rate": 100.0
+  }
+}

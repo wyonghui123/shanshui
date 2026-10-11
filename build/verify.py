@@ -107,6 +107,8 @@ def main():
 
     print("── 控制链与交付")
     fails += run("D2 回归", [PY, os.path.join("src", "d2", "d2_resolve.py")], tail=2)
+    # 外层 D2 层：郭熙《画意》十七句 → O2 门控 → D2 求解 → 与原典结论比对。
+    fails += run("D2 外层回归（郭熙十七句）", [PY, os.path.join("src", "d2", "d2_outer.py")], tail=2)
     rep_path = os.path.join(ROOT, "data", "runs", "d2_regression.json")
     rep = json.load(open(rep_path, encoding="utf-8"))
     if rep["summary"]["all_pass"]:
