@@ -369,11 +369,109 @@ def resolve_viewpoint(t, text, yuan, has_landscape):
             "criterion": vp[chosen]["criterion"]}
 
 
+def min_gap(a, b):
+    """两组位置之间的最小间距；任一为空则返回 None。"""
+    if not a or not b:
+        return None
+    best = None
+    for x in a:
+        for y in b:
+            d = abs(x - y)
+            if best is None or d < best:
+                best = d
+    return best
+
+
+def resolve_weather_composite(t, text):
+    """天候复合档（G5）：命中复合词组则其系数覆盖单值档。
+
+    匹配规则：两天候词均在文中出现，且首次出现位置之差 ≤ modulators.weather_composite.max_span。
+    不用严格相邻，因古诗用字跳跃（如「冬阴密雪」中「冬」与「雪」不相邻）。
+    """
+    cm = t["modulators"].get("weather_composite")
+    if not cm:
+        return None
+    wxm = t["modulators"]["weather"]
+    span = cm.get("max_span", 6)
+
+    # 按天候档名定位（而非按调制器的键名）。
+    # 关键：「霁」在 words 中映射到「晴」档，故组合判定须用档名「晴」在文中定位，
+    # 否则「雪霁早春」会因「晴」字不出现而漏配。
+    # 同一档可有多个触发词（如「晴」「霁」皆入晴档），取使间距最小的一组位置。
+    pos = {}
+    for w, name in wxm["words"].items():
+        start = 0
+        while True:
+            i = text.find(w, start)
+            if i < 0:
+                break
+            pos.setdefault(name, []).append(i)
+            start = i + 1
+
+    # 隐含复合：单一天候词 + 状态标记词，表示该天候已过或未盛。
+    #   「雨过晚照」中只有「雨」与「过」，但「过」即雨霁；
+    #   「残雪早春」中只有「雪」与「残」，但「残」表示雪已消而未全消。
+    # 此形态在《画题》复合天候中占多数，故须先于成对判定。
+    labels = [p["label"] for p in cm.get("pairs", [])]
+    for rule in cm.get("implicit", []):
+        if rule["label"] not in labels:
+            continue
+        hit_kw = next((k for k in rule["keys"] if k in text), None)
+        if hit_kw:
+            pair = next(p for p in cm["pairs"] if p["label"] == rule["label"])
+            return {
+                "label": rule["label"],
+                "sigma_mult": pair["sigma_mult"],
+                "blank_bonus": pair["blank_bonus"],
+                "mu_mult": pair.get("mu_mult", [1.0, 1.0]),
+                "cun_bias": pair.get("cun_bias", []),
+                "quality": pair["quality"],
+                "combo": [hit_kw],
+                "gap": 0,
+                "implicit": True,
+            }
+
+    if len(pos) < 2:
+        return None
+
+    best = None
+    for pair in cm.get("pairs", []):
+        combo = pair["combo"]
+        if not all(w in pos for w in combo):
+            continue
+        gap = min_gap(pos[combo[0]], pos[combo[1]])
+        if gap is not None and gap <= span:
+            if best is None or gap < best[0]:
+                best = (gap, pair)
+    if best is None:
+        return None
+
+    pair = best[1]
+    return {
+        "label": pair["label"],
+        "sigma_mult": pair["sigma_mult"],
+        "blank_bonus": pair["blank_bonus"],
+        "mu_mult": pair.get("mu_mult", [1.0, 1.0]),
+        "cun_bias": pair.get("cun_bias", []),
+        "quality": pair["quality"],
+        "combo": pair["combo"],
+        "gap": best[0],
+    }
+
+
 def resolve_weather(t, text):
-    """天候档（G4）：天候词 → 天候档 + 卡5/卡6 系数。未命中则 null（系数中性）。"""
+    """天候档（G4 单值 + G5 复合）：复合档优先，命中时覆盖单值系数。"""
     wxm = t["modulators"]["weather"]
     wx = t["vocab"]["weather"]
     hit = [w for w in wxm["words"] if w in text]
+
+    comp = resolve_weather_composite(t, text)
+    if comp:
+        comp["hit"] = hit
+        comp["note"] = f"命中复合天候「{comp['label']}」（{'+'.join(comp['combo'])}，间距 {comp['gap']} 字）→ 系数取复合档，单值档不叠加"
+        comp["source_id"] = "guoxi_huati_shierzu"
+        return comp
+
     if not hit:
         return {"name": None, "sigma_mult": [1.0, 1.0], "blank_bonus": 0.0,
                 "mu_mult": [1.0, 1.0], "cun_bias": [], "hit": [],
@@ -820,7 +918,7 @@ def regress(t, imagery):
     seal2 = t["vocab"].get("seal", {})
     n_mat2 = sum(len(mat2.get(c, {})) for c in ("纸绢", "笔", "墨"))
     ok_c = (set(vp2) == {"平视", "仰视", "俯视"}
-            and {"晴", "雨", "雪", "雾"} <= set(wx2)
+            and {"晴", "雨", "雪", "雾", "烟"} <= set(wx2)
             and {"晨", "昼", "暮", "夜"} <= set(tod2)
             and n_mat2 == 8
             and {"筋", "肉", "骨", "气", "平", "留", "圆", "重", "变"} <= set(sq2)
@@ -830,22 +928,52 @@ def regress(t, imagery):
     report["checks"].append({
         "poem": "全局", "check": "新算子齐备 C 组", "pass": bool(ok_c),
         "got": f"视点{len(vp2)} 天候{len(wx2)} 时辰{len(tod2)} 材质{n_mat2} 质量维{len(sq2)} 病{len(sd2)} 构图{len(comp2)} 印位{len(seal2.get('positions', {}))}",
-        "want": "视点3 天候4 时辰4 材质8 质量维9 病5 构图8 印位5",
+        "want": "视点3 天候5 时辰4 材质8 质量维9 病5 构图8 印位5",
     })
     n_total += 1
     n_pass += 1 if ok_c else 0
 
-    # 14 C 组·G5 口径：season_words 不再含「月」，月已迁至 time_words（月→夜）
+    # 14 C 组·时辰口径：season_words 不再含「月」，月已迁至 time_words（月→夜）
     ok_g5 = ("月" not in t["modulators"]["season_words"]
              and t["modulators"]["time_words"]["map"].get("月") == "夜")
     report["checks"].append({
-        "poem": "全局", "check": "时辰口径 G5", "pass": bool(ok_g5),
+        "poem": "全局", "check": "时辰口径", "pass": bool(ok_g5),
         "got": f"season_words含月={'月' in t['modulators']['season_words']} time_words[月]={t['modulators']['time_words']['map'].get('月')}",
         "want": "season_words 不含月 且 time_words[月]=夜",
     })
     n_total += 1
-    n_pass += 1 if ok_g5 else 0
 
+    # 15 天候复合档（骨架 G5）：四组齐备 +《画题》复合天候九例全部命中 + 单值档不受影响
+    cmv = t["modulators"].get("weather_composite", {})
+    labels = {p["label"] for p in cmv.get("pairs", [])}
+    want_comp = ["残雪早春", "雪霁早春", "雨霁早春", "冬阴密雪", "雨过晚照",
+                 "夏山雨霁", "秋山雨霁", "雪后山家", "雪残晚照"]
+    got_comp = {s: resolve_weather(t, s).get("label") for s in want_comp}
+    ok_comp = (labels == {"雪霁", "雨霁", "雨夹雪", "雾霁"}
+               and all(got_comp.values())
+               and got_comp["残雪早春"] == "雪霁"
+               and got_comp["冬阴密雪"] == "雨夹雪"
+               and got_comp["雨过晚照"] == "雨霁")
+    report["checks"].append({
+        "poem": "全局", "check": "天候复合档 G5", "pass": bool(ok_comp),
+        "got": f"四组={sorted(labels)} 《画题》九例={got_comp}",
+        "want": "四组齐备且九例全命中；残雪早春→雪霁、冬阴密雪→雨夹雪、雨过晚照→雨霁",
+    })
+    n_total += 1
+    n_pass += 1 if ok_comp else 0
+
+    # 16 单值档向后兼容：纯雪 / 纯雨 / 纯雾 / 纯烟仍走单值档，不被复合档劫持
+    pure = {"独钓寒江雪": "雪", "斜风细雨": "雨", "薄雾迷远山": "雾", "村舍炊烟起": "烟"}
+    got_pure = {s: resolve_weather(t, s).get("name") for s in pure}
+    ok_pure = all(got_pure[s] == pure[s] for s in pure)
+    report["checks"].append({
+        "poem": "全局", "check": "单值档兼容", "pass": bool(ok_pure),
+        "got": got_pure,
+        "want": pure,
+    })
+    n_total += 1
+    n_pass += 1 if ok_pure else 0
+    n_pass += 1 if ok_g5 else 0
     report["summary"] = {
         "passed": n_pass, "total": n_total,
         "rate": round(n_pass / n_total, 4) if n_total else 0.0,
